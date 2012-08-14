@@ -4,7 +4,7 @@
 #include "blacklistview_p.h"
 #include "tr.h"
 #include "global.h"
-#include "annotationbrowser.h" // TO BE REMOVED
+#include "annotationstandardmodel.h"
 #include "project/common/acfilteredtableview.h"
 #include "project/common/acfilteredlistview.h"
 #include "module/qtext/datetime.h"
@@ -200,9 +200,9 @@ AnnotationFilterView::setHeaderData(QAbstractItemModel *model)
   model->setHeaderData(HD_Status, Qt::Horizontal, TR(T_STATUS));
   model->setHeaderData(HD_UserId, Qt::Horizontal, TR(T_USER_ID));
   model->setHeaderData(HD_Flags, Qt::Horizontal, TR(T_FLAGS));
-  model->setHeaderData(HD_BlessedCount, Qt::Horizontal, TR(T_BLESSEDCOUNT));
-  model->setHeaderData(HD_CursedCount, Qt::Horizontal, TR(T_CURSEDCOUNT));
-  model->setHeaderData(HD_BlockedCount, Qt::Horizontal, TR(T_BLOCKEDCOUNT));
+  model->setHeaderData(HD_BlessCount, Qt::Horizontal, TR(T_BLESSCOUNT));
+  model->setHeaderData(HD_CurseCount, Qt::Horizontal, TR(T_CURSECOUNT));
+  model->setHeaderData(HD_BlockCount, Qt::Horizontal, TR(T_BLOCKCOUNT));
 }
 
 void
@@ -225,9 +225,9 @@ AnnotationFilterView::addRow(const Annotation &a)
 {
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate)
 #define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs).toString()
-#define FORMAT_LANGUAGE(_lang)    AnnotationBrowser::languageToString(_lang)
-#define FORMAT_FLAGS(_flags)      AnnotationBrowser::annotationFlagsToStringList(_flags)
-#define FORMAT_STATUS(_status)    AnnotationBrowser::annotationStatusToString(_status)
+#define FORMAT_LANGUAGE(_lang)    AnnotationStandardModel::languageToString(_lang)
+#define FORMAT_FLAGS(_flags)      AnnotationStandardModel::annotationFlagsToStringList(_flags)
+#define FORMAT_STATUS(_status)    AnnotationStandardModel::annotationStatusToString(_status)
 
   sourceModel_->insertRow(0);
 
@@ -249,9 +249,9 @@ AnnotationFilterView::addRow(const Annotation &a)
 
   sourceModel_->setData(sourceModel_->index(0, HD_UserId), a.userId(), Qt::DisplayRole);
   sourceModel_->setData(sourceModel_->index(0, HD_Flags), FORMAT_FLAGS(a.flags()), Qt::DisplayRole);
-  sourceModel_->setData(sourceModel_->index(0, HD_BlessedCount), a.blessedCount(), Qt::DisplayRole);
-  sourceModel_->setData(sourceModel_->index(0, HD_CursedCount), a.cursedCount(), Qt::DisplayRole);
-  sourceModel_->setData(sourceModel_->index(0, HD_BlockedCount), a.blockedCount(), Qt::DisplayRole);
+  sourceModel_->setData(sourceModel_->index(0, HD_BlessCount), a.blessCount(), Qt::DisplayRole);
+  sourceModel_->setData(sourceModel_->index(0, HD_CurseCount), a.curseCount(), Qt::DisplayRole);
+  sourceModel_->setData(sourceModel_->index(0, HD_BlockCount), a.blockCount(), Qt::DisplayRole);
 
   for (int i = 0; i < HD_Count; i++)
     sourceModel_->setData(sourceModel_->index(0, i), sourceModel_->headerData(i, Qt::Horizontal), Qt::ToolTipRole);
@@ -272,13 +272,7 @@ AnnotationFilterView::currentAnnotationId() const
   if (!mi.isValid())
     return 0;
   mi = mi.sibling(mi.row(), HD_Id);
-  if (!mi.isValid())
-    return 0;
-  bool ok;
-  qint64 ret = mi.data().toLongLong(&ok);
-  if (!ok)
-      return 0;
-  return ret;
+  return mi.isValid() ? mi.data().toLongLong() : 0;
 }
 
 void

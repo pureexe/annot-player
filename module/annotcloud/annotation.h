@@ -42,7 +42,7 @@ namespace AnnotCloud {
       CreateTime, UpdateTime,
       Pos, PosType,
       Time, Text,
-      BlessedCount, CursedCount, BlockedCount,
+      BlessCount, CurseCount, BlockCount,
       FieldCount
     };
 
@@ -175,23 +175,29 @@ namespace AnnotCloud {
     void setText(const QString &text)   { subtitle_ = -1; text_ = text; }
     bool hasText() const                { return !text_.isEmpty(); }
 
-  private: quint32 blessed_;
+  private: quint32 blessCount_;
   public:
-    quint32 blessedCount() const        { return blessed_; }
-    void setBlessedCount(quint32 count) { blessed_ = count; }
-    bool isBlessed() const              { return blessed_; }
+    quint32 blessCount() const          { return blessCount_; }
+    quint32 &blessCount()               { return blessCount_; }
+    void setBlessCount(quint32 count)   { blessCount_ = count; }
+    bool hasBlessCount() const          { return blessCount_; }
+    bool isBlessed() const              { return hasBlessCount(); }
 
-  private: quint32 cursed_;
+  private: quint32 curseCount_;
   public:
-    quint32 cursedCount() const         { return cursed_; }
-    void setCursedCount(quint32 count)  { cursed_ = count; }
-    bool isCursed() const               { return cursed_; }
+    quint32 curseCount() const          { return curseCount_; }
+    quint32 &curseCount()               { return curseCount_; }
+    void setCurseCount(quint32 count)   { curseCount_ = count; }
+    bool hasCurseCount() const          { return curseCount_; }
+    bool isCursed() const               { return hasCurseCount(); }
 
-  private: quint32 blocked_;
+  private: quint32 blockCount_;
   public:
-    quint32 blockedCount() const        { return blocked_; }
-    void setBlockedCount(quint32 count) { blocked_ = count; }
-    bool isBlocked() const               { return blocked_; }
+    quint32 blockCount() const          { return blockCount_; }
+    quint32 &blockCount()               { return blockCount_; }
+    void setBlockCount(quint32 count)   { blockCount_ = count; }
+    bool hasBlockCount() const          { return blockCount_; }
+    bool isBlocked() const              { return hasBlockCount(); }
 
     // - Constructions -
   public:
@@ -199,7 +205,7 @@ namespace AnnotCloud {
       : id_(0), tokenId_(0), tokenSection_(0), userId_(0), status_(0), flags_(0), language_(0),
         createTime_(0), createIp_(0), updateTime_(0), updateIp_(0),
         pos_(0), posType_(0), time_(0),
-        blessed_(0), cursed_(0), blocked_(0), subtitle_(-1)
+        blessCount_(0), curseCount_(0), blockCount_(0), subtitle_(-1)
     { }
 
     bool isValid() const { return hasId(); }
@@ -232,8 +238,8 @@ namespace AnnotCloud {
 
     // - Operators -
   public:
-    bool operator==(const Self &that) { return !operator!=(that); }
-    bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
+    //bool operator==(const Self &that) { return !operator!=(that); }
+    //bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
 
     // Static helpers
   public:

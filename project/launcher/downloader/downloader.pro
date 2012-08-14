@@ -1,7 +1,7 @@
 # downloader.pro
 # 9/3/2011
 
-VERSION = 0.1.1.1
+VERSION = 0.1.0.0
 
 CONFIG += noqt nocrt
 include(../../../config.pri)
@@ -15,7 +15,7 @@ include($$ROOTDIR/project/launcher/launcher.pri)
 
 TEMPLATE    = app
 win32: CONFIG += windows
-TARGET      = "Annot Downloader"
+TARGET      = "[ Download ]"
 
 HEADERS += config.h
 SOURCES += main.cc

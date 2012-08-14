@@ -200,14 +200,8 @@ AnnotationDatabase::insertUser(const User& user)
   bool ok = query.exec();
   DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
 
-  qint64 ret = 0;
-  if (ok)
-    ret = query.lastInsertId().toLongLong(&ok);
-
-  if (!ok) {
-    DOUT("error:" << query.lastError());
-    ret = 0;
-  }
+  qint64 ret = !ok ? 0 :
+    query.lastInsertId().toLongLong();
 
   DOUT("exit: id =" << ret);
   return ret;
@@ -240,14 +234,9 @@ AnnotationDatabase::insertToken(const Token &token)
   DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
   DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
-  qint64 ret = 0;
-  if (ok)
-    ret = query.lastInsertId().toLongLong(&ok);
 
-  if (!ok) {
-    DOUT("error:" << query.lastError());
-    ret = 0;
-  }
+  qint64 ret = !ok ? 0 :
+    query.lastInsertId().toLongLong();
 
   DOUT("exit: id =" << ret);
   return ret;
@@ -283,14 +272,9 @@ AnnotationDatabase::insertAlias(const Alias &alias)
   DOUT("locking"); m_.lock(); DOUT("locked");
   bool ok = query.exec();
   DOUT("unlocking"); m_.unlock(); DOUT("unlocked");
-  qint64 ret = 0;
-  if (ok)
-    ret = query.lastInsertId().toLongLong(&ok);
 
-  if (!ok) {
-    DOUT("error:" << query.lastError());
-    ret = 0;
-  }
+  qint64 ret = !ok ? 0 :
+    query.lastInsertId().toLongLong();
 
   DOUT("exit: ret =" << ret);
   return ret;
@@ -369,14 +353,9 @@ AnnotationDatabase::insertAnnotation(const Annotation &annot, bool lock)
   if (lock) { DOUT("locking"); m_.lock(); DOUT("locked"); }
   bool ok = query.exec();
   if (lock) { DOUT("unlocking"); m_.unlock(); DOUT("unlocked"); }
-  qint64 ret = 0;
-  if (ok)
-    ret = query.lastInsertId().toLongLong(&ok);
 
-  if (!ok) {
-    DOUT("error:" << query.lastError());
-    ret = 0;
-  }
+  qint64 ret = !ok ? 0 :
+    query.lastInsertId().toLongLong();
 
   DOUT("exit: ret =" << ret);
   return ret;
@@ -887,9 +866,7 @@ AnnotationDatabase::selectAliasUpdateTimeWithId(qint64 id) const
     return ret;
   }
 
-  ret = query.value(0).toLongLong(&ok);
-  if (!ok)
-    ret = -1;
+  ret = query.value(0).toLongLong();
 
   DOUT("exit: text =" << ret);
   return ret;
@@ -926,9 +903,7 @@ AnnotationDatabase::selectAnnotationUpdateTimeWithId(qint64 id) const
     return ret;
   }
 
-  ret = query.value(0).toLongLong(&ok);
-  if (!ok)
-    ret = -1;
+  ret = query.value(0).toLongLong();
 
   DOUT("exit: text =" << ret);
   return ret;

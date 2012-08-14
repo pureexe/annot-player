@@ -4,9 +4,9 @@
 // qtext/webview.h
 // 10/9/2011
 
-#include <QtWebKit/QWebView>
-#include <QtNetwork/QNetworkRequest>
 #include <QtCore/QString>
+#include <QtNetwork/QNetworkRequest>
+#include <QtWebKit/QWebView>
 
 QT_BEGIN_NAMESPACE
 class QAction;

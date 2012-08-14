@@ -7,8 +7,8 @@
 #endif // Q_WS_X11
 
 #include "qtx/qtx.h"
-#include <QtGui/QX11Info>
 #include <QtCore>
+#include <QtGui/QX11Info>
 #include <X11/extensions/shape.h>
 #include <X11/extensions/Xfixes.h>
 #include <X11/XKBlib.h>

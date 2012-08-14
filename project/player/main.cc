@@ -34,10 +34,10 @@
 #include "module/annotcache/annotationcachemanager.h"
 //#include "module/qt/qtsettings.h"
 //#include "module/download/downloader.h"
-#include <QtWebKit/QWebSettings>
+#include <QtGui>
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
-#include <QtGui>
+#include <QtWebKit/QWebSettings>
 //#include <fontconfig/fontconfig.h>
 //#include <freetype/ftsynth.h>
 //#include <freetype/freetype.h>
@@ -185,16 +185,16 @@ main(int argc, char *argv[])
       QLocale system = QLocale::system();
       lang =  system.language();
       script = system.script();
-      if (lang == QLocale::Japanese) {
-        settings->setAnnotationLanguages( // Ban Chinese language
-          Traits::JapaneseBit | Traits::UnknownLanguageBit |
-          Traits::EnglishBit | Traits::KoreanBit |
-          Traits::FrenchBit | Traits::GermanBit |
-          Traits::ItalianBit |
-          Traits::SpanishBit | Traits::PortugueseBit
-        );
-        settings->setAnnotationFilterEnabled(true);
-      }
+      //if (lang == QLocale::Japanese) {
+      //  settings->setAnnotationLanguages( // Ban Chinese language
+      //    Traits::JapaneseBit | Traits::UnknownLanguageBit |
+      //    Traits::EnglishBit | Traits::KoreanBit |
+      //    Traits::FrenchBit | Traits::GermanBit |
+      //    Traits::ItalianBit |
+      //    Traits::SpanishBit | Traits::PortugueseBit | Traits::RussianBit
+      //  );
+      //  settings->setAnnotationFilterEnabled(true);
+      //}
       ac->setLanguage(lang, script);
     }
     TranslationManager::globalInstance()->setLocale(lang, script, false); // auto-update translator = false
@@ -207,6 +207,10 @@ main(int argc, char *argv[])
   if (previousVersion != G_VERSION) {
     DOUT("update from old version");
     bool majorUpdate = !previousVersion.startsWith(G_VERSION_MAJOR);
+
+
+    settings->setAnnotationLanguages(QSet<int>());
+    settings->setAnnotationFilterEnabled(false);
 
     //bool initial = previousVersion.isEmpty();
 
@@ -262,12 +266,12 @@ main(int argc, char *argv[])
     //settings->setAnnotationLanguages(Traits::AllLanguages);
     //settings->setAnnotationFilterEnabled(false);
 
-    settings->setAnnotationLanguages(
-      settings->annotationLanguages() |
-      Traits::FrenchBit | Traits::GermanBit |
-      Traits::ItalianBit |
-      Traits::SpanishBit | Traits::PortugueseBit
-    );
+    //settings->setAnnotationLanguages(
+    //  settings->annotationLanguages() |
+    //  Traits::FrenchBit | Traits::GermanBit |
+    //  Traits::ItalianBit |
+    //  Traits::SpanishBit | Traits::PortugueseBit | Traits::RussianBit
+    //);
 
     settings->setLive(false);
 
@@ -299,7 +303,6 @@ main(int argc, char *argv[])
   }
 
   // Hashes
-  //qDebug() << qHash(QString("\\bookmark"));
   //qDebug() << qHash(QString("\\b"));
   //qDebug() << qHash(QString("docomo"));
   //qDebug() << qHash(QString("ue"));
@@ -392,7 +395,7 @@ main(int argc, char *argv[])
   //enum { AnimationTimingInterval = 40 };
   //QtSettings::globalInstance()->setAnimationTimingInterval(AnimationTimingInterval);
 
-//#ifdef USE_MODE_SIGNAL
+//#ifdef PLAYER_ENABLE_GAME
 //  // Root window
 //  QMainWindow root; // Persistant visible root widget to prevent Qt from automatic closing invisible windows
 //  root.setWindowFlags(root.windowFlags() | Qt::WindowStaysOnTopHint);
@@ -404,7 +407,7 @@ main(int argc, char *argv[])
 //#else
 //  MainWindow w;
 //
-//#endif // USE_MODE_SIGNAL
+//#endif // PLAYER_ENABLE_GAME
   DOUT("create mainwindow");
   MainWindow w(unique); {
     DOUT("mainwindow created");
@@ -482,7 +485,7 @@ main(int argc, char *argv[])
   //XSendEvent(dpy, DefaultRootWindow(dpy), False,
   //SubstructureNotifyMask, &xev);
 
-#if defined(USE_MODE_SIGNAL) && defined(Q_OS_WIN)
+#if defined(PLAYER_ENABLE_GAME) && defined(Q_OS_WIN)
   // jichi 11/29/2011: Used as a PERSISTENT hidden top level window.
   QWidget dummy;
   dummy.resize(QSize()); // zero-sized to be hidden
@@ -495,7 +498,7 @@ main(int argc, char *argv[])
   TextHook::globalInstance()->setInterval(500); // Esential!
   //TextHook::globalInstance()->start();
 #endif // WITH_WIN_TEXTHOOK
-#endif // USE_MODE_SIGNAL && Q_OS_WIN
+#endif // PLAYER_ENABLE_GAME && Q_OS_WIN
 
   //QWidget bk;
   //bk.setWindowFlags(Qt::CustomizeWindowHint);

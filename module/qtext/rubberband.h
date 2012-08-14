@@ -4,9 +4,9 @@
 // qtext/rubberbound.h
 // 2012/3/28
 
+#include <QtCore/QPoint>
 #include <QtGui/QGraphicsColorizeEffect>
 #include <QtGui/QRubberBand>
-#include <QtCore/QPoint>
 
 namespace QtExt {
 

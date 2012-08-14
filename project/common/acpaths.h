@@ -6,6 +6,9 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#ifdef Q_OS_WIN
+# include "win/qtwin/qtwin.h"
+#endif // Q_OS_WIn
 #ifdef Q_OS_MAC
 # include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
@@ -19,9 +22,9 @@
 #define AC_PATH_LOGS    ""      // TODO
 
 #ifdef Q_OS_WIN
-# define AC_PATH_CACHES  QCoreApplication::applicationDirPath() + "/" "caches"
+# define AC_PATH_CACHES  QtWin::getAppDataPath() + "/" "me.annot.cloud"
 #elif defined(Q_OS_MAC)
-# define AC_PATH_CACHES  QtMac::homeCachesPath() + "/me.annot.cloud"
+# define AC_PATH_CACHES  QtMac::homeCachesPath() + "/" "me.annot.cloud"
 #else
 # define AC_PATH_CACHES  QDir::homePath() + "/.annot/cloud"
 #endif // Q_OS_

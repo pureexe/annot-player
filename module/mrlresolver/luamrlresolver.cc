@@ -297,16 +297,7 @@ LuaMrlResolver::formatTitle(const QString &title)
 
 QString
 LuaMrlResolver::formatUrl(const QString &href)
-{
-  QString ret = href.trimmed();
-  return ret.isEmpty() ? ret : ret
-    .remove(QRegExp("#titles$"))
-    .remove(QRegExp("/#$"))
-    .remove(QRegExp("/$"))
-    .replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/")
-    .replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/")
-    .replace(QRegExp("/default.html$", Qt::CaseInsensitive), "/");
-}
+{ return MrlAnalysis::normalizeUrl(href); }
 
 QString
 LuaMrlResolver::cleanUrl(const QString &url)
@@ -322,19 +313,8 @@ LuaMrlResolver::cleanUrl(const QString &url)
       if (!r.isEmpty())
         ret = r.toString();
     }
-  } else if (ret.startsWith("http://www.bilibili.tv/video/", Qt::CaseInsensitive))
-    ret.remove(QRegExp("/#.*$"))
-       .remove(QRegExp("/$"))
-       .remove(QRegExp("/index_1.html$", Qt::CaseInsensitive))
-       .remove(QRegExp("/index.html$", Qt::CaseInsensitive));
-  else if (ret.startsWith("http://www.acfun.tv/v/", Qt::CaseInsensitive))
-    ret.remove(QRegExp("/#.*$"))
-       .remove(QRegExp("/$"))
-       .remove(QRegExp("/index.html$", Qt::CaseInsensitive));
-  else if (ret.startsWith("http://www.tudou.com/programs/view/", Qt::CaseInsensitive))
-    ret.remove(QRegExp("\\?.*"));
-
-  return ret;
+  }
+  return formatUrl(ret);
 }
 
 bool

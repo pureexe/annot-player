@@ -10,6 +10,8 @@ HEADERS += \
     $$PWD/bingtranslator_p.h \
     $$PWD/googletranslator.h \
     $$PWD/googletranslator_p.h \
+    $$PWD/jdictranslator.h \
+    $$PWD/jdictranslator_p.h \
     $$PWD/microsofttranslator.h \
     $$PWD/microsofttranslator_p.h \
     $$PWD/romajitranslator.h \
@@ -21,6 +23,7 @@ HEADERS += \
 SOURCES += \
     $$PWD/bingtranslator.cc \
     $$PWD/googletranslator.cc \
+    $$PWD/jdictranslator.cc \
     $$PWD/microsofttranslator.cc \
     $$PWD/romajitranslator.cc \
     $$PWD/translatormanager.cc \

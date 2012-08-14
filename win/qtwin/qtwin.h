@@ -3,11 +3,11 @@
 // qtwin.h
 // 7/21/2011
 
-#include <QtGui/QWidget>
 #include <QtCore/QList>
 #include <QtCore/QPoint>
 #include <QtCore/QRect>
 #include <QtCore/QString>
+#include <QtGui/QWidget>
 
 #define QTWIN_INVALID_POS QPoint(-32000, -32000)
 
@@ -182,6 +182,8 @@ namespace QtWin {
 
   // - Environments -
   QString getWinDirPath();
+  QString getSystemRoot();
+  QString getProgramFilesPath();
   QString getAppDataPath();
 
   QString getFontsPath();

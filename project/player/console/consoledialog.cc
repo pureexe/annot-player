@@ -101,9 +101,9 @@ ConsoleDialog::messageHandler(QtMsgType type, const char *msg)
     QString text;
     switch (type) {
     case QtDebugMsg:    text = QString("%1: %2").arg(TIMESTAMP).arg(msg); break;
-    case QtWarningMsg:  text = QString(HTML_STYLE_OPEN(color:orange) "%1: warning: %2" HTML_STYLE_CLOSE()).arg(TIMESTAMP).arg(msg); break;
-    case QtCriticalMsg: text = QString(HTML_STYLE_OPEN(color:red) "%1: critical: %2" HTML_STYLE_CLOSE()).arg(TIMESTAMP).arg(msg); break;
-    case QtFatalMsg:    text = QString(HTML_STYLE_OPEN(color:red) "%1: fatal: %2" HTML_STYLE_CLOSE()).arg(TIMESTAMP).arg(msg); break;
+    case QtWarningMsg:  text = QString(HTML_SS_OPEN(color:orange) "%1: warning: %2" HTML_SS_CLOSE()).arg(TIMESTAMP).arg(msg); break;
+    case QtCriticalMsg: text = QString(HTML_SS_OPEN(color:red) "%1: critical: %2" HTML_SS_CLOSE()).arg(TIMESTAMP).arg(msg); break;
+    case QtFatalMsg:    text = QString(HTML_SS_OPEN(color:red) "%1: fatal: %2" HTML_SS_CLOSE()).arg(TIMESTAMP).arg(msg); break;
     default: return;
     }
 

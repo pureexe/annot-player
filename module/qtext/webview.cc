@@ -5,13 +5,13 @@
 #include "module/qtext/actionwithid.h"
 #include "module/qtext/ss.h"
 #include "module/qtext/webpage.h"
+#include "module/qtext/filesystem.h"
 #ifdef WITH_MODULE_DOWNLOAD
-# include "module/qtext/filesystem.h"
 # include "module/download/download.h"
 #endif // WITH_MODULE_DOWNLOAD
-#include <QtWebKit>
-#include <QtGui>
 #include <QtCore>
+#include <QtGui>
+#include <QtWebKit>
 
 //#define DEBUG "qtext::webview"
 #include "module/debug/debug.h"

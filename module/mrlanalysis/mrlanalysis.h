@@ -31,6 +31,8 @@ namespace MrlAnalysis
   };
 
   Site matchSite(const QString &url, bool href = true);
+
+  QString normalizeUrl(const QString &url);
 }
 
 #endif // MRLANALYSIS_H

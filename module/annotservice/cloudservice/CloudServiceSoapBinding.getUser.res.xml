@@ -9,11 +9,11 @@
   <tns:getUserResponse>
    <return>
     <annotCount>0</annotCount>
-    <blessedCount>0</blessedCount>
-    <blockedCount>0</blockedCount>
+    <blessCount>0</blessCount>
+    <blockCount>0</blockCount>
     <createTime>0</createTime>
     <createIp>0</createIp>
-    <cursedCount>0</cursedCount>
+    <curseCount>0</curseCount>
     <email></email>
     <flags>0</flags>
     <id>0</id>

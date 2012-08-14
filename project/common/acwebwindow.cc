@@ -5,12 +5,12 @@
 #include "project/common/acui.h"
 #include "project/common/acprotocol.h"
 #include "module/qtext/webview.h"
-#include <QtWebKit/QWebPage>
-#include <QtWebKit/QWebView>
+#include <QtCore/QEvent>
+#include <QtGui/QShortcut>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkDiskCache>
-#include <QtGui/QShortcut>
-#include <QtCore/QEvent>
+#include <QtWebKit/QWebPage>
+#include <QtWebKit/QWebView>
 
 #define DEBUG "acwebwindow"
 #include "module/debug/debug.h"

@@ -6,9 +6,9 @@
 
 #include "project/common/acwindow.h"
 
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
 # define BACKLOGDIALOG_HAS_TEXT_TAB
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
 class TextEditTabView;
 
@@ -38,6 +38,11 @@ public slots:
   void appendText(const QString &text);
 #endif // BACKLOGDIALOG_HAS_TEXT_TAB
   void clear();
+
+signals:
+  void translateRequested(const QString &text);
+protected slots:
+  void setTranslateEnabled(bool t);
 
 private:
   void createLayout();

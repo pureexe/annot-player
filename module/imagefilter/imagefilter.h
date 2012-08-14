@@ -4,8 +4,8 @@
 // imagefilter.h
 // 5/16/2012
 
-#include <QtGui/QPainter>
 #include <QtCore/QPointF>
+#include <QtGui/QPainter>
 
 QT_FORWARD_DECLARE_CLASS(QImage)
 

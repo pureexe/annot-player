@@ -21,7 +21,7 @@ SleepDialog::SleepDialog(QWidget *parent)
 {
   setWindowTitle(tr("Sleep?"));
   setText(tr("Put the computer to sleep after %1 seconds ...")
-    .arg(HTML_STYLE_OPEN(color:red) "%1" HTML_STYLE_CLOSE())
+    .arg(HTML_SS_OPEN(color:red) "%1" HTML_SS_CLOSE())
   );
   QApplication::beep();
 }

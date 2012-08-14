@@ -2,9 +2,36 @@
 // 4/11/2012
 
 #include "module/mrlanalysis/mrlanalysis.h"
+#include <QtCore/QRegExp>
 
 //#define DEBUG "mrlanalysis"
 #include "module/debug/debug.h"
+
+QString
+MrlAnalysis::normalizeUrl(const QString &url)
+{
+  QString ret = url.trimmed();
+  if (ret.isEmpty())
+    return ret;
+  if (ret.startsWith("http://www.nicovideo.jp/watch/"))
+    ret.remove(QRegExp("\\?.*"));
+  else if (ret.startsWith("http://nicovideo.jp/")) {
+    ret.replace("http://nicovideo.jp/", "http://www.nicovideo.jp/");
+    ret.remove(QRegExp("\\?.*"));
+  } else if (ret.startsWith("http://bilibili.tv/"))
+    ret.replace("http://bilibili.tv/", "http://www.bilibili.tv/");
+  else if (ret.startsWith("http://acfun.tv/"))
+    ret.replace("http://acfun.tv/", "http://www.acfun.tv/");
+  else if (ret.startsWith("http://www.tudou.com/programs/view/", Qt::CaseInsensitive))
+    ret.remove(QRegExp("\\?.*"));
+
+  return ret
+     .remove(QRegExp("/#.*$"))
+     .remove(QRegExp("/index.html$", Qt::CaseInsensitive))
+     .remove(QRegExp("/default.html$", Qt::CaseInsensitive))
+     .remove(QRegExp("/index_1.html$", Qt::CaseInsensitive))
+     .remove(QRegExp("/$"));
+}
 
 MrlAnalysis::Site
 MrlAnalysis::matchSite(const QString &url, bool href)

@@ -21,15 +21,18 @@
 #define AC_PLAYER_ID     1
 #define AC_DOWNLOADER_ID 2
 #define AC_BROWSER_ID    3
+#define AC_TRANSLATOR_ID 4
 
 #ifdef Q_OS_MAC
 # define AC_BROWSER    "Annot Browser"
 # define AC_DOWNLOADER "Annot Downloader"
 # define AC_PLAYER     "Annot Player"
+# define AC_TRANSLATOR "Annot Translator"
 #else
 # define AC_BROWSER    "annot-browser"
 # define AC_DOWNLOADER "annot-down"
 # define AC_PLAYER     "annot-player"
+# define AC_TRANSLATOR "annot-dict"
 #endif // Q_OS_MAC
 
 #endif // ACGLOBAL_H

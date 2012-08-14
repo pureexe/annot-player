@@ -8,9 +8,9 @@
  <SOAP-ENV:Body>
    <tns:submitMediaAlias>
     <alias>
-     <blessedCount>0</blessedCount>
-     <blockedCount>0</blockedCount>
-     <cursedCount>0</cursedCount>
+     <blessCount>0</blessCount>
+     <blockCount>0</blockCount>
+     <curseCount>0</curseCount>
      <flags>0</flags>
      <id>0</id>
      <language>0</language>

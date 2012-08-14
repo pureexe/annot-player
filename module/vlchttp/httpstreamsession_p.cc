@@ -25,11 +25,11 @@
 #include "module/qtext/filesystem.h"
 #include "module/qtext/htmltag.h"
 #include "module/qtext/os.h"
+#include <QtCore>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkCookieJar>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtCore>
 
 #define DEBUG "httpstreamsession"
 #include "module/debug/debug.h"
@@ -387,7 +387,7 @@ HttpStreamSession::run()
       //  break;
       //}
       emit message(
-        (tr("preparing") + HTML_STYLE_OPEN(color:orange) " %1/%2: " HTML_STYLE_CLOSE())
+        (tr("preparing") + HTML_SS_OPEN(color:orange) " %1/%2: " HTML_SS_CLOSE())
           .arg(QString::number(count+1))
           .arg(QString::number(urls_.size()))
         + url.toString()

@@ -20,10 +20,11 @@ namespace AnnotCloud {
   public:
     enum TokenType {
       TT_Null = 0x0,
+      TT_Url = 0x7,
       TT_Video = 0x8,
       TT_Audio = 0x9,
       TT_Picture = 0xa,
-      TT_Program = 0xb
+      TT_Game = 0xb
     };
 
     enum TokenStatus {
@@ -53,6 +54,13 @@ namespace AnnotCloud {
     qint32 type() const                 { return type_; }
     void setType(qint32 t)              { type_ = t; }
     bool hasType() const                { return type_; }
+
+    bool isUrl() const                  { return type_ == TT_Url; }
+    bool isVideo() const                { return type_ == TT_Video; }
+    bool isAudio() const                { return type_ == TT_Audio; }
+    bool isPicture() const              { return type_ == TT_Picture; }
+    bool isGame() const                 { return type_ == TT_Game; }
+    bool isMedia() const { return !isGame(); }
 
   private: qint64 userId_;
   public:
@@ -110,46 +118,51 @@ namespace AnnotCloud {
     void setCreateIp(qint64 ip)         { createIp_ = ip; }
     bool hasCreateIp() const            { return createIp_; }
 
-  private: quint32 blessed_;
+  private: quint32 blessCount_;
   public:
-    quint32 blessedCount() const        { return blessed_; }
-    quint32 &blessedCount()             { return blessed_; }
-    void setBlessedCount(quint32 count) { blessed_ = count; }
-    bool isBlessed() const              { return blessed_; }
+    quint32 blessCount() const          { return blessCount_; }
+    quint32 &blessCount()               { return blessCount_; }
+    void setBlessCount(quint32 count)   { blessCount_ = count; }
+    bool hasBlessCount() const          { return blessCount_; }
+    bool isBlessed() const              { return hasBlessCount(); }
 
-  private: quint32 cursed_;
+  private: quint32 curseCount_;
   public:
-    quint32 cursedCount() const         { return cursed_; }
-    quint32 &cursedCount()              { return cursed_; }
-    void setCursedCount(quint32 count)  { cursed_ = count; }
-    bool isCursed() const               { return cursed_; }
+    quint32 curseCount() const          { return curseCount_; }
+    quint32 &curseCount()               { return curseCount_; }
+    void setCurseCount(quint32 count)   { curseCount_ = count; }
+    bool hasCurseCount() const          { return curseCount_; }
+    bool isCursed() const               { return hasCurseCount(); }
 
-  private: quint32 blocked_;
+  private: quint32 blockCount_;
   public:
-    quint32 blockedCount() const        { return blocked_; }
-    quint32 &blockedCount()             { return blocked_; }
-    void setBlockedCount(quint32 count) { blocked_ = count; }
-    bool isBlocked() const              { return blocked_; }
+    quint32 blockCount() const          { return blockCount_; }
+    quint32 &blockCount()               { return blockCount_; }
+    void setBlockCount(quint32 count)   { blockCount_ = count; }
+    bool hasBlockCount() const          { return blockCount_; }
+    bool isBlocked() const              { return hasBlockCount(); }
 
-  private: quint32 visited_;
+  private: quint32 visitCount_;
   public:
-    quint32 visitedCount() const        { return visited_; }
-    quint32 &visitedCount()             { return visited_; }
-    void setVisitedCount(quint32 count) { visited_ = count; }
-    bool isVisited() const              { return visited_; }
+    quint32 visitCount() const          { return visitCount_; }
+    quint32 &visitCount()               { return visitCount_; }
+    void setVisitCount(quint32 count)   { visitCount_ = count; }
+    bool hasVisitCount() const          { return visitCount_; }
+    bool isVisited() const              { return hasVisitCount(); }
 
-  private: quint32 annot_;
+  private: quint32 annotCount_;
   public:
-    quint32 annotCount() const          { return annot_; }
-    quint32 &annotCount()               { return annot_; }
-    void setAnnotCount(quint32 count)   { annot_ = count; }
-    bool isAnnotated() const            { return annot_; }
+    quint32 annotCount() const          { return annotCount_; }
+    quint32 &annotCount()               { return annotCount_; }
+    void setAnnotCount(quint32 count)   { annotCount_ = count; }
+    bool hasAnnotCount() const          { return annotCount_; }
+    bool isAnnotated() const            { return hasAnnotCount(); }
 
     // - Constructions -
   public:
     Token()
       : id_(0), type_(0), userId_(0), section_(0), status_(0), flags_(0), createTime_(0), createIp_(0),
-        blessed_(0), cursed_(0), blocked_(0), visited_(0), annot_(0)
+        blessCount_(0), curseCount_(0), blockCount_(0), visitCount_(0), annotCount_(0)
     { }
 
     bool isValid() const { return hasId(); } //&& hasType
@@ -168,8 +181,8 @@ namespace AnnotCloud {
 
     // - Operators -
 
-    bool operator==(const Self &that) { return !operator!=(that); }
-    bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
+    //bool operator==(const Self &that) { return !operator!=(that); }
+    //bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
 
     // - Helpers -
   public:

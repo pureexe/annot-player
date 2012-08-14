@@ -3,8 +3,8 @@
 // texthook.h  10/14/2011
 
 #include "texthook_config.h"
-#include <QtGui/QWidget> // where WId is declared
 #include <QtCore/QList>
+#include <QtGui/QWidget> // where WId is declared
 
 class TextHook : public QObject
 {

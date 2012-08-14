@@ -8,7 +8,7 @@
 
 // - Constructions -
 
-AcFilteredListView::AcFilteredListView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent)
+AcFilteredListView::AcFilteredListView(QAbstractItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent)
   : Base(parent), sourceModel_(sourceModel), proxyModel_(proxyModel)
 {
   Q_ASSERT(sourceModel_);
@@ -47,7 +47,7 @@ AcFilteredListView::createLayout()
     proxyView_->setAlternatingRowColors(true);
     proxyView_->setSortingEnabled(true);
     proxyView_->setModel(proxyModel_);
-    proxyView_->setToolTip(tr("View"));
+    proxyView_->setToolTip(tr("List"));
   }
 
   filterPatternEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Filter Pattern"), tr("Search"));
@@ -70,8 +70,8 @@ AcFilteredListView::createLayout()
   // Set up connections
   connect(filterPatternEdit_, SIGNAL(editTextChanged(QString)),
           SLOT(updateFilterRegExp()));
-  connect(filterPatternEdit_, SIGNAL(editTextChanged(QString)),
-          SLOT(updateCount()));
+  //connect(filterPatternEdit_, SIGNAL(editTextChanged(QString)),
+  //        SLOT(updateCount()));
 
   connect(proxyView_, SIGNAL(activated(QModelIndex)), SIGNAL(currentIndexChanged(QModelIndex)));
   connect(proxyView_, SIGNAL(clicked(QModelIndex)), SIGNAL(currentIndexChanged(QModelIndex)));
@@ -122,7 +122,7 @@ AcFilteredListView::updateFilterRegExp()
   //      filterSyntaxComboBox_->itemData(
   //        filterSyntaxComboBox_->currentIndex()).toInt());
 
-  QRegExp regExp(filterPatternEdit_->currentText(), Qt::CaseInsensitive, QRegExp::FixedString);
+  QRegExp regExp(filterPatternEdit_->currentText().trimmed(), Qt::CaseInsensitive, QRegExp::FixedString);
   proxyModel_->setFilterRegExp(regExp);
   updateCount();
 }
@@ -134,8 +134,8 @@ AcFilteredListView::updateFilterRegExp()
 void
 AcFilteredListView::updateCount()
 {
-  int total = sourceModel_->rowCount();
-  int count = proxyModel_->rowCount();
+  int total = sourceModel_->rowCount(),
+      count = proxyModel_->rowCount();
   countButton_->setText(
     QString("%1/%2")
       .arg(QString::number(count))

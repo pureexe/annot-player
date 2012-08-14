@@ -4,7 +4,7 @@
 DEFINES += PROJECT_PLAYER
 
 VERSION_MAJOR = 0.1.8.
-VERSION_MINOR = 0
+VERSION_MINOR = 1
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -102,10 +102,11 @@ MYPATH = \
     $$PWD/data \
     $$PWD/db \
     $$PWD/dialog \
+    $$PWD/game \
     $$PWD/global \
+    $$PWD/library \
     $$PWD/osd \
     $$PWD/player \
-    $$PWD/signal \
     $$PWD/token \
     $$PWD/tr \
     $$PWD/user \
@@ -116,23 +117,23 @@ DEPENDPATH      += $$MYPATH
 HEADERS += \
     annotationprefs.h \
     application.h \
-    clipboardmonitor.h \
     preferences.h \
     mainwindow.h \
     mainwindow_p.h \
     settings.h \
     textcodecmanager.h \
     tray.h \
-    annot/annotationbrowser.h \
+    annot/annotationanalyticsview.h \
     annot/annotationeditor.h \
     annot/annotationfilter.h \
-    annot/annotationanalyticsview.h \
     annot/annotationgraphicseffect.h \
     annot/annotationgraphicsitem.h \
     annot/annotationgraphicsitempool.h \
     annot/annotationgraphicsitemscheduler.h \
     annot/annotationgraphicsview.h \
     annot/annotationsettings.h \
+    annot/annotationstandardmodel.h \
+    annot/annotationtableview.h \
     annot/blacklistview.h \
     annot/blacklistview_p.h \
     annot/textformathandler.h \
@@ -167,9 +168,15 @@ HEADERS += \
     dialog/syncdialog.h \
     dialog/timeinputdialog.h \
     dialog/urldialog.h \
+    game/signalhub.h \
     global/global.h \
     global/rc.h \
     global/stylesheet.h \
+    library/media.h \
+    library/mediaitemmodel.h \
+    library/medialibrary.h \
+    library/medialibraryview.h \
+    library/mediastandardmodel.h \
     osd/osdwindow.h \
     osd/videoview.h \
     player/mainplayer.h \
@@ -183,19 +190,20 @@ HEADERS += \
     player/positioncalibration.h \
     player/positionslider.h \
     player/userlabel.h \
-    signal/signalhub.h \
     token/addaliasdialog.h \
     token/tokenview.h \
     user/useranalyticsview.h \
     user/userview.h \
+    util/clipboardmonitor.h \
     util/closewidgetthread.h \
     util/grabber.h \
-    util/textedittabview.h
+    util/icons.h \
+    util/textedittabview.h \
+    util/textview.h
 
 SOURCES += \
     annotationprefs.cc \
     application.cc \
-    clipboardmonitor.cc \
     main.cc \
     preferences.cc \
     mainwindow.cc \
@@ -203,7 +211,7 @@ SOURCES += \
     settings.cc \
     textcodecmanager.cc \
     tray.cc \
-    annot/annotationbrowser.cc \
+    annot/annotationanalyticsview.cc \
     annot/annotationeditor.cc \
     annot/annotationfilter.cc \
     annot/annotationgraphicseffect.cc \
@@ -211,8 +219,9 @@ SOURCES += \
     annot/annotationgraphicsitempool.cc \
     annot/annotationgraphicsitemscheduler.cc \
     annot/annotationgraphicsview.cc \
-    annot/annotationanalyticsview.cc \
     annot/annotationsettings.cc \
+    annot/annotationstandardmodel.cc \
+    annot/annotationtableview.cc \
     annot/blacklistview.cc \
     annot/blacklistview_p.cc \
     annot/textformathandler.cc \
@@ -247,6 +256,12 @@ SOURCES += \
     dialog/syncdialog.cc \
     dialog/timeinputdialog.cc \
     dialog/urldialog.cc \
+    game/signalhub.cc \
+    library/media.cc \
+    library/mediaitemmodel.cc \
+    library/medialibrary.cc \
+    library/medialibraryview.cc \
+    library/mediastandardmodel.cc \
     osd/osdwindow.cc \
     osd/videoview.cc \
     player/mainplayer.cc \
@@ -260,33 +275,35 @@ SOURCES += \
     player/positioncalibration.cc \
     player/positionslider.cc \
     player/userlabel.cc \
-    signal/signalhub.cc \
     token/addaliasdialog.cc \
     token/tokenview.cc \
     user/useranalyticsview.cc \
     user/userview.cc \
+    util/clipboardmonitor.cc \
     util/grabber.cc \
-    util/textedittabview.cc
+    util/icons.cc \
+    util/textedittabview.cc \
+    util/textview.cc
 
 win32 {
   HEADERS += associationprefs.h windowsregistry.h
   SOURCES += associationprefs.cc windowsregistry.cc
 
-  DEFINES += USE_MODE_SIGNAL
+  DEFINES += PLAYER_ENABLE_GAME
 
   HEADERS += \
-    signal/messagehandler.h \
-    signal/messageview.h \
-    signal/processinfo.h \
-    signal/processview.h \
-    signal/signalview.h
+    game/messagehandler.h \
+    game/messageview.h \
+    game/processinfo.h \
+    game/processview.h \
+    game/syncview.h
 
   SOURCES += \
-    signal/messagehandler.cc \
-    signal/messageview.cc \
-    signal/processinfo.cc \
-    signal/processview.cc \
-    signal/signalview.cc
+    game/messagehandler.cc \
+    game/messageview.cc \
+    game/processinfo.cc \
+    game/processview.cc \
+    game/syncview.cc
 }
 
 RESOURCES += player.qrc

@@ -20,11 +20,11 @@
 #ifdef WITH_MODULE_MRLANALYSIS
 # include "module/mrlanalysis/mrlanalysis.h"
 #endif // WITH_MODULE_MRLANALYSIS
+#include <QtCore/QFile>
+#include <QtCore/QUrl>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtCore/QFile>
-#include <QtCore/QUrl>
 
 //#define DEBUG "annotationdownloader"
 #include "module/debug/debug.h"

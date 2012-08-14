@@ -216,6 +216,10 @@ class SOAP_CMAC CloudServiceSoapBindingProxy : public soap
 	virtual	int submitMediaTokenUrl(tns__submitMediaTokenUrl *tns__submitMediaTokenUrl_, tns__submitMediaTokenUrlResponse *tns__submitMediaTokenUrlResponse_) { return submitMediaTokenUrl(NULL, NULL, tns__submitMediaTokenUrl_, tns__submitMediaTokenUrlResponse_); }
 	virtual	int submitMediaTokenUrl(const char *endpoint, const char *soap_action, tns__submitMediaTokenUrl *tns__submitMediaTokenUrl_, tns__submitMediaTokenUrlResponse *tns__submitMediaTokenUrlResponse_);
 
+	/// Web service operation 'updateMediaAnnotationLanguageWithId' (returns error code or SOAP_OK)
+	virtual	int updateMediaAnnotationLanguageWithId(tns__updateMediaAnnotationLanguageWithId *tns__updateMediaAnnotationLanguageWithId_, tns__updateMediaAnnotationLanguageWithIdResponse *tns__updateMediaAnnotationLanguageWithIdResponse_) { return updateMediaAnnotationLanguageWithId(NULL, NULL, tns__updateMediaAnnotationLanguageWithId_, tns__updateMediaAnnotationLanguageWithIdResponse_); }
+	virtual	int updateMediaAnnotationLanguageWithId(const char *endpoint, const char *soap_action, tns__updateMediaAnnotationLanguageWithId *tns__updateMediaAnnotationLanguageWithId_, tns__updateMediaAnnotationLanguageWithIdResponse *tns__updateMediaAnnotationLanguageWithIdResponse_);
+
 	/// Web service operation 'updateMediaAnnotationTextWithId' (returns error code or SOAP_OK)
 	virtual	int updateMediaAnnotationTextWithId(tns__updateMediaAnnotationTextWithId *tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse *tns__updateMediaAnnotationTextWithIdResponse_) { return updateMediaAnnotationTextWithId(NULL, NULL, tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse_); }
 	virtual	int updateMediaAnnotationTextWithId(const char *endpoint, const char *soap_action, tns__updateMediaAnnotationTextWithId *tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse *tns__updateMediaAnnotationTextWithIdResponse_);

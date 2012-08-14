@@ -52,18 +52,14 @@ AcTabView::finalizeLayout()
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
-  connect(new QShortcut(QKeySequence("CTRL+0"), this),
-          SIGNAL(activated()), tabButtons_[tabCount_ - 1], SLOT(click()));
+  new QShortcut(QKeySequence("CTRL+0"), tabButtons_[tabCount_ - 1], SLOT(click()));
 #ifndef Q_OS_MAC
-  connect(new QShortcut(QKeySequence("ALT+0"), this),
-          SIGNAL(activated()), tabButtons_[tabCount_ - 1], SLOT(click()));
+  new QShortcut(QKeySequence("ALT+0"), tabButtons_[tabCount_ - 1], SLOT(click()));
 #endif // Q_OS_MAC
   for (int i = 0; i < qMin(tabCount_,8); i++) {
-    connect(new QShortcut(QKeySequence("CTRL+" + QString::number(i+1)), this), SIGNAL(activated()),
-            tabButtons_[i], SLOT(click()));
+    new QShortcut(QKeySequence("CTRL+" + QString::number(i+1)), tabButtons_[i], SLOT(click()));
 #ifndef Q_OS_MAC
-    connect(new QShortcut(QKeySequence("ALT+" + QString::number(i+1)), this), SIGNAL(activated()),
-            tabButtons_[i], SLOT(click()));
+    new QShortcut(QKeySequence("ALT+" + QString::number(i+1)), tabButtons_[i], SLOT(click()));
 #endif // Q_OS_MAC
   }
 

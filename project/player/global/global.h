@@ -83,11 +83,11 @@ enum { ALPHA = 0 };
 #define G_FILTER_ANNOTATION     G_FORMAT_ANNOTATION(" *.")
 #define G_FILTER_PREVIEW        G_FORMAT_PREVIEW(" *.")
 #define G_FILTER_MEDIA          G_FILTER_VIDEO G_FILTER_AUDIO G_FILTER_PICTURE
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
 # define G_FILTER_SUPPORTED    G_FILTER_PROGRAM G_FILTER_MEDIA
 #else
 # define G_FILTER_SUPPORTED    G_FILTER_MEDIA
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
 #define VLC_AUTOHIDE_TIMEOUT    1500    // in msecs, same as VLC
 #define G_AUTOHIDE_TIMEOUT (VLC_AUTOHIDE_TIMEOUT * 2)
@@ -97,15 +97,15 @@ enum { ALPHA = 0 };
 // - Path -
 
 #ifdef Q_OS_WIN
-# define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+# define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" "me.annot.player"
 #elif defined(Q_OS_MAC)
-# define G_PATH_PROFILE        QtMac::homeApplicationSupportPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+# define G_PATH_PROFILE        QtMac::homeApplicationSupportPath() + "/" "me.annot.player"
 #else
 # define G_PATH_PROFILE        QDir::homePath() + "/.annot/player"
 #endif // Q_OS_WIN
 
 #ifdef Q_OS_WIN
-# define G_PATH_LOGS   QCoreApplication::applicationDirPath() + "/" ".."
+# define G_PATH_LOGS   QCoreApplication::applicationDirPath() + "/.."
 # define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug Player.txt"
 #elif defined(Q_OS_MAC)
 # define G_PATH_LOGS   QtMac::homeLogsPath() + "/" G_ORGANIZATION "/" G_APPLICATION
@@ -116,7 +116,7 @@ enum { ALPHA = 0 };
 #endif // Q_OS_
 
 #ifdef Q_OS_WIN
-# define G_PATH_CACHES  QCoreApplication::applicationDirPath() + "/" "caches"
+# define G_PATH_CACHES  G_PATH_PROFILE
 #elif defined(Q_OS_MAC)
 # define G_PATH_CACHES  QtMac::homeCachesPath() + "/me.annot.player"
 #else
@@ -127,6 +127,7 @@ enum { ALPHA = 0 };
 
 #define G_PATH_CACHEDB  G_PATH_CACHES "/" "online.db"
 #define G_PATH_QUEUEDB  G_PATH_CACHES "/" "offline.db"
+#define G_PATH_HISTORY  G_PATH_CACHES "/" "history.xml"
 
 #define G_PATH_DOWNLOADS AC_PATH_DOWNLOADS
 

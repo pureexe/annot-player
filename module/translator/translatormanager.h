@@ -63,6 +63,8 @@ public slots:
 
   void translate(int service, const QString &text, const QString &to, const QString &from = QString())
   {
+    if (!isEnabled())
+      return;
     Q_ASSERT(service >= 0 && service < ServiceCount);
     t_[service]->translate(text, to, from);
   }

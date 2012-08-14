@@ -17,7 +17,7 @@
 #include "module/debug/debug.h"
 
 #define WINDOW_SIZE     QSize(640, 640)
-#define BASE_URL        G_HOMEPAGE "/clients/player/"
+#define BASE_URL        G_HOMEPAGE "/client/player/"
 #define EMPTY_URL       BASE_URL "empty.html"
 
 using namespace AnnotCloud;

@@ -8,6 +8,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QDate>
 #include <QtCore/QHash>
+#include <QtCore/QSet>
 #include <QtGui/QColor>
 
 class Settings : public QSettings
@@ -116,8 +117,8 @@ public:
   void setPreferTraditionalChinese(bool t);
 
   ///  Theme in UiStyle
-  qint64 annotationLanguages() const; ///< Annotation language
-  void setAnnotationLanguages(qint64 lang);
+  QSet<int> annotationLanguages() const;
+  void setAnnotationLanguages(const QSet<int> languages);
 
   void setMultipleWindowsEnabled(bool t);
   bool isMultipleWindowsEnabled() const;

@@ -19,6 +19,7 @@ Translator::languageCode(int lang, int script)
   case QLocale::Italian:  return "it";
   case QLocale::Spanish:  return "es";
   case QLocale::Portuguese: return "pt";
+  case QLocale::Russian:  return "ru";
   case QLocale::Chinese:  return script == QLocale::SimplifiedChineseScript ?
                                  "zh-CHS" : //"zh-CN" :
                                  "zh-CHT";  //"zh-TW" or "zh-HK";

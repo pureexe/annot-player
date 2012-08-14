@@ -19,6 +19,7 @@ class QLineEdit;
 class QMenu;
 class QRadioButton;
 class QStatusBar;
+class QTextBrowser;
 class QTextEdit;
 class QToolButton;
 QT_END_NAMESPACE
@@ -143,6 +144,7 @@ public:
   };
 
   QTextEdit *makeTextEdit(ulong hints = 0, const QString &tip = QString());
+  QTextBrowser *makeTextBrowser(ulong hints = 0, const QString &tip = QString());
 
   QLabel *makeLabel(ulong hints = 0,
       const QString &title = QString(), const QString &tip = QString(), QWidget *buddy = nullptr);
@@ -155,25 +157,39 @@ public:
       const QString &text = QString(), const QString &tip = QString(), const QString &holder = QString());
   QGroupBox *makeGroupBox(ulong hints = 0,
       const QString &text = QString(), const QString &tip = QString());
-  QRadioButton *makeRadioButton(ulong hints = 0,
-      const QString &text = QString(), const QString &tip = QString());
-  QCheckBox *makeCheckBox(ulong hints = 0,
-      const QString &text = QString(), const QString &tip = QString());
 
   QGraphicsEffect *makeHaloEffect(const QColor &c);
   QGraphicsEffect *makeHaloEffect(Qt::GlobalColor c) { return makeHaloEffect(QColor(c)); }
   QGraphicsEffect *makeHaloEffect(ulong hints = DefaultHint);
 
+  QCheckBox *makeCheckBox(ulong hints = 0,
+      const QString &text = QString(), const QString &tip = QString(), const QString &key = QString(),
+      QObject *receiver = nullptr, const char *slot = nullptr,  Qt::ConnectionType type = Qt::AutoConnection);
+  QCheckBox *makeCheckBox(ulong hints, const QString &text, const QString &tip,
+      QObject *receiver , const char *slot = nullptr,  Qt::ConnectionType type = Qt::AutoConnection)
+  { return makeCheckBox(hints, text, tip, QString(), receiver, slot, type); }
+  QCheckBox *makeCheckBox(ulong hints, const QString &text,
+      QObject *receiver, const char *slot = nullptr,  Qt::ConnectionType type = Qt::AutoConnection)
+  { return makeCheckBox(hints, text, QString(), QString(), receiver, slot, type); }
+
+  QRadioButton *makeRadioButton(ulong hints = 0,
+      const QString &text = QString(), const QString &tip = QString(), const QString &key = QString(),
+      QObject *receiver = nullptr, const char *slot = nullptr,  Qt::ConnectionType type = Qt::AutoConnection);
+  QRadioButton *makeRadioButton(ulong hints, const QString &text, const QString &tip,
+      QObject *receiver, const char *slot = nullptr,  Qt::ConnectionType type = Qt::AutoConnection)
+  { return makeRadioButton(hints, text, tip, QString(), receiver, slot, type); }
+  QRadioButton *makeRadioButton(ulong hints, const QString &text,
+      QObject *receiver, const char *slot = nullptr,  Qt::ConnectionType type = Qt::AutoConnection)
+  { return makeRadioButton(hints, text, QString(), QString(), receiver, slot, type); }
+
   QToolButton *makeToolButton(ulong hints = 0,
       const QString &title = QString(), const QString &tip = QString(), const QString &key = QString(),
-      QObject *receiver = 0, const char *slot = 0,  Qt::ConnectionType type = Qt::AutoConnection);
-  QToolButton *makeToolButton(ulong hints,
-      const QString &title, const QString &tip,
-      QObject *receiver, const char *slot = 0,  Qt::ConnectionType type = Qt::AutoConnection)
+      QObject *receiver = nullptr, const char *slot = nullptr,  Qt::ConnectionType type = Qt::AutoConnection);
+  QToolButton *makeToolButton(ulong hints, const QString &title, const QString &tip,
+      QObject *receiver, const char *slot = nullptr,  Qt::ConnectionType type = Qt::AutoConnection)
   { return makeToolButton(hints, title, tip, QString(), receiver, slot, type); }
-  QToolButton *makeToolButton(ulong hints,
-      const QString &title,
-      QObject *receiver, const char *slot = 0,  Qt::ConnectionType type = Qt::AutoConnection)
+  QToolButton *makeToolButton(ulong hints, const QString &title,
+      QObject *receiver, const char *slot = nullptr,  Qt::ConnectionType type = Qt::AutoConnection)
   { return makeToolButton(hints, title, QString(), QString(), receiver, slot, type); }
 
   // - Stylers -

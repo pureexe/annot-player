@@ -132,11 +132,9 @@ AnnotationFilter::filter(const Annotation &input) const
     return false;
 
   // Language filter
-  if (!(languages_ & Traits::AnyLanguageBit)) {
-    qint64 l = 1L << input.language();
-    if (!(l & (languages_ | Traits::AnyLanguageBit)))
-      return true;
-  }
+  if (!languages_.isEmpty() && input.language() &&
+      languages_.contains(input.language()))
+    return true;
 
   // Annots filter
   if (!blockedAnnotations_.isEmpty() && input.hasId())

@@ -18,6 +18,7 @@ OTHER_FILES = \
     ChangeLog \
     COPYING \
     README \
-    TODO
+    TODO \
+    UPDATE
 
 # EOF

@@ -29,11 +29,13 @@
 #include "annotationanalyticsview.h"
 #include "annotationeditor.h"
 #include "annotationfilter.h"
+#include "medialibrary.h"
+#include "medialibraryview.h"
 #include "tokenview.h"
 #include "mediainfoview.h"
 //#include "commentview.h"
 #include "tray.h"
-#include "annotationbrowser.h"
+#include "annotationtableview.h"
 #include "stylesheet.h"
 #include "rc.h"
 #include "tr.h"
@@ -64,15 +66,16 @@
 #ifdef Q_OS_WIN
 # include "windowsregistry.h"
 #endif // Q_OS_WIN
-#ifdef USE_MODE_SIGNAL
-# include "signalview.h"
+#ifdef PLAYER_ENABLE_GAME
+# include "syncview.h"
 # include "messageview.h"
 # include "processview.h"
 # include "messagehandler.h"
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 #include "project/common/acabout.h"
 #include "project/common/acbrowser.h"
 #include "project/common/acdownloader.h"
+#include "project/common/actranslator.h"
 #include "project/common/acprotocol.h"
 #include "project/common/acpaths.h"
 #include "project/common/acplayer.h"
@@ -178,6 +181,7 @@ enum { DEFAULT_LIVE_INTERVAL = 3000 }; // 3 seconds
 enum { HISTORY_SIZE = 100 };   // Size of playPos/Sub/AudioTrack history
 enum { HOLD_TIMEOUT = 2000 };
 enum { DBLCLICK_TIMEOUT = 600 }; // around ::GetDoubleClickTime()
+enum { CLICK_TIMEOUT = 500 };
 enum { RECENT_COUNT = 35 };
 
 enum { MiniConsoleTimeout = 6000, MainConsoleTimeout = 4000 };
@@ -298,7 +302,7 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   : Base(parent, f), disposed_(false), submit_(true),
     liveInterval_(DEFAULT_LIVE_INTERVAL),
     preferences_(nullptr), tray_(nullptr), magnifier_(nullptr), tokenView_(nullptr),
-    annotationAnalyticsView_(nullptr), userAnalyticsView_(nullptr), annotationBrowser_(nullptr), annotationEditor_(nullptr), blacklistView_(nullptr), backlogDialog_(nullptr), consoleDialog_(nullptr),
+    libraryView_(nullptr), annotationAnalyticsView_(nullptr), userAnalyticsView_(nullptr), annotationBrowser_(nullptr), annotationEditor_(nullptr), blacklistView_(nullptr), backlogDialog_(nullptr), consoleDialog_(nullptr),
     annotationCountDialog_(nullptr), deviceDialog_(nullptr), helpDialog_(nullptr), loginDialog_(nullptr), liveDialog_(nullptr),
     processPickDialog_(nullptr), seekDialog_(nullptr), syncDialog_(nullptr), windowPickDialog_(nullptr),
     mediaInfoView_(nullptr), userView_(nullptr),
@@ -427,20 +431,21 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   annotationFilter_->setBlockedUserAliases(settings->blockedUserNames());
   //annotationFilter_->setAnnotationCountHint(settings->annotationCountHint());
   {
-    qint64 l = settings->annotationLanguages();
+    QSet<int> l = settings->annotationLanguages();
     annotationFilter_->setLanguages(l);
 
-    toggleAnnotationLanguageToAnyAct_->setChecked(l & Traits::AnyLanguageBit);
-    toggleAnnotationLanguageToUnknownAct_->setChecked(l & Traits::UnknownLanguageBit);
-    toggleAnnotationLanguageToEnglishAct_->setChecked(l & Traits::EnglishBit);
-    toggleAnnotationLanguageToJapaneseAct_->setChecked(l & Traits::JapaneseBit);
-    toggleAnnotationLanguageToChineseAct_->setChecked(l & Traits::ChineseBit);
-    toggleAnnotationLanguageToKoreanAct_->setChecked(l & Traits::KoreanBit);
-    toggleAnnotationLanguageToFrenchAct_->setChecked(l & Traits::FrenchBit);
-    toggleAnnotationLanguageToGermanAct_->setChecked(l & Traits::GermanBit);
-    toggleAnnotationLanguageToItalianAct_->setChecked(l & Traits::Italian);
-    toggleAnnotationLanguageToSpanishAct_->setChecked(l & Traits::Spanish);
-    toggleAnnotationLanguageToPortugueseAct_->setChecked(l & Traits::Portuguese);
+    toggleAnnotationLanguageToAnyAct_->setChecked(l.isEmpty());
+    //toggleAnnotationLanguageToUnknownAct_->setChecked(l & Traits::UnknownLanguageBit);
+    toggleAnnotationLanguageToEnglishAct_->setChecked(l.contains(Traits::English));
+    toggleAnnotationLanguageToJapaneseAct_->setChecked(l.contains(Traits::Japanese));
+    toggleAnnotationLanguageToChineseAct_->setChecked(l.contains(Traits::Chinese));
+    toggleAnnotationLanguageToKoreanAct_->setChecked(l.contains(Traits::Korean));
+    toggleAnnotationLanguageToFrenchAct_->setChecked(l.contains(Traits::French));
+    toggleAnnotationLanguageToGermanAct_->setChecked(l.contains(Traits::German));
+    toggleAnnotationLanguageToItalianAct_->setChecked(l.contains(Traits::Italian));
+    toggleAnnotationLanguageToSpanishAct_->setChecked(l.contains(Traits::Spanish));
+    toggleAnnotationLanguageToPortugueseAct_->setChecked(l.contains(Traits::Portuguese));
+    toggleAnnotationLanguageToRussianAct_->setChecked(l.contains(Traits::Russian));
     invalidateAnnotationLanguages();
   }
 
@@ -513,6 +518,8 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   // Enable keyboard shortcuts
   //updateContextMenu();
 
+  QTimer::singleShot(0, library_, SLOT(load()));
+
   //grabGesture(Qt::PanGesture);
   grabGesture(Qt::SwipeGesture);
   grabGesture(Qt::PinchGesture);
@@ -568,6 +575,9 @@ MainWindow::createComponents(bool unique)
   if (unique && !queue_->open(G_PATH_QUEUEDB))
     queue_->clear();
 
+  // Library
+  library_ = new MediaLibrary(G_PATH_HISTORY, this);
+
   // Data server
   dataServer_ = new DataServer(hub_, server_, cache_, queue_, this);
 
@@ -613,12 +623,13 @@ MainWindow::createComponents(bool unique)
   expelRubberBand_->setRadius(400);
 
   clickListener_ = new MouseClickEventListener(this);
-  clickListener_->setInterval( // around 200 msec
-#ifdef WITH_WIN_QTWIN
-    QtWin::getDoubleClickInterval() /3 +10 // +10 to ensure non-zero
-#else
-    DBLCLICK_TIMEOUT /2 +10 // +10 to ensure non-zero
-#endif // Q_OS_WIN
+  clickListener_->setInterval(
+    CLICK_TIMEOUT
+//#ifdef WITH_WIN_QTWIN
+//    QtWin::getDoubleClickInterval() /2 +10 // +10 to ensure non-zero
+//#else
+//    DBLCLICK_TIMEOUT /2 +10 // +10 to ensure non-zero
+//#endif // Q_OS_WIN
   );
 
 //#ifdef WITH_WIN_DWM
@@ -693,18 +704,18 @@ MainWindow::createComponents(bool unique)
   //userPanel_ = new UserPanel(this);
   //userPanel_->hide(); // TODO!!!!!!
 
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
   messageHandler_ = new MessageHandler(this);
-  signalView_ = new SignalView(this);
-  windows_.append(signalView_);
+  syncView_ = new SyncView(this);
+  windows_.append(syncView_);
 
   recentMessageView_ = new MessageView(this);
   windows_.append(recentMessageView_);
 
-  AC_CONNECT_MESSAGES(signalView_, this, Qt::AutoConnection);
+  AC_CONNECT_MESSAGES(syncView_, this, Qt::AutoConnection);
   AC_CONNECT_MESSAGES(recentMessageView_, this, Qt::AutoConnection);
 
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
 #ifdef WITH_MODULE_DOLL
   doll_ = new Doll(this);
@@ -758,6 +769,7 @@ MainWindow::createComponents(bool unique)
 
   browserDelegate_ = new AcBrowser(this);
   downloaderDelegate_ = new AcDownloader(this);
+  translatorDelegate_ = new AcTranslator(this);
   appServer_ = new AcPlayerServer(this);
 
   annotationDownloader_ = new AnnotationDownloader(this);
@@ -987,14 +999,14 @@ MainWindow::createConnections()
   //connect(tokenView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
   //connect(tokenView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
 
-#ifdef USE_MODE_SIGNAL
-  //connect(signalView_->tokenView(), SIGNAL(aliasSubmitted(Alias)), SLOT(submitAlias(Alias)));
+#ifdef PLAYER_ENABLE_GAME
+  //connect(syncView_->tokenView(), SIGNAL(aliasSubmitted(Alias)), SLOT(submitAlias(Alias)));
 
-  //connect(signalView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
-  //connect(signalView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
-  //connect(signalView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
-  //connect(signalView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
-#endif // USE_MODE_SIGNAL
+  //connect(syncView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
+  //connect(syncView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
+  //connect(syncView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
+  //connect(syncView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
+#endif // PLAYER_ENABLE_GAME
 
 
   //connect(annotationBrowser_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
@@ -1119,30 +1131,30 @@ MainWindow::createConnections()
 
   connect(TextCodecManager::globalInstance(), SIGNAL(encodingChanged(QString)), logger_, SLOT(logTextEncodingChanged(QString)), Qt::QueuedConnection);
 
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
   connect(this, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
   connect(this, SIGNAL(windowPicked(WId)), SLOT(setWindowOnTop()));
   //connect(this, SIGNAL(windowPicked(WId)), osdWindow_, SLOT(setWindowOnTop()));
 
-  connect(this, SIGNAL(attached(ProcessInfo)), signalView_->processView(), SIGNAL(attached(ProcessInfo)));
-  connect(this, SIGNAL(detached(ProcessInfo)), signalView_->processView(), SIGNAL(detached(ProcessInfo)));
+  connect(this, SIGNAL(attached(ProcessInfo)), syncView_->processView(), SIGNAL(attached(ProcessInfo)));
+  connect(this, SIGNAL(detached(ProcessInfo)), syncView_->processView(), SIGNAL(detached(ProcessInfo)));
 
-  connect(signalView_->processView(), SIGNAL(attached(ProcessInfo)), recentMessageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
-  connect(signalView_->processView(), SIGNAL(detached(ProcessInfo)), recentMessageView_, SLOT(clearProcessName()));
+  connect(syncView_->processView(), SIGNAL(attached(ProcessInfo)), recentMessageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
+  connect(syncView_->processView(), SIGNAL(detached(ProcessInfo)), recentMessageView_, SLOT(clearProcessName()));
 
-  connect(signalView_->processView(), SIGNAL(attached(ProcessInfo)), SLOT(resumeGameEncoding(ProcessInfo)));
+  connect(syncView_->processView(), SIGNAL(attached(ProcessInfo)), SLOT(resumeGameEncoding(ProcessInfo)));
 
-  AC_CONNECT_MESSAGE(signalView_, this, Qt::AutoConnection);
-  AC_CONNECT_WARNING(signalView_, this, Qt::AutoConnection);
+  AC_CONNECT_MESSAGE(syncView_, this, Qt::AutoConnection);
+  AC_CONNECT_WARNING(syncView_, this, Qt::AutoConnection);
 
-  connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), SLOT(backlogDialog()));
-  connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), SLOT(openProcessHook(ulong,ProcessInfo)));
+  connect(syncView_, SIGNAL(hookSelected(ulong,ProcessInfo)), SLOT(backlogDialog()));
+  connect(syncView_, SIGNAL(hookSelected(ulong,ProcessInfo)), SLOT(openProcessHook(ulong,ProcessInfo)));
 
   connect(recentMessageView_, SIGNAL(hookSelected(ulong)), SLOT(openProcessHook(ulong)));
   connect(recentMessageView_, SIGNAL(hookSelected(ulong)), recentMessageView_, SLOT(hide()));
   connect(messageHandler_, SIGNAL(messageReceivedWithId(qint64)), annotationView_, SLOT(showAnnotationsAtPos(qint64)));
   connect(messageHandler_, SIGNAL(messageReceivedWithText(QString)), SLOT(translate(QString)));
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
   //connect(player_, SIGNAL(opening()), SLOT(backlogDialog()));
   // MRL resolver
   connect(mrlResolver_, SIGNAL(mediaResolved(MediaInfo,QNetworkCookieJar*)), SLOT(openRemoteMedia(MediaInfo,QNetworkCookieJar*)));
@@ -1242,6 +1254,9 @@ MainWindow::createActions()
           openProxyBrowserAct_->setShortcut(QKeySequence("CTRL+B"));
           addAction(openProxyBrowserAct_);
 
+  connect(showTranslatorAct_ = new QAction(QIcon(ACRC_IMAGE_TRANSLATOR), tr("Translator"), this),
+          SIGNAL(triggered()), SLOT(showTranslator()));
+
   connect(toggleDownloaderVisibleAct_ = new QAction(QIcon(ACRC_IMAGE_DOWNLOADER), TR(T_MENUTEXT_DOWNLOAD), this),
           SIGNAL(triggered()), SLOT(showDownloader()));
 
@@ -1252,6 +1267,11 @@ MainWindow::createActions()
           SIGNAL(triggered()), SLOT(showWindowPickDialog()));
   connect(showProcessDialogAct_ = new QAction(TR(T_MENUTEXT_PROCESSPICKDIALOG), this),
           SIGNAL(triggered()), SLOT(showProcessPickDialog()));
+
+  connect(showLibraryAct_ = new QAction(tr("Library"), this),
+          SIGNAL(triggered()), this, SLOT(showLibrary()));
+          showLibraryAct_->setShortcut(QKeySequence("CTRL+L"));
+          addAction(showLibraryAct_);
 
   connect(toggleSubtitleOnTopAct_ = new QAction(tr("Show Subtitle On Top"), this),
           SIGNAL(triggered(bool)), SLOT(setSubtitleOnTop(bool)));
@@ -1478,10 +1498,10 @@ MainWindow::createActions()
   MAKE_TOGGLE(setDefaultAspectRatioAct_, DEFAULT, this, SLOT(setDefaultAspectRatio()))
   MAKE_TOGGLE(setStandardAspectRatioAct_, ASPECTRATIOSTANDARD, this, SLOT(setStandardAspectRatio()))
   MAKE_TOGGLE(setWideScreenAspectRatioAct_, ASPECTRATIOWIDESCREEN, this, SLOT(setWideScreenAspectRatio()))
-#ifdef USE_MODE_SIGNAL
-  MAKE_TOGGLE(toggleSignalViewVisibleAct_, SIGNALVIEW, this, SLOT(setSignalViewVisible(bool)))
+#ifdef PLAYER_ENABLE_GAME
+  MAKE_TOGGLE(toggleSyncViewVisibleAct_, SIGNALVIEW, this, SLOT(setSyncViewVisible(bool)))
   MAKE_TOGGLE(toggleRecentMessageViewVisibleAct_, RECENTMESSAGES, this, SLOT(setRecentMessageViewVisible(bool)))
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
   MAKE_ACTION(forward5sAct_,    FORWARD5S,      this,   SLOT(forward5s()))
   MAKE_ACTION(backward5sAct_,   BACKWARD5S,     this,   SLOT(backward5s()))
@@ -1527,7 +1547,8 @@ MainWindow::createActions()
   MAKE_TOGGLE(setUserLanguageToItalianAct_, ITALIAN, this, SLOT(setUserLanguageToItalian()))
   MAKE_TOGGLE(setUserLanguageToSpanishAct_, SPANISH, this, SLOT(setUserLanguageToSpanish()))
   MAKE_TOGGLE(setUserLanguageToPortugueseAct_, PORTUGUESE, this, SLOT(setUserLanguageToPortuguese()));
-  MAKE_TOGGLE(setUserLanguageToUnknownAct_, UNKNOWNLANGUAGE, this, SLOT(setUserLanguageToUnknown()))
+  MAKE_TOGGLE(setUserLanguageToRussianAct_, RUSSIAN, this, SLOT(setUserLanguageToRussian()));
+  //MAKE_TOGGLE(setUserLanguageToUnknownAct_, UNKNOWNLANGUAGE, this, SLOT(setUserLanguageToUnknown()))
 
   MAKE_TOGGLE(toggleAnnotationLanguageToEnglishAct_,  ENGLISH, this, SLOT(invalidateAnnotationLanguages()))
   MAKE_TOGGLE(toggleAnnotationLanguageToJapaneseAct_, JAPANESE,this, SLOT(invalidateAnnotationLanguages()))
@@ -1538,7 +1559,8 @@ MainWindow::createActions()
   MAKE_TOGGLE(toggleAnnotationLanguageToItalianAct_, ITALIAN, this, SLOT(invalidateAnnotationLanguages()))
   MAKE_TOGGLE(toggleAnnotationLanguageToSpanishAct_, SPANISH, this, SLOT(invalidateAnnotationLanguages()))
   MAKE_TOGGLE(toggleAnnotationLanguageToPortugueseAct_, PORTUGUESE, this, SLOT(invalidateAnnotationLanguages()))
-  MAKE_TOGGLE(toggleAnnotationLanguageToUnknownAct_, UNKNOWNLANGUAGE, this, SLOT(invalidateAnnotationLanguages()))
+  MAKE_TOGGLE(toggleAnnotationLanguageToRussianAct_, RUSSIAN, this, SLOT(invalidateAnnotationLanguages()))
+  //MAKE_TOGGLE(toggleAnnotationLanguageToUnknownAct_, UNKNOWNLANGUAGE, this, SLOT(invalidateAnnotationLanguages()))
   MAKE_TOGGLE(toggleAnnotationLanguageToAnyAct_, ANYLANGUAGE, this,SLOT(invalidateAnnotationLanguages()))
 
   MAKE_ACTION(showMaximizedAct_,        MAXIMIZE,       this,    SLOT(showMaximized()))
@@ -1946,20 +1968,21 @@ MainWindow::createMenus()
     userLanguageMenu_->addAction(setUserLanguageToItalianAct_);
     userLanguageMenu_->addAction(setUserLanguageToSpanishAct_);
     userLanguageMenu_->addAction(setUserLanguageToPortugueseAct_);
-    userLanguageMenu_->addSeparator();
-    userLanguageMenu_->addAction(setUserLanguageToUnknownAct_);
+    userLanguageMenu_->addAction(setUserLanguageToRussianAct_);
+    //userLanguageMenu_->addSeparator();
+    //userLanguageMenu_->addAction(setUserLanguageToUnknownAct_);
   }
 
   gameMenu_ = new QMenu(this); {
     ui->setContextMenuStyle(gameMenu_, this);
     gameMenu_->setTitle(tr("Sync with Galgame")  + " ...");
     gameMenu_->setToolTip(tr("Sync with Galgame"));
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
 
 #ifdef WITH_WIN_PICKER
     gameMenu_->addAction(showProcessDialogAct_);
 #endif // WITH_WIN_PICKER
-    gameMenu_->addAction(toggleSignalViewVisibleAct_);
+    gameMenu_->addAction(toggleSyncViewVisibleAct_);
     gameMenu_->addSeparator();
     gameMenu_->addAction(toggleRecentMessageViewVisibleAct_);
     gameMenu_->addAction(toggleBacklogDialogVisibleAct_);
@@ -1970,7 +1993,7 @@ MainWindow::createMenus()
     gameMenu_->addAction(toggleTranslateAct_);
     gameMenu_->addMenu(translatorMenu_);
     gameMenu_->addMenu(userLanguageMenu_);
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
   }
 
   annotationLanguageMenu_ = new QMenu(this); {
@@ -1980,7 +2003,7 @@ MainWindow::createMenus()
     annotationLanguageMenu_->setToolTip(TR(T_TOOLTIP_ANNOTATIONLANGUAGE));
 
     annotationLanguageMenu_->addAction(toggleAnnotationLanguageToAnyAct_);
-    annotationLanguageMenu_->addAction(toggleAnnotationLanguageToUnknownAct_);
+    //annotationLanguageMenu_->addAction(toggleAnnotationLanguageToUnknownAct_);
     annotationLanguageMenu_->addSeparator();
     annotationLanguageMenu_->addAction(toggleAnnotationLanguageToEnglishAct_);
     annotationLanguageMenu_->addAction(toggleAnnotationLanguageToJapaneseAct_);
@@ -1992,6 +2015,7 @@ MainWindow::createMenus()
     annotationLanguageMenu_->addAction(toggleAnnotationLanguageToItalianAct_);
     annotationLanguageMenu_->addAction(toggleAnnotationLanguageToSpanishAct_);
     annotationLanguageMenu_->addAction(toggleAnnotationLanguageToPortugueseAct_);
+    annotationLanguageMenu_->addAction(toggleAnnotationLanguageToRussianAct_);
   }
 
 //#ifdef Q_OS_WIN
@@ -2221,9 +2245,11 @@ MainWindow::createMenus()
     utilityMenu_->addSeparator();
     utilityMenu_->addAction(openProxyBrowserAct_);
     utilityMenu_->addAction(toggleDownloaderVisibleAct_);
+    utilityMenu_->addAction(showTranslatorAct_);
     utilityMenu_->addAction(toggleMagnifierVisibleAct_);
     utilityMenu_->addAction(toggleAnnotationEditorVisibleAct_ );
     utilityMenu_->addAction(downloadAnnotationsAct_);
+    utilityMenu_->addAction(showLibraryAct_);
 
 #ifndef Q_OS_MAC
     utilityMenu_->addAction(newWindowAct_);
@@ -2323,6 +2349,8 @@ MainWindow::createMenus()
   //menuBar_ = new QMenuBar;
   QMenu *m;
   m = menuBar()->addMenu(tr("&File")); {
+    m->addAction(showLibraryAct_);
+    m->addSeparator();
     m->addAction(openFileAct_);
     m->addAction(openUrlAct_);
     m->addSeparator();
@@ -2364,6 +2392,8 @@ MainWindow::createMenus()
     openButtonMenu_->setToolTip(TR(T_OPEN));
     openButtonMenu_->setIcon(QIcon(RC_IMAGE_OPEN));
 
+    openButtonMenu_->addAction(showLibraryAct_);
+    openButtonMenu_->addSeparator();
     openButtonMenu_->addAction(openFileAct_);
     openButtonMenu_->addAction(openUrlAct_);
     openButtonMenu_->addSeparator();
@@ -2656,11 +2686,12 @@ MainWindow::setVisible(bool visible)
 void
 MainWindow::open()
 {
-  switch (hub_->tokenMode()) {
-  case SignalHub::LiveTokenMode:
-  case SignalHub::MediaTokenMode: openFile(); break;
-  case SignalHub::SignalTokenMode: openProcess(); break;
-  }
+  //switch (hub_->tokenMode()) {
+  //case SignalHub::LiveTokenMode:
+  //case SignalHub::MediaTokenMode: openFile(); break;
+  //case SignalHub::SignalTokenMode: openProcess(); break;
+  //}
+  showLibrary();
 }
 
 UrlDialog*
@@ -2813,9 +2844,9 @@ MainWindow::openFile()
 
   static const QString filter =
       TR(T_FORMAT_SUPPORTED) + ("(" G_FILTER_SUPPORTED ")" ";;")
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
     + TR(T_GALGAME)   + ("(" G_FILTER_PROGRAM ")" ";;")
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
     + TR(T_FORMAT_VIDEO)     + ("(" G_FILTER_VIDEO ")" ";;")
     + TR(T_FORMAT_AUDIO)     + ("(" G_FILTER_AUDIO ")" ";;")
     + TR(T_FORMAT_PICTURE)   + ("(" G_FILTER_PICTURE ")" ";;")
@@ -2933,7 +2964,7 @@ MainWindow::openAnnotationFile(const QString &fileName, bool import)
     annots = l;
 
   QString src = QFileInfo(fileName).fileName();
-  QString msg = QString("%1 :" HTML_STYLE_OPEN(color:red) "+%2" HTML_STYLE_CLOSE() ", %3")
+  QString msg = QString("%1 :" HTML_SS_OPEN(color:red) "+%2" HTML_SS_CLOSE() ", %3")
     .arg(tr("annotations found"))
     .arg(QString::number(annots.size()))
     .arg(src);
@@ -2950,19 +2981,19 @@ MainWindow::openAnnotationFile(const QString &fileName, bool import)
 void
 MainWindow::openProcess()
 {
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
   if (hub_->isMediaTokenMode() && player_->hasMedia())
     player_->closeMedia();
-  showSignalView();
-#endif // USE_MODE_SIGNAL
+  showSyncView();
+#endif // PLAYER_ENABLE_GAME
 }
 
 void
 MainWindow::openWindow()
 {
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
   setProcessPickDialogVisible(true);
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 }
 
 bool
@@ -3289,7 +3320,7 @@ MainWindow::hasExternalAnnotationFiles() const
 
   DOUT("enter");
   QFileInfo fi(path);
-  QDir dir = fi.absolutePath();
+  QDir dir = fi.absoluteDir();
   if (!dir.exists()) {
     DOUT("exit: dir does not exist");
     return false;
@@ -3319,7 +3350,7 @@ MainWindow::externalAnnotationFiles() const
 
   DOUT("enter");
   QFileInfo fi(path);
-  QDir dir = fi.absolutePath();
+  QDir dir = fi.absoluteDir();
   if (!dir.exists()) {
     DOUT("exit: dir does not exist");
     return QStringList();
@@ -3358,9 +3389,13 @@ MainWindow::openStreamUrl(const QString &rtsp)
 { openMrl(rtsp, false); }
 
 void
-MainWindow::openMrl(const QString &path, bool checkPath)
+MainWindow::openMrl(const QString &input, bool checkPath)
 {
-  DOUT("enter: path =" << path);
+  DOUT("enter: input =" << input);
+  QString path = input;
+#ifdef Q_OS_WIN
+  path.replace('\\', '/');
+#endif // Q_OS_WIN
 
   disableNavigation();
 
@@ -3399,7 +3434,7 @@ MainWindow::openMrl(const QString &path, bool checkPath)
     }
     if (fi.isFile() && !Player::isSupportedFile(file))
       emit warning(tr("play file with unknown extension") + ": "
-        HTML_STYLE_OPEN(color:orange) + fi.suffix() + HTML_STYLE_CLOSE()
+        HTML_SS_OPEN(color:orange) + fi.suffix() + HTML_SS_CLOSE()
       );
   }
 
@@ -3743,9 +3778,9 @@ MainWindow::play()
     break;
 
   case SignalHub::SignalTokenMode:
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
     messageHandler_->setActive(true);
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 #ifdef WITH_WIN_TEXTHOOK
     TextHook::globalInstance()->setEnabled(true);
     emit messageOnce(tr("Synchronized"));
@@ -4171,9 +4206,9 @@ MainWindow::windowTitleBase() const
   QString ret;
   switch (hub_->tokenMode()) {
   case SignalHub::SignalTokenMode:
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
     ret = messageHandler_->processInfo().processName;
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
     break;
 
   case SignalHub::LiveTokenMode:
@@ -4232,6 +4267,18 @@ MainWindow::syncPrefixLineText(const QString &text)
 }
 
 // - Dialogs -
+
+void
+MainWindow::showLibrary()
+{
+  if (!libraryView_) {
+    libraryView_ = new MediaLibraryView(library_, this);
+    connect(libraryView_, SIGNAL(openRequested(QString)), SLOT(openSource(QString)));
+    windows_.append(libraryView_);
+  }
+  libraryView_->show();
+  libraryView_->raise();
+}
 
 void
 MainWindow::showLoginDialog()
@@ -4347,7 +4394,7 @@ void
 MainWindow::setAnnotationBrowserVisible(bool t)
 {
   if (!annotationBrowser_) {
-    annotationBrowser_ = new AnnotationBrowser(hub_, this);
+    annotationBrowser_ = new AnnotationTableView(hub_, this);
     windows_.append(annotationBrowser_);
 
     AC_CONNECT_MESSAGES(annotationBrowser_, this, Qt::AutoConnection);
@@ -4375,9 +4422,9 @@ MainWindow::setAnnotationBrowserVisible(bool t)
     connect(annotationBrowser_, SIGNAL(annotationTextUpdatedWithId(QString,qint64)), dataManager_, SLOT(updateAnnotationTextWithId(QString,qint64)));
     connect(annotationView_, SIGNAL(annotationPosChanged(qint64)), annotationBrowser_, SLOT(setAnnotationPos(qint64)));
     connect(this, SIGNAL(userIdChanged(qint64)), annotationBrowser_, SLOT(setUserId(qint64)));
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
     connect(messageHandler_, SIGNAL(messageReceivedWithId(qint64)), annotationBrowser_, SLOT(setAnnotationPos(qint64)));
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
     annotationBrowser_->setUserId(server_->user().id());
     if (dataManager_->hasAnnotations())
@@ -4414,14 +4461,15 @@ MainWindow::backlogDialog()
   if (!backlogDialog_) {
     backlogDialog_ = new BacklogDialog(this);
     windows_.append(backlogDialog_);
+    connect(backlogDialog_, SIGNAL(translateRequested(QString)), SLOT(translateUsingTranslator(QString)));
     connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), backlogDialog_, SLOT(clear()));
     connect(player_, SIGNAL(mediaChanged()), backlogDialog_, SLOT(clear()));
     connect(annotationView_, SIGNAL(subtitleAdded(QString)), backlogDialog_, SLOT(appendSubtitle(QString)));
     connect(annotationView_, SIGNAL(annotationAdded(QString)), backlogDialog_, SLOT(appendAnnotation(QString)));
-#ifdef USE_MODE_SIGNAL
-    connect(signalView_, SIGNAL(hookSelected(ulong,ProcessInfo)), backlogDialog_, SLOT(clear()));
+#ifdef PLAYER_ENABLE_GAME
+    connect(syncView_, SIGNAL(hookSelected(ulong,ProcessInfo)), backlogDialog_, SLOT(clear()));
     connect(messageHandler_, SIGNAL(messageReceivedWithText(QString)), backlogDialog_, SLOT(appendText(QString)));
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
   }
   return backlogDialog_;
 }
@@ -4676,9 +4724,9 @@ MainWindow::setProcessPickDialogVisible(bool visible)
     AC_CONNECT_MESSAGE(processPickDialog_, this, Qt::AutoConnection);
     connect(processPickDialog_, SIGNAL(windowPicked(WId)), SIGNAL(windowPicked(WId)));
     connect(processPickDialog_, SIGNAL(cancelled()), SLOT(updateOsdWindowOnTop()));
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
     connect(processPickDialog_, SIGNAL(windowPicked(WId)), SLOT(openProcessWindow(WId)));
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
     //connect(processPickDialog_, SIGNAL(windowPicked(WId)), osdWindow_, SLOT(setWindowOnTop()));
 
     // FIXME
@@ -4712,7 +4760,12 @@ MainWindow::submitAliasText(const QString &text, qint32 type, bool async, bool l
   a.setText(text);
   a.setType(type);
   a.setUserId(server_->user().id());
-  a.setLanguage(server_->user().language());
+
+  if (a.isUrl())
+    a.setLanguage(Alias::guessUrlLanguage(a.text(), server_->user().language()));
+  else
+    a.setLanguage(server_->user().language());
+
   a.setUpdateTime(::time(0));
   //if (tokenView_) // FIXME: use signals here
   //  tokenView_->addAlias(a);
@@ -4799,13 +4852,13 @@ MainWindow::fileType(const QString &fileName)
   if (isDevicePath(fileName))
     return Token::TT_Video;
 
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
   static const QStringList supportedProgramSuffices =
       QStringList() G_FORMAT_PROGRAM(<<);
   foreach (const QString &suffix, supportedProgramSuffices)
     if (fileName.endsWith("." + suffix, Qt::CaseInsensitive))
-      return Token::TT_Program;
-#endif // USE_MODE_SIGNAL
+      return Token::TT_Game;
+#endif // PLAYER_ENABLE_GAME
 
   if (Player::isSupportedVideo(fileName) || Player::isSupportedImage(fileName))
     return Token::TT_Video;
@@ -4866,7 +4919,7 @@ MainWindow::updateOnlineAnnotations(bool async)
 
   if (!annots.isEmpty()) {
     QString src = "http://annot.me";
-    QString msg = QString("%1 :" HTML_STYLE_OPEN(color:red) "+%2" HTML_STYLE_CLOSE() ", %3")
+    QString msg = QString("%1 :" HTML_SS_OPEN(color:red) "+%2" HTML_SS_CLOSE() ", %3")
       .arg(tr("annotations found"))
       .arg(QString::number(annots.size()))
       .arg(src);
@@ -5077,8 +5130,7 @@ MainWindow::signFileWithUrl(const QString &path, const QString &url, bool async)
     Alias a;
     a.setType(Alias::AT_Url);
     a.setUserId(server_->user().id());
-    qint32 lang = Alias::guessUrlLanguage(url, server_->user().language());
-    a.setLanguage(lang);
+    a.setLanguage(Alias::guessUrlLanguage(url, server_->user().language()));
     a.setText(url);
     a.setUpdateTime(now);
     aliases.append(a);
@@ -5139,6 +5191,11 @@ MainWindow::setToken(const QString &input, bool async)
     return;
   }
 
+  const qint64 now = QDateTime::currentMSecsSinceEpoch();
+  Media media;
+  media.setVisitCount(1);
+  media.setVisitTime(now);
+
   DOUT("inetMutex locking");
   inetMutex_.lock();
   DOUT("inetMutex locked");
@@ -5150,9 +5207,14 @@ MainWindow::setToken(const QString &input, bool async)
   Alias alias;
 
   if (!input.isEmpty()) {
+    QString path = removeUrlPrefix(input);
+    media.setLocation(path);
+
+    if (hub_->isMediaTokenMode() && player_->hasMedia())
+      media.setTitle(player_->mediaTitle());
+
     token.setType(tokenType_ = fileType(input));
 
-    QString path = removeUrlPrefix(input);
     Q_ASSERT(!recentDigest_.isEmpty());
     if (recentDigest_.isEmpty() && isDigestReady(path))
       recentDigest_ = digestFromFile(path);
@@ -5175,34 +5237,47 @@ MainWindow::setToken(const QString &input, bool async)
           alias.setUserId(server_->user().id());
           alias.setLanguage(server_->user().language());
           alias.setText(fileName);
-          alias.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+          alias.setUpdateTime(now / 1000);
         }
       }
     }
   } else if (!recentDigest_.isEmpty()) {
     token.setDigest(recentDigest_);
   } else if (!recentUrl_.isEmpty()) {
+    Q_ASSERT(hub_->isMediaTokenMode());
     token.setUrl(recentUrl_);
-    token.setType(tokenType_ = Token::TT_Video);
+    media.setLocation(recentUrl_);
+
+    token.setType(tokenType_ = Token::TT_Url);
     int section = currentPlaylistIndex();
     if (section < 0)
       section = 0;
     token.setSection(section);
     QString title = player_->mediaTitle();
+    media.setTitle(title);
     if (!title.isEmpty() && !isRemoteMrl(title)) {
       if (recentUrlTitles_.size() > RECENT_COUNT)
         recentUrlTitles_.erase(recentUrlTitles_.begin());
       recentUrlTitles_[recentUrl_] = title;
-      alias.setType(Alias::AT_Name);
+      alias.setType(Alias::AT_Title);
       alias.setUserId(server_->user().id());
       alias.setLanguage(server_->user().language());
       alias.setText(title);
-      alias.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+      alias.setUpdateTime(now / 1000);
     }
   }
 
- if (//!token.hasType() ||
-     !token.hasDigest() && !token.hasUrl()) {
+  media.setDigest(token.digest());
+  media.setType(token.type());
+
+  if (//!token.hasType() ||
+      !token.hasDigest() && !token.hasUrl()) {
+
+    if (!media.hasTitle() && media.hasLocation() && !media.isUrl())
+      media.setTitle(QFileInfo(media.location()).completeBaseName());
+
+    library_->visit(media);
+
     DOUT("inetMutex unlocking");
     inetMutex_.unlock();
     DOUT("inetMutex unlocked");
@@ -5210,7 +5285,7 @@ MainWindow::setToken(const QString &input, bool async)
     return;
   }
 
-  token.setCreateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+  token.setCreateTime(now / 1000);
 
   if (hub_->isMediaTokenMode() && player_->hasMedia() && token.hasDigest()) {
     int section = 0;
@@ -5228,24 +5303,58 @@ MainWindow::setToken(const QString &input, bool async)
   if (alias.hasText())
     aliases.append(alias);
 
-#ifdef USE_MODE_SIGNAL
-  if (hub_->isSignalTokenMode()) {
+#ifdef PLAYER_ENABLE_GAME
+  if (tokenType_ == Token::TT_Game) {
     WId hwnd = annotationView_->trackedWindow();
     if (hwnd && QtWin::getWindowProcessId(hwnd) != QCoreApplication::applicationPid()) {
       QString t = QtWin::getWindowText(hwnd).trimmed();
       if (!t.isEmpty()) {
         DOUT("galgame window title =" << t);
+        media.setTitle(t);
+
         Alias a;
-        a.setType(Alias::AT_Name);
+        a.setType(Alias::AT_Title);
         a.setUserId(server_->user().id());
         a.setLanguage(server_->user().language());
         a.setText(t);
-        a.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+        a.setUpdateTime(now / 1000);
         aliases.append(a);
       }
     }
+
+    static QString programFiles;
+    if (programFiles.isEmpty()) {
+      programFiles = QtWin::getProgramFilesPath();
+      if (!programFiles.isEmpty()) {
+        programFiles.replace('\\', '/');
+        if (!programFiles.endsWith('/'))
+          programFiles.append('/');
+      }
+    }
+    QString path = input;
+    path.replace('\\', '/');
+    if (!programFiles.isEmpty() && path.startsWith(programFiles, Qt::CaseInsensitive)) {
+      path.remove(programFiles, Qt::CaseInsensitive);
+      QStringList l = path.split('/');
+      l.removeLast();
+      if (!l.isEmpty() && l.size() <= 2) {
+        Alias a;
+        a.setType(Alias::AT_Folder);
+        a.setUserId(server_->user().id());
+        a.setLanguage(server_->user().language());
+        a.setText(l.last());
+        a.setUpdateTime(now / 1000);
+        aliases.append(a);
+
+        if (l.size() == 2) {
+          a.setType(Alias::AT_Brand);
+          a.setText(l.first());
+          aliases.append(a);
+        }
+      }
+    }
   }
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
   qint64 tid = 0;
   if (submit_) {
@@ -5272,6 +5381,13 @@ MainWindow::setToken(const QString &input, bool async)
       token = t;
   }
 
+  media.setTokenId(token.id());
+
+  //if (!media.hasTitle() && media.hasLocation() && !media.isRemote())
+  //  media.setTitle(QFileInfo(media.location()).completeBaseName());
+
+  library_->visit(media);
+
   bool fromCache;
   aliases = dataServer_->selectAliasesWithToken(token, false, &fromCache); // false = ignore cache
   if (server_->isConnected() && fromCache) {
@@ -5293,9 +5409,9 @@ MainWindow::setToken(const QString &input, bool async)
 
 //  if (commentView_)
 //    commentView_->setTokenId(token.id());
-#ifdef USE_MODE_SIGNAL
-  //signalView_->tokenView()->setAliases(aliases);
-#endif // USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
+  //syncView_->tokenView()->setAliases(aliases);
+#endif // PLAYER_ENABLE_GAME
 
   //bool fromCache;
   AnnotationList annots = dataServer_->selectAnnotationsWithToken(token, false, &fromCache); // false = ignore cache
@@ -5343,7 +5459,7 @@ MainWindow::setToken(const QString &input, bool async)
 
   if (!annots.isEmpty()) {
     QString src = dataServer_->preferCache() ? tr("offline database") : "http://annot.me";
-    QString msg = QString("%1 :" HTML_STYLE_OPEN(color:red) "+%2" HTML_STYLE_CLOSE() ", %3")
+    QString msg = QString("%1 :" HTML_SS_OPEN(color:red) "+%2" HTML_SS_CLOSE() ", %3")
       .arg(tr("annotations found"))
       .arg(QString::number(annots.size()))
       .arg(src);
@@ -5364,10 +5480,8 @@ MainWindow::showText(const QString &text, bool isSigned)
     annot.setUserAlias(server_->user().name());
     annot.setUserAnonymous(server_->user().isAnonymous());
   }
-  annot.setLanguage(server_->isAuthorized() ?
-    server_->user().language() :
-    Traits::AnyLanguage
-  );
+  if (server_->isAuthorized())
+    annot.setLanguage(server_->user().language());
   annot.setText(text);
   annotationView_->showAnnotation(annot);
   DOUT("exit");
@@ -5445,7 +5559,8 @@ MainWindow::showSubtitle(const QString &input, int userLang, const QString &pref
   //  annot.setUserAlias(server_->user().name());
   //  annot.setUserAnonymous(server_->user().isAnonymous());
   //}
-  annot.setLanguage(userLang ? userLang : Traits::AnyLanguage);
+  if (userLang)
+    annot.setLanguage(userLang);
   text.prepend(CORE_CMD_SUB " ");
   annot.setText(text)    ;
   annotationView_->showAnnotation(annot, false); // showMeta = false
@@ -5525,9 +5640,9 @@ MainWindow::submitText(const QString &text, bool async)
   if (!server_->isAuthorized() ||
       !dataManager_->token().hasDigest() && !dataManager_->token().hasUrl() ||
       hub_->isMediaTokenMode() && !player_->hasMedia()
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
       || hub_->isSignalTokenMode() && !messageHandler_->lastMessageHash().isValid()
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
      ) {
 
     showText(text, true); // isSigned = true
@@ -5568,10 +5683,10 @@ MainWindow::submitText(const QString &text, bool async)
       Q_ASSERT(0);
       break;
     case SignalHub::SignalTokenMode:
-  #ifdef USE_MODE_SIGNAL
+  #ifdef PLAYER_ENABLE_GAME
       annot.setPos(messageHandler_->lastMessageHash().hash);
       annot.setPosType(messageHandler_->lastMessageHash().count);
-  #endif // USE_MODE_SIGNAL
+  #endif // PLAYER_ENABLE_GAME
       break;
     }
 
@@ -5697,7 +5812,7 @@ MainWindow::say(const QString &text, const QString &color)
   if (color.isEmpty())
     emit message(text);
   else
-    emit message(html_style(text, "color:" + color));
+    emit message(html_ss(text, "color:" + color));
   DOUT("exit");
 }
 
@@ -6499,11 +6614,11 @@ MainWindow::updateAnnotationSubtitleMenu()
 void
 MainWindow::updateGameMenu()
 {
-#ifdef USE_MODE_SIGNAL
-  toggleSignalViewVisibleAct_->setChecked(signalView_->isVisible());
+#ifdef PLAYER_ENABLE_GAME
+  toggleSyncViewVisibleAct_->setChecked(syncView_->isVisible());
   toggleRecentMessageViewVisibleAct_->setChecked(recentMessageView_->isVisible());
   toggleTranslateAct_->setEnabled(hub_->isSignalTokenMode() && server_->isConnected());
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
   //toggleSubtitleAnnotationVisibleAct_->setChecked(annotationView_->isSubtitleVisible());
   //toggleSubtitleOnTopAct_->setChecked(isSubtitleOnTop());
   updateTranslatorMenu();
@@ -6559,6 +6674,8 @@ MainWindow::updateContextMenu()
     //contextMenu_->addAction(openAct_);
 
     openMenu_->clear(); {
+      openMenu_->addAction(showLibraryAct_);
+      openMenu_->addSeparator();
       openMenu_->addAction(openFileAct_);
       openMenu_->addAction(openUrlAct_);
       openMenu_->addAction(openVideoDeviceAct_);
@@ -6624,11 +6741,11 @@ MainWindow::updateContextMenu()
       contextMenu_->addMenu(sectionMenu_);
     }
 
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
     contextMenu_->addSeparator();
     contextMenu_->addMenu(gameMenu_);
     updateGameMenu();
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
     contextMenu_->addSeparator();
     if (hub_->isMediaTokenMode() && player_->hasMedia()) {
@@ -6869,9 +6986,9 @@ MainWindow::updateContextMenu()
 
 //  if (ALPHA)
 //  if (player_->hasMedia()
-//#ifdef USE_MODE_SIGNAL
+//#ifdef PLAYER_ENABLE_GAME
 //      && hub_->isMediaTokenMode()
-//#endif // USE_MODE_SIGNAL
+//#endif // PLAYER_ENABLE_GAME
 //      ) {
 //    // Sync mode
 //    contextMenu_->addSeparator();
@@ -7037,9 +7154,9 @@ MainWindow::updateUserMenu()
   if (!server_->isAuthorized())
     return;
 
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
   toggleTranslateAct_->setEnabled(hub_->isSignalTokenMode() && server_->isConnected());
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
   // Menu
 
@@ -7049,11 +7166,11 @@ MainWindow::updateUserMenu()
 
     userMenu_->addSeparator();
     userMenu_->addMenu(translatorMenu_);
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
     userMenu_->addAction(toggleTranslateAct_);
     userMenu_->addAction(toggleSubtitleOnTopAct_);
     userMenu_->addAction(toggleBacklogDialogVisibleAct_);
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
     userMenu_->addSeparator();
     userMenu_->addAction(toggleUserViewVisibleAct_);
@@ -7086,7 +7203,8 @@ MainWindow::updateUserMenu()
     setUserLanguageToItalianAct_->setChecked(server_->user().language() == Traits::Italian);
     setUserLanguageToSpanishAct_->setChecked(server_->user().language() == Traits::Spanish);
     setUserLanguageToPortugueseAct_->setChecked(server_->user().language() == Traits::Portuguese);
-    setUserLanguageToUnknownAct_->setChecked(server_->user().language() == Traits::UnknownLanguage);
+    setUserLanguageToRussianAct_->setChecked(server_->user().language() == Traits::Russian);
+    //setUserLanguageToUnknownAct_->setChecked(server_->user().language() == Traits::UnknownLanguage);
   }
 }
 
@@ -7349,6 +7467,9 @@ MainWindow::dispose()
 {
   DOUT("enter");
 
+  if (annotationBrowser_ && annotationBrowser_->isVisible() && dataManager_->hasAnnotations())
+    annotationBrowser_->hide(); // prevent hanging when deleting annotations
+
   saveSettingsTimer_->stop();
 
   enum { wait_player_stop_timeout = 2000 }; // 2 seconds
@@ -7584,7 +7705,7 @@ MainWindow::blessTokenWithId(qint64 id, bool async)
   if (ok) {
     emit message(tr("media blessed"));
     if (dataManager_->token().id() == id) {
-      dataManager_->token().blessedCount()++;
+      dataManager_->token().blessCount()++;
       //dataManager_->invalidateToken();
     }
   } else
@@ -7627,7 +7748,7 @@ MainWindow::curseTokenWithId(qint64 id, bool async)
   if (ok) {
     emit message(tr("media cursed"));
     if (dataManager_->token().id() == id) {
-      dataManager_->token().cursedCount()++;
+      dataManager_->token().curseCount()++;
       //dataManager_->invalidateToken();
     }
   } else
@@ -8102,8 +8223,8 @@ MainWindow::openProcessId(ulong pid)
     bool ok = TextHook::globalInstance()->attachProcess(pid);
     if (ok) {
       emit message(tr("process attached") + QString(" (pid = %1)").arg(QString::number(pid)));
-      signalView_->processView()->refresh();
-      ProcessInfo pi = signalView_->processView()->attachedProcessInfo();
+      syncView_->processView()->refresh();
+      ProcessInfo pi = syncView_->processView()->attachedProcessInfo();
       if (pi.isValid() && pid == pi.processId)
         emit attached(pi);
       if (!annotationView_->trackedWindow() ||
@@ -8139,7 +8260,7 @@ MainWindow::openProcessPath(const QString &path)
 
   addRecent(path);
 
-  signalView_->processView()->refresh();
+  syncView_->processView()->refresh();
   if (!pid) {
     emit warning(tr("failed to start process") + QString(" (name = %1)").arg(processName));
     openProcess();
@@ -8249,9 +8370,9 @@ MainWindow::resumeGameEncoding(const ProcessInfo &pi)
     QString e = p.value();
     emit message(
       tr("resuming last game encoding") + ": "
-      HTML_STYLE_OPEN(color:orange)
+      HTML_SS_OPEN(color:orange)
       + e +
-      HTML_STYLE_CLOSE()
+      HTML_SS_CLOSE()
     );
     TextCodecManager::globalInstance()->setEncoding(e);
   } else {
@@ -8259,9 +8380,9 @@ MainWindow::resumeGameEncoding(const ProcessInfo &pi)
     if (!e.isEmpty()) {
       emit message(
         tr("detect game encoding") + ": "
-        HTML_STYLE_OPEN(color:orange)
+        HTML_SS_OPEN(color:orange)
         + e +
-        HTML_STYLE_CLOSE()
+        HTML_SS_CLOSE()
       );
       TextCodecManager::globalInstance()->setEncoding(e);
     }
@@ -8270,18 +8391,18 @@ MainWindow::resumeGameEncoding(const ProcessInfo &pi)
 
 #endif // WITH_WIN_TEXTHOOK
 
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
 
 void
-MainWindow::showSignalView()
-{ setSignalViewVisible(true); }
+MainWindow::showSyncView()
+{ setSyncViewVisible(true); }
 
 void
-MainWindow::hideSignalView()
-{ setSignalViewVisible(false); }
+MainWindow::hideSyncView()
+{ setSyncViewVisible(false); }
 
 void
-MainWindow::setSignalViewVisible(bool visible)
+MainWindow::setSyncViewVisible(bool visible)
 {
   //if (visible) {
   //  if (hub_->isMediaTokenMode() && hub_->isNormalPlayerMode() &&
@@ -8291,14 +8412,14 @@ MainWindow::setSignalViewVisible(bool visible)
   //  if (hub_->isMediaTokenMode() && !isVisible())
   //    show();
   //}
-  //signalView_->tokenView()->setToken(tokenView_->token());
-  //signalView_->tokenView()->setAliases(tokenView_->aliases());
-  //signalView_->tokenView()->setUserId(tokenView_->userId());
-  signalView_->setVisible(visible);
+  //syncView_->tokenView()->setToken(tokenView_->token());
+  //syncView_->tokenView()->setAliases(tokenView_->aliases());
+  //syncView_->tokenView()->setUserId(tokenView_->userId());
+  syncView_->setVisible(visible);
   if (visible) {
     // FIXME
     osdWindow_->setWindowOnTop();
-    signalView_->raise();
+    syncView_->raise();
   }
 }
 
@@ -8329,7 +8450,7 @@ MainWindow::setRecentMessageViewVisible(bool visible)
     recentMessageView_->raise();
 }
 
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
 void
 MainWindow::setWindowTrackingEnabled(bool t)
@@ -8452,15 +8573,14 @@ void MainWindow::setUserLanguageToGerman()      { setUserLanguage(Traits::German
 void MainWindow::setUserLanguageToItalian()     { setUserLanguage(Traits::Italian); }
 void MainWindow::setUserLanguageToSpanish()     { setUserLanguage(Traits::Spanish); }
 void MainWindow::setUserLanguageToPortuguese()  { setUserLanguage(Traits::Portuguese); }
-void MainWindow::setUserLanguageToUnknown()     { setUserLanguage(Traits::UnknownLanguage); }
+void MainWindow::setUserLanguageToRussian()     { setUserLanguage(Traits::Russian); }
+//void MainWindow::setUserLanguageToUnknown()     { setUserLanguage(Traits::UnknownLanguage); }
 
 void
 MainWindow::invalidateAnnotationLanguages()
 {
-  qint64 languages = 0;
+  QSet<int> languages;
   if (toggleAnnotationLanguageToAnyAct_->isChecked()) {
-    languages = Traits::AnyLanguageBit;
-
     toggleAnnotationLanguageToEnglishAct_->setEnabled(false);
     toggleAnnotationLanguageToJapaneseAct_->setEnabled(false);
     toggleAnnotationLanguageToChineseAct_->setEnabled(false);
@@ -8470,7 +8590,8 @@ MainWindow::invalidateAnnotationLanguages()
     toggleAnnotationLanguageToItalianAct_->setEnabled(false);
     toggleAnnotationLanguageToSpanishAct_->setEnabled(false);
     toggleAnnotationLanguageToPortugueseAct_->setEnabled(false);
-    toggleAnnotationLanguageToUnknownAct_->setEnabled(false);
+    toggleAnnotationLanguageToRussianAct_->setEnabled(false);
+    //toggleAnnotationLanguageToUnknownAct_->setEnabled(false);
 
   } else {
     toggleAnnotationLanguageToEnglishAct_->setEnabled(true);
@@ -8482,25 +8603,27 @@ MainWindow::invalidateAnnotationLanguages()
     toggleAnnotationLanguageToItalianAct_->setEnabled(true);
     toggleAnnotationLanguageToSpanishAct_->setEnabled(true);
     toggleAnnotationLanguageToPortugueseAct_->setEnabled(true);
-    toggleAnnotationLanguageToUnknownAct_->setEnabled(true);
+    toggleAnnotationLanguageToRussianAct_->setEnabled(true);
+    //toggleAnnotationLanguageToUnknownAct_->setEnabled(true);
 
-    if (toggleAnnotationLanguageToUnknownAct_->isChecked())       languages |= Traits::UnknownLanguageBit;
-    if (toggleAnnotationLanguageToEnglishAct_->isChecked())       languages |= Traits::EnglishBit;
-    if (toggleAnnotationLanguageToJapaneseAct_->isChecked())      languages |= Traits::JapaneseBit;
-    if (toggleAnnotationLanguageToChineseAct_->isChecked())       languages |= Traits::ChineseBit;
-    if (toggleAnnotationLanguageToKoreanAct_->isChecked())        languages |= Traits::KoreanBit;
-    if (toggleAnnotationLanguageToFrenchAct_->isChecked())        languages |= Traits::FrenchBit;
-    if (toggleAnnotationLanguageToGermanAct_->isChecked())        languages |= Traits::GermanBit;
-    if (toggleAnnotationLanguageToItalianAct_->isChecked())       languages |= Traits::ItalianBit;
-    if (toggleAnnotationLanguageToSpanishAct_->isChecked())       languages |= Traits::SpanishBit;
-    if (toggleAnnotationLanguageToPortugueseAct_->isChecked())    languages |= Traits::PortugueseBit;
+    //if (toggleAnnotationLanguageToUnknownAct_->isChecked())     languages |= Traits::UnknownLanguageBit;
+    if (toggleAnnotationLanguageToEnglishAct_->isChecked())     languages.insert(Traits::English);
+    if (toggleAnnotationLanguageToJapaneseAct_->isChecked())    languages.insert(Traits::Japanese);
+    if (toggleAnnotationLanguageToChineseAct_->isChecked())     languages.insert(Traits::Chinese);
+    if (toggleAnnotationLanguageToKoreanAct_->isChecked())      languages.insert(Traits::Korean);
+    if (toggleAnnotationLanguageToFrenchAct_->isChecked())      languages.insert(Traits::French);
+    if (toggleAnnotationLanguageToGermanAct_->isChecked())      languages.insert(Traits::German);
+    if (toggleAnnotationLanguageToItalianAct_->isChecked())     languages.insert(Traits::Italian);
+    if (toggleAnnotationLanguageToSpanishAct_->isChecked())     languages.insert(Traits::Spanish);
+    if (toggleAnnotationLanguageToPortugueseAct_->isChecked())  languages.insert(Traits::Portuguese);
+    if (toggleAnnotationLanguageToRussianAct_->isChecked())     languages.insert(Traits::Russian);
   }
 
   // Use at least unknown language
-  if (!languages) {
-    toggleAnnotationLanguageToUnknownAct_->setChecked(true);
-    languages = Traits::UnknownLanguageBit;
-  }
+  //if (!languages) {
+  //  toggleAnnotationLanguageToUnknownAct_->setChecked(true);
+  //  languages = Traits::AnyLanguageBit;
+  //}
 
   annotationFilter_->setLanguages(languages);
 }
@@ -8539,7 +8662,7 @@ QString
 MainWindow::languageToString(int lang)
 {
   switch(lang) {
-  case Traits::AnyLanguage:     return TR(T_ANYLANGUAGE);
+  //case Traits::AnyLanguage:     return TR(T_ANYLANGUAGE);
   case Traits::English:         return TR(T_ENGLISH);
   case Traits::Japanese:        return TR(T_JAPANESE);
   case Traits::Chinese:         return TR(T_CHINESE);
@@ -8549,8 +8672,9 @@ MainWindow::languageToString(int lang)
   case Traits::Italian:         return TR(T_ITALIAN);
   case Traits::Spanish:         return TR(T_SPANISH);
   case Traits::Portuguese:      return TR(T_PORTUGUESE);
+  case Traits::Russian:         return TR(T_RUSSIAN);
 
-  case Traits::UnknownLanguage:
+  //case Traits::UnknownLanguage:
   default : return TR(T_ALIEN);
   }
 }
@@ -8830,11 +8954,11 @@ MainWindow::openSource(const QString &path)
       emit warning(tr("invalid lnk") + ": " + path );
   } else
 #endif // Q_OS_WIN
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
   if (!suffix.compare("exe", Qt::CaseInsensitive))
     openProcessPath(path);
   else
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
   if (Player::isSupportedSubtitle(fi.fileName())) {
     if (player_->hasMedia())
       openSubtitleFile(path);
@@ -8919,6 +9043,10 @@ MainWindow::translate(const QString &text, int lang)
     return;
   static const int script = AcSettings::globalSettings()->languageScript();
   QString lcode = Translator::languageCode(Traits::localeLanguage(lang), script);
+  if (lcode.isEmpty()) {
+    lcode = Translator::languageCode(QLocale::English);
+    Q_ASSERT(!lcode.isEmpty());
+  }
   translator_->translate(text, lcode);
 }
 
@@ -9561,7 +9689,7 @@ MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url, co
     annots = l;
 
    QString src = isRemoteMrl(url) ? url : "http://nicovideo.jp";
-   QString msg = QString("%1 :" HTML_STYLE_OPEN(color:red) "+%2" HTML_STYLE_CLOSE() ", %3")
+   QString msg = QString("%1 :" HTML_SS_OPEN(color:red) "+%2" HTML_SS_CLOSE() ", %3")
      .arg(tr("annotations found"))
      .arg(QString::number(annots.size()))
      .arg(src);
@@ -9656,13 +9784,7 @@ bool
 MainWindow::isAnnotationUrlRegistered(const QString &suburl) const
 {
   QMutexLocker lock(&annotMutex_);
-  QString k = suburl;
-  if (k.endsWith('/'))
-    k.chop(1);
-  else if (k.endsWith("/index.html", Qt::CaseInsensitive))
-    k.remove(QRegExp("/index.html$"));
-  else if (k.endsWith("index_1.html", Qt::CaseInsensitive))
-    k.remove(QRegExp("/index_1.html$"));
+  QString k = MrlAnalysis::normalizeUrl(suburl);
   return annotationUrls_.contains(k, Qt::CaseInsensitive);
 }
 
@@ -9771,7 +9893,7 @@ MainWindow::copyCurrentUrl()
   if (!url.isEmpty() && c) {
     c->setText(url);
     emit message(tr("copied") + ": " +
-      HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
+      HTML_SS_OPEN(color:orange) + url + HTML_SS_CLOSE()
     );
   }
 }
@@ -9784,7 +9906,7 @@ MainWindow::copyCurrentTitle()
   if (!url.isEmpty() && c) {
     c->setText(url);
     emit message(tr("copied") + ": " +
-      HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
+      HTML_SS_OPEN(color:orange) + url + HTML_SS_CLOSE()
     );
   }
 }
@@ -9927,9 +10049,9 @@ MainWindow::resumePlayPos()
     if (pos > 0 && pos < player_->mediaLength()) {
       emit message(
         tr("resuming last play") + ": "
-        HTML_STYLE_OPEN(color:orange)
+        HTML_SS_OPEN(color:orange)
         + QtExt::msecs2time(pos).toString("hh:mm:ss") +
-        HTML_STYLE_CLOSE()
+        HTML_SS_CLOSE()
       );
       pos -= 5000; // seek back 5 seconds
       seek(pos);
@@ -10276,13 +10398,13 @@ MainWindow::enterAnnotationUrl(const QString &url)
     return;
   if (isAnnotationUrlRegistered(url)) {
     emit message(tr("annot URL is already used") + ": "
-        HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
+        HTML_SS_OPEN(color:orange) + url + HTML_SS_CLOSE()
     );
     return;
   }
   if (url == dataManager_->token().url()) {
     emit message(tr("media URL is being played ") + ": "
-      HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
+      HTML_SS_OPEN(color:orange) + url + HTML_SS_CLOSE()
     );
     return;
   }
@@ -10290,7 +10412,7 @@ MainWindow::enterAnnotationUrl(const QString &url)
     if (a.type() == Alias::AT_Url &&
         a.text() == url) {
       emit message(tr("annotation URL already imported") + ": "
-        HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
+        HTML_SS_OPEN(color:orange) + url + HTML_SS_CLOSE()
       );
       return;
     }
@@ -10314,7 +10436,7 @@ MainWindow::enterMediaUrl(const QString &url)
     return;
   if (url == dataManager_->token().url()) {
     emit message(tr("media URL is being played ") + ": "
-        HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE()
+        HTML_SS_OPEN(color:orange) + url + HTML_SS_CLOSE()
     );
     return;
   }
@@ -10874,7 +10996,7 @@ MainWindow::searchWithEngine(int engine, const QString &key)
     if (e) {
       QString url = e->search(key);
       if (!url.isEmpty()) {
-        emit message(tr("opening") + ": " HTML_STYLE_OPEN(color:orange) + url + HTML_STYLE_CLOSE());
+        emit message(tr("opening") + ": " HTML_SS_OPEN(color:orange) + url + HTML_SS_CLOSE());
         browserDelegate_->openUrl(url);
       }
     }
@@ -11132,6 +11254,8 @@ MainWindow::saveSettings()
 
   settings->sync();
   ac->sync();
+
+  library_->save();
   DOUT("exit");
 }
 
@@ -11175,6 +11299,19 @@ MainWindow::toggleRomajiTranslator(bool t)
     emit message(tr("load Romaji Translator"));
   else
     emit message(tr("offload Romaji Translator"));
+}
+
+// - Translator -
+
+void
+MainWindow::showTranslator()
+{ translatorDelegate_->show(); }
+
+void
+MainWindow::translateUsingTranslator(const QString &text)
+{
+  if (!text.isEmpty())
+    translatorDelegate_->translate(text);
 }
 
 // EOF

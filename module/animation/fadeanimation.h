@@ -1,8 +1,8 @@
 #ifndef FADEANIMATION_H
 #define FADEANIMATION_H
 
-#include <QtCore/QPropertyAnimation>
 #include <QtCore/QEasingCurve>
+#include <QtCore/QPropertyAnimation>
 
 class FadeAnimation : public QPropertyAnimation
 {

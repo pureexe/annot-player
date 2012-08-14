@@ -15,9 +15,9 @@
 #endif // WITH_MODULE_QT
 #include "module/mrlresolver/mrlresolversettings.h"
 //#include "module/download/downloader.h"
+#include <QtGui>
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
-#include <QtGui>
 #include <boost/tuple/tuple.hpp>
 
 #define DEBUG "main"

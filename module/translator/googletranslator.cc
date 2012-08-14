@@ -4,12 +4,12 @@
 #include "module/translator/googletranslator.h"
 #include "module/translator/googletranslator_p.h"
 #include "module/translator/translatorsettings.h"
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkDiskCache>
 #include <QtWebKit/QWebElement>
 #include <QtWebKit/QWebFrame>
 #include <QtWebKit/QWebPage>
 //#include <QtWebKit/QWebSettings>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkDiskCache>
 
 //#define DEBUG "googletranslator"
 #include "module/debug/debug.h"
@@ -77,6 +77,8 @@ GoogleTranslator::translateUrl(const QString &text, const QString &to, const QSt
 void
 GoogleTranslator::translate(const QString &text, const QString &to, const QString &from)
 {
+  if (!isEnabled())
+    return;
   DOUT("enter");
   QUrl query = translateUrl(text, to, from);
   DOUT("query =" << query);
@@ -105,7 +107,7 @@ GoogleTranslator::processWebPage(QWebPage *page, bool success)
       }
     }
   }
-  emit errorMessage("network error from google translator");
+  emit errorMessage(tr("network error from Google Translator"));
   DOUT("exit");
 }
 

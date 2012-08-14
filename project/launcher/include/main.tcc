@@ -1,8 +1,8 @@
 // main.tcc
 // 9/3/2011
 #include "msc.h"
-#include <string>
 #include <windows.h>
+#include <string>
 #include <memory>
 
 //#define DEBUG "main"
@@ -44,13 +44,12 @@ WinMain(__in HINSTANCE hInstance, __in HINSTANCE hPrevInstance, __in LPSTR lpCmd
     if (nSize == BUFFER_SIZE)
       return -1;
   }
-  std::wstring wsApp(wszBuffer);
   std::wstring wsDir = dirname(wszBuffer);
-  std::wstring wsNextApp = wsDir + (L"\\" APP_PREFIX APP_EXE);
-  std::wstring wsNextAppPath = dirname(wsNextApp);
+  std::wstring wsApp = wsDir + (L"\\" APP_PREFIX APP_EXE);
+  std::wstring wsAppPath = dirname(wsApp);
 
   // See: http://msdn.microsoft.com/en-us/library/windows/desktop/cc144102(v=vs.85).aspx
-  ::SetFileAttributesW(wsDir.c_str(), FILE_ATTRIBUTE_READONLY);
+  //::SetFileAttributesW(wsDir.c_str(), FILE_ATTRIBUTE_READONLY);
 
   DOUT(QString::fromStdWString(app));
 
@@ -85,13 +84,13 @@ WinMain(__in HINSTANCE hInstance, __in HINSTANCE hPrevInstance, __in LPSTR lpCmd
   // );
   //
   BOOL bResult = ::CreateProcessW(
-    wsNextApp.c_str(),  // app path
+    wsApp.c_str(),      // app path
     lpwCmdLine,         // app param
     0, 0,               // security attributes
     false,              // inherited
     CREATE_DEFAULT_ERROR_MODE, // creation flags
     lpEnvironment,
-    wsNextAppPath.c_str(),
+    wsAppPath.c_str(),
     &siStartupInfo,
     &piProcessInfo
   );

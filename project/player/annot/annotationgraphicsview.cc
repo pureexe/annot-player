@@ -491,7 +491,7 @@ AnnotationGraphicsView::selectItem(AnnotationGraphicsItem *item, bool detail)
   if (!item)
     return;
   qint64 uid = item->annotation().userId();
-  if (uid)
+  if (uid && hub_->isMediaTokenMode())
     emit selectedUserIds(QList<qint64>() << uid);
   if (detail && uid)
     emit selectedUserId(uid);
@@ -1170,14 +1170,14 @@ AnnotationGraphicsView::setRotation(qreal value)
 void
 AnnotationGraphicsView::searchText(const QString &text, int engine)
 {
-  emit message(tr("search") + ": " + HTML_STYLE_OPEN(color:orange) + text + HTML_STYLE_CLOSE());
+  emit message(tr("search") + ": " + HTML_SS_OPEN(color:orange) + text + HTML_SS_CLOSE());
   emit searchRequested(engine,text);
 }
 
 void
 AnnotationGraphicsView::translateText(const QString &text, int lang)
 {
-  emit message(tr("translate") + ": " + HTML_STYLE_OPEN(color:orange) + text + HTML_STYLE_CLOSE());
+  emit message(tr("translate") + ": " + HTML_SS_OPEN(color:orange) + text + HTML_SS_CLOSE());
   emit translateRequested(text, lang);
 }
 

@@ -5,7 +5,7 @@
 // 2/6/2012
 
 #include "module/annotcodec/annotationcodec.h"
-#include <QFile>
+#include <QtCore/QFile>
 
 class NicovideoCodec : public AnnotationCodec
 {

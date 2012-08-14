@@ -224,13 +224,7 @@ TaskDialog::formatUrl(const QString &url)
     ret.prepend('h');
   else if (!ret.startsWith("http://", Qt::CaseInsensitive))
     ret.prepend("http://");
-
-  ret.remove(QRegExp("#$"))
-     .remove(QRegExp("#titles$"))
-     .replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/")
-     .replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/")
-     .replace(QRegExp("/#$"), "/");
-  return ret;
+  return MrlAnalysis::normalizeUrl(ret);
 }
 
 // EOF

@@ -5,7 +5,9 @@ TEMPLATE = subdirs
 SUBDIRS = \
     browser \
     downloader \
-    player
+    player \
+    translator \
+    updater
 
 OTHER_FILES += \
     include/msc.h \

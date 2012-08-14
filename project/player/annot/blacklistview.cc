@@ -148,8 +148,8 @@ BlacklistView::createLayout()
 void
 BlacklistView::createActions()
 {
-  connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), textTabButton_, SLOT(click()));
-  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), userTabButton_, SLOT(click()));
+  new QShortcut(QKeySequence("CTRL+1"), textTabButton_, SLOT(click()));
+  new QShortcut(QKeySequence("CTRL+2"), userTabButton_, SLOT(click()));
 }
 
 // - Slots -

@@ -2,8 +2,8 @@
 // 8/6/2011
 
 #include "module/qtext/slider.h"
-#include <QtGui/QMouseEvent>
 #include <QtCore/QDebug>
+#include <QtGui/QMouseEvent>
 
 // - Events -
 

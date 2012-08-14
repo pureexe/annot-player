@@ -5,8 +5,8 @@
 // 11/2/2011
 
 #include "module/translator/translator.h"
-#include <QtNetwork/QNetworkRequest>
 #include <QtCore/QUrl>
+#include <QtNetwork/QNetworkRequest>
 
 QT_FORWARD_DECLARE_CLASS(QAuthenticator)
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)

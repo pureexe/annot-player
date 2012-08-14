@@ -4,10 +4,10 @@
 #ifdef WITH_MODULE_COMPRESS
 # include "module/compress/qgzip.h"
 #endif // WITH_MODULE_COMPRESS
+#include <QtCore>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtCore/QtCore>
 
 //#define DEBUG "downloader"
 #include "module/debug/debug.h"

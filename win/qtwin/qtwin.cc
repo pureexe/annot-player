@@ -747,6 +747,14 @@ QtWin::getWinDirPath()
 { return qgetenv("windir"); }
 
 QString
+QtWin::getSystemRoot()
+{ return qgetenv("SYSTEMROOT"); }
+
+QString
+QtWin::getProgramFilesPath()
+{ return qgetenv("PROGRAMFILES"); }
+
+QString
 QtWin::getAppDataPath()
 { return qgetenv("AppData"); }
 

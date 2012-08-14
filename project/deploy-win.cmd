@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/dev/build || exit /b 1
 
-set VERSION=0.1.8.0
+set VERSION=0.1.8.1
 set APP=annot-player
 set TARGET=Annot Stream
 set ZIPFILE=%APP%-%VERSION%-win.zip
@@ -30,6 +30,11 @@ set ITH_DLLS=IHF.dll,IHF_DLL.dll,ITH_Engine.dll
 
 set OPENSSL_HOME=/Volumes/win/dev/openssl/1.0.0j
 set OPENSSL_DLLS=libeay32.dll,ssleay32.dll
+
+set CYGWIN_HOME=
+set LFTP_HOME=%CYGWIN_HOME%
+set LFTP_EXE=lftp.exe
+set LFTP_DLLS=cyggcc_s-1.dll,cygstdc++-6.dll,cygcrypto-1.0.0.dll,cygncurses-10.dll,cygncursesw-10.dll,cygwin1.dll,cygexpat-1.dll,cygiconv-2.dll,cygintl-8.dll,cygreadline7.dll,cygssl-1.0.0.dll,cygz.dll
 
 ::set GPAC_HOME=/Volumes/win/dev/gpac
 ::set GPAC_DLLS=js32.dll,libgpac.dll,libeay32.dll,ssleay32.dll
@@ -67,15 +72,20 @@ rm -Rf "%TARGET%"
 mkdir "%TARGET%"
 cd "%TARGET%" || exit /b 1
 
-cp -v "%BUILD%/Annot Browser.exe" . || exit /b 1
-cp -v "%BUILD%/Annot Downloader.exe" . || exit /b 1
-cp -v "%BUILD%/Annot Player.exe" . || exit /b 1
+cp -v "%BUILD%/[ Browse ].exe" . || exit /b 1
+cp -v "%BUILD%/[ Download ].exe" . || exit /b 1
+cp -v "%BUILD%/[ Play ].exe" . || exit /b 1
+cp -v "%BUILD%/[ Translate ].exe" . || exit /b 1
+cp -v "%BUILD%/[ Update ].exe" . || exit /b 1
 
 cp -v "%SOURCE%/README" "Read Me.txt" || exit /b 1
 unix2dos "Read Me.txt"
 
-cp -v "%SOURCE%/ChangeLog" ChangeLog.txt || exit /b 1
-unix2dos ChangeLog.txt
+cp -v "%SOURCE%/UPDATE" "Update.txt" || exit /b 1
+unix2dos "Update.txt"
+
+cp -v "%SOURCE%/ChangeLog" "ChangeLog.txt" || exit /b 1
+unix2dos "ChangeLog.txt"
 
 rm -Rf licenses
 cp -R "%SOURCE%/licenses" Licenses
@@ -122,13 +132,14 @@ cp -Rv "%VLC_HOME%"/{%VLC_DATA%} . || exit /b 1
 
 rm -fv plugins/*.dat* || exit /b 1
 
-:: FIXME: playlist plugin bug in VLC 2.0.2
+:: FIXME: playlist plugin bug in VLC 2.0.2+
 cp -v "%VLC_HOME%"/../VLC-2.0.1/plugins/demux/libplaylist_plugin.dll plugins/demux/ || exit /b 1
 
 ::cp -v "%BUILD%"/*.{exe,dll} . || exit /b 1
 cp -v "%BUILD%"/*.{exe,dll} .
 
-rm -fv "Annot Player.exe" "Annot Browser.exe" "Annot Downloader.exe"
+rm -fv "[ Play ].exe" "[ Browse ].exe" "[ Download ].exe" "[ Translate ].exe"
+rm -fv "annot-update.exe"
 rm -fv "annot-tester.exe"
 rm -fv hook.dll
 rm -fv webbrowser.dll
@@ -162,6 +173,16 @@ cp -Rv "%SOURCE%"/project/player/avatars . || exit /b 1
 
 cd ..
 
+mkdir Update
+cd Update || exit /b 1
+
+cp -Rv "%SOURCE%"/project/updater/scripts/* .
+cp -v "%LFTP_HOME%"/bin/{%LFTP_EXE%,%LFTP_DLLS%} */. || exit /b 1
+
+cp -v "%BUILD%/annot-update.exe" . || exit /b 1
+
+cd ..
+
 :: Scripts
 cp -v "%SOURCE%"/scripts/* . || exit /b 1
 
@@ -176,6 +197,7 @@ chmod -R 755 .
 
 attrib +h Data
 attrib +h Licenses
+attrib +h Update
 
 :: See: http://msdn.microsoft.com/en-us/library/windows/desktop/cc144102(v=vs.85).aspx
 attrib +h icon.ico
@@ -187,7 +209,7 @@ attrib +r .
 
 cd ..
 
-rm -f "%ZIPFILE%"
-zip -9r "%ZIPFILE%" "%TARGET%" > nul
+::rm -f "%ZIPFILE%"
+::zip -9r "%ZIPFILE%" "%TARGET%" > nul
 
 :: EOF

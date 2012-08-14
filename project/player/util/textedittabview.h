@@ -6,7 +6,7 @@
 
 #include "project/common/actabview.h"
 
-class AcTextView;
+class TextView;
 
 class TextEditTabView : public AcTabView
 {
@@ -25,7 +25,7 @@ public slots:
 
 public:
   void addTab(const QString &name);
-  AcTextView *textWidget(int tab) const;
+  TextView *textWidget(int tab) const;
 };
 
 #endif // TEXTEDITTABVIEW_H

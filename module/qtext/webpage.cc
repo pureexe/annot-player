@@ -2,8 +2,8 @@
 // 4/9/2012
 
 #include "module/qtext/webpage.h"
-#include <QtWebKit/QWebFrame>
 #include <QtGui>
+#include <QtWebKit/QWebFrame>
 
 #define DEBUG "qtext::webpage"
 #include "module/debug/debug.h"

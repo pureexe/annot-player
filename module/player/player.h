@@ -4,8 +4,8 @@
 // player.h
 // 6/30/2011
 
-#include <QtGui/QWidget> // where WId is declared
 #include <QtCore/QStringList>
+#include <QtGui/QWidget> // where WId is declared
 
 QT_BEGIN_NAMESPACE
 class QMacCocoaViewContainer;

@@ -13,11 +13,11 @@
 #endif // WITH_MODULE_LUARESOLVER
 #include "module/qtext/filesystem.h"
 #include "module/qtext/os.h"
+#include <QtCore>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkCookieJar>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtCore>
 
 #define DEBUG "httpbufferedsession"
 #include "module/debug/debug.h"

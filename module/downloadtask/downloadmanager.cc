@@ -4,6 +4,9 @@
 #ifdef WITH_MODULE_ANNOTDOWN
 # include "module/annotdown/annotationdownloader.h"
 #endif // WITH_MODULE_ANNOTDOWN
+#ifdef WITH_MODULE_MRLANALYSIS
+# include "module/mrlanalysis//mrlanalysis.h"
+#endif // WITH_MODULE_MRLANALYSIS
 #include <QtCore/QRegExp>
 #include <QtCore/QThreadPool>
 
@@ -62,17 +65,13 @@ DownloadManager::setDownloadsLocation(const QString &path)
 QString
 DownloadManager::normalizeUrl(const QString &url)
 {
-  QString ret = url.trimmed().toLower();
-  if (!ret.isEmpty()) {
-    ret.remove(QRegExp("/index.html$"))
-       .remove(QRegExp("/index_1.html$"))
-       .remove(QRegExp("/$"))
-       .replace("http://acfun.tv/" , "http://www.acfun.tv")
-       .replace("http://bilibili.tv/" , "http://www.bilibili.tv");
-    if (ret.startsWith("http://www.nicovideo.jp/watch/"))
-      ret.remove(QRegExp("\\?.*"));
-  }
-  return ret;
+  return
+#ifdef WITH_MODULE_MRLANALYSIS
+    MrlAnalysis::normalizeUrl(url)
+#else
+    url
+#endif // WITH_MODULE_MRLANALYSIS
+  ;
 }
 
 // - Queries -

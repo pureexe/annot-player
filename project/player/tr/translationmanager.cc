@@ -259,6 +259,7 @@ TranslationManager::translate(int tid) const
   case T_ITALIAN:       return tr("Italian");
   case T_SPANISH:       return tr("Spanish");
   case T_PORTUGUESE:    return tr("Portuguese");
+  case T_RUSSIAN:       return tr("Russian");
 
   case T_ATTACH:        return tr("Attach");
   case T_DETACH:        return tr("Detach");
@@ -335,7 +336,7 @@ TranslationManager::translate(int tid) const
   case T_FORMAT_PICTURE:        return tr("Picture");
   case T_FORMAT_IMAGE:          return tr("Image");
   case T_FORMAT_SUBTITLE:       return tr("Subtitle");
-  case T_FORMAT_PROGRAM:        return tr("Program");
+  case T_FORMAT_PROGRAM:        return tr("Game");
 
   // Actions:
 
@@ -587,6 +588,7 @@ TranslationManager::translate(int tid) const
 
   case T_MENUTEXT_EDIT:         return tr("Edit");
   case T_TIP_EDIT:              return tr("Edit");
+  case T_EDIT:                  return tr("Edit");
 
   case T_MENUTEXT_CLEAR:        return tr("Clear");
   case T_TIP_CLEAR:             return tr("Clear");
@@ -644,14 +646,14 @@ TranslationManager::translate(int tid) const
   case T_TIP_CREATEDATE:        return tr("Create Date");
   case T_LABEL_UPDATEDATE:      return tr("Update Date");
   case T_TIP_UPDATEDATE:        return tr("Update Date");
-  case T_LABEL_BLESSEDCOUNT:    return tr("Blessed");
-  case T_TIP_BLESSEDCOUNT:      return tr("Blessed Count");
-  case T_LABEL_CURSEDCOUNT:     return tr("Cursed");
-  case T_TIP_CURSEDCOUNT:       return tr("Cursed Count");
-  case T_LABEL_BLOCKEDCOUNT:    return tr("Blocked");
-  case T_TIP_BLOCKEDCOUNT:      return tr("Blocked Count");
-  case T_LABEL_VISITEDCOUNT:    return tr("Visited");
-  case T_TIP_VISITEDCOUNT:      return tr("Visited Count");
+  case T_LABEL_BLESSCOUNT:      return tr("Blessed");
+  case T_TIP_BLESSCOUNT:        return tr("Bless Count");
+  case T_LABEL_CURSECOUNT:      return tr("Cursed");
+  case T_TIP_CURSECOUNT:        return tr("Curse Count");
+  case T_LABEL_BLOCKCOUNT:      return tr("Blocked");
+  case T_TIP_BLOCKCOUNT:        return tr("Block Count");
+  case T_LABEL_VISITCOUNT:      return tr("Visited");
+  case T_TIP_VISITCOUNT:        return tr("Visit Count");
   case T_LABEL_ANNOTCOUNT:      return tr("Annot");
   case T_TIP_ANNOTCOUNT:        return tr("Annotation Count");
 
@@ -777,14 +779,15 @@ TranslationManager::translate(int tid) const
   case T_LANGUAGE:      return tr("Language");
   case T_STATUS:        return tr("Status");
   case T_FLAGS:         return tr("Flags");
-  case T_BLESSEDCOUNT:  return tr("Blessed Count");
-  case T_CURSEDCOUNT:   return tr("Cursed Count");
-  case T_BLOCKEDCOUNT:  return tr("Blocked Count");
+  case T_BLESSCOUNT:    return tr("Bless Count");
+  case T_CURSECOUNT:    return tr("Curse Count");
+  case T_BLOCKCOUNT:    return tr("Block Count");
   case T_ANNOTCOUNT:    return tr("Annot Count");
-  case T_VISITEDCOUNT:  return tr("Visited Count");
+  case T_VISITCOUNT:    return tr("Visit Count");
 
   case T_PID:           return tr("PID");
   case T_FOLDER:        return tr("Folder");
+  case T_FILE:          return tr("File");
   case T_PATH:          return tr("Path");
 
   case T_ACTIVE:        return tr("Active");

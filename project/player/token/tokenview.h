@@ -52,9 +52,9 @@ protected:
     HD_Flags,
     HD_Id,
     HD_UserId,
-    HD_BlessedCount,
-    HD_CursedCount,
-    HD_BlockedCount,
+    HD_BlessCount,
+    HD_CurseCount,
+    HD_BlockCount,
     HD_Count
   };
 
@@ -128,6 +128,7 @@ protected slots:
 
   // - Format -
 protected:
+  static int aliasTypeFromString(const QString &text);
   static QString aliasTypeToString(int t);
   static QString languageToString(int lang);
   static QStringList aliasFlagsToStringList(int flags);
@@ -180,9 +181,9 @@ private:
 
   //QLabel *createDateLabel_,
   //       *annotCountLabel_,
-  //       *blessedCountLabel_,
-  //       *cursedCountLabel_,
-  //       *visitedCountLabel_;
+  //       *blessCountLabel_,
+  //       *curseCountLabel_,
+  //       *visitCountLabel_;
 
   QToolButton *addButton_,
               *updateButton_;

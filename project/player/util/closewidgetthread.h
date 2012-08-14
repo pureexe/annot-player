@@ -4,8 +4,8 @@
 // CloseWidgetThread.h
 // 10/31/2011
 
-#include <QtGui/QWidget>
 #include <QtCore/QThread>
+#include <QtGui/QWidget>
 
 class CloseWidgetThread : public QThread
 {

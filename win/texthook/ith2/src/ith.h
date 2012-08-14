@@ -2,8 +2,8 @@
 
 // ith.h  10/15/2011
 
-#include <QtGui/QWidget>
 #include <QtCore/QString>
+#include <QtGui/QWidget>
 
 namespace Ith {
 

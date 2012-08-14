@@ -4,13 +4,13 @@
 #include "module/translator/romajitranslator.h"
 #include "module/translator/romajitranslator_p.h"
 #include "module/qtext/bytearray.h"
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
 #include <QtCore/QByteArray>
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextDecoder>
 #include <QtCore/QTextEncoder>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
 
 //#define DEBUG "romajitranslator"
 #include "module/debug/debug.h"
@@ -57,6 +57,8 @@ RomajiTranslator::translateUrl(const QString &text) const
 void
 RomajiTranslator::translate(const QString &text)
 {
+  if (!isEnabled())
+    return;
   DOUT("enter: text =" << text);
   QString query = translateUrl(text);
   DOUT("query =" << query);

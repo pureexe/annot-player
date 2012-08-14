@@ -25,8 +25,8 @@
 #include "module/download/downloader.h"
 #include "module/downloadtask/downloadmanager.h"
 #include "module/downloadtask/mrldownloadtask.h"
-#include <QtNetwork/QNetworkAccessManager>
 #include <QtGui>
+#include <QtNetwork/QNetworkAccessManager>
 #include <climits>
 
 #define DEBUG "mainwindow"
@@ -446,13 +446,7 @@ MainWindow::currentId() const
   if (!mi.isValid())
     return 0;
   mi = mi.sibling(mi.row(), HD_Id);
-  if (!mi.isValid())
-    return 0;
-  bool ok;
-  int ret = mi.data().toInt(&ok);
-  if (!ok)
-    return 0;
-  return ret;
+  return mi.isValid() ?  mi.data().toInt() : 0;
 }
 
 QString
@@ -936,12 +930,9 @@ MainWindow::downloadStateToString(int state) const
 QString
 MainWindow::downloadSizeToString(qint64 size) const
 {
-  if (size < 1024)
-    return QString::number(size) + " B";
-  else if (size < 1024 * 1024)
-    return QString::number(size / 1014) + " KB";
-  else
-    return QString::number(size / (1024.0 * 1024), 'f', 1) + " MB";
+  return size < 1024 ? QString::number(size) + " B" :
+         size < 1024 * 1024 ? QString::number(size / 1014) + " KB" :
+         QString::number(size / (1024.0 * 1024), 'f', 1) + " MB";
 }
 
 QString

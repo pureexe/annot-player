@@ -8,7 +8,6 @@
 #include "module/crypt/simplecrypt.h"
 #include "module/qtext/algorithm.h"
 #include <QtCore>
-#include <QNetworkProxy>
 
 // - Settings keys -
 

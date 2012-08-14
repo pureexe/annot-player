@@ -138,13 +138,17 @@
 <context>
     <name>AcFilteredListView</name>
     <message>
-        <location filename="../../common/acfilteredlistview.cc" line="50"/>
         <source>View</source>
-        <translation>ビュー</translation>
+        <translation type="obsolete">ビュー</translation>
     </message>
     <message>
         <source>Filter pattern</source>
         <translation type="obsolete">パターン</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredlistview.cc" line="50"/>
+        <source>List</source>
+        <translation>列表</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredlistview.cc" line="53"/>
@@ -169,7 +173,7 @@
         <translation type="obsolete">パターン</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="55"/>
+        <location filename="../../common/acfilteredtableview.cc" line="56"/>
         <source>Search</source>
         <translation>検索</translation>
     </message>
@@ -182,7 +186,7 @@
         <translation type="obsolete">正規表現</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="61"/>
+        <location filename="../../common/acfilteredtableview.cc" line="62"/>
         <source>Wildcard</source>
         <translation>ワイルドカード</translation>
     </message>
@@ -191,24 +195,29 @@
         <translation type="obsolete">そのまま</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="55"/>
-        <location filename="../../common/acfilteredtableview.cc" line="57"/>
+        <location filename="../../common/acfilteredtableview.cc" line="51"/>
+        <source>Table</source>
+        <translation>列表</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredtableview.cc" line="56"/>
+        <location filename="../../common/acfilteredtableview.cc" line="58"/>
         <source>Filter Pattern</source>
         <translation>パターン</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="59"/>
-        <location filename="../../common/acfilteredtableview.cc" line="65"/>
+        <location filename="../../common/acfilteredtableview.cc" line="60"/>
+        <location filename="../../common/acfilteredtableview.cc" line="66"/>
         <source>Filter Syntax</source>
         <translation>シンタックス</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="60"/>
+        <location filename="../../common/acfilteredtableview.cc" line="61"/>
         <source>Regular Expression</source>
         <translation>正規表現</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="62"/>
+        <location filename="../../common/acfilteredtableview.cc" line="63"/>
         <source>Fixed String</source>
         <translation>そのまま</translation>
     </message>
@@ -217,13 +226,13 @@
         <translation type="obsolete">列</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="67"/>
-        <location filename="../../common/acfilteredtableview.cc" line="72"/>
+        <location filename="../../common/acfilteredtableview.cc" line="68"/>
+        <location filename="../../common/acfilteredtableview.cc" line="73"/>
         <source>Filter Column</source>
         <translation>列</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="74"/>
+        <location filename="../../common/acfilteredtableview.cc" line="75"/>
         <source>Count</source>
         <translation>行数</translation>
     </message>
@@ -639,7 +648,7 @@
         <translation>ビリビリ動画の解析に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="346"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="326"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>ニコニコ動画のアカウントは必要です</translation>
     </message>
@@ -1426,15 +1435,15 @@
 <context>
     <name>YoutubeMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="55"/>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="62"/>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="94"/>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="143"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="54"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="61"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="93"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="142"/>
         <source>failed to resolve URL</source>
         <translation>URLの分析に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="87"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="86"/>
         <source>network error, failed to resolve media URL</source>
         <translation>通信不能のため、URLの分析に失敗した</translation>
     </message>

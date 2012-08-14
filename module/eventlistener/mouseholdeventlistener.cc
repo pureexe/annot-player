@@ -2,10 +2,10 @@
 // 7/14/2012
 
 #include "module/eventlistener/mouseholdeventlistener.h"
-#include <QtGui/QMouseEvent>
 #include <QtCore/QDateTime>
 #include <QtCore/QEvent>
 #include <QtCore/QTimer>
+#include <QtGui/QMouseEvent>
 
 // - Construction -
 

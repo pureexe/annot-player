@@ -8,11 +8,11 @@
  <SOAP-ENV:Body>
   <tns:selectRelatedMediaAnnotationsWithTokenIdResponse>
    <return>
-    <blessedCount>0</blessedCount>
-    <blockedCount>0</blockedCount>
+    <blessCount>0</blessCount>
+    <blockCount>0</blockCount>
     <createTime>0</createTime>
     <createIp>0</createIp>
-    <cursedCount>0</cursedCount>
+    <curseCount>0</curseCount>
     <flags>0</flags>
     <id>0</id>
     <language>0</language>
@@ -28,11 +28,11 @@
     <userId>0</userId>
    </return>
    <return>
-    <blessedCount>0</blessedCount>
-    <blockedCount>0</blockedCount>
+    <blessCount>0</blessCount>
+    <blockCount>0</blockCount>
     <createTime>0</createTime>
     <createIp>0</createIp>
-    <cursedCount>0</cursedCount>
+    <curseCount>0</curseCount>
     <flags>0</flags>
     <id>0</id>
     <language>0</language>

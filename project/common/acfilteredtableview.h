@@ -4,14 +4,14 @@
 // filteredtableview.h
 // 11/17/2011
 
-#include <QtGui/QWidget>
 #include <QtCore/QHash>
 #include <QtCore/QModelIndex>
+#include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
+class QAbstractItemModel;
 class QComboBox;
 class QMenu;
-class QStandardItemModel;
 class QSortFilterProxyModel;
 class QToolButton;
 class QTreeView;
@@ -26,7 +26,7 @@ class AcFilteredTableView : public QWidget
   typedef QWidget Base;
 
 public:
-  AcFilteredTableView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent = nullptr);
+  AcFilteredTableView(QAbstractItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent = nullptr);
 
 signals:
   void currentIndexChanged(QModelIndex index);
@@ -35,6 +35,8 @@ signals:
 public:
   QModelIndex currentIndex() const;
   void removeCurrentRow();
+
+  QTreeView *view() const { return proxyView_; }
 
   // - Actions -
 public slots:
@@ -53,7 +55,7 @@ private:
   void createLayout();
 
 private:
-  QStandardItemModel *sourceModel_;
+  QAbstractItemModel *sourceModel_;
   QSortFilterProxyModel *proxyModel_;
   QTreeView *proxyView_;
 

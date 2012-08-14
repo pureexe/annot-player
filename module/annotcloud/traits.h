@@ -5,6 +5,9 @@
 // 8/17/2011
 
 #include <QtCore/QLocale>
+#include <QtCore/QByteArray>
+
+#define AC_LANG(ch1, ch2)   (int(ch1) << 8 | (ch2))
 
 namespace AnnotCloud {
 
@@ -13,21 +16,48 @@ namespace AnnotCloud {
   {
     // - Types -
 
+    //enum Language {
+    //  NoLanguage = 0,
+    //  AnyLanguage = 0x1,
+    //  UnknownLanguage = 0x2,
+    //  English = 0x10,
+    //  Japanese = 0x11,
+    //  Chinese = 0x12,
+    //  Korean = 0x13,
+    //  French = 0x14,
+    //  German = 0x15,
+    //  Italian = 0x16,
+    //  Spanish = 0x17,
+    //  Portuguese = 0x18,
+    //  Russian = 0x19
+    //};
+    //enum { LanguageCount = 9 };
+
+    // Consistent with  ISO 639-1.
+    // See: http://msdn.microsoft.com/en-us/library/hh456380.aspx
     enum Language {
       NoLanguage = 0,
-      AnyLanguage = 0x1,
-      UnknownLanguage = 0x2,
-      English = 0x10,
-      Japanese = 0x11,
-      Chinese = 0x12,
-      Korean = 0x13,
-      French = 0x14,
-      German = 0x15,
-      Italian = 0x16,
-      Spanish = 0x17,
-      Portuguese = 0x18
+      //AnyLanguage = 0x1,
+      //UnknownLanguage = 0x2,
+      English = AC_LANG('e','n'),   // 25966 / 16
+      Japanese = AC_LANG('j','a'),  // 27233 / 17
+      Chinese = AC_LANG('z','h'),   // 31336 / 18
+      Korean = AC_LANG('k','o'),    // 27503 / 19
+      French = AC_LANG('f','r'),    // 26226 / 20
+      German = AC_LANG('d','e'),    // 25701 / 21
+      Italian = AC_LANG('i','t'),   // 26996 / 22
+      Spanish = AC_LANG('e','s'),   // 25971 / 23
+      Portuguese = AC_LANG('p','t'),// 28788 / 24
+      Russian = AC_LANG('r','u')    // 29301 / 25
     };
-    enum { LanguageCount = 9 };
+
+    inline QByteArray languageCode(int lang)
+    {
+      QByteArray ret(2, 0);
+      ret[0] = char((lang >> 8) & 0xff);
+      ret[1] = char(lang & 0xff);
+      return ret;
+    }
 
     inline QLocale::Language localeLanguage(int lang)
     {
@@ -41,6 +71,7 @@ namespace AnnotCloud {
       case Italian: return QLocale::Italian;
       case Spanish: return QLocale::Spanish;
       case Portuguese: return QLocale::Portuguese;
+      case Russian: return QLocale::Russian;
       default:      return QLocale::AnyLanguage;
       }
     }
@@ -52,6 +83,7 @@ namespace AnnotCloud {
       case French: case German:
       case Italian:
       case Spanish:case Portuguese:
+      case Russian:
         return true;
       default: return false;
       }
@@ -68,6 +100,7 @@ namespace AnnotCloud {
       }
     }
 
+    /*
     enum LanguageBit {
       NoLanguageBit =   1L << NoLanguage,
       AnyLanguageBit =  1L << AnyLanguage,
@@ -80,13 +113,15 @@ namespace AnnotCloud {
       GermanBit =       1L << German,
       ItalianBit =      1L << Italian,
       SpanishBit =      1L << Spanish,
-      PortugueseBit =   1L << Portuguese
+      PortugueseBit =   1L << Portuguese,
+      RussianBit =      1L << Russian
     };
     enum { AllLanguages =
       AnyLanguageBit | UnknownLanguageBit |
       EnglishBit | JapaneseBit | ChineseBit | KoreanBit |
-      FrenchBit | GermanBit | ItalianBit | SpanishBit | PortugueseBit
+      FrenchBit | GermanBit | ItalianBit | SpanishBit | PortugueseBit | RussianBit
     };
+    */
 
     enum Entity {
       NullEntity = 0, // Error!

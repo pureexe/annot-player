@@ -3,6 +3,7 @@
 
 #include "backlogdialog.h"
 #include "textedittabview.h"
+#include "textview.h"
 #include "tr.h"
 #include "project/common/acui.h"
 #include <QtGui>
@@ -23,6 +24,9 @@ BacklogDialog::BacklogDialog(QWidget *parent)
   setWindowTitle(TR(T_TITLE_BACKLOG));
 
   createLayout();
+
+  foreach (QWidget *w, tabView_->widgets())
+    connect(qobject_cast<TextView *>(w), SIGNAL(selectedTextChanged(QString)), SIGNAL(translateRequested(QString)));
 }
 
 void
@@ -31,17 +35,19 @@ BacklogDialog::createLayout()
   AcUi *ui = AcUi::globalInstance();
 
   tabView_ = new TextEditTabView(this);
-  tabView_->addTab(tr("Annot"));
+  tabView_->addTab(tr("Comment"));
   tabView_->addTab(tr("Subtitle"));
 #ifdef BACKLOGDIALOG_HAS_TEXT_TAB
   tabView_->addTab(tr("Text"));
 #endif // BACKLOGDIALOG_HAS_TEXT_TAB
   tabView_->finalizeLayout();
 
-  QToolButton *okButton = ui->makeToolButton(
-        AcUi::PushHint | AcUi::HighlightHint, TR(T_OK), this, SLOT(fadeOut()));
+  QToolButton *translateButton = ui->makeToolButton(
+        AcUi::CheckHint, tr("Translate"), tr("Automatically translate seletected text"), this, SLOT(setTranslateEnabled(bool)));
   QToolButton *clearButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_CLEAR), this, SLOT(clear()));
+
+  translateButton->click(); // enable translation by default
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -50,14 +56,14 @@ BacklogDialog::createLayout()
     rows->addLayout(footer);
 
     footer->addWidget(clearButton);
-    footer->addWidget(okButton);
+    footer->addWidget(translateButton);
 
     // left, top, right, bottom
     int patch = 0;
     if (!AcUi::isAeroAvailable())
       patch = 9;
     footer->setContentsMargins(0, 0, 0, 0);
-    rows->setContentsMargins(9, patch, 9, 9);
+    rows->setContentsMargins(patch, patch, patch, patch);
     setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
 }
@@ -80,6 +86,15 @@ BacklogDialog::appendText(const QString &text)
   appendSubtitle(text);
 }
 #endif // BACKLOGDIALOG_HAS_TEXT_TAB
+
+// - Actions -
+
+void
+BacklogDialog::setTranslateEnabled(bool t)
+{
+  foreach (QWidget *w, tabView_->widgets())
+    qobject_cast<TextView *>(w)->setSelectionMonitored(t);
+}
 
 void
 BacklogDialog::clear()

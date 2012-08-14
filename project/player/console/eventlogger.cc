@@ -11,8 +11,8 @@
 #include "module/qtext/htmltag.h"
 #include "module/qtext/datetime.h"
 #include "module/player/player.h"
-#include <QtGui/QApplication>
 #include <QtCore>
+#include <QtGui/QApplication>
 
 #define DEBUG "eventlogger"
 #include "module/debug/debug.h"
@@ -146,7 +146,7 @@ EventLogger::logVolumeChanged()
     int v = player_->volume() * 100;
     if (v == 50)
       return;
-    QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2%" HTML_STYLE_CLOSE())
+    QString msg = QString("%1: " HTML_SS_OPEN(color:orange) "%2%" HTML_SS_CLOSE())
         .arg(TR(T_VOLUME)).arg(QString::number(v));
     logger_->showMessageOnce(msg);
   }
@@ -224,7 +224,7 @@ EventLogger::logAudioChannelChanged(int ch)
   case Player::NoChannel: msg = tr("none");
   default: ;
   }
-  msg = HTML_STYLE_OPEN(color:orange) + msg + HTML_STYLE_CLOSE();
+  msg = HTML_SS_OPEN(color:orange) + msg + HTML_SS_CLOSE();
   msg.prepend(tr("audio channel") + ": ");
   logger_->showMessage(msg);
 }
@@ -237,7 +237,7 @@ EventLogger::logPlayRateChanged(qreal rate)
     logger_->showMessage(tr("resume playing"));
   else
     logger_->showMessage(tr("fast forward") +
-      QString(": " HTML_STYLE_OPEN(color:orange) "x%1" HTML_STYLE_CLOSE())
+      QString(": " HTML_SS_OPEN(color:orange) "x%1" HTML_SS_CLOSE())
       .arg(QString::number(r))
     );
 }
@@ -271,12 +271,12 @@ EventLogger::logSeeked(qint64 msecs)
     qint64 len = player_->mediaLength();
     QTime t = QtExt::msecs2time(msecs);
     QTime l = QtExt::msecs2time(len);
-    QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2" HTML_STYLE_CLOSE() " / %3")
+    QString msg = QString("%1: " HTML_SS_OPEN(color:orange) "%2" HTML_SS_CLOSE() " / %3")
         .arg(tr("Seek"))
         .arg(t.toString())
         .arg(l.toString());
     if (len)
-      msg += QString(" (" HTML_STYLE_OPEN(color:orange) "%1%" HTML_STYLE_CLOSE() ")")
+      msg += QString(" (" HTML_SS_OPEN(color:orange) "%1%" HTML_SS_CLOSE() ")")
              .arg(QString::number(msecs * 100.0 / len, 'f', 1));
     logger_->showMessageOnce(msg);
   }
@@ -287,7 +287,7 @@ void
 EventLogger::logAudioDelayChanged(qint64 msecs)
 {
   QTime t = QtExt::msecs2time(msecs);
-  QString msg = QString("%1: " HTML_STYLE_OPEN(color:orange) "%2" HTML_STYLE_CLOSE())
+  QString msg = QString("%1: " HTML_SS_OPEN(color:orange) "%2" HTML_SS_CLOSE())
       .arg(tr("Audio Delay Time"))
       .arg(t.toString("m:ss"));
   logger_->showMessageOnce(msg);
@@ -331,7 +331,7 @@ EventLogger::logClientAgentAuthorizationError()
 
 void
 EventLogger::logTextEncodingChanged(const QString &enc)
-{ logger_->showMessage(tr("text encoding") + ": " HTML_STYLE_OPEN(color:orange) + enc + HTML_STYLE_CLOSE()); }
+{ logger_->showMessage(tr("text encoding") + ": " HTML_SS_OPEN(color:orange) + enc + HTML_SS_CLOSE()); }
 
 void
 EventLogger::logAspectRatioChanged(const QString &ratio)
@@ -340,7 +340,7 @@ EventLogger::logAspectRatioChanged(const QString &ratio)
     logger_->showMessage(tr("video aspect ratio set to default"));
   else
     logger_->showMessage(tr("video aspect ratio") + ": "
-        HTML_STYLE_OPEN(color:orange) + ratio + HTML_STYLE_CLOSE());
+        HTML_SS_OPEN(color:orange) + ratio + HTML_SS_CLOSE());
 }
 
 void
@@ -376,7 +376,7 @@ EventLogger::logContrastChanged(qreal value)
     logger_->showMessageOnce(tr("Reset Contrast"));
   else
     logger_->showMessageOnce(tr("Contrast") + ": "
-        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+        HTML_SS_OPEN(color:orange) + QString::number(value) + HTML_SS_CLOSE());
 }
 
 void
@@ -392,7 +392,7 @@ EventLogger::logBrightnessChanged(qreal value)
     logger_->showMessageOnce(tr("Rest Brightness"));
   else
     logger_->showMessageOnce(tr("Brightness") + ": "
-        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+        HTML_SS_OPEN(color:orange) + QString::number(value) + HTML_SS_CLOSE());
 }
 
 void
@@ -406,7 +406,7 @@ EventLogger::logHueChanged(int value)
 
   if (value)
     logger_->showMessageOnce(tr("Hue") + ": "
-        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+        HTML_SS_OPEN(color:orange) + QString::number(value) + HTML_SS_CLOSE());
   else
     logger_->showMessageOnce(tr("Reset Hue"));
 }
@@ -424,7 +424,7 @@ EventLogger::logSaturationChanged(qreal value)
     logger_->showMessageOnce(tr("Reset Saturation"));
   else
     logger_->showMessageOnce(tr("Saturation") + ": "
-        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+        HTML_SS_OPEN(color:orange) + QString::number(value) + HTML_SS_CLOSE());
 }
 
 void
@@ -440,7 +440,7 @@ EventLogger::logGammaChanged(qreal value)
     logger_->showMessageOnce(tr("Reset Gamma"));
   else
     logger_->showMessageOnce(tr("Gamma") + ": "
-        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+        HTML_SS_OPEN(color:orange) + QString::number(value) + HTML_SS_CLOSE());
 }
 
 void
@@ -456,7 +456,7 @@ EventLogger::logAnnotationScaleChanged(qreal value)
     logger_->showMessageOnce(tr("Reset Scale"));
   else
     logger_->showMessageOnce(tr("Scale") + ": "
-        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+        HTML_SS_OPEN(color:orange) + QString::number(value) + HTML_SS_CLOSE());
 }
 
 void
@@ -474,7 +474,7 @@ EventLogger::logAnnotationSpeedFactorChanged(int value)
   else {
     QString t = QString("X%1").arg(QString::number(value/qreal(DefaultValue), 'f', 2));
     logger_->showMessageOnce(tr("Moving Speed") + ": "
-        HTML_STYLE_OPEN(color:orange) + t + HTML_STYLE_CLOSE());
+        HTML_SS_OPEN(color:orange) + t + HTML_SS_CLOSE());
   }
 }
 
@@ -491,7 +491,7 @@ EventLogger::logAnnotationRotationChanged(qreal value)
     logger_->showMessageOnce(tr("Reset Rotation"));
   else
     logger_->showMessageOnce(tr("Rotate") + ": "
-        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE());
+        HTML_SS_OPEN(color:orange) + QString::number(value) + HTML_SS_CLOSE());
 }
 
 void
@@ -505,7 +505,7 @@ EventLogger::logAnnotationOffsetChanged(int value)
 
   if (value)
     logger_->showMessageOnce(tr("Annotation Delay Time") + ": "
-        HTML_STYLE_OPEN(color:orange) + QString::number(value) + HTML_STYLE_CLOSE() +
+        HTML_SS_OPEN(color:orange) + QString::number(value) + HTML_SS_CLOSE() +
         tr(" sec"));
   else
     logger_->showMessageOnce(tr("Reset Annotation Time"));
@@ -597,7 +597,7 @@ EventLogger::logSelectedUserIds(const QList<qint64> &uids)
     qint64 now = QDateTime::currentMSecsSinceEpoch();
     if (now > ts + timeout)
       logger_->showMessageOnce(tr("Found %1 Users").arg(
-        HTML_STYLE_OPEN(color:orange) + QString::number(count) + HTML_STYLE_CLOSE()
+        HTML_SS_OPEN(color:orange) + QString::number(count) + HTML_SS_CLOSE()
       ));
     ts = now;
   }

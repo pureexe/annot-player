@@ -2,10 +2,10 @@
 // 2/15/2012
 
 #include "module/stream/bufferedremotestream.h"
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
 #include <QtCore/QEventLoop>
 #include <QtCore/QFile>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
 
 //#define DEBUG "bufferedremotestream"
 #include "module/debug/debug.h"

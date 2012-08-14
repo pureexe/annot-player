@@ -4,9 +4,9 @@
 // miniconsole.h
 // 7/18/2012
 
-#include <QtGui/QLabel>
 #include <QtCore/QMutex>
 #include <QtCore/QStringList>
+#include <QtGui/QLabel>
 
 QT_BEGIN_NAMESPACE
 class QAction;

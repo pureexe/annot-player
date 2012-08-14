@@ -11,13 +11,13 @@
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/traits.h"
 #include "module/qtext/htmltag.h"
+#include <QtCore/QFile>
+#include <QtCore/QStringList>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
-#include <QtCore/QFile>
-#include <QtCore/QStringList>
 #include <climits>
 
 //#define DEBUG "nicovideocodec"
@@ -82,9 +82,10 @@ AnnotationList
 NicovideoCodec::parseDocument(const QByteArray &data)
 {
   DOUT("enter: data.size =" << data.size());
+  AnnotationList ret;
   if (data.isEmpty()) {
     DOUT("exit: empty data");
-    return AnnotationList();
+    return ret;
   }
   QDomDocument doc;
   doc.setContent(skipXmlLeadingComment(
@@ -92,15 +93,14 @@ NicovideoCodec::parseDocument(const QByteArray &data)
   ));
   if (doc.isNull()) {
     DOUT("exit: invalid document root");
-    return AnnotationList();
+    return ret;
   }
   QDomElement root = doc.firstChildElement("packet");
   if (root.isNull()) {
     DOUT("exit: invalid root element");
-    return AnnotationList();
+    return ret;
   }
 
-  AnnotationList ret;
   QDomElement e = root.firstChildElement("chat");
   while (!e.isNull()) {
     QString text = e.text().trimmed();

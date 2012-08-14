@@ -6,8 +6,8 @@
 
 #include "module/imagefilter/imagefilter.h"
 #include <QtCore/QObject>
-#include <QtCore/QSize>
 #include <QtCore/QPoint>
+#include <QtCore/QSize>
 
 class RippleImageFilter : public QObject, public ImageFilter
 {

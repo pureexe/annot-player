@@ -5,9 +5,9 @@
 // 5/24/2012
 
 #include "project/common/acsettings.h"
+#include <QtCore/QObject>
 #include <QtGui/QColor>
 #include <QtGui/QFont>
-#include <QtCore/QObject>
 
 //QColor(r, g, b, a), sample color RGB palatte: http://www.tayloredmktg.com/rgb/
 #define ANNOTATION_COLOR_DEFAULT    QColor(255, 250, 250, 255) // Disable alpha for better performance.

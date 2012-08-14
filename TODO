@@ -4,40 +4,10 @@
 http://db.tt/SrtkzxIJ
 http://qt-project.org/wiki/Category:Add-ons
 
-# server
-- move wiki to sakuradite
-- add shortcuts && gestures to googlecode and herlpwiki
-- JSP: add a list of highligh features
-- make wiki like JSP able to share annot/video URL
-- make twitter-like system in JSP
 
-# ideas
-- Windows 8
-  touchpad with annotations
-- control annot in detail, point: more informable and expressable
-- integrate with SNS
-
-- bridge with other asian culture like thai
-- integrate my browser with jsp server
-
-- player
-  - imagine
-    - get use of mouse/tablet gestures/shortcuts
-      property_anime function/curve
-      embedded webview/qpainter
-      make a annot game?
-  goal: make annotation more useful, only keep useful information
-        integrate SNS
-        freedom, anntotate deathnote
-
-# TODO
-
-- goei2 everyday 1h at least
-- writing proposal
-- scan and send material
-- ask for reference letters
-- car tax  goto dmv
-- car inspection goto walmart
+# key ideas
+- stream trial games, and sub trial games in chinese
+    - librsync for downloading files?
 
 # features
 - show how to associate XML
@@ -45,62 +15,120 @@ http://qt-project.org/wiki/Category:Add-ons
   drag-and-drop
   rename
 
+- show where to find annotations
+  - overgame
+  - on top
+  - in backlog
+  - on the desktop
+  - in another notepad
 
-# projects
-- stream galgame
-- server design: build my own jsp wiki
-  - how to associate with wiki
-  - make similar to wikimedia
-    - add translation/annotation viewer as tabs
-  annot wiki
-  see jspwiki
-- chat
+#
 
-# server
+work on streaming
+- windows driver
+- sync
 
-- social
-  - create user group
-  - change annotation group
 
-- social
-  - allow user share ads/news for game they are playing
-  - allow add comments
+# 0.1.8.2
+#
+fix cloudserviceudatre.cmd
 
-- maintain
-  - backup mysql to my own machine
-  - automatic back database everyweek
-  - change DNS server to Japan
+- option to integrate native applocale to launch galgame
+  systemroot/AppPatch
+  - annot/win/applocale launcher
 
-http://visualnovelaer.wordpress.com/2012/07/01/a-revolution-for-fan-translation-it-is-now-possible-to-sub-any-visual-novel-without-hacking/
+- windows updator
+  native win32 windows
+http://msdn.microsoft.com/en-us/library/bb384843.aspx
+http://winprog.org/tutorial/start.html
 
-# 0.1.8.1
+- Annot Translator
+  - add static shared search engines
+  - add Japanese Tip/sentence/word Everyday on startup
+
+use curl or vlc native downloader to replace qt networkaccessmanager?
+- FIXME: http://www.acfun.tv/v/ac379761_16
+  why rejected?
+
+- Annot Browser
+  - add translate engines to annot browser
+
+- windows
+- able to listen to more than 1 channels, change GUI interface
+change ui from number comboedit to multiple checkbox of text channels
+create a special combonent for a group of checkbox
+- always keep recent 3 text from all channels
+- listen to more than text
+  - add up to 3 channel to listen
+
+- mac:
+- add user-defined keyword dictionary for special noun
+  - able to share it online
+  - database: dict_term
+    term_id term_status term_flag user_id term_create_ip term_create_time term_update_time term_update_ip term_type term_from term_to term_source, term_target
+    term_bless_count term_curse_count term_block_count
+
+- able to change annotation language in annotation browser, and annotationgraphicsitem
+
+- windows
+  - debug "F" in game mode
 - windows xp
+  - get a better theme for windows
+    filterpattern, etc change to white color
   - check if it is possible to bypass apploc on Chinese Windows XP
     - also, if windows title is correct
   - check subtitle rendering
 
-- add mediamanager
-  - for recent files
+- finish library tree view
 
-- windows
-  - able to listen to more than 1 channels
-  - listen to more than text
-    - add up to 3 channel to listen
+- mac
+Honyaku: http://honyaku.yahoo.co.jp/
+Excite: http://www.excite.co.jp/
+SDL: http://www.freetranslation.com/
+OCN: http://www.ocn.ne.jp/translation/
+infoseek: http://translation.infoseek.ne.jp/
+
+- use QItemSelectionModel to enable multiple selection of models
+- utilize qt browser demo, how addressbar, etc are implemented
+
+enable offline annotation edit
+- dump game text to XML
+  <token>....</token>
+  <annot id="$annotid" anchor="$tokenId..">
+  </annot>
+- sync xml with game
 
 - windows game
   - submit game text as context as well
+    figure how to use heuristics for scene_text
+  - also figure out how to sugmit game icon or scenario screenshots as well?
   - game_scene
     scene_text scene_context prev_scene_id
+
+- group: able to flag annot from context menu
+  - able to flag outline color for annot, similar to finder
+    implement as \halo[red] etc
+  - trash, instead of delete permanently
+    automaticaly trash when edit create huge change
+    \flag[delete] etc
+
+- integrate winsparkle and appcasting
+
+- flags of annot from context menu
+- add annot permission instead
+add group of annot
 
 - game
   - figure out how to utilize ITH profiles
     - using SHA1256 in qt5
      compute sha1 256 for game as well
 
+
+- use online service for chatting (primepush) instead of writing client in C++
+
 - seek for offline translation abbroach
 
-# 0.1.8.2
-
+# 0.1.8.3
 - annot-down
   - rewrite thread using qtconcurrent and QFuture for blocking, rather then eventloop to block
     eliminate eventloops and signals
@@ -110,6 +138,7 @@ http://visualnovelaer.wordpress.com/2012/07/01/a-revolution-for-fan-translation-
   - able to subscribe to nicovideo | bilibili.tv in annot-down
     keep a history of all downloaded url
   - rewrite gui using tree mode
+
 
 - figure out how to recache fonts
 
@@ -174,6 +203,14 @@ memory_id user_id memory_create_ip memory_create_time  memory_type memory_first 
     - debug hang when close current video
 
 ## LATER
+- QT5
+ - switch to QML
+
+demos/sqlbrowser to show all cache content
+
+windows 8:  touchpad with annotations
+
+- remember recent actions
 - voice recognition
 http://cmusphinx.sourceforge.net/wiki/download/
 

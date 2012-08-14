@@ -10,7 +10,7 @@ cd "$PREFIX"  || exit 1
 ## environment
 
 COLOR=purple
-VERSION=0.1.7.0
+VERSION=0.1.8.0
 DMG_SIZE=250m
 
 TARGET="Annot Stream"
@@ -52,6 +52,13 @@ DOWNLOADER_MACOS=$DOWNLOADER_CONTENTS/MacOS
 DOWNLOADER_BIN=$DOWNLOADER_MACOS/$DOWNLOADER_NAME
 DOWNLOADER_RESOURCES=$DOWNLOADER_CONTENTS/Resources
 
+TRANSLATOR_NAME="Annot Translator"
+TRANSLATOR_APP=$TRANSLATOR_NAME.app
+TRANSLATOR_CONTENTS=$TRANSLATOR_APP/Contents
+TRANSLATOR_MACOS=$TRANSLATOR_CONTENTS/MacOS
+TRANSLATOR_BIN=$TRANSLATOR_MACOS/$TRANSLATOR_NAME
+TRANSLATOR_RESOURCES=$TRANSLATOR_CONTENTS/Resources
+
 ## copy package
 
 test -e "$TARGET" && finder-remove "$TARGET"
@@ -81,11 +88,14 @@ cp -Rv "$APP_BUILD/$DOWNLOADER_APP" . || exit 1
 rm -Rf "$DOWNLOADER_MACOS"/*
 cp -v "$APP_BUILD/$DOWNLOADER_BIN" "$DOWNLOADER_BIN" || exit 1
 
-echo "ignore error on /usr/lib/@loader_path@loader_path caused by @loader_path/lib/libvlc*.dylib"
-macdeployqt "$APP"
+cp -Rv "$APP_BUILD/$TRANSLATOR_APP" . || exit 1
+rm -Rf "$TRANSLATOR_MACOS"/*
+cp -v "$APP_BUILD/$TRANSLATOR_BIN" "$TRANSLATOR_BIN" || exit 1
 
+macdeployqt "$APP"
 macdeployqt "$BROWSER_APP"
 macdeployqt "$DOWNLOADER_APP"
+macdeployqt "$TRANSLATOR_APP"
 
 ## link apps to APP
 
@@ -103,7 +113,14 @@ ln -s ../../"$APP_FRAMEWORKS" || exit 1
 ln -s ../../"$APP_PLUGINS" || exit 1
 cd ../..
 
-cd "$DOWNLOADER_APP"/Contents/MacOS || exit 1
+cd "$TRANSLATOR_APP"/Contents || exit 1
+finder-remove Frameworks
+finder-remove PlugIns
+ln -s ../../"$APP_FRAMEWORKS" || exit 1
+ln -s ../../"$APP_PLUGINS" || exit 1
+cd ../..
+
+cd "$BROWSER_APP"/Contents/MacOS || exit 1
 ln -s ../../../"$APP_MACOS"/lua || exit 1
 ln -s ../../../"$APP_MACOS"/doc || exit 1
 ln -s ../../../"$APP_MACOS"/images || exit 1
@@ -111,10 +128,15 @@ ln -s ../../../"$APP_MACOS"/jsf || exit 1
 ln -s ../../../"$APP_MACOS"/translations || exit 1
 cd ../../..
 
-cd "$BROWSER_APP"/Contents/MacOS || exit 1
+cd "$DOWNLOADER_APP"/Contents/MacOS || exit 1
 ln -s ../../../"$APP_MACOS"/lua || exit 1
 ln -s ../../../"$APP_MACOS"/doc || exit 1
-ln -s ../../../"$APP_MACOS"/images || exit 1
+ln -s ../../../"$APP_MACOS"/jsf || exit 1
+ln -s ../../../"$APP_MACOS"/translations || exit 1
+cd ../../..
+
+cd "$TRANSLATOR_APP"/Contents/MacOS || exit 1
+ln -s ../../../"$APP_MACOS"/doc || exit 1
 ln -s ../../../"$APP_MACOS"/jsf || exit 1
 ln -s ../../../"$APP_MACOS"/translations || exit 1
 cd ../../..

@@ -2,10 +2,10 @@
 // 7/14/2012
 
 #include "module/eventlistener/mouseclickeventlistener.h"
-#include <QtGui/QMouseEvent>
 #include <QtCore/QDateTime>
 #include <QtCore/QEvent>
 #include <QtCore/QTimer>
+#include <QtGui/QMouseEvent>
 
 //#define DEBUG "mouseclickeventlistener"
 #include "module/debug/debug.h"

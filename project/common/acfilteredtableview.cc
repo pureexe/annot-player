@@ -8,7 +8,7 @@
 
 // - Constructions -
 
-AcFilteredTableView::AcFilteredTableView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent)
+AcFilteredTableView::AcFilteredTableView(QAbstractItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent)
   : Base(parent), sourceModel_(sourceModel), proxyModel_(proxyModel)
 {
   Q_ASSERT(sourceModel_);
@@ -48,8 +48,9 @@ AcFilteredTableView::createLayout()
     proxyView_->setRootIsDecorated(true);
     proxyView_->setAlternatingRowColors(true);
     proxyView_->setSortingEnabled(true);
+    proxyView_->setToolTip(tr("Table"));
+
     proxyView_->setModel(proxyModel_);
-    //proxyView_->setToolTip(tr("Running processes"));
   }
 
   filterPatternEdit_ = ui->makeComboBox(AcUi::EditHint, "", tr("Filter Pattern"), tr("Search"));
@@ -99,8 +100,8 @@ AcFilteredTableView::createLayout()
   // Set up connections
   connect(filterPatternEdit_, SIGNAL(editTextChanged(QString)),
           SLOT(updateFilterRegExp()));
-  connect(filterPatternEdit_, SIGNAL(editTextChanged(QString)),
-          SLOT(updateCount()));
+  //connect(filterPatternEdit_, SIGNAL(editTextChanged(QString)),
+  //        SLOT(updateCount()));
   connect(filterSyntaxComboBox_, SIGNAL(currentIndexChanged(int)),
           SLOT(updateFilterRegExp()));
   connect(filterColumnComboBox_, SIGNAL(currentIndexChanged(int)),
@@ -170,8 +171,8 @@ AcFilteredTableView::updateFilterColumn()
 void
 AcFilteredTableView::updateCount()
 {
-  int total = sourceModel_->rowCount();
-  int count = proxyModel_->rowCount();
+  int total = sourceModel_->rowCount(),
+      count = proxyModel_->rowCount();
   countButton_->setText(
     QString("%1/%2")
       .arg(QString::number(count))

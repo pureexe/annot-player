@@ -88,9 +88,9 @@ TokenView::createLayout()
 //
 //  //MAKE_TOKEN_LABEL(source, SOURCE)
 //  MAKE_TOKEN_LABEL(createDate, CREATEDATE)
-//  MAKE_TOKEN_LABEL(blessedCount, BLESSEDCOUNT)
-//  MAKE_TOKEN_LABEL(cursedCount, CURSEDCOUNT)
-//  MAKE_TOKEN_LABEL(visitedCount, VISITEDCOUNT)
+//  MAKE_TOKEN_LABEL(blessCount, BLESSCOUNT)
+//  MAKE_TOKEN_LABEL(curseCount, CURSECOUNT)
+//  MAKE_TOKEN_LABEL(visitCount, VISITCOUNT)
 //  MAKE_TOKEN_LABEL(annotCount, ANNOTCOUNT)
 //#undef MAKE_TOKEN_LABEL
 
@@ -120,18 +120,18 @@ TokenView::createLayout()
     grid->addWidget(createDateBuddy, ++r, c=0);
     grid->addWidget(createDateLabel_, r, ++c);
 
-    grid->addWidget(visitedCountBuddy, ++r, c=0);
-    grid->addWidget(visitedCountLabel_, r, ++c);
+    grid->addWidget(visitCountBuddy, ++r, c=0);
+    grid->addWidget(visitCountLabel_, r, ++c);
 
     grid->addWidget(annotCountBuddy, ++r, c=0);
     grid->addWidget(annotCountLabel_, r, ++c);
 
-    grid->addWidget(blessedCountBuddy, ++r, c=0);
-    grid->addWidget(blessedCountLabel_, r, ++c);
+    grid->addWidget(blessCountBuddy, ++r, c=0);
+    grid->addWidget(blessCountLabel_, r, ++c);
     grid->addWidget(blessButton, r, ++c);
 
-    grid->addWidget(cursedCountBuddy, ++r, c=0);
-    grid->addWidget(cursedCountLabel_, r, ++c);
+    grid->addWidget(curseCountBuddy, ++r, c=0);
+    grid->addWidget(curseCountLabel_, r, ++c);
     grid->addWidget(curseButton, r, ++c);
 
     grid->addWidget(aliasBuddy, ++r, c=0);
@@ -162,9 +162,9 @@ TokenView::setAliasHeaderData(QAbstractItemModel *model)
   model->setHeaderData(HD_Flags, Qt::Horizontal, TR(T_FLAGS));
   model->setHeaderData(HD_Id, Qt::Horizontal, TR(T_ID));
   model->setHeaderData(HD_UserId, Qt::Horizontal, TR(T_USER_ID));
-  model->setHeaderData(HD_BlessedCount, Qt::Horizontal, TR(T_BLESSEDCOUNT));
-  model->setHeaderData(HD_CursedCount, Qt::Horizontal, TR(T_CURSEDCOUNT));
-  model->setHeaderData(HD_BlockedCount, Qt::Horizontal, TR(T_BLOCKEDCOUNT));
+  model->setHeaderData(HD_BlessCount, Qt::Horizontal, TR(T_BLESSCOUNT));
+  model->setHeaderData(HD_CurseCount, Qt::Horizontal, TR(T_CURSECOUNT));
+  model->setHeaderData(HD_BlockCount, Qt::Horizontal, TR(T_BLOCKCOUNT));
 }
 
 void
@@ -275,9 +275,7 @@ TokenView::currentAliasType() const
     return 0;
 
   QString t = index.data().toString();
-  return t == tr("URL") ? Alias::AT_Url :
-         t == tr("name") ? Alias::AT_Name :
-         0;
+  return aliasTypeFromString(t);
 }
 
 qint64
@@ -289,14 +287,7 @@ TokenView::currentAliasId() const
 
   int row = index.row();
   index = index.sibling(row, HD_Id);
-  if (!index.isValid())
-    return 0;
-  bool ok;
-  qint64 ret = index.data().toLongLong(&ok);
-  if (!ok)
-    return 0;
-
-  return ret;
+  return index.isValid() ? index.data().toLongLong() : 0;
 }
 
 qint64
@@ -308,14 +299,7 @@ TokenView::currentAliasUserId() const
 
   int row = index.row();
   index = index.sibling(row, HD_UserId);
-  if (!index.isValid())
-    return 0;
-  bool ok;
-  qint64 ret = index.data().toLongLong(&ok);
-  if (!ok)
-    return 0;
-
-  return ret;
+  return index.isValid() ? index.data().toLongLong() : 0;
 }
 
 void
@@ -356,9 +340,9 @@ TokenView::addAlias(const Alias &a)
   sourceModel_->setData(sourceModel_->index(0, HD_Flags), FORMAT_FLAGS(a.flags()));
   sourceModel_->setData(sourceModel_->index(0, HD_Id), a.id());
   sourceModel_->setData(sourceModel_->index(0, HD_UserId), a.userId());
-  sourceModel_->setData(sourceModel_->index(0, HD_BlessedCount), a.blessedCount());
-  sourceModel_->setData(sourceModel_->index(0, HD_CursedCount), a.cursedCount());
-  sourceModel_->setData(sourceModel_->index(0, HD_BlockedCount), a.blockedCount());
+  sourceModel_->setData(sourceModel_->index(0, HD_BlessCount), a.blessCount());
+  sourceModel_->setData(sourceModel_->index(0, HD_CurseCount), a.curseCount());
+  sourceModel_->setData(sourceModel_->index(0, HD_BlockCount), a.blockCount());
 
   for (int i = 0; i < HD_Count; i++)
     sourceModel_->setData(sourceModel_->index(0, i), sourceModel_->headerData(i, Qt::Horizontal), Qt::ToolTipRole);
@@ -435,10 +419,10 @@ TokenView::updateLabels()
   //else
   //  createDateLabel_->setText(TR(T_UNKNOWN));
 //
-  //visitedCountLabel_->setText(FORMAT_COUNT(token_.visitedCount()));
+  //visitCountLabel_->setText(FORMAT_COUNT(token_.visitCount()));
   //annotCountLabel_->setText(FORMAT_COUNT(token_.annotCount()));
-  //blessedCountLabel_->setText(FORMAT_COUNT(token_.blessedCount()));
-  //cursedCountLabel_->setText(FORMAT_COUNT(token_.cursedCount()));
+  //blessCountLabel_->setText(FORMAT_COUNT(token_.blessCount()));
+  //curseCountLabel_->setText(FORMAT_COUNT(token_.curseCount()));
 
 #undef FORMAT_TIME
 #undef FORMAT_COUNT
@@ -470,10 +454,10 @@ TokenView::bless()
   }
 
   bool ok;
-  qint64 count = blessedCountLabel_->text().toUInt(&ok);
+  qint64 count = blessCountLabel_->text().toUInt(&ok);
   if (!ok)
     count = 0;
-  blessedCountLabel_->setText(QString::number(++count));
+  blessCountLabel_->setText(QString::number(++count));
 
   emit tokenBlessedWithId(tid);
 }
@@ -496,10 +480,10 @@ TokenView::curse()
   }
 
   bool ok;
-  qint64 count = cursedCountLabel_->text().toUInt(&ok);
+  qint64 count = curseCountLabel_->text().toUInt(&ok);
   if (!ok)
     count = 0;
-  cursedCountLabel_->setText(QString::number(++count));
+  curseCountLabel_->setText(QString::number(++count));
 
   emit tokenCursedWithId(tid);
 }
@@ -521,7 +505,7 @@ QString
 TokenView::languageToString(int lang)
 {
   switch(lang) {
-  case Traits::AnyLanguage:     return TR(T_ANYLANGUAGE);
+  //case Traits::AnyLanguage:     return TR(T_ANYLANGUAGE);
   case Traits::English:         return TR(T_ENGLISH);
   case Traits::Japanese:        return TR(T_JAPANESE);
   case Traits::Chinese:         return TR(T_CHINESE);
@@ -531,9 +515,10 @@ TokenView::languageToString(int lang)
   case Traits::Italian:         return TR(T_ITALIAN);
   case Traits::Spanish:         return TR(T_SPANISH);
   case Traits::Portuguese:      return TR(T_PORTUGUESE);
+  case Traits::Russian:         return TR(T_RUSSIAN);
 
-  case Traits::UnknownLanguage:
-  default : return TR(T_ALIEN);
+  //case Traits::UnknownLanguage:
+  default: return TR(T_ALIEN);
   }
 }
 
@@ -559,12 +544,24 @@ QString
 TokenView::aliasTypeToString(int type)
 {
   switch (type) {
-  case Alias::AT_Name:  return tr("name");
-  case Alias::AT_File:return tr("file");
-  case Alias::AT_Tag:   return tr("tag");
+  case Alias::AT_Title:  return tr("Title");
+  case Alias::AT_File:return tr("File");
+  case Alias::AT_Tag:   return tr("Tag");
   case Alias::AT_Url: return tr("URL");
+  case Alias::AT_Name:  return tr("Name");
+  case Alias::AT_Folder: return tr("Folder");
+  case Alias::AT_Brand: return tr("Brand");
   default: return TR(T_NA);
   }
+}
+
+int
+TokenView::aliasTypeFromString(const QString &text)
+{
+  for (int i = 1; i < Alias::AT_Count; i++)
+    if (text == aliasTypeToString(i))
+      return i;
+  return 0;
 }
 
 // - Context menu -

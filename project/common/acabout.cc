@@ -35,7 +35,7 @@ AcAbout::templateText() const
 {
   static const char *ret =
     HTML_CENTER_OPEN() \
-      HTML_STYLE_OPEN(color:purple) \
+      HTML_SS_OPEN(color:purple) \
         HTML_BR() \
 \
         AC_ORGANIZATION " " \
@@ -56,7 +56,7 @@ AcAbout::templateText() const
           AC_EMAIL          HTML_BR() \
         HTML_A_CLOSE() \
 \
-      HTML_STYLE_CLOSE() \
+      HTML_SS_CLOSE() \
     HTML_CENTER_CLOSE()
   ;
   return ret;

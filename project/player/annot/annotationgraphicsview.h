@@ -6,9 +6,9 @@
 
 #include "module/annotcloud/annotation.h"
 #include "module/qtext/eventforwarder.h"
-#include <QtGui/QGraphicsView>
 #include <QtCore/QHash>
 #include <QtCore/QList>
+#include <QtGui/QGraphicsView>
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
 

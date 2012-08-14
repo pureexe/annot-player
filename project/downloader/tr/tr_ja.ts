@@ -138,13 +138,17 @@
 <context>
     <name>AcFilteredListView</name>
     <message>
-        <location filename="../../common/acfilteredlistview.cc" line="50"/>
         <source>View</source>
-        <translation>ビュー</translation>
+        <translation type="obsolete">ビュー</translation>
     </message>
     <message>
         <source>Filter pattern</source>
         <translation type="obsolete">パターン</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredlistview.cc" line="50"/>
+        <source>List</source>
+        <translation>列表</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredlistview.cc" line="53"/>
@@ -165,8 +169,8 @@
 <context>
     <name>AcFilteredTableView</name>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="55"/>
-        <location filename="../../common/acfilteredtableview.cc" line="57"/>
+        <location filename="../../common/acfilteredtableview.cc" line="56"/>
+        <location filename="../../common/acfilteredtableview.cc" line="58"/>
         <source>Filter Pattern</source>
         <translation>パターン</translation>
     </message>
@@ -175,29 +179,34 @@
         <translation type="obsolete">パターン</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="59"/>
-        <location filename="../../common/acfilteredtableview.cc" line="65"/>
+        <location filename="../../common/acfilteredtableview.cc" line="51"/>
+        <source>Table</source>
+        <translation>列表</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredtableview.cc" line="60"/>
+        <location filename="../../common/acfilteredtableview.cc" line="66"/>
         <source>Filter Syntax</source>
         <translation>シンタックス</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="60"/>
+        <location filename="../../common/acfilteredtableview.cc" line="61"/>
         <source>Regular Expression</source>
         <translation>正規表現</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="62"/>
+        <location filename="../../common/acfilteredtableview.cc" line="63"/>
         <source>Fixed String</source>
         <translation>そのまま</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="67"/>
-        <location filename="../../common/acfilteredtableview.cc" line="72"/>
+        <location filename="../../common/acfilteredtableview.cc" line="68"/>
+        <location filename="../../common/acfilteredtableview.cc" line="73"/>
         <source>Filter Column</source>
         <translation>列</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="55"/>
+        <location filename="../../common/acfilteredtableview.cc" line="56"/>
         <source>Search</source>
         <translation>検索</translation>
     </message>
@@ -210,7 +219,7 @@
         <translation type="obsolete">正規表現</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="61"/>
+        <location filename="../../common/acfilteredtableview.cc" line="62"/>
         <source>Wildcard</source>
         <translation>ワイルドカード</translation>
     </message>
@@ -223,7 +232,7 @@
         <translation type="obsolete">列</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="74"/>
+        <location filename="../../common/acfilteredtableview.cc" line="75"/>
         <source>Count</source>
         <translation>行数</translation>
     </message>
@@ -665,7 +674,7 @@
         <translation>URLの解析に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="346"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="326"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>ニコアカウントを入力してください</translation>
     </message>
@@ -674,10 +683,10 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.cc" line="61"/>
-        <location filename="../mainwindow.cc" line="708"/>
-        <location filename="../mainwindow.cc" line="773"/>
-        <location filename="../mainwindow.cc" line="775"/>
-        <location filename="../mainwindow.cc" line="977"/>
+        <location filename="../mainwindow.cc" line="702"/>
+        <location filename="../mainwindow.cc" line="767"/>
+        <location filename="../mainwindow.cc" line="769"/>
+        <location filename="../mainwindow.cc" line="968"/>
         <source>Annot Downloader</source>
         <translation>とあるﾀﾞｳﾝﾛｰﾄﾞ使い</translation>
     </message>
@@ -800,7 +809,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cc" line="292"/>
-        <location filename="../mainwindow.cc" line="871"/>
+        <location filename="../mainwindow.cc" line="865"/>
         <source>Copy Title</source>
         <translation>タイトルをコピー</translation>
     </message>
@@ -900,27 +909,27 @@
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="628"/>
+        <location filename="../mainwindow.cc" line="622"/>
         <source>opening</source>
         <translation>開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="630"/>
+        <location filename="../mainwindow.cc" line="624"/>
         <source>not exist</source>
         <translation>存在しない</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="647"/>
+        <location filename="../mainwindow.cc" line="641"/>
         <source>download annotations</source>
         <translation>弾幕を落とす</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="653"/>
+        <location filename="../mainwindow.cc" line="647"/>
         <source>task exists</source>
         <translation>タスクが既に存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1120"/>
+        <location filename="../mainwindow.cc" line="1111"/>
         <source>file saved</source>
         <translation>セーブした</translation>
     </message>
@@ -929,7 +938,7 @@
         <translation type="obsolete">ウィンドウを非表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="977"/>
+        <location filename="../mainwindow.cc" line="968"/>
         <source>Minimize to Tray</source>
         <translation>トレイに隠れる</translation>
     </message>
@@ -938,43 +947,43 @@
         <translation type="obsolete">ﾀﾞｳﾝﾛｰﾄﾞ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="803"/>
+        <location filename="../mainwindow.cc" line="797"/>
         <source>download finished</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="810"/>
+        <location filename="../mainwindow.cc" line="804"/>
         <source>download failed</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="870"/>
+        <location filename="../mainwindow.cc" line="864"/>
         <source>Copy URL</source>
         <translation>URLをコピー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="927"/>
+        <location filename="../mainwindow.cc" line="921"/>
         <source>Stopped</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="928"/>
+        <location filename="../mainwindow.cc" line="922"/>
         <source>Downloading</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="929"/>
+        <location filename="../mainwindow.cc" line="923"/>
         <source>Pending</source>
         <translation>待つ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="930"/>
+        <location filename="../mainwindow.cc" line="924"/>
         <source>Finished</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="931"/>
-        <location filename="../mainwindow.cc" line="932"/>
+        <location filename="../mainwindow.cc" line="925"/>
+        <location filename="../mainwindow.cc" line="926"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
@@ -1287,17 +1296,17 @@
         <translation>長い名前を切断しました</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="100"/>
+        <location filename="../signer.cc" line="99"/>
         <source>saving aliases ...</source>
         <translation>弾幕情報を保存中…</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="113"/>
+        <location filename="../signer.cc" line="112"/>
         <source>media signed</source>
         <translation>弾幕情報が保存しました</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="115"/>
+        <location filename="../signer.cc" line="114"/>
         <source>failed to sign media</source>
         <translation>弾幕情報の保存に失敗した</translation>
     </message>
@@ -1306,22 +1315,22 @@
         <translation type="obsolete">ログインに失敗した</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="176"/>
+        <location filename="../signer.cc" line="175"/>
         <source>logging in as %1 ...</source>
         <translation>%1でログイン中…</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="184"/>
+        <location filename="../signer.cc" line="183"/>
         <source>failed to connect to server</source>
         <translation>サーバーに接触できません</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="191"/>
+        <location filename="../signer.cc" line="190"/>
         <source>login succeeded as %1</source>
         <translation>%1でログインした</translation>
     </message>
     <message>
-        <location filename="../signer.cc" line="193"/>
+        <location filename="../signer.cc" line="192"/>
         <source>failed to login as %1</source>
         <translation>%1でログイン失敗した</translation>
     </message>
@@ -1467,15 +1476,15 @@
 <context>
     <name>YoutubeMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="55"/>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="62"/>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="94"/>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="143"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="54"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="61"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="93"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="142"/>
         <source>failed to resolve URL</source>
         <translation>URLの解析に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="87"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="86"/>
         <source>network error, failed to resolve media URL</source>
         <translation>URLの解析に失敗した</translation>
     </message>

@@ -7,9 +7,9 @@
 #include "project/common/accomboedit.h"
 #include "project/common/acsettings.h"
 #include "module/mrlanalysis/mrlanalysis.h"
+#include "module/qtext/overlaylayout.h"
 #include "module/qtext/ss.h"
 #include "module/qtext/string.h"
-#include "module/qtext/overlaylayout.h"
 #include <QtGui>
 
 #ifdef Q_OS_MAC
@@ -120,7 +120,7 @@ UrlDialog::open()
       edit_->itemText(edit_->count() - 1) != url)
     edit_->addItem(url);
 
-  url = autoCompleteUrl(url);
+  url = normalizeUrl(url);
   emit urlEntered(url);
 }
 
@@ -173,21 +173,17 @@ UrlDialog::decrease()
 }
 
 QString
-UrlDialog::autoCompleteUrl(const QString &url)
+UrlDialog::normalizeUrl(const QString &url)
 {
   QString ret = url.trimmed();
+  if (ret.isEmpty())
+    return ret;
   if (url.startsWith("ttp://"))
     ret.prepend('h');
   else if (!url.startsWith("http://", Qt::CaseInsensitive))
     ret.prepend("http://");
 
-  ret.remove(QRegExp("#$"))
-     .remove(QRegExp("#titles$"))
-     .replace(QRegExp("/index.html$", Qt::CaseInsensitive), "/")
-     .replace(QRegExp("/index_1.html$", Qt::CaseInsensitive), "/")
-     .replace(QRegExp("/#$"), "/");
-
-  return ret;
+  return MrlAnalysis::normalizeUrl(url);
 }
 
 void

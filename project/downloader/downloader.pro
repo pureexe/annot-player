@@ -1,7 +1,7 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.2.2
+VERSION = 0.1.2.3
 
 DEFINES += PROJECT_DOWNLOADER
 
@@ -43,12 +43,13 @@ mac {
     include($$ROOTDIR/mac/qtcocoa/qtcocoa.pri)
 }
 
-QT      += core gui network
+QT      += core gui network xml
 #CONFIG(static): QTPLUGIN += qsqlite
 
 DEFINES += WITH_QT_CORE \
            WITH_QT_GUI \
-           WITH_QT_NETWORK
+           WITH_QT_NETWORK \
+           WITH_QT_XML
 
 ## Sources
 

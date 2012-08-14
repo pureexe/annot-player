@@ -44,7 +44,7 @@ public slots:
   void setVisible(bool visible) override;
 
 protected:
-  static QString autoCompleteUrl(const QString &url);
+  static QString normalizeUrl(const QString &url);
 
 protected slots:
   void showExampleUrl();

@@ -153,19 +153,19 @@ inline QString html_dummy_close()  { return HTML_DUMMY_CLOSE(); }
 inline QString html_dummy(const QString &content)
 { return html_dummy_open() + content + html_dummy_close(); }
 
-//#define HTML_STYLE_OPEN(_style) HTML_TAG_OPEN(div, style="display:inline;" #_style ) // Not working on Windows
-//#define HTML_STYLE_OPEN(_style) "<div style=\"display:inline;" #_style "\">"
-#define HTML_STYLE_OPEN(_style) HTML_TAG_OPEN(span, style=#_style)
-#define HTML_STYLE_CLOSE()      HTML_TAG_CLOSE(span)
-#define HTML_STYLE(_content, _style) HTML_STYLE_OPEN(_style) _content HTML_STYLE_CLOSE()
+//#define HTML_SS_OPEN(_style) HTML_TAG_OPEN(div, style="display:inline;" #_style ) // Not working on Windows
+//#define HTML_SS_OPEN(_style) "<div style=\"display:inline;" #_style "\">"
+#define HTML_SS_OPEN(_style) HTML_TAG_OPEN(span, style=#_style)
+#define HTML_SS_CLOSE()      HTML_TAG_CLOSE(span)
+#define HTML_SS(_content, _style) HTML_SS_OPEN(_style) _content HTML_SS_CLOSE()
 
-inline QString html_style_open(const QString &style = "")
+inline QString html_ss_open(const QString &style = "")
 { return "<span style=\"" + style + "\">"; }
 
-inline QString html_style_close() { return HTML_STYLE_CLOSE(); }
+inline QString html_ss_close() { return HTML_SS_CLOSE(); }
 
-inline QString html_style(const QString &content = "", const QString &style = "")
-{ return html_style_open(style) + content + html_style_close(); }
+inline QString html_ss(const QString &content = "", const QString &style = "")
+{ return html_ss_open(style) + content + html_ss_close(); }
 
 // <em>
 
@@ -232,6 +232,27 @@ inline QString html_td_close() { return HTML_TD_CLOSE(); }
 
 inline QString html_td(const QString &content = "")
 { return html_td_open() + content + html_td_close(); }
+
+// - CSS -
+
+#define HTML_STYLE_OPEN(_type)  HTML_TAG_OPEN(style, type=#_type)
+#define HTML_STYLE_CLOSE()      HTML_TAG_CLOSE(style)
+#define HTML_STYLE(_content, _type) HTML_STYLE_OPEN(_type) _content HTML_STYLE_CLOSE()
+
+inline QString html_style_open(const QString &type = "")
+{ return "<span type=\"" + type + "\">"; }
+
+inline QString html_style_close() { return HTML_STYLE_CLOSE(); }
+
+inline QString html_style(const QString &content = "", const QString &type = "")
+{ return html_style_open(type) + content + html_style_close(); }
+
+
+#define HTML_CSS_OPEN()     HTML_STYLE_OPEN("text/css")
+#define HTML_CSS_CLOSE()    HTML_STYLE_CLOSE()
+
+#define HTML_JAVASCRIPT_OPEN()   HTML_STYLE_OPEN("text/javascript")
+#define HTML_JAVASCRIPT_CLOSE()  HTML_STYLE_CLOSE()
 
 // - Escape -
 

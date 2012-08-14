@@ -6,8 +6,8 @@
 
 #include "webbrowser.h"
 #include "gui/wbcomboedit.h"
-#include <QtWebKit/QWebView>
 #include <QtGui>
+#include <QtWebKit/QWebView>
 
 // - Helpers -
 

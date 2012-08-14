@@ -8,9 +8,9 @@
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
-#include <QtSql/QSqlDatabase>
 #include <QtCore/QObject>
 #include <QtCore/QMutex>
+#include <QtSql/QSqlDatabase>
 
 /**
  *  Represents cached database.

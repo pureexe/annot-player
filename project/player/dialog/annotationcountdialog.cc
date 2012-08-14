@@ -89,7 +89,7 @@ AnnotationCountDialog::ok()
   fadeOut();
   uint count = edit_->currentText().toUInt();
   if (count)
-    emit message(QString("%1: " HTML_STYLE_OPEN(color:red) " %2" HTML_STYLE_CLOSE())
+    emit message(QString("%1: " HTML_SS_OPEN(color:red) " %2" HTML_SS_CLOSE())
         .arg(tr("annotation max count"))
         .arg(QString::number(count)));
   else

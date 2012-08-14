@@ -2,15 +2,15 @@
 // 1/24/2012
 
 #include "module/mrlresolver/youkumrlresolver.h"
+#include <QtCore/QDateTime>
+#include <QtCore/QRegExp>
+#include <QtCore/QStringList>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptValueIterator>
-#include <QtCore/QDateTime>
-#include <QtCore/QRegExp>
-#include <QtCore/QStringList>
 #include <cstdlib>
 
 //#define DEBUG "youkumrlresolver"

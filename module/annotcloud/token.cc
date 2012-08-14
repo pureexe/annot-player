@@ -9,7 +9,6 @@
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QStringList>
-#include <memory>
 
 #define DEBUG "module/annotcloud::token"
 #include "module/debug/debug.h"

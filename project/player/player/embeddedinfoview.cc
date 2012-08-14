@@ -37,7 +37,7 @@ EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, SignalHub 
 
   setStyleSheet(
     SS_BEGIN(QLabel)
-      SS_COLOR(cyan)
+      SS_COLOR(white)
       SS_FONT_SIZE(9pt)
       //SS_FONT_WEIGHT(bold)
     SS_END
@@ -46,7 +46,7 @@ EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, SignalHub 
   setMaximumWidth(MAX_WIDTH);
 
   { // Outline font
-    QGraphicsEffect *e = AcUi::globalInstance()->makeHaloEffect(QColor("orange")); // orange is the complementary color of cyan
+    QGraphicsEffect *e = AcUi::globalInstance()->makeHaloEffect(QColor("orange"));
     if (e) {
       e->setProperty("opacity", 0.95);
       setGraphicsEffect(e);
@@ -115,12 +115,12 @@ EmbeddedInfoView::updateText()
     qreal kbrate = player_->bitrate() / 1000;
     QString kbrateField;
     if (kbrate > 0.0)
-      kbrateField = QString(HTML_STYLE_OPEN(color:red) "%3" HTML_STYLE_CLOSE() " kbps")
+      kbrateField = QString(HTML_SS_OPEN(color:red) "%3" HTML_SS_CLOSE() " kbps")
         .arg(QString::number(kbrate, 'f', 1));
     t.append(
-      HTML_STYLE_OPEN(color:red)
+      HTML_SS_OPEN(color:red)
       + QString("- %1 -").arg(tr("Codec")) +
-      HTML_STYLE_CLOSE()
+      HTML_SS_CLOSE()
       HTML_BR()
       +
       QString("%1: %2" "%3" HTML_BR())
@@ -157,9 +157,9 @@ EmbeddedInfoView::updateText()
     //if (hue || !qFuzzyCompare(saturation, 1) || !qFuzzyCompare(gamma, 1) ||
     //    !qFuzzyCompare(contrast, 1) || !qFuzzyCompare(brightness, 1)) {
       t.append(
-        HTML_STYLE_OPEN(color:red)
+        HTML_SS_OPEN(color:red)
         + QString("- %1 -").arg(tr("Video")) +
-        HTML_STYLE_CLOSE()
+        HTML_SS_CLOSE()
         HTML_BR()
       );
 
@@ -197,9 +197,9 @@ EmbeddedInfoView::updateText()
     if (delay ||
         ch && ch != Player::StereoChannel) {
       t.append(
-        HTML_STYLE_OPEN(color:red)
+        HTML_SS_OPEN(color:red)
         + QString("- %1 -").arg(tr("Audio")) +
-        HTML_STYLE_CLOSE()
+        HTML_SS_CLOSE()
         HTML_BR()
       );
 
@@ -214,13 +214,13 @@ EmbeddedInfoView::updateText()
       default: chstr = tr("None");
       }
       if (ch != Player::StereoChannel)
-        chstr = HTML_STYLE_OPEN(color:orange) + chstr + HTML_STYLE_CLOSE();
+        chstr = HTML_SS_OPEN(color:orange) + chstr + HTML_SS_CLOSE();
       t.append(QString("%1: %2")
         .arg(tr("Channel")).arg(chstr)
       );
 
       if (delay)
-        t.append(QString(" %1: " HTML_STYLE_OPEN(color:red) "%2" "%3" HTML_STYLE_CLOSE())
+        t.append(QString(" %1: " HTML_SS_OPEN(color:red) "%2" "%3" HTML_SS_CLOSE())
           .arg(tr("Delay")).arg(QString::number(delay)).arg(tr(" sec."))
         );
 
@@ -231,9 +231,9 @@ EmbeddedInfoView::updateText()
   // Annotation
   if (data_->hasAnnotations()) {
     t.append(
-      HTML_STYLE_OPEN(color:red)
+      HTML_SS_OPEN(color:red)
       + QString("- %1 -").arg(TR(T_ANNOTATION)) +
-      HTML_STYLE_CLOSE()
+      HTML_SS_CLOSE()
       HTML_BR()
     );
     qint64 minT = data_->minAnnotationCreateTime(),
@@ -257,9 +257,9 @@ EmbeddedInfoView::updateText()
       userCount = 1;
     t.append(
       QString(
-        "%1:" HTML_STYLE_OPEN(color:red) "%2" HTML_STYLE_CLOSE() " "
-        "%3:" HTML_STYLE_OPEN(color:red) "%4" HTML_STYLE_CLOSE() " "
-        "%5:" HTML_STYLE_OPEN(color:red) "%6" HTML_STYLE_CLOSE() "/%7" HTML_BR()
+        "%1:" HTML_SS_OPEN(color:red) "%2" HTML_SS_CLOSE() " "
+        "%3:" HTML_SS_OPEN(color:red) "%4" HTML_SS_CLOSE() " "
+        "%5:" HTML_SS_OPEN(color:red) "%6" HTML_SS_CLOSE() "/%7" HTML_BR()
       )
       .arg(tr("Annotations")).arg(QString::number(data_->annotations().size()))
       .arg(tr("Users")).arg(QString::number(userCount))
@@ -280,13 +280,13 @@ EmbeddedInfoView::updateText()
     }
     if (!qFuzzyCompare(AnnotationSettings::globalSettings()->rotation() +1, 1)) {
       QString rotation = QString::number(AnnotationSettings::globalSettings()->rotation(), 'f', 1);
-      rotation = HTML_STYLE_OPEN(color:red) + rotation + HTML_STYLE_CLOSE();
+      rotation = HTML_SS_OPEN(color:red) + rotation + HTML_SS_CLOSE();
       t.append(tr("Rotation") + ":" + rotation + " ");
       newline = true;
     }
     if (AnnotationSettings::globalSettings()->offset()) {
       QString offset = QString::number(AnnotationSettings::globalSettings()->offset());
-      offset = HTML_STYLE_OPEN(color:red) + offset + HTML_STYLE_CLOSE();
+      offset = HTML_SS_OPEN(color:red) + offset + HTML_SS_CLOSE();
       t.append(tr("Offset") + ":" + offset + tr(" sec"));
       newline = true;
     }
@@ -304,9 +304,9 @@ EmbeddedInfoView::updateText()
       urls.append(a.text());
   if (!urls.isEmpty()) {
     t.append(
-      HTML_STYLE_OPEN(color:red)
+      HTML_SS_OPEN(color:red)
       + QString("- %1 -").arg(TR(T_URL)) +
-      HTML_STYLE_CLOSE()
+      HTML_SS_CLOSE()
       HTML_BR()
     );
     foreach (const QString &url, urls)
@@ -319,9 +319,9 @@ EmbeddedInfoView::updateText()
     if (!lang)
       lang = AcSettings::globalSettings()->language();
     t.append(
-      HTML_STYLE_OPEN(color:red)
+      HTML_SS_OPEN(color:red)
       + QString("- %1 -").arg(TR(T_TIME)) +
-      HTML_STYLE_CLOSE()
+      HTML_SS_CLOSE()
       HTML_BR()
     );
     QDateTime utc = QDateTime::currentDateTimeUtc();
@@ -332,10 +332,10 @@ EmbeddedInfoView::updateText()
     static const QString fmt = "h:mm";
     t.append(
       tr("Local") + ": "
-      HTML_STYLE_OPEN(color:red)
+      HTML_SS_OPEN(color:red)
       + local.time().toString(fmt) + " "
       + weekToString(local.date().dayOfWeek()) +
-      HTML_STYLE_CLOSE()
+      HTML_SS_CLOSE()
     );
     if (showJapanTime) {
       QTime jst = utc.time().addSecs(3600 * QtExt::JapanTimeZone);

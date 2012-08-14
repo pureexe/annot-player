@@ -6,9 +6,9 @@
 
 #include "module/stream/inputstream.h"
 #include "module/qtext/stoppable.h"
-#include <QtNetwork/QNetworkRequest>
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
+#include <QtNetwork/QNetworkRequest>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 

@@ -99,7 +99,7 @@ namespace detail {
   };
   */
 
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
   class OpenProcessId : public QObject
   {
     Q_OBJECT
@@ -121,7 +121,7 @@ namespace detail {
       QTimer::singleShot(0, this, SLOT(deleteLater()));
     }
   };
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
 } // namespace detail
 

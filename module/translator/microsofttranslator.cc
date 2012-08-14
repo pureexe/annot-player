@@ -65,6 +65,8 @@ MicrosoftTranslator::translateRequest(const QUrl &url)
 void
 MicrosoftTranslator::translate(const QString &text, const QString &to, const QString &from)
 {
+  if (!isEnabled())
+    return;
   DOUT("enter");
   QUrl query = translateUrl(text, to, from);
   DOUT("query =" << query);

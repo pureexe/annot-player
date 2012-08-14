@@ -38,6 +38,10 @@ public:
   bool isRippleEnabled() const { return rippleEnabled_; }
   void setRippleEnabled(bool t);
 
+  bool isWindowOnTop() const { return windowFlags() & Qt::WindowStaysOnTopHint; }
+public slots:
+  void setWindowOnTop(bool t);
+
   // - Events -
 public slots:
   void setVisible(bool visible) override;

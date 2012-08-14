@@ -25,12 +25,12 @@
 #  endif // WITH_WIN_QTWIN
 # endif // Q_OS_WIN
 #endif // WITH_MODULE_VLCCORE
+#include <QtCore/QEventLoop>
 #ifdef Q_OS_MAC
 # include <QtGui/QMacCocoaViewContainer>
 #endif // Q_OS_MAC
-#include <QtNetwork/QNetworkCookieJar>
 #include <QtGui/QMouseEvent>
-#include <QtCore/QEventLoop>
+#include <QtNetwork/QNetworkCookieJar>
 #include <boost/tuple/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <cstring>
@@ -1411,7 +1411,7 @@ Player::searchMediaSubtitles(const QString &fileName)
 {
   QStringList ret;
   QFileInfo fi(fileName);
-  QDir dir = fi.absolutePath();
+  QDir dir = fi.absoluteDir();
   if (dir.exists()) {
     QString baseName = fi.completeBaseName();
     QStringList filters = supportedSubtitleFilters();
@@ -1426,7 +1426,7 @@ QString
 Player::searchSubtitleMedia(const QString &fileName)
 {
   QFileInfo fi(fileName);
-  QDir dir = fi.absolutePath();
+  QDir dir = fi.absoluteDir();
   if (dir.exists()) {
     QString baseName = fi.baseName() ;
     QStringList filters = supportedVideoFilters();

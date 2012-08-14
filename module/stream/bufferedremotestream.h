@@ -5,8 +5,8 @@
 // 2/15/2012
 
 #include "module/stream/remotestream.h"
-#include <QtNetwork/QNetworkReply>
 #include <QtCore/QMutex>
+#include <QtNetwork/QNetworkReply>
 
 class BufferedRemoteStream :  public RemoteStream
 {

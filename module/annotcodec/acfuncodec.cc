@@ -9,15 +9,15 @@
 #endif // WITH_MODULE_ANNOTCACHE
 #include "module/qtext/htmltag.h"
 #include "module/qtext/network.h"
+#include <QtCore/QStringList>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptValueIterator>
-#include <QtCore/QStringList>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
 #include <climits>
 
 //#define DEBUG "acfuncodec"
@@ -108,9 +108,10 @@ AnnotationList
 AcfunCodec::parseXmlDocument(const QByteArray &data)
 {
   DOUT("enter: data.size =" << data.size());
+  AnnotationList ret;
   if (data.isEmpty()) {
     DOUT("exit: empty data");
-    return AnnotationList();
+    return ret;
   }
   QDomDocument doc;
   doc.setContent(skipXmlLeadingComment(
@@ -118,15 +119,14 @@ AcfunCodec::parseXmlDocument(const QByteArray &data)
   ));
   if (doc.isNull()) {
     DOUT("exit: invalid document root");
-    return AnnotationList();
+    return ret;
   }
   QDomElement root = doc.firstChildElement("c");
   if (root.isNull()) {
     DOUT("exit: invalid root element");
-    return AnnotationList();
+    return ret;
   }
 
-  AnnotationList ret;
   QDomElement e = root.firstChildElement("l");
   while (!e.isNull()) {
     QString text = e.text().trimmed();
@@ -150,9 +150,10 @@ AnnotationList
 AcfunCodec::parseJsonDocument(const QByteArray &data)
 {
   DOUT("enter: data.size =" << data.size());
+  AnnotationList ret;
   if (data.isEmpty()) {
     DOUT("exit: empty data");
-    return AnnotationList();
+    return ret;
   }
 
   // Comments and spaces will be skipped by QScriptEngine.
@@ -165,12 +166,11 @@ AcfunCodec::parseJsonDocument(const QByteArray &data)
   QScriptValue root = engine.evaluate("(" + json + ")");
   if (!root.isValid()) {
     DOUT("exit: invalid JSON document");
-    return AnnotationList();
+    return ret;
   }
 
   QScriptValueIterator it(root);
   it.next();
-  AnnotationList ret;
   while (it.hasNext()) {
     QScriptValue v = it.value();
 

@@ -12,13 +12,12 @@
 
 #include "module/mrlresolver/youtubemrlresolver.h"
 #include "module/qtext/htmltag.h"
-//#include "module/qtext/network.h"
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
 #include <QtCore/QRegExp>
 #include <QtCore/QStringList>
 #include <QtCore/QUrl>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
 #include <cstdlib>
 
 #define DEBUG "youtubemrlresolver"

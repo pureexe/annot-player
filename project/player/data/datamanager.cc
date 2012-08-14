@@ -204,15 +204,6 @@ DataManager::updateUrls() const
 
 QString
 DataManager::normalizeUrl(const QString &url)
-{
-  QString ret = url;
-  if (ret.endsWith('/'))
-    ret.chop(1);
-  else if (ret.endsWith("/index.html", Qt::CaseInsensitive))
-    ret.remove(QRegExp("/index.html$"));
-  else if (ret.endsWith("index_1.html", Qt::CaseInsensitive))
-    ret.remove(QRegExp("/index_1.html$"));
-  return ret;
-}
+{ return MrlAnalysis::normalizeUrl(url); }
 
 // EOF

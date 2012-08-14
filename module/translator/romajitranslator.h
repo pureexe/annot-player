@@ -30,7 +30,7 @@ public:
 
 public slots:
   void translate(const QString &text, const QString &to, const QString &from = QString()) override
-  { translate(text); Q_UNUSED(to); Q_UNUSED(from); }
+  { Q_UNUSED(to); Q_UNUSED(from); translate(text); }
 
   void translate(const QString &text);
 

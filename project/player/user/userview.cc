@@ -50,9 +50,9 @@ UserView::createLayout()
   MAKE_BUDDY(loginIp, TR(T_LOGINIP))
   MAKE_BUDDY(loginCount, TR(T_LOGINCOUNT))
   MAKE_BUDDY(annotCount, TR(T_ANNOTCOUNT))
-  MAKE_BUDDY(blessedCount, TR(T_BLESSEDCOUNT))
-  MAKE_BUDDY(cursedCount, TR(T_CURSEDCOUNT))
-  MAKE_BUDDY(blockedCount, TR(T_BLOCKEDCOUNT))
+  MAKE_BUDDY(blessCount, TR(T_BLESSCOUNT))
+  MAKE_BUDDY(curseCount, TR(T_CURSECOUNT))
+  MAKE_BUDDY(blockCount, TR(T_BLOCKCOUNT))
 
   // Set layout
 
@@ -83,14 +83,14 @@ UserView::createLayout()
     grid->addWidget(annotCountBuddy, ++r, c=0);
     grid->addWidget(annotCountLabel_, r, ++c);
 
-    grid->addWidget(blessedCountBuddy, ++r, c=0);
-    grid->addWidget(blessedCountLabel_, r, ++c);
+    grid->addWidget(blessCountBuddy, ++r, c=0);
+    grid->addWidget(blessCountLabel_, r, ++c);
 
-    grid->addWidget(cursedCountBuddy, ++r, c=0);
-    grid->addWidget(cursedCountLabel_, r, ++c);
+    grid->addWidget(curseCountBuddy, ++r, c=0);
+    grid->addWidget(curseCountLabel_, r, ++c);
 
-    grid->addWidget(blockedCountBuddy, ++r, c=0);
-    grid->addWidget(blockedCountLabel_, r, ++c);
+    grid->addWidget(blockCountBuddy, ++r, c=0);
+    grid->addWidget(blockCountLabel_, r, ++c);
 
     //grid->setContentsMargins(0, 0, 0, 0);
     //setContentsMargins(0, 0, 0, 0);
@@ -113,9 +113,9 @@ UserView::updateUser()
   loginIpLabel_->setText(FORMAT_IP(user_.loginIp()));
   loginCountLabel_->setText(FORMAT_COUNT(user_.loginCount()));
   annotCountLabel_->setText(FORMAT_COUNT(user_.annotCount()));
-  blessedCountLabel_->setText(FORMAT_COUNT(user_.blessedCount()));
-  cursedCountLabel_->setText(FORMAT_COUNT(user_.cursedCount()));
-  blockedCountLabel_->setText(FORMAT_COUNT(user_.blockedCount()));
+  blessCountLabel_->setText(FORMAT_COUNT(user_.blessCount()));
+  curseCountLabel_->setText(FORMAT_COUNT(user_.curseCount()));
+  blockCountLabel_->setText(FORMAT_COUNT(user_.blockCount()));
 #undef FORMAT_TIME
 #undef FORMAT_COUNT
 #undef FORMAT_IP

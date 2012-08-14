@@ -5,10 +5,10 @@
 // 8/19/2011
 
 #include "module/annotcloud/annotation.h"
-#include <QtWebKit/QWebElement>
-#include <QtGui/QColor>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
+#include <QtGui/QColor>
+#include <QtWebKit/QWebElement>
 #include <utility>
 
 namespace AnnotCloud {

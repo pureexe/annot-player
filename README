@@ -1,8 +1,9 @@
-Product:	Annot Player
-Version:	0.1.8.0
-Release:	2012/7/29
+README (UTF-8)
+
+Product:	Annot Stream
+Version:	0.1.8.1
+Release:	2012/8/14 TUE
 Homepage:	http://annot.me
-Help (Wiki):	http://annot.me/wiki/FAQ
 Download:	http://code.google.com/p/annot-player/downloads
 Source (Git):	https://code.google.com/p/annot-player
 License:	GNU GPL v3
@@ -14,14 +15,19 @@ Requirements:
 - Linux (Debian/Ubuntu/Fedora)
 
 Distribution (Windows):
-- Data/ (hidden)        Apps' data files
-- Annot Browser.exe     App launcher of data/annot-browser.exe
-- Annot Downloader.exe  App launcher of data/annot-down.exe
-- Annot Player.exe      App launcher of data/annot-player.exe
+- [ Browse ].exe        Shortcut of Data/annot-browser.exe
+- [ Download ].exe      Shortcut of Data/annot-down.exe
+- [ Play ].exe          Shortcut of Data/annot-player.exe
+- [ Translate ].exe     Shortcut of Data/annot-dict.exe
+- [ Update ].exe        Shortcut of Update/update.exe
 - ChangeLog.txt         Log of changes (UTF-8)
 - COPYING.txt           GPLv3 license
 - Read Me.txt           Readme (UTF-8)
+- Update.txt            Instructions on update (UTF-8)
 - Reset Preferences.reg Remove all registry settings (HKCU/Software/Annot)
+- Data/      (hidden)   Apps' data files
+- Licenses/  (hidden)   Apps' licenses
+- Update/    (hidden)   Self updater
 
 Contributions:
 - 0.1.7 (2012.7): Thanks for the ideas and feature requests from M M, Aaeru, Niokun and spoxxy!

@@ -11,8 +11,8 @@
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/combobox.h"
 #include "module/qtext/fontcombobox.h"
-#include <boost/tuple/tuple.hpp>
 #include <QtGui>
+#include <boost/tuple/tuple.hpp>
 
 #ifdef Q_OS_MAC
 # define K_CTRL        "cmd"
@@ -68,14 +68,13 @@ AnnotationEditor::AnnotationEditor(QWidget *parent)
   connect(textEdit_, SIGNAL(textChanged()), SLOT(updateCount()));
 
   // Shortcuts
-  saveShortcut_ = new QShortcut(QKeySequence::Save, this);
-  connect(saveShortcut_, SIGNAL(activated()), SLOT(save()));
+  saveShortcut_ = new QShortcut(QKeySequence::Save, this, SLOT(save()));
 
-  connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), codeRibonButton_, SLOT(click()));
-  connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
+  new QShortcut(QKeySequence("CTRL+1"), codeRibonButton_, SLOT(click()));
+  new QShortcut(QKeySequence("CTRL+2"), htmlRibonButton_, SLOT(click()));
 #ifndef Q_OS_MAC
-  connect(new QShortcut(QKeySequence("ALT+1"), this), SIGNAL(activated()), codeRibonButton_, SLOT(click()));
-  connect(new QShortcut(QKeySequence("ALT+2"), this), SIGNAL(activated()), htmlRibonButton_, SLOT(click()));
+  new QShortcut(QKeySequence("ALT+1"), codeRibonButton_, SLOT(click()));
+  new QShortcut(QKeySequence("ALT+2"), htmlRibonButton_, SLOT(click()));
 #endif // Q_OS_MAC
 
   // Start up states
@@ -234,7 +233,7 @@ AnnotationEditor::createRibons()
   } connect(fontSizeComboBox_, SIGNAL(activated(QString)), SLOT(setFontSize(QString)));
 
   // - Html ribon
-  QGroupBox *htmlRibon = new QGroupBox; {
+  QGroupBox *htmlRibon = new QGroupBox(this); {
     QVBoxLayout *rows = new QVBoxLayout;
     QHBoxLayout *row0 = new QHBoxLayout,
                 *row1 = new QHBoxLayout;

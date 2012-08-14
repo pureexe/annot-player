@@ -4,17 +4,16 @@
 // acfilteredlistview.h
 // 11/17/2011
 
-#include <QtGui/QWidget>
 #include <QtCore/QHash>
 #include <QtCore/QModelIndex>
+#include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
-//class QComboBox;
+class QAbstractItemModel;
 class QComboBox;
 class QLineEdit;
 class QMenu;
 class QSortFilterProxyModel;
-class QStandardItemModel;
 class QToolButton;
 class QTreeView;
 QT_END_NAMESPACE
@@ -28,7 +27,7 @@ class AcFilteredListView : public QWidget
   typedef QWidget Base;
 
 public:
-  AcFilteredListView(QStandardItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent = nullptr);
+  AcFilteredListView(QAbstractItemModel *sourceModel, QSortFilterProxyModel *proxyModel, QWidget *parent = nullptr);
 
 signals:
   void currentIndexChanged(QModelIndex index);
@@ -55,7 +54,7 @@ private:
   void createLayout();
 
 private:
-  QStandardItemModel *sourceModel_;
+  QAbstractItemModel *sourceModel_;
   QSortFilterProxyModel *proxyModel_;
   QTreeView *proxyView_;
 

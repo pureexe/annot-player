@@ -17,13 +17,13 @@
 #endif // WITH_MODULE_DOWNLOAD
 #include "module/qtext/networkcookie.h"
 #include "module/qtext/os.h"
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtCore/QTextDecoder>
-#include <QtCore/QTextEncoder>
 #ifdef Q_OS_WIN
 # include <QtCore/QCoreApplication>
 # include <QtCore/QFileInfo>
 #endif // Q_OS_WIN
+#include <QtCore/QTextDecoder>
+#include <QtCore/QTextEncoder>
+#include <QtNetwork/QNetworkAccessManager>
 #include <boost/function.hpp>
 #include <exception>
 

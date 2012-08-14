@@ -2,8 +2,8 @@
 // 2/15/2012
 
 #include "module/stream/remotestream.h"
-#include <QtNetwork/QNetworkAccessManager>
 #include <QtCore/QEventLoop>
+#include <QtNetwork/QNetworkAccessManager>
 
 // - Wait -
 

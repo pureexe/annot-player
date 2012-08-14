@@ -1,8 +1,8 @@
 // rippleimagefilter.cc
 // 5/11/2012
 #include "module/imagefilter/rippleimagefilter.h"
-#include <QtGui/QPixmap>
 #include <QtGui/QImage>
+#include <QtGui/QPixmap>
 
 // - Construction -
 

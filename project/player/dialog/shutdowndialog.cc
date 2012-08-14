@@ -21,7 +21,7 @@ ShutdownDialog::ShutdownDialog(QWidget *parent)
 {
   setWindowTitle(tr("Shutdown?"));
   setText(tr("Shutdown the computer after %1 seconds ...")
-    .arg(HTML_STYLE_OPEN(color:red) "%1" HTML_STYLE_CLOSE())
+    .arg(HTML_SS_OPEN(color:red) "%1" HTML_SS_CLOSE())
   );
   QApplication::beep();
 }

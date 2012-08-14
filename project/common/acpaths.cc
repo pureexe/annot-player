@@ -11,11 +11,11 @@
 # include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
 #include "module/qtext/filesystem.h"
-#include <QtGui/QDesktopServices>
-#include <QtCore/QUrl>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
+#include <QtCore/QUrl>
+#include <QtGui/QDesktopServices>
 
 #define DEBUG "acpath"
 #include "module/debug/debug.h"

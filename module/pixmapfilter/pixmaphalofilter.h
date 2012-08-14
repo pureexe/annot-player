@@ -6,8 +6,8 @@
 // See: gui/image/pixmapfilter_p.h
 
 #include "module/pixmapfilter/pixmapfilter.h"
-#include <QtGui/QColor>
 #include <QtCore/QPointF>
+#include <QtGui/QColor>
 
 class PixmapHaloFilter : public QPixmapFilter
 {

@@ -14,10 +14,10 @@
 #ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
-#include "boost/foreach.hpp"
-#include <map>
 #include <QtCore>
 #include <QtGui>
+#include <boost/foreach.hpp>
+#include <map>
 
 using namespace AnnotCloud;
 
@@ -865,6 +865,7 @@ PlayerUi::updateVisibleWidgets()
   positionSlider()->setVisible(v);
   positionButton()->setVisible(v);
 
+  openButton()->setVisible(v);
   previousButton()->setVisible(v);
   nextButton()->setVisible(v);
   nextFrameButton()->setVisible(v);

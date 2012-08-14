@@ -4,7 +4,6 @@
 #include "settings.h"
 #include "global.h"
 #include "annotationsettings.h"
-#include "module/annotcloud/traits.h"
 #include <QtCore>
 #ifdef __clang__
 # pragma clang diagnostic ignored "-Wunused-parameter" // in boost algorithm
@@ -13,8 +12,6 @@
 
 #define DEBUG "settings"
 #include "module/debug/debug.h"
-
-using namespace AnnotCloud;
 
 // - Settings keys -
 
@@ -200,16 +197,31 @@ void
 Settings::setSubtitleColor(int colorId)
 { setValue(SK_SUBTITLECOLOR, colorId); }
 
-qint64
+QSet<int>
 Settings::annotationLanguages() const
 {
-  enum { defval = Traits::AllLanguages };
-  return value(SK_ANNOTLANGUAGES, defval).toLongLong();
+  QSet<int> ret;
+  auto l = value(SK_ANNOTLANGUAGES).toList();
+  if (l.isEmpty())
+    return ret;
+  foreach (const QVariant &v, l)
+    if (int lang = v.toInt())
+      ret.insert(lang);
+  return ret;
 }
 
 void
-Settings::setAnnotationLanguages(qint64 bits)
-{ setValue(SK_ANNOTLANGUAGES, bits); }
+Settings::setAnnotationLanguages(const QSet<int> languages)
+{
+  if (languages.isEmpty())
+    remove(SK_ANNOTLANGUAGES);
+  else {
+    QList<QVariant> value;
+    foreach (int lang, languages)
+      value.append(lang);
+    setValue(SK_ANNOTLANGUAGES, value);
+  }
+}
 
 QColor
 Settings::annotationHighlightColor() const

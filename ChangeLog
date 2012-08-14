@@ -1,6 +1,18 @@
-ChangeLog
-Annot Project
-6/18/2011
+ChangeLog (UTF-8)
+Annot Stream
+Since 6/18/2011
+
+8/14/2012 TUE	player,down,browser,translator	0.1.8.1,0.1.3.3,0.1.2.3,0.1.0.0
+        * Add intremental updater.
+          Alternatively, latest binaries could be found at ftp.annot.me/release/annot-player.
+          Versions before 0.1.8.1 are now broken and won't work propertly.
+        * Add Annot Translator using WWWJDIC (beta). Internet access is indispensible.
+        * Integrate galgame Backlog with Annot Translator.
+        * Add media library to index available media and games from play history.
+        * Double-click subtitles will edit it if the user has its ownership.
+          Otherwise, show its analytics.
+        * Add support for Russian language.
+        * Update VLC plugins to version 2.0.3.
 
 7/29/2012 MON	annot.player, down, browser	0.1.8.0, 0.1.3.2, 0.1.2.2
         * Fix the severe issue for synchronizing annotations caused by the changes of the server framework.
@@ -18,8 +30,8 @@ Annot Project
         * Add XML/JSON annotations download dialog to annot-player.
         * Some unstable experimental features are temporarily disabled.
         * Annotation Downloader is changed to use single download thread to avoid parallel bugs.
-        * Fix the bug that makes wmv and ISO images invisible from openning.
-        * Fix the bug that causes annot-player unable to fetch annotations when openning files in Windows Explorer.
+        * Fix the bug that makes wmv and ISO images invisible from opening.
+        * Fix the bug that causes annot-player unable to fetch annotations when opening files in Windows Explorer.
         * Fix a bug that might cause context menu to render in full black.
         * Reimplement thread-safe message logging mechanism which could result in mystery crashes.
 
@@ -165,25 +177,6 @@ Annot Project
         * Able to select annotation and draw all annotations from the its user.
         * Able to exile surrounded annotations using SHIFT+LButton or LButton+RButton.
         * Added more mouse gestures to manipulate annotations. Shortcuts follow.
-          Modifier Keys + Mouse Buttons
-          * SHIFT          + LButton    : Exile annotations by hovering
-          * CTRL           + LButton    : Capture annotations using rubberband
-                             LButton(FullScreen only)
-            CTRL+R
-          * ALT            + LButton    : Release annotations using rubberband
-                             RButton(FullScreen only)
-          * CTRL+ALT       + LButton    : Kill annotations using rubberband
-                             MButton(FullScreen only)
-          * CTRL+SHIFT     + LButton    : Capture annotations by hovering
-            CTRL           + LButton+RButton
-          * ALT+SHIFT      + LButton    : Release annotations by hovering
-            ALT            + LButton+RButton
-          * CTRL+ALT+SHIFT + LButton    : Kill annotations by hovering
-            SHIFT          + LButton+RButton
-          * CTRL           + Wheel      : Scale selected annotations
-                             LButton+Wheel
-          * SHIFT          + Wheel      : Rotate selected annotations
-                             RButton+Wheel
         * Browser improved.
           * Added multiple search engines.
           * Always highlight selected text.
@@ -253,7 +246,7 @@ Annot Project
 3/23/2012	annot.player	0.1.3.4
         * Show download progress in position slider.
         * Added annotation thread view.
-        * Allow openning multiple windows from context menu.
+        * Allow opennng multiple windows from context menu.
         * Bug fix in streaming module.
 
 3/20/2012	annot.player	0.1.3.3
@@ -310,9 +303,6 @@ Annot Project
 
 2/9/2012	annot.player	0.1.2.7
         * Support importing annotations from nicovideo.jp.
-          Example URLs:
-            http://www.nicovideo.jp/watch/1310115872
-            http://www.nicovideo.jp/watch/sm16712476
         * Support bilibili/nicovideo login.
         * Online video and annotations decoding improved.
         * User interface improved.
@@ -322,22 +312,14 @@ Annot Project
         * Added option to limit annotation count.
 
 2/4/2012	annot.player	0.1.2.6
-        * Fixed a severe bug while openning remote media.
+        * Fixed a severe bug while opening remote media.
 
 2/4/2012	annot.player	0.1.2.5
         * Now support playing GoogleVideo/AcFun/BiliBili/Sina/Tudou,QQ video online, with annotation support.
-          Example URLs follow:
-          http://www.youtube.com/watch?v=-DJqnomZoLk
-          http://video.google.com/videoplay?docid=-8070240344560020977
-          http://www.bilibili.tv/video/av55775/
-          http://www.acfun.tv/v/ac245437/
         * Support importing online annotations from AcFun and Bilibli.
 
 1/27/2012	annot.player	0.1.2.4
         * Now support playing Youtube/Youku video online, with annotation support.
-          Example URLs follow:
-          http://www.youtube.com/watch?v=-DJqnomZoLk
-          http://v.youku.com/v_show/id_XOTg1NzAwMzI=.html
 
 1/20/2012	annot.player	0.1.2.3
         * Adjusted for Akatsuki no Goei 2
@@ -399,7 +381,7 @@ Annot Project
         * Added CD/DVD device dialog. CD/DVD buffering performance improved.
         * Fixed sqlite cache creation bug in Linux.
         * Menubar enabled to all OSes.
-        * Forward token digest to reduce delay on openning media.
+        * Forward token digest to reduce delay on opening media.
         * Added playlist to open multiple files or folder.
         * Switched to GNU ChangeLog format.
 
@@ -407,7 +389,7 @@ Annot Project
         * Windows global mouse hook removed and replaced with native vlcore calls.
         Less mouse hanging in Windows when the app is busy.
         * Added support to play cue file.
-        * Added support to play cdda. Fixed bug while openning CD on Windows.
+        * Added support to play cdda. Fixed bug while opening CD on Windows.
         * Added embedded mode.
         Able to embed/play vidoe/annots in any window, such as Notepad, Photoshop, or PPStream.
         * Able to select embedded player on the top or bottom.
@@ -562,28 +544,25 @@ Annot Project
 
 7/26/2011	touch.player	0.0.1.0
         * Most GUI issue solved.
-        - DWM aero
-        - Mouse hook on Windows
-        - OSD display
-        - Graphics view animation
-        - Text encoding
-        - QSS and UI style
-
+          * DWM aero
+          * Mouse hook on Windows
+          * OSD display
+          * Graphics view animation
+          * Text encoding
+          * QSS and UI style
         * Directory structure changed a lot.
-        - Moved common packages into Core
-        - Moved Windows stuff into win32
-        - Put VLC wrapper (MediaPlayer) alone.
-        - Combined with touch.reader.
-
+          * Moved common packages into Core
+          * Moved Windows stuff into win32
+          * Put VLC wrapper (MediaPlayer) alone.
+          * Combined with touch.reader.
         * Work under Linux.
         But only tested for Windows.
         Missing VLC 1.1.x for Mac.
-
         * Major Missing component
-        - Database
-        - User
-        - Network
-        - Platform other then win7
+          * Database
+          * User
+          * Network
+          * Platform other then win7
 
 6/30/2011	touch.player	0.0.0.0
         * Project launched.

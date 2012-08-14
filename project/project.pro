@@ -7,10 +7,13 @@ TEMPLATE = subdirs
 SUBDIRS = \
     browser \
     downloader \
-    player
+    player \
+    translator 
     #tester
 
-win32:  SUBDIRS += launcher
+win32:  SUBDIRS += \
+    launcher \
+    updater
 #mac:    SUBDIRS += live
 #unix:   SUBDIRS += x
 
@@ -21,6 +24,6 @@ OTHER_FILES += \
     deploy-fedora.sh \
     deploy-mac.sh \
     deploy-win.cmd \
-    deploy-win-delta.cmd
+    deploy-win-update.cmd 
 
 # EOF

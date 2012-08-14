@@ -34,9 +34,9 @@ Tray::createActions()
     menu->addAction(TR(T_MENUTEXT_OPENURL), w_, SLOT(openUrl()));
     menu->addAction(TR(T_MENUTEXT_OPENANNOTATIONURL), w_, SLOT(openAnnotationUrl()));
     menu->addAction(TR(T_MENUTEXT_OPENDIRECTORY), w_, SLOT(openBrowsedDirectory()));
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
     menu->addAction(TR(T_MENUTEXT_PROCESSPICKDIALOG), w_, SLOT(openWindow()));
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 #ifdef WITH_WIN_PICKER
     menu->addAction(TR(T_MENUTEXT_WINDOWPICKDIALOG), w_, SLOT(showWindowPickDialog()));
 #endif // WITH_WIN_PICKER

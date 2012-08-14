@@ -2164,6 +2164,60 @@ int CloudServiceSoapBindingProxy::submitMediaTokenUrl(const char *endpoint, cons
 	return soap_closesock(soap);
 }
 
+int CloudServiceSoapBindingProxy::updateMediaAnnotationLanguageWithId(const char *endpoint, const char *soap_action, tns__updateMediaAnnotationLanguageWithId *tns__updateMediaAnnotationLanguageWithId_, tns__updateMediaAnnotationLanguageWithIdResponse *tns__updateMediaAnnotationLanguageWithIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__updateMediaAnnotationLanguageWithId soap_tmp___tns__updateMediaAnnotationLanguageWithId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://210.175.54.32/service/cloud";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__updateMediaAnnotationLanguageWithId.tns__updateMediaAnnotationLanguageWithId_ = tns__updateMediaAnnotationLanguageWithId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__updateMediaAnnotationLanguageWithId(soap, &soap_tmp___tns__updateMediaAnnotationLanguageWithId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__updateMediaAnnotationLanguageWithId(soap, &soap_tmp___tns__updateMediaAnnotationLanguageWithId, "-tns:updateMediaAnnotationLanguageWithId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__updateMediaAnnotationLanguageWithId(soap, &soap_tmp___tns__updateMediaAnnotationLanguageWithId, "-tns:updateMediaAnnotationLanguageWithId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__updateMediaAnnotationLanguageWithIdResponse_)
+		return soap_closesock(soap);
+	tns__updateMediaAnnotationLanguageWithIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__updateMediaAnnotationLanguageWithIdResponse_->soap_get(soap, "tns:updateMediaAnnotationLanguageWithIdResponse", "tns:updateMediaAnnotationLanguageWithIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
 int CloudServiceSoapBindingProxy::updateMediaAnnotationTextWithId(const char *endpoint, const char *soap_action, tns__updateMediaAnnotationTextWithId *tns__updateMediaAnnotationTextWithId_, tns__updateMediaAnnotationTextWithIdResponse *tns__updateMediaAnnotationTextWithIdResponse_)
 {	struct soap *soap = this;
 	struct __tns__updateMediaAnnotationTextWithId soap_tmp___tns__updateMediaAnnotationTextWithId;

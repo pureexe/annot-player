@@ -48,9 +48,9 @@ private:
          *loginIpLabel_,
          *loginCountLabel_,
          *annotCountLabel_,
-         *blessedCountLabel_,
-         *cursedCountLabel_,
-         *blockedCountLabel_;
+         *blessCountLabel_,
+         *curseCountLabel_,
+         *blockCountLabel_;
 };
 
 #endif // USERVIEW_H

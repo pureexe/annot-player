@@ -9,14 +9,14 @@
 #include "module/mrlresolver/mrlinfo.h"
 #include "module/searchengine/searchenginefactory.h"
 #include "module/translator/translatormanager.h"
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
 # include "processinfo.h"
-#endif // USE_MODE_SIGNAL
-#include <QtGui/QMainWindow>
+#endif // PLAYER_ENABLE_GAME
 #include <QtCore/QMutex>
 #include <QtCore/QHash>
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfoList>
+#include <QtGui/QMainWindow>
 
 QT_BEGIN_NAMESPACE
 class QGestureEvent;
@@ -49,6 +49,8 @@ class EventLogger;
 class FadeAnimation;
 class Grabber;
 class Magnifier;
+class MediaLibrary;
+class MediaLibraryView;
 class MrlResolver;
 class Player;
 class RippleImageFilter;
@@ -59,14 +61,15 @@ class TranslatorManager;
 class AcPlayerServer;
 class AcDownloader;
 class AcBrowser;
+class AcTranslator;
 
 class MouseClickEventListener;
 
 // Views
 class AnnotationGraphicsView;
 class AnnotationAnalyticsView;
-class AnnotationBrowser;
 class AnnotationEditor;
+class AnnotationTableView;
 //class CommentView;
 class MainPlayerUi;
 class MessageHandler;
@@ -81,7 +84,7 @@ class EmbeddedCanvas;
 class PlayerUi;
 class Preferences;
 class MessageView;
-class SignalView;
+class SyncView;
 class BacklogDialog;
 class ConsoleDialog;
 class TokenView;
@@ -355,6 +358,9 @@ protected:
 protected slots:
   void checkReachEnd();
 
+  void showTranslator();
+  void translateUsingTranslator(const QString &text);
+
 public slots:
   void invalidateMediaAndPlay(bool async = true);
 protected slots:
@@ -418,6 +424,8 @@ protected slots:
   void showMagnifier() { setMagnifierVisible(true); }
   void hideMagnifier() { setMagnifierVisible(true); }
   void toggleMagnifierVisible();
+
+  void showLibrary();
 
   //void setNetworkProxyDialogVisible(bool visible);
 
@@ -505,7 +513,8 @@ protected slots:
   void setUserLanguageToItalian();
   void setUserLanguageToSpanish();
   void setUserLanguageToPortuguese();
-  void setUserLanguageToUnknown();
+  void setUserLanguageToRussian();
+  //void setUserLanguageToUnknown();
 
   void invalidateAnnotationLanguages();
 
@@ -792,24 +801,24 @@ protected slots:
 public slots:
   void setWindowTrackingEnabled(bool t);
 
-#ifdef USE_MODE_SIGNAL
+#ifdef PLAYER_ENABLE_GAME
 public slots:
-  void showSignalView();
-  void hideSignalView();
-  void setSignalViewVisible(bool visible);
+  void showSyncView();
+  void hideSyncView();
+  void setSyncViewVisible(bool visible);
 
   void showRecentMessageView();
   void hideRecentMessageView();
   void setRecentMessageViewVisible(bool visible);
 
 private:
-  SignalView *signalView_;
+  SyncView *syncView_;
   MessageView *recentMessageView_;
   MessageHandler *messageHandler_;
 
-  QAction *toggleSignalViewVisibleAct_,
+  QAction *toggleSyncViewVisibleAct_,
           *toggleRecentMessageViewVisibleAct_;
-#endif // USE_MODE_SIGNAL
+#endif // PLAYER_ENABLE_GAME
 
   // - Helpers -
 protected:
@@ -924,6 +933,8 @@ private:
 
   Magnifier *magnifier_;
 
+  MediaLibrary *library_;
+
   MouseClickEventListener *clickListener_;
 
   QList<SearchEngine *> searchEngines_;
@@ -959,6 +970,7 @@ private:
   AcPlayerServer *appServer_;
   AcBrowser *browserDelegate_;
   AcDownloader *downloaderDelegate_;
+  AcTranslator *translatorDelegate_;
   AnnotationDownloader *annotationDownloader_;
 
   AnnotationServerAgent *server_;
@@ -982,6 +994,8 @@ private:
   TokenView *tokenView_;
   VideoView *videoView_;
 
+  MediaLibraryView *libraryView_;
+
   MainPlayerUi *mainPlayer_;
   MiniPlayerUi *miniPlayer_;
   EmbeddedPlayerUi *embeddedPlayer_;
@@ -990,7 +1004,7 @@ private:
   AnnotationGraphicsView *annotationView_;
   AnnotationAnalyticsView *annotationAnalyticsView_;
   UserAnalyticsView *userAnalyticsView_;
-  AnnotationBrowser *annotationBrowser_;
+  AnnotationTableView *annotationBrowser_;
   AnnotationEditor *annotationEditor_;
   AnnotationFilter *annotationFilter_;
 
@@ -1098,6 +1112,8 @@ private:
   QAction *toggleGoogleTranslatorAct_,
           *toggleMicrosoftTranslatorAct_,
           *toggleRomajiTranslatorAct_;
+
+  QAction *showLibraryAct_;
 
   QMenu *annotationMenu_;
   QMenu *annotationSettingsMenu_;
@@ -1243,6 +1259,7 @@ private:
 
   QAction *toggleUserAnonymousAct_;
   QAction *openProxyBrowserAct_;
+  QAction *showTranslatorAct_;
 
   QAction *forward5sAct_,
           *backward5sAct_,
@@ -1281,7 +1298,8 @@ private:
           *setUserLanguageToItalianAct_,
           *setUserLanguageToSpanishAct_,
           *setUserLanguageToPortugueseAct_,
-          *setUserLanguageToUnknownAct_;
+          *setUserLanguageToRussianAct_;
+          //*setUserLanguageToUnknownAct_;
 
   QAction *toggleAnnotationLanguageToEnglishAct_,
           *toggleAnnotationLanguageToJapaneseAct_,
@@ -1292,7 +1310,8 @@ private:
           *toggleAnnotationLanguageToItalianAct_,
           *toggleAnnotationLanguageToSpanishAct_,
           *toggleAnnotationLanguageToPortugueseAct_,
-          *toggleAnnotationLanguageToUnknownAct_,
+          *toggleAnnotationLanguageToRussianAct_,
+          //*toggleAnnotationLanguageToUnknownAct_,
           *toggleAnnotationLanguageToAnyAct_;
 
   QAction *toggleAeroEnabledAct_,

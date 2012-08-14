@@ -146,6 +146,7 @@ protected slots:
   void translateToItalian();
   void translateToSpanish();
   void translateToPortuguese();
+  void translateToRussian();
 
   void fly();
   void stay(Style location = TopStyle);

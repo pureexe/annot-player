@@ -26,9 +26,9 @@
 #endif // WITH_MODULE_MRLRESOLVER
 #include "module/qtext/filesystem.h"
 #include "module/qtext/network.h"
+#include <QtCore/QFileInfo>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkCookieJar>
-#include <QtCore/QFileInfo>
 
 #define DEBUG "mrldownloadtask_m"
 #include "module/debug/debug.h"

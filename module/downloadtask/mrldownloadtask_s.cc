@@ -16,8 +16,8 @@
 # error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
 #include "module/qtext/filesystem.h"
-#include <QtNetwork/QNetworkAccessManager>
 #include <QtCore/QFileInfo>
+#include <QtNetwork/QNetworkAccessManager>
 
 #define DEBUG "mrldownloadtask_s"
 #include "module/debug/debug.h"

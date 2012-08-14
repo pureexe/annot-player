@@ -3,9 +3,9 @@
 // ith.h
 // 10/15/2011
 
-#include <QtGui/QWidget>
 #include <QtCore/QByteArray>
 #include <QtCore/QHash>
+#include <QtGui/QWidget>
 
 class HookManager;
 class TextThread;

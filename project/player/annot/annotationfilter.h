@@ -5,6 +5,7 @@
 
 #include "module/annotcloud/annotation.h"
 #include <QtCore/QObject>
+#include <QtCore/QSet>
 #include <QtCore/QStringList>
 
 class DataManager;
@@ -22,7 +23,7 @@ class AnnotationFilter : public QObject
   // - Constructions -
 public:
   explicit AnnotationFilter(DataManager *dm, QObject *parent = nullptr)
-    : Base(parent), dm_(dm), enabled_(false), languages_(0), annotationCountHint_(0)
+    : Base(parent), dm_(dm), enabled_(false), annotationCountHint_(0)
   { Q_ASSERT(dm_); }
 
   ///  Return true if the annotation is supposed to be blocked.
@@ -41,7 +42,7 @@ signals:
 
 public:
   bool isEnabled() const { return enabled_; }
-  qint64 languages() const { return languages_; } ///< Allowed languages
+  const QSet<int> &languages() const { return languages_; }
 
   const AnnotationList &blockedAnnotations() const { return blockedAnnotations_; }
   const QStringList &blockedUserAliases() const { return blockedUserAliases_; }
@@ -51,7 +52,7 @@ public:
 
 public slots:
   void setEnabled(bool enabled);
-  void setLanguages(qint64 bits) { languages_ = bits; }
+  void setLanguages(const QSet<int> &value) { languages_ = value; }
 
   void setAnnotationCountHint(int count = 0)
   { annotationCountHint_ = count > 0 ? count : 0; }
@@ -75,7 +76,7 @@ public slots:
 private:
   DataManager *dm_;
   bool enabled_;
-  qint64 languages_;
+  QSet<int> languages_;
 
   int annotationCountHint_;
 

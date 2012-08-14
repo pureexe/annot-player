@@ -5,9 +5,9 @@
 // 3/20/2012
 
 #include "module/annotcloud/annotation.h"
-#include <QtXml/QDomDocument>
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#include <QtXml/QDomDocument>
 
 namespace AnnotCloud {
 

@@ -16,11 +16,11 @@
 #ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
-#include <QtWebKit/QWebSettings>
-//#include <QtNetwork/QNetworkAccessManager>
+#include <QtGui>
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
-#include <QtGui>
+//#include <QtNetwork/QNetworkAccessManager>
+#include <QtWebKit/QWebSettings>
 
 #define DEBUG "main"
 #include "module/debug/debug.h"

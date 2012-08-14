@@ -3,13 +3,13 @@
 
 #include "module/annotcloud/annotpaint.h"
 #include "module/qtext/datetime.h"
-#ifdef WITH_QT_SVG
-# include <QtSvg/QSvgGenerator>
-#endif // WITH_QT_SVG
-#include <QtGui/QPainter>
 #include <QtCore/QDateTime>
 #include <QtCore/QHash>
 #include <QtCore/QMultiMap>
+#include <QtGui/QPainter>
+#ifdef WITH_QT_SVG
+# include <QtSvg/QSvgGenerator>
+#endif // WITH_QT_SVG
 //#include <boost/bimap.hpp>
 #include <boost/foreach.hpp>
 #include <climits>

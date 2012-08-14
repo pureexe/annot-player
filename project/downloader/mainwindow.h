@@ -6,6 +6,7 @@
 
 #include "project/common/acmainwindow.h"
 #include "module/searchengine/searchenginefactory.h"
+#include <QtCore/QList>
 
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;

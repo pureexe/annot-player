@@ -1,7 +1,7 @@
 # browser.pro
 # 3/29/2012
 
-VERSION = 0.1.3.2
+VERSION = 0.1.3.3
 
 DEFINES += PROJECT_BROWSER
 
@@ -42,13 +42,14 @@ mac {
     include($$ROOTDIR/unix/qtunix/qtunix.pri)
 }
 
-QT      += core gui network webkit
+QT      += core gui network webkit xml
 #CONFIG(static): QTPLUGIN += qsqlite
 
 DEFINES += WITH_QT_CORE \
            WITH_QT_GUI \
            WITH_QT_NETWORK \
-           WITH_QT_WEBKIT
+           WITH_QT_WEBKIT \
+           WITH_QT_XML
 
 ## Sources
 

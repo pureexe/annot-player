@@ -108,7 +108,23 @@ AcMainWindow::notify(const QString &text)
   }
 }
 
-// - Actions -
+// - Properties -
+
+void
+AcMainWindow::setWindowOnTop(bool t)
+{
+  if (t != isWindowOnTop()) {
+    bool visible = isVisible();
+    setWindowFlags(t ? windowFlags() | Qt::WindowStaysOnTopHint :
+                       windowFlags() & ~Qt::WindowStaysOnTopHint);
+
+#ifdef WITH_WIN_DWM
+    AcUi::globalInstance()->setDwmEnabled(true);
+#endif // WITH_WIN_DWM
+    if (visible)
+      show();
+  }
+}
 
 void
 AcMainWindow::setRippleEnabled(bool t)

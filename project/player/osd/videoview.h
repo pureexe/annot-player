@@ -3,7 +3,7 @@
 
 // videoview.h
 // 7/10/2011
-#include <QtGlobal>
+#include <QtCore/QList>
 #ifdef Q_OS_MAC
 # include <QtGui/QMacCocoaViewContainer>
   typedef QMacCocoaViewContainer VideoViewBase;
@@ -15,7 +15,6 @@
 # include <QtGui/QFrame>
   typedef QFrame VideoViewBase;
 #endif // Q_OS_LINUX
-#include <QtCore/QList>
 
 // class VideoView
 ///  Media player screen container (parent).

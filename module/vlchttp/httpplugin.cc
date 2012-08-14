@@ -11,9 +11,9 @@
 #else
 # error "mrlanalysis module is required"
 #endif // WITH_MODULE_MRLANALYSIS
-#include <QtNetwork/QNetworkCookieJar>
 #include <QtCore/QDir>
 #include <QtCore/QEventLoop>
+#include <QtNetwork/QNetworkCookieJar>
 //#include <cstdarg>
 
 #include <vlc/plugins/vlc_common.h>

@@ -14,9 +14,9 @@
 #include "module/mousegesture/mousegesturefilter.h"
 #include "module/qtext/filesystem.h"
 #include "module/qtext/algorithm.h"
-#include <QtWebKit/QWebHistory>
-#include <QtNetwork/QNetworkDiskCache>
 #include <QtGui>
+#include <QtNetwork/QNetworkDiskCache>
+#include <QtWebKit/QWebHistory>
 
 #define DEBUG "webbrowser"
 #include "module/debug/debug.h"

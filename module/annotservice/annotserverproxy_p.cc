@@ -286,9 +286,9 @@ AnnotationServerProxy::getUser()
     ret.setLoginTime(p->loginTime);
     ret.setLoginIp(p->loginIp);
     ret.setLoginCount(p->loginCount);
-    ret.setBlessedCount(p->blessedCount);
-    ret.setCursedCount(p->cursedCount);
-    ret.setBlockedCount(p->blockedCount);
+    ret.setBlessCount(p->blessCount);
+    ret.setCurseCount(p->curseCount);
+    ret.setBlockCount(p->blockCount);
     ret.setAnnotCount(p->annotCount);
 
     if (p->name)
@@ -340,9 +340,9 @@ AnnotationServerProxy::selectUser(const QString &userName, const QString &passwo
     ret.setLoginTime(p->loginTime);
     ret.setLoginIp(p->loginIp);
     ret.setLoginCount(p->loginCount);
-    ret.setBlessedCount(p->blessedCount);
-    ret.setCursedCount(p->cursedCount);
-    ret.setBlockedCount(p->blockedCount);
+    ret.setBlessCount(p->blessCount);
+    ret.setCurseCount(p->curseCount);
+    ret.setBlockCount(p->blockCount);
     ret.setAnnotCount(p->annotCount);
 
     if (p->name)
@@ -396,10 +396,10 @@ AnnotationServerProxy::submitToken(const Token &token)
   arg0.section = token.section();
   arg0.createTime = token.createTime();
   arg0.createIp = 0;
-  arg0.blessedCount = token.blessedCount();
-  arg0.cursedCount = token.cursedCount();
-  arg0.blockedCount = token.blockedCount();
-  arg0.visitedCount = token.visitedCount();
+  arg0.blessCount = token.blessCount();
+  arg0.curseCount = token.curseCount();
+  arg0.blockCount = token.blockCount();
+  arg0.visitCount = token.visitCount();
   arg0.annotCount = token.annotCount();
 
   tns__submitMediaToken request;
@@ -577,9 +577,9 @@ AnnotationServerProxy::submitAlias(const Alias &alias)
   arg0.language = alias.language();
   arg0.updateTime = alias.updateTime();
   arg0.updateIp = 0;
-  arg0.blessedCount = alias.blessedCount();
-  arg0.cursedCount = alias.cursedCount();
-  arg0.blockedCount = alias.blockedCount();
+  arg0.blessCount = alias.blessCount();
+  arg0.curseCount = alias.curseCount();
+  arg0.blockCount = alias.blockCount();
 
   tns__submitMediaAlias request;
   request.alias = &arg0;
@@ -710,9 +710,9 @@ AnnotationServerProxy::submitAnnotation(const Annotation &annot)
   arg0.createTime = annot.createTime();
   arg0.updateTime = annot.updateTime();
   arg0.updateIp = 0;
-  arg0.blessedCount = annot.blessedCount();
-  arg0.cursedCount = annot.cursedCount();
-  arg0.blockedCount = annot.blockedCount();
+  arg0.blessCount = annot.blessCount();
+  arg0.curseCount = annot.curseCount();
+  arg0.blockCount = annot.blockCount();
 
   tns__submitMediaAnnotation request;
   request.annot = &arg0;
@@ -849,10 +849,10 @@ AnnotationServerProxy::selectTokenWithId(qint64 id)
     ret.setSection(p->section);
     ret.setCreateTime(p->createTime);
     ret.setCreateIp(p->createIp);
-    ret.setBlessedCount(p->blessedCount);
-    ret.setCursedCount(p->cursedCount);
-    ret.setBlockedCount(p->blockedCount);
-    ret.setVisitedCount(p->visitedCount);
+    ret.setBlessCount(p->blessCount);
+    ret.setCurseCount(p->curseCount);
+    ret.setBlockCount(p->blockCount);
+    ret.setVisitCount(p->visitCount);
     ret.setAnnotCount(p->annotCount);
   }
   DOUT("exit: tid =" << ret.id());
@@ -894,10 +894,10 @@ AnnotationServerProxy::selectTokenWithDigest(const QString &digest, int section)
     ret.setSection(p->section);
     ret.setCreateTime(p->createTime);
     ret.setCreateIp(p->createIp);
-    ret.setBlessedCount(p->blessedCount);
-    ret.setCursedCount(p->cursedCount);
-    ret.setBlockedCount(p->blockedCount);
-    ret.setVisitedCount(p->visitedCount);
+    ret.setBlessCount(p->blessCount);
+    ret.setCurseCount(p->curseCount);
+    ret.setBlockCount(p->blockCount);
+    ret.setVisitCount(p->visitCount);
     ret.setAnnotCount(p->annotCount);
   }
 
@@ -925,10 +925,10 @@ AnnotationServerProxy::selectAliasesWithTokenId(qint64 tid)
     return ret;
   }
 
-  if (!response.return_.empty())
+  if (!response.return_.empty()) {
+    Alias a; // improve performance
     foreach (tns__mediaAlias *p, response.return_)
       if (p) {
-        Alias a;
         a.setStatus(p->status);
         a.setFlags(p->flags);
         a.setId(p->id);
@@ -940,12 +940,13 @@ AnnotationServerProxy::selectAliasesWithTokenId(qint64 tid)
           a.setText(QString::fromStdString(*p->text));
         a.setUpdateTime(p->updateTime);
         a.setUpdateIp(p->updateIp);
-        a.setBlessedCount(p->blessedCount);
-        a.setCursedCount(p->cursedCount);
-        a.setBlockedCount(p->blockedCount);
+        a.setBlessCount(p->blessCount);
+        a.setCurseCount(p->curseCount);
+        a.setBlockCount(p->blockCount);
 
         ret.append(a);
       }
+  }
 
   DOUT("exit: count =" << ret.size());
   return ret;
@@ -971,10 +972,10 @@ AnnotationServerProxy::selectRelatedAliasesWithTokenId(qint64 tid)
     return ret;
   }
 
-  if (!response.return_.empty())
+  if (!response.return_.empty()) {
+    Alias a; // improve performance
     foreach (tns__mediaAlias *p, response.return_)
       if (p) {
-        Alias a;
         a.setStatus(p->status);
         a.setFlags(p->flags);
         a.setId(p->id);
@@ -986,12 +987,13 @@ AnnotationServerProxy::selectRelatedAliasesWithTokenId(qint64 tid)
           a.setText(QString::fromStdString(*p->text));
         a.setUpdateTime(p->updateTime);
         a.setUpdateIp(p->updateIp);
-        a.setBlessedCount(p->blessedCount);
-        a.setCursedCount(p->cursedCount);
-        a.setBlockedCount(p->blockedCount);
+        a.setBlessCount(p->blessCount);
+        a.setCurseCount(p->curseCount);
+        a.setBlockCount(p->blockCount);
 
         ret.append(a);
       }
+  }
 
   DOUT("exit: count =" << ret.size());
   return ret;
@@ -1017,10 +1019,10 @@ AnnotationServerProxy::selectAnnotationsWithTokenId(qint64 tid)
     return ret;
   }
 
-  if (!response.return_.empty())
+  if (!response.return_.empty()) {
+    Annotation a; // improve performance
     foreach (tns__mediaAnnotation *p, response.return_)
       if (p) {
-        Annotation a;
         a.setStatus(p->status);
         a.setFlags(p->flags);
         a.setId(p->id);
@@ -1037,12 +1039,13 @@ AnnotationServerProxy::selectAnnotationsWithTokenId(qint64 tid)
         a.setCreateTime(p->createTime);
         a.setUpdateTime(p->updateTime);
         a.setUpdateIp(p->updateIp);
-        a.setBlessedCount(p->blessedCount);
-        a.setCursedCount(p->cursedCount);
-        a.setBlockedCount(p->blockedCount);
+        a.setBlessCount(p->blessCount);
+        a.setCurseCount(p->curseCount);
+        a.setBlockCount(p->blockCount);
 
         ret.append(a);
       }
+  }
 
   DOUT("exit: count =" << ret.size());
   return ret;
@@ -1068,10 +1071,10 @@ AnnotationServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
     return ret;
   }
 
-  if (!response.return_.empty())
+  if (!response.return_.empty()) {
+    Annotation a; // improve performance
     foreach (tns__mediaAnnotation *p, response.return_)
       if (p) {
-        Annotation a;
         a.setStatus(p->status);
         a.setFlags(p->flags);
         a.setId(p->id);
@@ -1088,12 +1091,13 @@ AnnotationServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
         a.setCreateTime(p->createTime);
         a.setUpdateTime(p->updateTime);
         a.setUpdateIp(p->updateIp);
-        a.setBlessedCount(p->blessedCount);
-        a.setCursedCount(p->cursedCount);
-        a.setBlockedCount(p->blockedCount);
+        a.setBlessCount(p->blessCount);
+        a.setCurseCount(p->curseCount);
+        a.setBlockCount(p->blockCount);
 
         ret.append(a);
       }
+  }
 
   DOUT("exit: count =" << ret.size());
   return ret;

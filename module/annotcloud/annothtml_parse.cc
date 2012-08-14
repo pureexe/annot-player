@@ -1,4 +1,4 @@
-// annotcloud/annothtml_parse.cc
+// annothtml_parse.cc
 // 8/19/2011
 
 #include "module/annotcloud/annothtml.h"
@@ -369,8 +369,8 @@ AnnotationHtmlParser::translate(const QString &tag,
           int i = 0; \
           foreach (const QString &param, params) { \
             switch (i) { \
-            case 0: ret = html_style_open(_csstag ":" + param); break; \
-            case 1: ret += param + html_style_close(); break; \
+            case 0: ret = html_ss_open(_csstag ":" + param); break; \
+            case 1: ret += param + html_ss_close(); break; \
             default: ret += param; \
             } \
             i++; \
@@ -383,7 +383,7 @@ AnnotationHtmlParser::translate(const QString &tag,
         int i = 0; \
         foreach (const QString &param, params) { \
           if (i == 0) \
-            ret = html_style(param, _csstag ":" + color); \
+            ret = html_ss(param, _csstag ":" + color); \
           else \
             ret += param; \
           i++; \
@@ -415,8 +415,8 @@ AnnotationHtmlParser::translate(const QString &tag,
             if (param[param.size() -1].isDigit())
               param += "px";
             switch (i) {
-            case 0: ret = html_style_open("font-size:" + param); break;
-            case 1: ret += param + html_style_close(); break;
+            case 0: ret = html_ss_open("font-size:" + param); break;
+            case 1: ret += param + html_ss_close(); break;
             default: ret += param;
             }
             i++;
@@ -431,7 +431,7 @@ AnnotationHtmlParser::translate(const QString &tag,
         int i = 0;
         foreach (const QString &param, params) {
           if (i == 0)
-            ret = html_style(param, "font-size:" + size);
+            ret = html_ss(param, "font-size:" + size);
           else
             ret += param;
           i++;
@@ -512,10 +512,10 @@ AnnotationHtmlParser::translate(const QString &tag,
             case 0: {
                 QString style = param;
                 style.replace("=", ":").replace(",", ";");
-                ret = html_style_open(style);
+                ret = html_ss_open(style);
               } break;
             case 1:
-              ret += param + html_style_close();
+              ret += param + html_ss_close();
               break;
             default:
               ret += param;
@@ -532,7 +532,7 @@ AnnotationHtmlParser::translate(const QString &tag,
         int i = 0;
         foreach (const QString &param, params) {
           if (i == 0)
-            ret = html_style(param, style);
+            ret = html_ss(param, style);
           else
             ret += param;
           i++;
@@ -629,7 +629,7 @@ AnnotationHtmlParser::translate(const QString &tag,
 
 #undef RETURN_HTML_TAG
 
-#define RETURN_HTML_STYLE(_HTML, _style) \
+#define RETURN_HTML_SS(_HTML, _style) \
   { \
     switch (params.size()) { \
     case 0: return ""; \
@@ -651,7 +651,7 @@ AnnotationHtmlParser::translate(const QString &tag,
     break; \
   }
 
-#define RETURN_html_style(_html, _style) \
+#define RETURN_html_ss(_html, _style) \
   { \
     switch (params.size()) { \
     case 0: return ""; \
@@ -677,22 +677,22 @@ AnnotationHtmlParser::translate(const QString &tag,
   case H_Strike:
   case H_StrikeOut:
   case H_Sout:
-    RETURN_HTML_STYLE(HTML_STYLE, text-decoration:line-through)
+    RETURN_HTML_SS(HTML_SS, text-decoration:line-through)
 
   case H_Underline:
   case H_Uline:
   case H_Url: // Temporary rendering solution
-    RETURN_HTML_STYLE(HTML_STYLE, text-decoration:underline)
+    RETURN_HTML_SS(HTML_SS, text-decoration:underline)
 
   case H_Overline:
-    RETURN_HTML_STYLE(HTML_STYLE, text-decoration:overline)
+    RETURN_HTML_SS(HTML_SS, text-decoration:overline)
 
   case H_Blink:
-    RETURN_HTML_STYLE(HTML_STYLE, text-decoration:blink)
+    RETURN_HTML_SS(HTML_SS, text-decoration:blink)
 
 #define CASE_TRANSFORM(_trans) \
   case H_##_trans: \
-    RETURN_HTML_STYLE(HTML_STYLE, text-transform:_trans)
+    RETURN_HTML_SS(HTML_SS, text-transform:_trans)
 
   CASE_TRANSFORM(Uppercase)
   CASE_TRANSFORM(Lowercase)
@@ -700,7 +700,7 @@ AnnotationHtmlParser::translate(const QString &tag,
 
 #define CASE_COLOR(_color) \
   case H_##_color: \
-    RETURN_HTML_STYLE(HTML_STYLE, color:_color)
+    RETURN_HTML_SS(HTML_SS, color:_color)
 
   CASE_COLOR(Black)
   CASE_COLOR(Blue)
@@ -720,7 +720,7 @@ AnnotationHtmlParser::translate(const QString &tag,
 
 #define CASE_SIZE(_id, _size) \
   case H_##_id: \
-    RETURN_html_style(html_style, "font-size:" + _size)
+    RETURN_html_ss(html_ss, "font-size:" + _size)
 
   CASE_SIZE(Tiny,       tinySize_)
   CASE_SIZE(Small,      smallSize_)
@@ -730,8 +730,8 @@ AnnotationHtmlParser::translate(const QString &tag,
   CASE_SIZE(Huge,       hugeSize_)
 #undef CASE_SIZE
 
-#undef RETURN_HTML_STYLE
-#undef RETURN_html_style
+#undef RETURN_HTML_SS
+#undef RETURN_html_ss
 
     // Unknown tag
   default:

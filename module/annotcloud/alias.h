@@ -1,7 +1,7 @@
 #ifndef _ANNOTCLOUD_ALIAS_H
 #define _ANNOTCLOUD_ALIAS_H
 
-// annotcloud/tokenalias.h
+// alias.h
 // 10/5/2011
 
 #include "module/annotcloud/traits.h"
@@ -21,10 +21,14 @@ namespace AnnotCloud {
 
     enum AliasType {
       AT_Null = 0, // invalid
-      AT_Name = 1,
+      AT_Title = 1,
       AT_File = 2,
       AT_Tag = 3,
-      AT_Url = 4
+      AT_Url = 4,
+      AT_Name = 5,
+      AT_Folder = 6,
+      AT_Brand = 7,
+      AT_Count
     };
 
     enum AliasStatus {
@@ -126,41 +130,47 @@ namespace AnnotCloud {
     void setUpdateIp(qint64 ip)         { updateIp_ = ip; }
     bool hasUpdateIp() const            { return updateIp_; }
 
-  private: quint32 blessed_;
+  private: quint32 blessCount_;
   public:
-    quint32 blessedCount() const        { return blessed_; }
-    void setBlessedCount(quint32 count) { blessed_ = count; }
-    bool isBlessed() const              { return blessed_; }
+    quint32 blessCount() const          { return blessCount_; }
+    quint32 &blessCount()               { return blessCount_; }
+    void setBlessCount(quint32 count)   { blessCount_ = count; }
+    bool hasBlessCount() const          { return blessCount_; }
+    bool isBlessed() const              { return hasBlessCount(); }
 
-  private: quint32 cursed_;
+  private: quint32 curseCount_;
   public:
-    quint32 cursedCount() const         { return cursed_; }
-    quint32 &cursedCount()              { return cursed_; }
-    void setCursedCount(quint32 count)  { cursed_ = count; }
-    bool isCursed() const               { return cursed_; }
+    quint32 curseCount() const          { return curseCount_; }
+    quint32 &curseCount()               { return curseCount_; }
+    void setCurseCount(quint32 count)   { curseCount_ = count; }
+    bool hasCurseCount() const          { return curseCount_; }
+    bool isCursed() const               { return hasCurseCount(); }
 
-  private: quint32 blocked_;
+  private: quint32 blockCount_;
   public:
-    quint32 blockedCount() const        { return blocked_; }
-    quint32 &blockedCount()             { return blocked_; }
-    void setBlockedCount(quint32 count) { blocked_ = count; }
-    bool isBlocked() const              { return blocked_; }
+    quint32 blockCount() const          { return blockCount_; }
+    quint32 &blockCount()               { return blockCount_; }
+    void setBlockCount(quint32 count)   { blockCount_ = count; }
+    bool hasBlockCount() const          { return blockCount_; }
+    bool isBlocked() const              { return hasBlockCount(); }
 
     // - Constructions -
   public:
     Alias()
       : id_(0), tokenId_(0), tokenSection_(0), userId_(0), type_(0),
         status_(0), flags_(0), language_(0), updateTime_(0), updateIp_(0),
-        blessed_(0), cursed_(0), blocked_(0)
+        blessCount_(0), curseCount_(0), blockCount_(0)
     { }
 
     bool isValid() const { return hasId() && hasType(); }
 
+    bool isUrl() const { return type() == AT_Url; }
+
     void clear() { (*this) = Self(); }
 
     // - Operators -
-    bool operator==(const Self &that) { return !operator!=(that); }
-    bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
+    //bool operator==(const Self &that) { return !operator!=(that); }
+    //bool operator!=(const Self &that) { return ::memcmp(this, &that, sizeof(Self)); }
 
     // - Helpers -
 

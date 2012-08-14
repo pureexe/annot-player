@@ -5,10 +5,10 @@
 // 7/10/2011
 
 #include "module/qtext/draggablemainwindow.h"
-#include <QtNetwork/QNetworkRequest>
-#include <QtGui/QWidgetList>
 #include <QtCore/QList>
 #include <QtCore/QUrl>
+#include <QtGui/QWidgetList>
+#include <QtNetwork/QNetworkRequest>
 
 #define WB_BLANK_PAGE   "about:blank"
 

@@ -21,9 +21,9 @@
 // - Path -
 
 #ifdef Q_OS_WIN
-# define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+# define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" "me.annot.browser"
 #elif defined(Q_OS_MAC)
-# define G_PATH_PROFILE        QtMac::homeApplicationSupportPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+# define G_PATH_PROFILE        QtMac::homeApplicationSupportPath() + "/" "me.annot.browser"
 #else
 # define G_PATH_PROFILE        QDir::homePath() + "/.annot/browser"
 #endif // Q_OS_
@@ -32,7 +32,7 @@
 #define G_PATH_LOCK_RUNNING  G_PATH_LOCK "/" "running.lock"
 
 #ifdef Q_OS_WIN
-# define G_PATH_CACHES G_PATH_PROFILE "/" " Caches"
+# define G_PATH_CACHES G_PATH_PROFILE "/" "Caches"
 #elif defined(Q_OS_MAC)
 # define G_PATH_CACHES QtMac::homeCachesPath() + "/me.annot.browser"
 #else

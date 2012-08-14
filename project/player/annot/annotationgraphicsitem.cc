@@ -21,8 +21,8 @@
 #include "module/qtext/filesystem.h"
 #include "module/qtext/htmltag.h"
 #include "module/textcodec/textcodec.h"
-#include <boost/tuple/tuple.hpp>
 #include <QtGui>
+#include <boost/tuple/tuple.hpp>
 
 #ifdef __GNUC__
 # pragma GCC diagnostic ignored "-Wparentheses"    // suggest parentheses around '&&' within '||'
@@ -516,7 +516,7 @@ AnnotationGraphicsItem::updateMeta()
         days < 7*5   ? QString::number(days/7) + tr("weeks") :
         days < 30*12 ? QString::number((12+d0.month()-d1.month()) % 12) + tr("months") :
                        d1.toString("M/d/yyyy");
-      ts.append(HTML_STYLE_OPEN(color:orange) + ds + HTML_STYLE_CLOSE());
+      ts.append(HTML_SS_OPEN(color:orange) + ds + HTML_SS_CLOSE());
       QString w;
       switch (d1.dayOfWeek()) {
       case 1: w = tr("Mon"); break;
@@ -528,7 +528,7 @@ AnnotationGraphicsItem::updateMeta()
       case 7: w = tr("Sun"); break;
       default: Q_ASSERT(0);
       }
-      ts.append(HTML_STYLE_OPEN(font-size:12px;color:magenta) + w + HTML_STYLE_CLOSE());
+      ts.append(HTML_SS_OPEN(font-size:12px;color:magenta) + w + HTML_SS_CLOSE());
 
       ts.append(t1.toString("h:mm"));
     } else {
@@ -549,18 +549,18 @@ AnnotationGraphicsItem::updateMeta()
 
     }
     if (!ts.isEmpty()) {
-      ts = HTML_STYLE_OPEN(color:yellow)
+      ts = HTML_SS_OPEN(color:yellow)
           + ts +
-          HTML_STYLE_CLOSE();
+          HTML_SS_CLOSE();
       ret.append(ts);
     }
   }
   QString u = annot_.userAlias();
   if (!u.isEmpty()) {
     enum { user_len = 4 };
-    u = HTML_STYLE_OPEN(color:cyan)
+    u = HTML_SS_OPEN(color:cyan)
         "@" + u.right(user_len) +
-        HTML_STYLE_CLOSE();
+        HTML_SS_CLOSE();
     ret.append(u);
   }
   QString avatar;
@@ -569,7 +569,7 @@ AnnotationGraphicsItem::updateMeta()
     int count = data_->annotationCountForUserId(uid);
     if (count > 1) {
       QString c = QString::number(count);
-      c = HTML_STYLE_OPEN(font-size:11px;color:red) "x" + c + HTML_STYLE_CLOSE();
+      c = HTML_SS_OPEN(font-size:11px;color:red) "x" + c + HTML_SS_CLOSE();
       ret.append(c);
 
       avatar =
@@ -583,7 +583,7 @@ AnnotationGraphicsItem::updateMeta()
     }
   }
   if (!ret.isEmpty())
-    ret = HTML_STYLE_OPEN(text-decoration:underline;font-size:11px) + ret + HTML_STYLE_CLOSE();
+    ret = HTML_SS_OPEN(text-decoration:underline;font-size:11px) + ret + HTML_SS_CLOSE();
   prefix_ = avatar;
   suffix_ = ret;
 }
@@ -787,18 +787,18 @@ AnnotationGraphicsItem::setOpacity(qreal opacity)
 //           || hash == AnnotCloud::H_Strike
 //           || hash == AnnotCloud::H_StrikeOut
 //           || hash == AnnotCloud::H_Sout)
-//    return HTML_STYLE(SELF(left), text-decoration:line-through);
+//    return HTML_SS(SELF(left), text-decoration:line-through);
 //  else if (hash == AnnotCloud::H_Underline
 //           || hash == AnnotCloud::H_Uline)
-//    return HTML_STYLE(SELF(left), text-decoration:underline);
+//    return HTML_SS(SELF(left), text-decoration:underline);
 //  else if (hash == AnnotCloud::H_Overline)
-//    return HTML_STYLE(SELF(left), text-decoration:overline);
+//    return HTML_SS(SELF(left), text-decoration:overline);
 //  else if (hash == AnnotCloud::H_Blink)
-//    return HTML_STYLE(SELF(left), text-decoration:blink);
+//    return HTML_SS(SELF(left), text-decoration:blink);
 //
 //#define ELIF_TRANSFORM(_trans)
 //  else if (hash == AnnotCloud::H_##_trans)
-//    return HTML_STYLE(SELF(left), text-transform:_trans);
+//    return HTML_SS(SELF(left), text-transform:_trans);
 //
 //  ELIF_TRANSFORM(Uppercase)
 //  ELIF_TRANSFORM(Lowercase)
@@ -806,7 +806,7 @@ AnnotationGraphicsItem::setOpacity(qreal opacity)
 //
 //#define ELIF_COLOR(_color)
 //  else if (hash == (AnnotCloud::H_##_color))
-//    return HTML_STYLE(SELF(left), color:_color);
+//    return HTML_SS(SELF(left), color:_color);
 //
 //  ELIF_COLOR(Black)
 //  ELIF_COLOR(Blue)
@@ -826,7 +826,7 @@ AnnotationGraphicsItem::setOpacity(qreal opacity)
 //
 //#define ELIF_SIZE(_id, _size)
 //  else if (hash == (AnnotCloud::H_##_id))
-//    return HTML_STYLE(SELF(left), font-size:_size);
+//    return HTML_SS(SELF(left), font-size:_size);
 //
 //  ELIF_SIZE(Tiny,       ANNOTATION_SIZE_TINY)
 //  ELIF_SIZE(Small,      ANNOTATION_SIZE_SMALL)
@@ -1278,7 +1278,7 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
   if (paused)
     m->addAction(tr("Release") + " ["+ tr("MButton")+"]", this, SLOT(resume()));
   if (annot_.hasUserId())
-    m->addAction(tr("Analytics") + " ["+ tr("DoubleClick")+"]", this, SLOT(analyzeMe()));
+    m->addAction(tr("Analytics"), this, SLOT(analyzeMe()));
   m->addSeparator();
 
   searchMenu->addAction(QIcon(WBRC_IMAGE_GOOGLE), "Google", this, SLOT(searchWithGoogle()));
@@ -1296,6 +1296,7 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
   translateMenu->addAction(QIcon(ACRC_IMAGE_ITALIAN), TR(T_ITALIAN), this, SLOT(translateToItalian()));
   translateMenu->addAction(QIcon(ACRC_IMAGE_SPANISH), TR(T_SPANISH), this, SLOT(translateToSpanish()));
   translateMenu->addAction(QIcon(ACRC_IMAGE_PORTUGUESE), TR(T_PORTUGUESE), this, SLOT(translateToPortuguese()));
+  translateMenu->addAction(QIcon(ACRC_IMAGE_RUSSIAN), TR(T_RUSSIAN), this, SLOT(translateToRussian()));
 
   m->addMenu(translateMenu);
 
@@ -1339,8 +1340,10 @@ AnnotationGraphicsItem::mouseDoubleClickEvent(QMouseEvent *event)
     pause();
 
   //analyzeMe();
-  bool detail = true;//hub_->isFullScreenWindowMode();
-  view_->selectItem(this, detail);
+  if (isEditable())
+    edit();
+  else
+    view_->selectItem(this, true); // detail = true
 }
 
 bool
@@ -1729,5 +1732,9 @@ AnnotationGraphicsItem::translateToSpanish()
 void
 AnnotationGraphicsItem::translateToPortuguese()
 { translate(Traits::Portuguese); }
+
+void
+AnnotationGraphicsItem::translateToRussian()
+{ translate(Traits::Russian); }
 
 // EOF

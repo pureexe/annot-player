@@ -104,7 +104,7 @@ win32 {
     POPPLER_HOME        = $$DEV_HOME/poppler
     BOOST_HOME          = $$DEV_HOME/boost
     GSOAP_HOME          = $$DEV_HOME/gsoap
-    GSOAP_HOME          = $$DEV_HOME/gsoap/src/gsoap
+    GSOAP_SRC           = $$DEV_HOME/gsoap/src/gsoap
     ZLIB_HOME           = $$DEV_HOME/zlib
     LUA_HOME            = $$DEV_HOME/lua
     FREETYPE_HOME       = $$DEV_HOME/freetype

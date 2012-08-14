@@ -462,25 +462,43 @@ AcUi::makeGroupBox(ulong hints, const QString &title, const QString &tip)
 }
 
 QRadioButton*
-AcUi::makeRadioButton(ulong hints, const QString &text, const QString &tip)
+AcUi::makeRadioButton(ulong hints, const QString &text, const QString &tip, const QString &key,
+                      QObject *receiver, const char *slot, Qt::ConnectionType type)
 {
   Q_UNUSED(hints);
   QRadioButton *ret = new QRadioButton;
   ret->setStyleSheet(ACSS_RADIOBUTTON);
   ret->setText(text);
-  ret->setToolTip(tip.isEmpty() ? text : tip);
+
+  QString t = tip.isEmpty() ? text : tip;
+  if (!key.isEmpty())
+    t += " [" + key + "]";
+  ret->setToolTip(t);
+
+  if (receiver && slot)
+    connect(ret, SIGNAL(clicked(bool)), receiver, slot, type);
+
   ret->setGraphicsEffect(makeHaloEffect(hints));
   return ret;
 }
 
 QCheckBox*
-AcUi::makeCheckBox(ulong hints, const QString &text, const QString &tip)
+AcUi::makeCheckBox(ulong hints, const QString &text, const QString &tip, const QString &key,
+                   QObject *receiver, const char *slot, Qt::ConnectionType type)
 {
   Q_UNUSED(hints);
   QCheckBox *ret = new QCheckBox;
   ret->setStyleSheet(ACSS_CHECKBOX);
   ret->setText(text);
-  ret->setToolTip(tip.isEmpty() ? text : tip);
+
+  QString t = tip.isEmpty() ? text : tip;
+  if (!key.isEmpty())
+    t += " [" + key + "]";
+  ret->setToolTip(t);
+
+  if (receiver && slot)
+    connect(ret, SIGNAL(clicked(bool)), receiver, slot, type);
+
   ret->setGraphicsEffect(makeHaloEffect(hints));
   return ret;
 }
@@ -489,6 +507,17 @@ QTextEdit*
 AcUi::makeTextEdit(ulong hints, const QString &tip)
 {
   QTextEdit *ret = new AcTextEdit;
+  ret->setToolTip(tip);
+  ret->setReadOnly(hints & ReadOnlyHint);
+  //ret->setGraphicsEffect(makeHaloEffect(hints));
+  return ret;
+}
+
+QTextBrowser*
+AcUi::makeTextBrowser(ulong hints, const QString &tip)
+{
+  QTextBrowser *ret = new QTextBrowser;
+  ret->setStyleSheet(ACSS_TEXTBROWSER);
   ret->setToolTip(tip);
   ret->setReadOnly(hints & ReadOnlyHint);
   //ret->setGraphicsEffect(makeHaloEffect(hints));

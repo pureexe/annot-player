@@ -11,8 +11,8 @@
 #ifdef Q_OS_MAC
 # include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
-#include <QtNetwork/QHostAddress>
 #include <QtCore>
+#include <QtNetwork/QHostAddress>
 
 #define DEBUG "acipc"
 #include "module/debug/debug.h"

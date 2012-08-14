@@ -4,8 +4,8 @@
 // qtext/webpage.h
 // 4/9/2012
 
-#include <QtWebKit/QWebPage>
 #include <QtNetwork/QNetworkRequest>
+#include <QtWebKit/QWebPage>
 
 namespace QtExt {
 

@@ -19,7 +19,7 @@
 // - Path -
 
 #ifdef Q_OS_WIN
-# define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" G_ORGANIZATION "/" G_APPLICATION
+# define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" "me.annot.downloader"
 #elif defined(Q_OS_MAC)
 # define G_PATH_PROFILE        QtMac::homeApplicationSupportPath() + "/me.annot.downloader"
 #else

@@ -38,6 +38,8 @@ BingTranslator::translateUrl(const QString &text, const QString &to, const QStri
 void
 BingTranslator::translate(const QString &text, const QString &to, const QString &from)
 {
+  if (!isEnabled())
+    return;
   DOUT("enter");
   QUrl query = translateUrl(text, to, from);
   DOUT("query =" << query);

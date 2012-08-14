@@ -4,10 +4,10 @@
 #include "module/graphicseffect/graphicshaloeffect.h"
 #include "module/graphicseffect/graphicshaloeffect_p.h"
 #include <private/qdrawhelper_p.h>
+#include <QtCore/QRectF>
 #include <QtGui/QImage>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEngine>
-#include <QtCore/QRectF>
 
 // - Construction -
 

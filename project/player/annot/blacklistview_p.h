@@ -5,8 +5,8 @@
 // 11/16/2011
 
 #include "module/annotcloud/annotation.h"
-#include <QtGui/QWidget>
 #include <QtCore/QStringList>
+#include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
@@ -120,9 +120,9 @@ protected:
     HD_Status,
     HD_UserId,
     HD_Flags,
-    HD_BlessedCount,
-    HD_CursedCount,
-    HD_BlockedCount,
+    HD_BlessCount,
+    HD_CurseCount,
+    HD_BlockCount,
     HD_Count
   };
 public:

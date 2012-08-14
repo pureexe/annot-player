@@ -2,7 +2,7 @@
 // 1/1/2012
 
 #include "textedittabview.h"
-#include "project/common/actextview.h"
+#include "textview.h"
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/toolbuttonwithid.h"
 #include <QtGui>
@@ -12,14 +12,14 @@
 void
 TextEditTabView::addTab(const QString &tabName)
 {
-  QWidget *tab = new AcTextView(this);
+  QWidget *tab = new TextView(this);
   tab->setWindowTitle(tabName);
   Base::addTab(tab);
 }
 
-AcTextView*
+TextView*
 TextEditTabView::textWidget(int tab) const
-{ return qobject_cast<AcTextView *>(widget(tab)); }
+{ return qobject_cast<TextView *>(widget(tab)); }
 
 // - Actions -
 

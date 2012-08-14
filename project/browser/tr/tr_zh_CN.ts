@@ -173,13 +173,17 @@
 <context>
     <name>AcFilteredListView</name>
     <message>
-        <location filename="../../common/acfilteredlistview.cc" line="50"/>
         <source>View</source>
-        <translation>视图</translation>
+        <translation type="obsolete">视图</translation>
     </message>
     <message>
         <source>Filter pattern</source>
         <translation type="obsolete">过滤文本</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredlistview.cc" line="50"/>
+        <source>List</source>
+        <translation>列表</translation>
     </message>
     <message>
         <location filename="../../common/acfilteredlistview.cc" line="53"/>
@@ -204,7 +208,7 @@
         <translation type="obsolete">过滤文本</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="55"/>
+        <location filename="../../common/acfilteredtableview.cc" line="56"/>
         <source>Search</source>
         <translation>检索</translation>
     </message>
@@ -217,7 +221,7 @@
         <translation type="obsolete">正则表达</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="61"/>
+        <location filename="../../common/acfilteredtableview.cc" line="62"/>
         <source>Wildcard</source>
         <translation>通配符</translation>
     </message>
@@ -226,24 +230,29 @@
         <translation type="obsolete">固定字符</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="55"/>
-        <location filename="../../common/acfilteredtableview.cc" line="57"/>
+        <location filename="../../common/acfilteredtableview.cc" line="51"/>
+        <source>Table</source>
+        <translation>列表</translation>
+    </message>
+    <message>
+        <location filename="../../common/acfilteredtableview.cc" line="56"/>
+        <location filename="../../common/acfilteredtableview.cc" line="58"/>
         <source>Filter Pattern</source>
         <translation>过滤文本</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="59"/>
-        <location filename="../../common/acfilteredtableview.cc" line="65"/>
+        <location filename="../../common/acfilteredtableview.cc" line="60"/>
+        <location filename="../../common/acfilteredtableview.cc" line="66"/>
         <source>Filter Syntax</source>
         <translation>过滤语法</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="60"/>
+        <location filename="../../common/acfilteredtableview.cc" line="61"/>
         <source>Regular Expression</source>
         <translation>正则表达</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="62"/>
+        <location filename="../../common/acfilteredtableview.cc" line="63"/>
         <source>Fixed String</source>
         <translation>固定字符</translation>
     </message>
@@ -252,13 +261,13 @@
         <translation type="obsolete">过滤的列</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="67"/>
-        <location filename="../../common/acfilteredtableview.cc" line="72"/>
+        <location filename="../../common/acfilteredtableview.cc" line="68"/>
+        <location filename="../../common/acfilteredtableview.cc" line="73"/>
         <source>Filter Column</source>
         <translation>过滤的列</translation>
     </message>
     <message>
-        <location filename="../../common/acfilteredtableview.cc" line="74"/>
+        <location filename="../../common/acfilteredtableview.cc" line="75"/>
         <source>Count</source>
         <translation>行数</translation>
     </message>
@@ -674,7 +683,7 @@
         <translation>使用哔哩哔哩账户解析地址失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="346"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="326"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>请输入nico账户</translation>
     </message>
@@ -893,17 +902,9 @@
         <translation>以%1登录nicovideo.jp中...</translation>
     </message>
     <message>
-        <source>openning new window</source>
-        <translation type="obsolete">正在打开新窗口</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.cc" line="590"/>
         <source>failed open new window</source>
         <translation>无法创建新窗口</translation>
-    </message>
-    <message>
-        <source>openning</source>
-        <translation type="obsolete">正在打开</translation>
     </message>
 </context>
 <context>
@@ -1028,10 +1029,6 @@
         <location filename="../../../module/qtext/webview.cc" line="273"/>
         <source>opening</source>
         <translation>正在打开</translation>
-    </message>
-    <message>
-        <source>openning</source>
-        <translation type="obsolete">正在打开</translation>
     </message>
     <message>
         <location filename="../../../module/qtext/webview.cc" line="297"/>
@@ -1374,10 +1371,6 @@
         <translation>载入完成</translation>
     </message>
     <message>
-        <source>openning</source>
-        <translation type="obsolete">正在打开</translation>
-    </message>
-    <message>
         <location filename="../../../module/webbrowser/webbrowser.cc" line="641"/>
         <source>opening</source>
         <translation>正在打开</translation>
@@ -1473,15 +1466,15 @@
 <context>
     <name>YoutubeMrlResolver</name>
     <message>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="55"/>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="62"/>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="94"/>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="143"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="54"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="61"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="93"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="142"/>
         <source>failed to resolve URL</source>
         <translation>解析地址失败</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="87"/>
+        <location filename="../../../module/mrlresolver/youtubemrlresolver.cc" line="86"/>
         <source>network error, failed to resolve media URL</source>
         <translation>网络错误，解析地址失败</translation>
     </message>

@@ -4,11 +4,13 @@
 #include "project/common/acsettings.h"
 #include "project/common/acglobal.h"
 #include "project/common/acui.h"
-#include "module/crypt/crypt.h"
-#include "module/crypt/simplecrypt.h"
 #include "module/qtext/algorithm.h"
-#include <QtNetwork/QNetworkProxy>
+#ifdef WITH_MODULE_CRYPT
+# include "module/crypt/crypt.h"
+# include "module/crypt/simplecrypt.h"
+#endif // WITH_MODULE_CRYPT
 #include <QtCore/QLocale>
+#include <QtNetwork/QNetworkProxy>
 #include <boost/tuple/tuple.hpp>
 
 // - AcSettings keys -
@@ -91,38 +93,59 @@ AcSettings::setUserId(qint64 uid)
 QString
 AcSettings::userName() const
 {
+#ifdef WITH_MODULE_CRYPT
   QString ret = value(SK_USERNAME).toString();
   return ret.isEmpty() ? ret : Crypt::decrypt(ret);
+#else
+  Q_ASSERT(0);
+  return QString();
+#endif // WITH_MODULE_CRYPT
 }
 
 void
 AcSettings::setUserName(const QString &userName)
 {
+#ifdef WITH_MODULE_CRYPT
   if (userName.isEmpty())
     remove(SK_USERNAME);
   else
     setValue(SK_USERNAME, Crypt::encrypt(userName));
+#else
+  Q_UNUSED(userName);
+  Q_ASSERT(0);
+#endif // WITH_MODULE_CRYPT
 }
 
 QString
 AcSettings::password() const
 {
+#ifdef WITH_MODULE_CRYPT
   QString ret = value(SK_PASSWORD).toString();
   return ret.isEmpty() ? ret : Crypt::decrypt(ret);
+#else
+  Q_ASSERT(0);
+  return QString();
+#endif // WITH_MODULE_CRYPT
 }
 
 void
 AcSettings::setPassword(const QString &password)
 {
+#ifdef WITH_MODULE_CRYPT
   if (password.isEmpty())
     remove(SK_PASSWORD);
   else
     setValue(SK_PASSWORD, Crypt::encrypt(password));
+#else
+  Q_UNUSED(password);
+  Q_ASSERT(0);
+#endif // WITH_MODULE_CRYPT
 }
 
 std::pair<QString, QString>
 AcSettings::nicovideoAccount()
 {
+#ifdef WITH_MODULE_CRYPT
   QString username, password;
   QStringList v = value(SK_NICOACCOUNT).toStringList();
   if (v.size() == 2) {
@@ -131,11 +154,16 @@ AcSettings::nicovideoAccount()
     password = c.decryptToString(v.last());
   }
   return std::make_pair(username, password);
+#else
+  Q_ASSERT(0);
+  return std::pair<QString, QString>();
+#endif // WITH_MODULE_CRYPT
 }
 
 void
 AcSettings::setNicovideoAccount(const QString &username, const QString &password)
 {
+#ifdef WITH_MODULE_CRYPT
   if (username.isEmpty() || password.isEmpty())
     remove(SK_NICOACCOUNT);
   else {
@@ -150,11 +178,17 @@ AcSettings::setNicovideoAccount(const QString &username, const QString &password
     boost::tie(username, password) = nicovideoAccount();
     emit nicovideoAccountChanged(username, password);
   }
+#else
+  Q_UNUSED(username);
+  Q_UNUSED(password);
+  Q_ASSERT(0);
+#endif // WITH_MODULE_CRYPT
 }
 
 std::pair<QString, QString>
 AcSettings::bilibiliAccount()
 {
+#ifdef WITH_MODULE_CRYPT
   QString username, password;
   QStringList v = value(SK_BILIACCOUNT).toStringList();
   if (v.size() == 2) {
@@ -163,11 +197,16 @@ AcSettings::bilibiliAccount()
     password = c.decryptToString(v.last());
   }
   return std::make_pair(username, password);
+#else
+  Q_ASSERT(0);
+  return std::pair<QString, QString>();
+#endif // WITH_MODULE_CRYPT
 }
 
 void
 AcSettings::setBilibiliAccount(const QString &username, const QString &password)
 {
+#ifdef WITH_MODULE_CRYPT
   if (username.isEmpty() || password.isEmpty())
     remove(SK_BILIACCOUNT);
   else {
@@ -183,6 +222,11 @@ AcSettings::setBilibiliAccount(const QString &username, const QString &password)
     boost::tie(username, password) = bilibiliAccount();
     emit bilibiliAccountChanged(username, password);
   }
+#else
+  Q_UNUSED(username);
+  Q_UNUSED(password);
+  Q_ASSERT(0);
+#endif // WITH_MODULE_CRYPT
 }
 
 // - i18n -
@@ -292,33 +336,53 @@ AcSettings::proxyType() const
 QString
 AcSettings::proxyUser() const
 {
+#ifdef WITH_MODULE_CRYPT
   QString ret = value(SK_PROXY_USER).toString();
   return ret.isEmpty() ? ret : Crypt::decrypt(ret);
+#else
+  Q_ASSERT(0);
+  return QString();
+#endif // WITH_MODULE_CRYPT
 }
 
 void
 AcSettings::setProxyUser(const QString &userName)
 {
+#ifdef WITH_MODULE_CRYPT
   if (userName.isEmpty())
     remove(SK_PROXY_USER);
   else
     setValue(SK_PROXY_USER, Crypt::encrypt(userName));
+#else
+  Q_UNUSED(userName);
+  Q_ASSERT(0);
+#endif // WITH_MODULE_CRYPT
 }
 
 QString
 AcSettings::proxyPassword() const
 {
+#ifdef WITH_MODULE_CRYPT
   QString ret = value(SK_PROXY_PASS).toString();
   return ret.isEmpty() ? ret : Crypt::decrypt(ret);
+#else
+  Q_ASSERT(0);
+  return QString();
+#endif //WITH_MODULE_CRYPT
 }
 
 void
 AcSettings::setProxyPassword(const QString &password)
 {
+#ifdef WITH_MODULE_CRYPT
   if (password.isEmpty())
     remove(SK_PROXY_PASS);
   else
     setValue(SK_PROXY_PASS, Crypt::encrypt(password));
+#else
+  Q_UNUSED(password);
+  Q_ASSERT(0);
+#endif // WITH_MODULE_CRYPT
 }
 
 // - Locations -

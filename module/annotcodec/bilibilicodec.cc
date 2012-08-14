@@ -15,13 +15,13 @@
 #else
 # error "gzip is required to uncompress bilibili reply"
 #endif // WITH_MODULE_COMPRESS
+#include <QtCore/QByteArray>
+#include <QtCore/QStringList>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
-#include <QtCore/QByteArray>
-#include <QtCore/QStringList>
 
 #define RequestUrlAttribute QNetworkRequest::UserMax
 
@@ -112,9 +112,11 @@ AnnotationList
 BilibiliCodec::parseDocument(const QByteArray &data)
 {
   DOUT("enter: data.size =" << data.size());
+  AnnotationList ret;
+
   if (data.isEmpty()) {
     DOUT("exit: empty data");
-    return AnnotationList();
+    return ret;
   }
   QDomDocument doc;
   doc.setContent(skipXmlLeadingComment(
@@ -122,15 +124,14 @@ BilibiliCodec::parseDocument(const QByteArray &data)
   ));
   if (doc.isNull()) {
     DOUT("exit: invalid document root");
-    return AnnotationList();
+    return ret;
   }
   QDomElement root = doc.firstChildElement("i");
   if (root.isNull()) {
     DOUT("exit: invalid root element");
-    return AnnotationList();
+    return ret;
   }
 
-  AnnotationList ret;
   QDomElement e = root.firstChildElement("d");
   while (!e.isNull()) {
     QString text = e.text().trimmed();

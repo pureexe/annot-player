@@ -89,8 +89,7 @@ Signer::signFileWithUrl(const QString &fileName, const QString &url, bool async)
   Alias urlAlias; {
     urlAlias.setType(Alias::AT_Url);
     urlAlias.setUserId(server_->user().id());
-    qint32 lang = Alias::guessUrlLanguage(url, server_->user().language());
-    urlAlias.setLanguage(lang);
+    urlAlias.setLanguage(Alias::guessUrlLanguage(url, server_->user().language()));
     urlAlias.setText(url);
     urlAlias.setUpdateTime(now);
   }
