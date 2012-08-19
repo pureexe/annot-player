@@ -6,6 +6,8 @@
 
 #include <QtGui/QTextBrowser>
 
+namespace QtExt { class TextHighlighter; }
+
 class TranslateBrowser : public QTextBrowser
 {
   Q_OBJECT
@@ -14,9 +16,13 @@ class TranslateBrowser : public QTextBrowser
   typedef QTextBrowser Base;
 
   QString selectedText_;
+  QtExt::TextHighlighter *highlighter_;
 
 public:
   explicit TranslateBrowser(QWidget *parent = nullptr);
+
+public slots:
+  void highlightText(const QString &t);
 
 signals:
   void selectedTextChanged(const QString &text);

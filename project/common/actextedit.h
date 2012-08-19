@@ -4,14 +4,14 @@
 // textedit.h
 // 10/10/2011
 
-#include "module/qtext/textedit.h"
+#include "module/qtext/highlighttextedit.h"
 
-class AcTextEdit : public QtExt::TextEdit
+class AcTextEdit : public QtExt::HighlightTextEdit
 {
   Q_OBJECT
   Q_DISABLE_COPY(AcTextEdit)
   typedef AcTextEdit Self;
-  typedef QtExt::TextEdit Base;
+  typedef QtExt::HighlightTextEdit Base;
 
 public:
   explicit AcTextEdit(QWidget *parent = nullptr)

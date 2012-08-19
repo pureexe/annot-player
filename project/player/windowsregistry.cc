@@ -78,7 +78,7 @@ WindowsRegistry::registerRawType(const QString &type)
   static QString command;
   if (command.isEmpty()) {
     QString app = QCoreApplication::applicationFilePath();
-    app.replace('/', '\\');
+    app = QDir::toNativeSeparators(app);
     command = "\"" + app  + "\" \"%1\"";
   }
 
@@ -153,7 +153,7 @@ WindowsRegistry::registerShell(const QString &type)
   static QString command;
   if (command.isEmpty()) {
     QString app = QCoreApplication::applicationFilePath();
-    app.replace('/', '\\');
+    app = QDir::toNativeSeparators(app);
     command = "\"" + app  + "\" %1"; // NOTE: %1 is not quoted, as DVD/AudioCD won't strip off quotes
   }
 

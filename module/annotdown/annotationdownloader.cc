@@ -2,8 +2,8 @@
 // 7/6/2012
 
 #include "module/annotdown/annotationdownloader.h"
-#include "module/qtext/filesystem.h"
 #include "module/qtext/network.h"
+#include "module/qtext/filesystem.h"
 #ifdef WITH_MODULE_COMPRESS
 # include "module/compress/qgzip.h"
 #endif // WITH_MODULE_COMPRESS
@@ -20,6 +20,7 @@
 #ifdef WITH_MODULE_MRLANALYSIS
 # include "module/mrlanalysis/mrlanalysis.h"
 #endif // WITH_MODULE_MRLANALYSIS
+#include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkAccessManager>
@@ -169,7 +170,7 @@ AnnotationDownloader::saveData(const QByteArray &data, const QString &refurl, co
     return;
   }
   if (!downloadsLocation_.isEmpty())
-    fileName.prepend(FILE_PATH_SEP).prepend(downloadsLocation_);
+    fileName.prepend(QDir::separator()).prepend(downloadsLocation_);
   DOUT("fileName =" << fileName);
 
   if (AnnotationCacheManager::globalInstance()->saveData(data, refurl)) {

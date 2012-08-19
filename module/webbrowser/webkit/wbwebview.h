@@ -32,6 +32,8 @@ signals:
 
   void searchWithEngineRequested(const QString &text, int engine);
 
+  void selectedTextChanged(QString);
+
 public:
   bool hasSearchEngines() const { return !searchEngines_.isEmpty(); }
 

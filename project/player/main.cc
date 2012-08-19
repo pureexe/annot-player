@@ -234,8 +234,8 @@ main(int argc, char *argv[])
     }
 #endif // Q_OS_WIN
 
-    if (QFile::rename(QDir::homePath() + "/Annot", G_PATH_DOWNLOADS))
-      AcLocationManager::globalInstance()->createDownloadsLocation();
+    if (!QFile::exists(G_PATH_CACHES "/history.xml"))
+      QFile::rename(G_PATH_CACHES "/history.xml", G_PATH_MEDIADB);
 
 #ifdef Q_OS_WIN
     WindowsRegistry::globalInstance()->unregisterRawType("DVD");
@@ -395,7 +395,7 @@ main(int argc, char *argv[])
   //enum { AnimationTimingInterval = 40 };
   //QtSettings::globalInstance()->setAnimationTimingInterval(AnimationTimingInterval);
 
-//#ifdef PLAYER_ENABLE_GAME
+//#ifdef AC_ENABLE_GAME
 //  // Root window
 //  QMainWindow root; // Persistant visible root widget to prevent Qt from automatic closing invisible windows
 //  root.setWindowFlags(root.windowFlags() | Qt::WindowStaysOnTopHint);
@@ -407,7 +407,7 @@ main(int argc, char *argv[])
 //#else
 //  MainWindow w;
 //
-//#endif // PLAYER_ENABLE_GAME
+//#endif // AC_ENABLE_GAME
   DOUT("create mainwindow");
   MainWindow w(unique); {
     DOUT("mainwindow created");
@@ -426,7 +426,13 @@ main(int argc, char *argv[])
 
     // Show main window
     DOUT("show mainwindow");
-    w.resize(INIT_WINDOW_SIZE);
+
+    QStringList args = a.arguments();
+
+    bool showLibrary = args.size() <= 1 && QFile::exists(G_PATH_MEDIADB) && settings->showLibrary();
+    w.resize(showLibrary ? LIBRARY_WINDOW_SIZE : INIT_WINDOW_SIZE);
+    if (showLibrary)
+      w.prepareLibrary();
     w.show();
     //QTimer::singleShot(0, &w, SLOT(show()));
 
@@ -442,7 +448,6 @@ main(int argc, char *argv[])
     //  w.checkInternetConnection();
     w.login(userName, password);
 
-    QStringList args = a.arguments();
     if (args.size() > 1) {
       args.removeFirst();
       w.openSources(args);
@@ -485,7 +490,7 @@ main(int argc, char *argv[])
   //XSendEvent(dpy, DefaultRootWindow(dpy), False,
   //SubstructureNotifyMask, &xev);
 
-#if defined(PLAYER_ENABLE_GAME) && defined(Q_OS_WIN)
+#if defined(AC_ENABLE_GAME) && defined(Q_OS_WIN)
   // jichi 11/29/2011: Used as a PERSISTENT hidden top level window.
   QWidget dummy;
   dummy.resize(QSize()); // zero-sized to be hidden
@@ -498,7 +503,7 @@ main(int argc, char *argv[])
   TextHook::globalInstance()->setInterval(500); // Esential!
   //TextHook::globalInstance()->start();
 #endif // WITH_WIN_TEXTHOOK
-#endif // PLAYER_ENABLE_GAME && Q_OS_WIN
+#endif // AC_ENABLE_GAME && Q_OS_WIN
 
   //QWidget bk;
   //bk.setWindowFlags(Qt::CustomizeWindowHint);

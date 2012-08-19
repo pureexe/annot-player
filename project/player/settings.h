@@ -68,6 +68,9 @@ public:
   bool isAutoPlayNext() const;
   void setAutoPlayNext(bool t);
 
+  bool showLibrary() const;
+  void setShowLibrary(bool t);
+
   bool isLive() const;
   void setLive(bool t);
 

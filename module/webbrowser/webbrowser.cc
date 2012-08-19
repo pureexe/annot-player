@@ -795,6 +795,8 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
     connect(wbview, SIGNAL(errorMessage(QString)), SLOT(showError(QString)));
     connect(wbview, SIGNAL(warning(QString)), SLOT(warn(QString)));
     connect(wbview, SIGNAL(notification(QString)), SLOT(notify(QString)));
+
+    connect(wbview, SIGNAL(selectedTextChanged(QString)), SIGNAL(selectedTextChanged(QString)));
     connect(wbview, SIGNAL(windowCreated(QWebView*)), SLOT(newTab(QWebView*)));
     connect(wbview, SIGNAL(openLinkRequested(QString)), SLOT(newTabInBackground(QString)));
 
@@ -1093,7 +1095,7 @@ WebBrowser::download(const QNetworkRequest &req)
   QString fileName = QFileInfo(req.url().toString()).fileName();
   fileName = QtExt::escapeFileName(fileName);
 
-  path += FILE_PATH_SEP + fileName;
+  path += QDir::separator() + fileName;
   bool ok = ::dlget(path, req, true, retries, this); // async = true
   if (ok)
     showMessage(path);

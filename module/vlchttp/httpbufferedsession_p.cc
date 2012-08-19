@@ -78,7 +78,7 @@ HttpBufferedSession::updateFileName()
 {
   bool mp4 = contentType_.contains("mp4", Qt::CaseInsensitive);
   QString suf = mp4 ? ".mp4" : ".flv";
-  fileName_ = cacheDirectory() + FILE_PATH_SEP + QtExt::escapeFileName(mediaTitle()) + suf;
+  fileName_ = cacheDirectory() + QDir::separator() + QtExt::escapeFileName(mediaTitle()) + suf;
 }
 
 // - Actions -
@@ -101,7 +101,7 @@ HttpBufferedSession::save()
     dir.mkpath(dir.absolutePath());
 
   //for (int i = 2; QFile::exists(fileName_); i++)
-  //  fileName_ = fi.absolutePath() + FILE_PATH_SEP + fi.completeBaseName() + " " + QString::number(i) + "." + fi.suffix();
+  //  fileName_ = fi.absolutePath() + QDir::separator() + fi.completeBaseName() + " " + QString::number(i) + "." + fi.suffix();
   QtExt::trashOrRemoveFile(fileName_);
 
   QFile file(fileName_);

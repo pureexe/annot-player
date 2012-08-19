@@ -15,7 +15,7 @@ PACKAGE_ARCH=i386
 PACKAGE_SECTION=network
 PACKAGE_PRIORITY=optional
 
-SRC_PREFIX=/Volumes/local/devel/annot
+SRC_PREFIX=/Volumes/local/dev/annot
 SRC_RULES="$SRC_PREFIX/project/translator/debian.rules"
 SRC_CONTROL="$SRC_PREFIX/project/translator/debian.control"
 SRC_COPYRIGHT="$SRC_PREFIX/licenses/annot-dict.txt"

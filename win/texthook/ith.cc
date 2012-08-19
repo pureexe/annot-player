@@ -15,7 +15,7 @@
 // - Construction -
 
 HookManager *Ith::hookManager_;
-QHash<TextThread *, TextThreadProperty *> Ith::threadProperties_;
+QHash<TextThread *, TextThreadDelegate *> Ith::threadDelegates_;
 qint64 Ith::messageInterval_ = 200; // 0.2 secs by default
 WId Ith::parentWindow_;
 
@@ -69,8 +69,8 @@ Ith::threadCreateCallback(TextThread *t)
   DOUT("enter: pid =" << t->PID());
   Q_ASSERT(t);
 
-  TextThreadProperty *d = new TextThreadProperty(t, messageInterval_, parentWindow_);
-  threadProperties_[t] = d;
+  TextThreadDelegate *d = new TextThreadDelegate(t, messageInterval_, parentWindow_);
+  threadDelegates_[t] = d;
   t->RegisterOutputCallBack(threadOutputCallback, d);
   DOUT("exit");
   return 0;
@@ -81,10 +81,10 @@ Ith::threadRemoveCallback(TextThread *t)
 {
   DOUT("enter");
   Q_ASSERT(t);
-  auto p = threadProperties_.find(t);
-  if (p != threadProperties_.end()) {
+  auto p = threadDelegates_.find(t);
+  if (p != threadDelegates_.end()) {
     delete p.value();
-    threadProperties_.erase(p);
+    threadDelegates_.erase(p);
   }
   DOUT("exit");
   return 0;
@@ -97,7 +97,7 @@ Ith::threadOutputCallback(TextThread *t, BYTE *data,DWORD dataLength, DWORD newL
   Q_UNUSED(t);
   Q_ASSERT(data);
 
-  auto d = static_cast<TextThreadProperty *>(pUserData);
+  auto d = static_cast<TextThreadDelegate *>(pUserData);
   Q_ASSERT(d);
   if (newLine)
     d->flush();

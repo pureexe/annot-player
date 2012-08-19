@@ -5,15 +5,20 @@
 <context>
     <name>AcAbout</name>
     <message>
-        <location filename="../../common/acabout.cc" line="69"/>
-        <location filename="../../common/acabout.cc" line="84"/>
+        <location filename="../../common/acabout.cc" line="70"/>
+        <location filename="../../common/acabout.cc" line="91"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../../common/acabout.cc" line="81"/>
+        <location filename="../../common/acabout.cc" line="82"/>
         <source>OK</source>
         <translation>确定</translation>
+    </message>
+    <message>
+        <location filename="../../common/acabout.cc" line="84"/>
+        <source>Update</source>
+        <translation>更新</translation>
     </message>
 </context>
 <context>
@@ -162,7 +167,7 @@
 <context>
     <name>AcLocationManager</name>
     <message>
-        <location filename="../../common/acpaths.cc" line="60"/>
+        <location filename="../../common/acpaths.cc" line="59"/>
         <source>Video</source>
         <translation>动画</translation>
     </message>
@@ -332,8 +337,8 @@
 <context>
     <name>JdicTranslator</name>
     <message>
-        <location filename="../../../module/translator/jdictranslator.cc" line="106"/>
-        <location filename="../../../module/translator/jdictranslator.cc" line="132"/>
+        <location filename="../../../module/translator/jdictranslator.cc" line="109"/>
+        <location filename="../../../module/translator/jdictranslator.cc" line="135"/>
         <source>network error from WWWJDIC Translator</source>
         <translation>无法连接WWWJDIC服务器</translation>
     </message>
@@ -341,187 +346,197 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="45"/>
+        <location filename="../mainwindow.cc" line="46"/>
         <source>Annot Translator</source>
         <translation>とある翻訳使い</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="112"/>
+        <location filename="../mainwindow.cc" line="113"/>
         <source>Translate</source>
         <translation>翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="114"/>
+        <location filename="../mainwindow.cc" line="115"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="114"/>
+        <location filename="../mainwindow.cc" line="115"/>
         <source>Automatically translate selected text</source>
         <translation>自动翻译选定文本</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="115"/>
+        <location filename="../mainwindow.cc" line="116"/>
         <source>Clipboard</source>
         <translation>剪贴板</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="115"/>
+        <location filename="../mainwindow.cc" line="116"/>
         <source>Monitor and translate clipboard text</source>
         <translation>监视和翻译剪贴板</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="116"/>
+        <location filename="../mainwindow.cc" line="117"/>
         <source>Top</source>
         <translation>置顶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="116"/>
+        <location filename="../mainwindow.cc" line="117"/>
         <source>Window stays on top</source>
         <translation>窗口置顶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="118"/>
+        <location filename="../mainwindow.cc" line="119"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="119"/>
+        <location filename="../mainwindow.cc" line="120"/>
         <source>English</source>
         <translation>英文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="120"/>
+        <location filename="../mainwindow.cc" line="121"/>
         <source>Chinese</source>
         <translation>中文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="121"/>
+        <location filename="../mainwindow.cc" line="122"/>
         <source>Simplified Chinese</source>
         <translation>简体中文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="122"/>
+        <location filename="../mainwindow.cc" line="123"/>
         <source>Korean</source>
         <translation>朝鲜文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="123"/>
+        <location filename="../mainwindow.cc" line="124"/>
         <source>French</source>
         <translation>法文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="124"/>
+        <location filename="../mainwindow.cc" line="125"/>
         <source>German</source>
         <translation>德文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="125"/>
+        <location filename="../mainwindow.cc" line="126"/>
         <source>Italian</source>
         <translation>意大利文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="126"/>
+        <location filename="../mainwindow.cc" line="127"/>
         <source>Spanish</source>
         <translation>西班牙文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="127"/>
+        <location filename="../mainwindow.cc" line="128"/>
         <source>Portuguese</source>
         <translation>葡萄牙文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="128"/>
+        <location filename="../mainwindow.cc" line="129"/>
         <source>Russian</source>
         <translation>俄文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="129"/>
+        <location filename="../mainwindow.cc" line="130"/>
         <source>Japanese</source>
         <translation>日文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="133"/>
+        <location filename="../mainwindow.cc" line="138"/>
         <source>WWWJDIC</source>
         <translation>辞书</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="133"/>
+        <location filename="../mainwindow.cc" line="138"/>
         <source>WWWJDIC Translator</source>
         <translation>WWWJDIC翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="134"/>
+        <location filename="../mainwindow.cc" line="139"/>
         <source>Romaji</source>
         <translation>罗马字</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="134"/>
+        <location filename="../mainwindow.cc" line="139"/>
         <source>Romaji Translator</source>
         <translation>罗马字翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="135"/>
+        <location filename="../mainwindow.cc" line="140"/>
         <source>Microsoft</source>
         <translation>微软</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="135"/>
+        <location filename="../mainwindow.cc" line="140"/>
         <source>Microsoft Translator</source>
         <translation>微软翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="136"/>
+        <location filename="../mainwindow.cc" line="141"/>
         <source>Google</source>
         <translation>谷歌</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="136"/>
+        <location filename="../mainwindow.cc" line="141"/>
         <source>Google Translator</source>
         <translation>谷歌翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="279"/>
+        <location filename="../mainwindow.cc" line="287"/>
+        <source>About</source>
+        <translation>关于</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="289"/>
+        <source>Preferences</source>
+        <translation>偏好</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="295"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="280"/>
+        <location filename="../mainwindow.cc" line="301"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="288"/>
+        <location filename="../mainwindow.cc" line="309"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="298"/>
+        <location filename="../mainwindow.cc" line="319"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="307"/>
+        <location filename="../mainwindow.cc" line="328"/>
         <source>&amp;Settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="308"/>
+        <location filename="../mainwindow.cc" line="329"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="310"/>
+        <location filename="../mainwindow.cc" line="331"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="312"/>
+        <location filename="../mainwindow.cc" line="333"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="582"/>
+        <location filename="../mainwindow.cc" line="604"/>
         <source>opening</source>
         <translation>正在打开</translation>
     </message>
@@ -538,87 +553,87 @@
 <context>
     <name>QtExt::WebView</name>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="104"/>
+        <location filename="../../../module/qtext/webview.cc" line="103"/>
         <source>Clip the Page</source>
         <translation>保存页面</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="105"/>
+        <location filename="../../../module/qtext/webview.cc" line="104"/>
         <source>Save the web page as image to disk and clipboard</source>
         <translation>保存页面为图片</translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="111"/>
         <location filename="../../../module/qtext/webview.cc" line="112"/>
-        <location filename="../../../module/qtext/webview.cc" line="113"/>
         <source>Zoom In</source>
         <translation>放大</translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="119"/>
         <location filename="../../../module/qtext/webview.cc" line="120"/>
-        <location filename="../../../module/qtext/webview.cc" line="121"/>
         <source>Zoom Out</source>
         <translation>缩小</translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="127"/>
         <location filename="../../../module/qtext/webview.cc" line="128"/>
-        <location filename="../../../module/qtext/webview.cc" line="129"/>
         <source>Actual Size</source>
         <translation>实际大小</translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="135"/>
         <location filename="../../../module/qtext/webview.cc" line="136"/>
-        <location filename="../../../module/qtext/webview.cc" line="137"/>
         <source>Clear Highlight</source>
         <translation>清除加亮</translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="140"/>
         <location filename="../../../module/qtext/webview.cc" line="141"/>
-        <location filename="../../../module/qtext/webview.cc" line="142"/>
         <source>Open in System Default Browser</source>
         <translation>用系统默认浏览器打开</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="234"/>
+        <location filename="../../../module/qtext/webview.cc" line="233"/>
         <source>Unnamed</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="273"/>
+        <location filename="../../../module/qtext/webview.cc" line="272"/>
         <source>opening</source>
         <translation>正在打开</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="297"/>
+        <location filename="../../../module/qtext/webview.cc" line="296"/>
         <source>clipping</source>
         <translation>正在保存</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="321"/>
+        <location filename="../../../module/qtext/webview.cc" line="320"/>
         <source>saved</source>
         <translation>保存成功</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="323"/>
+        <location filename="../../../module/qtext/webview.cc" line="322"/>
         <source>unable to save</source>
         <translation>保存失败</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="343"/>
+        <location filename="../../../module/qtext/webview.cc" line="342"/>
         <source>failed to download %1</source>
         <translation>无法下载%1</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="347"/>
+        <location filename="../../../module/qtext/webview.cc" line="346"/>
         <source>download is not allowed</source>
         <translation>无法下载</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="366"/>
+        <location filename="../../../module/qtext/webview.cc" line="365"/>
         <source>History</source>
         <translation>历史</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="383"/>
+        <location filename="../../../module/qtext/webview.cc" line="382"/>
         <source>Blank</source>
         <translation>空白页</translation>
     </message>

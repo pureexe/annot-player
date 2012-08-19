@@ -81,7 +81,7 @@ SyncView::createLayout()
     rows->setContentsMargins(4, 0, 4, 4);
   } setCentralWidget(new LayoutWidget(rows, this));
 
-  connect(messageView_, SIGNAL(hookSelected(ulong)), SLOT(selectHookAndHide(ulong)));
+  connect(messageView_, SIGNAL(channelSelected(ulong,QString)), SLOT(select(ulong,QString)));
 
   connect(processView_, SIGNAL(attached(ProcessInfo)), messageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
   connect(processView_, SIGNAL(detached(ProcessInfo)), messageView_, SLOT(clearProcessName()));
@@ -118,12 +118,12 @@ SyncView::createLayout()
 // - Events -
 
 void
-SyncView::selectHookAndHide(ulong hookId)
+SyncView::select(ulong anchor, const QString &function)
 {
   fadeOut();
   ProcessInfo pi = processView_->attachedProcessInfo();
-  if (pi.isValid() && hookId)
-    emit hookSelected(hookId, pi);
+  if (pi.isValid() && anchor)
+    emit channelSelected(anchor, function, pi);
   else
     emit warning(tr("process is not attached properly. try retart the app first."));
 }

@@ -5,8 +5,11 @@
 // 8/5/2012
 
 #include "project/common/acmainwindow.h"
+#include <QtCore/QModelIndex>
 
 QT_BEGIN_NAMESPACE
+class QAction;
+class QMenu;
 class QListView;
 class QStackedLayout;
 class QToolButton;
@@ -27,6 +30,7 @@ class MediaLibraryView : public AcMainWindow
 
   enum FilterType {
     FT_All,
+    FT_Folder,
     FT_Game,
     FT_Video,
     FT_Url,
@@ -38,30 +42,42 @@ public:
 
 signals:
   void openRequested(const QString &fileName);
+  void toggled();
+  void showGameRequested(const QString &digest);
+
+public:
+  bool autoHide() const;
+  bool autoRun() const;
 
   // -  Events -
 public slots:
   void setVisible(bool visible) override;
 
+protected:
+  void contextMenuEvent(QContextMenuEvent *event) override;
+
   // - Actions -
 protected slots:
   void showIcon();
   void showList();
-  void showTree();
 
   void refresh();
   void clear(bool confirm = true);
   void open();
+  void browse();
   void showSelection();
-  void openDirectory();
+  void showGame();
 
   void updateCount();
   void updateButtons();
   void updateFilterEdit();
   void setFilterType(int type);
 
+  void updateContextMenu();
+
 private:
   void createLayout();
+  void createActions();
 
 private:
   MediaLibrary *library_;
@@ -69,15 +85,18 @@ private:
 
   QListView *iconView_;
   QTreeView *listView_;
-  QTreeView *treeView_;
 
   QLineEdit *filterEdit_;
   QComboBox *filterType_;
 
-  QToolButton *openButton_, *dirButton_, *countButton_;
+  QToolButton *openButton_, *browseButton_, *countButton_;
 
-  QSortFilterProxyModel *standardProxyModel_, *standardFilterModel_;
-  QItemSelectionModel *standardSelectionModel_;
+  QSortFilterProxyModel *proxyModel_, *filterModel_;
+  QItemSelectionModel *selectionModel_;
+
+  QMenu *contextMenu_;
+  QAction *autoHideAct_, *toggleAct_, *autoRunAct_,
+          *openAct_, *browseAct_, *showGameAct_;
 };
 
 #endif // MEDIALIBRARYVIEW_H

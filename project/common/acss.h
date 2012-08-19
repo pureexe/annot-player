@@ -180,7 +180,7 @@
   SS_BEGIN(QRadioButton:disabled) \
     SS_COLOR(_disabled) \
   SS_END
-#define ACSS_RADIOBUTTON  ACSS_RADIOBUTTON_(white, red, orange, orange, gray)
+#define ACSS_RADIOBUTTON  ACSS_RADIOBUTTON_(white, red, cyan, cyan, gray)
 
 #define ACSS_GROUPBOX \
   SS_BEGIN(QGroupBox) \

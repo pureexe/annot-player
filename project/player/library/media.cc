@@ -3,6 +3,7 @@
 
 #include "media.h"
 #include "icons.h"
+#include <QtCore/QFile>
 #include <QtCore/QHash>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
@@ -177,6 +178,12 @@ bool
 Media::write(const L &l, const QString &fileName)
 {
   DOUT("enter: count =" << l.size() << ", fileName =" << fileName);
+  //if (l.isEmpty()) {
+  //  if (QFile::exists(fileName))
+  //    QFile::remove(fileName);
+  //  DOUT("exit: empty list");
+  //  return;
+  //}
   QFile file(fileName);
   if (!file.open(QIODevice::WriteOnly)) {
     DOUT("exit: ret = false, cannot  write to file");

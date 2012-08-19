@@ -2,7 +2,7 @@
 // 8/5/2012
 
 #include "medialibrary.h"
-#include "mediastandardmodel.h"
+#include "mediamodel.h"
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QMutexLocker>
@@ -13,23 +13,21 @@
 // - Construction -
 
 MediaLibrary::MediaLibrary(const QString &xmlLocation, QObject *parent)
-  : Base(parent), libraryLocation_(xmlLocation), dirty_(false), standardModel_(0), treeModel_(0)
+  : Base(parent), libraryLocation_(xmlLocation), dirty_(true), model_(0)
 { }
 
 // - Properties -
 
-QStandardItemModel*
-MediaLibrary::standardModel() const
-{
-  if (!standardModel_)
-    standardModel_ = new MediaStandardModel(const_cast<Self *>(this));
-  return standardModel_;
-}
+bool
+MediaLibrary::exists() const
+{ return QFile::exists(libraryLocation_); }
 
-QAbstractItemModel*
-MediaLibrary::treeModel() const
+QStandardItemModel*
+MediaLibrary::model() const
 {
-  return treeModel_;
+  if (!model_)
+    model_ = new MediaModel(const_cast<Self *>(this));
+  return model_;
 }
 
 const QSet<QString>&
@@ -135,18 +133,16 @@ MediaLibrary::refresh()
     urls_.clear();
   loadUrls();
 
-  if (!standardModel_)
-    standardModel_ = new MediaStandardModel(this);
-
-  if (!standardModel_->isEmpty())
-    standardModel_->reset();
-
+  if (!model_)
+    model_ = new MediaModel(this);
+  else if (!model_->isEmpty())
+    model_->reset();
   foreach (const Media &media, games_)
-    standardModel_->addMedia(media);
+    model_->addMedia(media);
   foreach (const Media &media, urls_)
-    standardModel_->addMedia(media);
+    model_->addMedia(media);
   foreach (const QString &folder, folders_)
-    standardModel_->addFolder(folder);
+    model_->addFolder(folder);
 }
 
 // - Visit -
@@ -178,6 +174,10 @@ MediaLibrary::visit(const Media &media)
       p->setTitle(media.title());
     if (media.hasDigest())
       p->setDigest(media.digest());
+    if (media.hasTokenId())
+      p->setTokenId(media.tokenId());
+    if (media.hasType())
+      p->setType(media.type());
   }
 
   DOUT("exit");

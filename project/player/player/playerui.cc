@@ -135,6 +135,8 @@ PlayerUi::createConnections()
 
   connect(inputCountButton(), SIGNAL(clicked()), SLOT(popupInputItems()));
 
+  connect(libraryButton(), SIGNAL(clicked()), SIGNAL(toggleLibraryRequested()));
+
   // Always connected
   connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), SLOT(updateVisibleWidgets()));
 
@@ -424,7 +426,7 @@ PlayerUi::updateVolumeSlider()
   // Update tool tip.
   int percentage = qRound(vol * 100);
   slider->setToolTip(
-    QString("%1 %2%" " [↑/↓]")
+    QString("%1 %2%" " [�↓]")
       .arg(TR(T_VOLUME))
       .arg(QString::number(percentage))
   );

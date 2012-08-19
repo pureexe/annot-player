@@ -614,7 +614,7 @@ MainWindow::openLocation(const QString &path)
   if (QFile::exists(path)) {
     QString url = path;
 #ifdef Q_OS_WIN
-    url.replace('\\', '/');
+    url = QDir::fromNativeSeparators(url);
     url.prepend('/');
 #endif // Q_OS_WIN
     url.prepend("file://");

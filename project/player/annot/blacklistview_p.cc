@@ -4,7 +4,7 @@
 #include "blacklistview_p.h"
 #include "tr.h"
 #include "global.h"
-#include "annotationstandardmodel.h"
+#include "annotationlistmodel.h"
 #include "project/common/acfilteredtableview.h"
 #include "project/common/acfilteredlistview.h"
 #include "module/qtext/datetime.h"
@@ -225,9 +225,9 @@ AnnotationFilterView::addRow(const Annotation &a)
 {
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate)
 #define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs).toString()
-#define FORMAT_LANGUAGE(_lang)    AnnotationStandardModel::languageToString(_lang)
-#define FORMAT_FLAGS(_flags)      AnnotationStandardModel::annotationFlagsToStringList(_flags)
-#define FORMAT_STATUS(_status)    AnnotationStandardModel::annotationStatusToString(_status)
+#define FORMAT_LANGUAGE(_lang)    AnnotationListModel::languageToString(_lang)
+#define FORMAT_FLAGS(_flags)      AnnotationListModel::annotationFlagsToStringList(_flags)
+#define FORMAT_STATUS(_status)    AnnotationListModel::annotationStatusToString(_status)
 
   sourceModel_->insertRow(0);
 

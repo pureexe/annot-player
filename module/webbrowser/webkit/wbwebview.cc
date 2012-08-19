@@ -207,15 +207,24 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
 void
 WbWebView::invalidateSelection()
 {
-  QString selection = selectedUrl();
-  if (!selection.isEmpty())
-    emit message(selection);
+  QString text = selectedText();
+  QString url = selectedUrl();
+  if (!url.isEmpty())
+    emit message(url);
+
+  if (!text.isEmpty())
+    text = text.trimmed();
+  if (!text.isEmpty())
+    emit selectedTextChanged(text);
 }
 
 QString
 WbWebView::selectedUrl() const
 {
-  QString ret = selectedText().trimmed();
+  QString ret = selectedText();
+  if (ret.isEmpty())
+    return ret;
+  ret = ret.trimmed();
   if (ret.isEmpty())
     return ret;
   ret = ret.split('\n', QString::SkipEmptyParts).first();

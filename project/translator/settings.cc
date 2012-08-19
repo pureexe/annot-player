@@ -21,6 +21,8 @@
 #define SK_RECENT       "Recent"
 #define SK_SIZE         "Size"
 
+#define SK_LANG         "LanguageIndex"
+
 // - Constructions -
 
 Settings::Settings(QObject *parent)
@@ -49,5 +51,13 @@ Settings::recentSize() const
 void
 Settings::setRecentSize(const QSize &value)
 { setValue(SK_SIZE, value); }
+
+int
+Settings::languageIndex() const
+{ return value(SK_LANG).toInt(); }
+
+void
+Settings::setLanguageIndex(int value)
+{ setValue(SK_LANG, value); }
 
 // EOF

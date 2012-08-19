@@ -22,6 +22,7 @@
 #include "module/translator/translatormanager.h"
 #include "module/translator/jdictranslator.h"
 #include <QtGui>
+#include <boost/foreach.hpp>
 
 #define DEBUG "mainwindow"
 #include "module/debug/debug.h"
@@ -112,7 +113,7 @@ MainWindow::createLayout()
   translateButton_ = ui->makeToolButton(AcUi::PushHint | AcUi::HighlightHint, tr("Translate"), this, SLOT(translate()));
 
   autoButton_ = ui->makeToolButton(AcUi::CheckHint, tr("Auto"), tr("Automatically translate selected text"));
-  clipboardButton_ = ui->makeToolButton(AcUi::CheckHint, tr("Clipboard"), tr("Monitor and translate clipboard text"));
+  clipboardButton_ = ui->makeToolButton(AcUi::CheckHint, tr("Clipboard"), tr("Monitor and translate clipboard text"), this, SLOT(translateClipboard()));
   topButton_ = ui->makeToolButton(AcUi::CheckHint, tr("Top"), tr("Window stays on top"), this, SLOT(setWindowOnTop(bool)));
 
   languageCombo_ = ui->makeComboBox(AcUi::ReadOnlyHint, QString(), tr("Language")); {
@@ -128,7 +129,11 @@ MainWindow::createLayout()
     languageCombo_->addItem(QIcon(ACRC_IMAGE_RUSSIAN), tr("Russian"));
     languageCombo_->addItem(QIcon(ACRC_IMAGE_JAPANESE), tr("Japanese"));
   }
+  int lang = Settings::globalSettings()->languageIndex();
+  if (lang > 0 && lang < languageCombo_->count())
+    languageCombo_->setCurrentIndex(lang);
   connect(languageCombo_, SIGNAL(activated(int)), SLOT(updateLanguage()));
+  connect(languageCombo_, SIGNAL(activated(int)), SLOT(translate()));
 
   jdicButton_ = ui->makeCheckBox(0, tr("WWWJDIC"), tr("WWWJDIC Translator"), this, SLOT(updateTranslators()));
   romajiButton_ = ui->makeCheckBox(0, tr("Romaji"), tr("Romaji Translator"), this, SLOT(updateTranslators()));
@@ -137,6 +142,7 @@ MainWindow::createLayout()
 
   translateEdit_ = new TranslateEdit;
   connect(translateEdit_, SIGNAL(textChanged()), SLOT(autoTranslate()));
+  connect(translateEdit_, SIGNAL(selectedTextChanged(QString)), SLOT(highlightText(QString)));
   connect(translateEdit_, SIGNAL(selectedTextChanged(QString)), SLOT(autoTranslate(QString)));
 
   for (size_t i = 0; i < sizeof(browsers_)/sizeof(*browsers_); i++) {
@@ -147,6 +153,8 @@ MainWindow::createLayout()
     case DictBrowser1:
     case DictBrowser2:
       connect(b, SIGNAL(selectedTextChanged(QString)), SLOT(autoTranslate(QString)));
+    case DictBrowser3:
+      connect(b, SIGNAL(selectedTextChanged(QString)), SLOT(highlightText(QString)));
     }
   }
 
@@ -276,7 +284,20 @@ MainWindow::createActions()
   //  m->addAction(menuBarAct_);
   //  m->addAction(tr("Preferences"), this, SLOT(preferences()), QKeySequence("CTRL+,"));
   //#endif // Q_OS_MAC
-    m->addAction(tr("Hide"), this, SLOT(fadeOut()));
+    m->addAction(tr("About"), this, SLOT(showAbout()));
+
+    m->addAction(tr("Preferences"), this, SLOT(showPreferences())
+#ifdef Q_OS_WIN
+      , QKeySequence("ALT+O")
+#endif // Q_OS_WIN
+    );
+
+    m->addAction(tr("Hide"), this, SLOT(fadeOut())
+#ifdef Q_OS_WIN
+      , QKeySequence("CTRL+H")
+#endif // Q_OS_WIN
+    );
+
     m->addAction(tr("Quit"), this, SLOT(quit()));
   }
 
@@ -530,7 +551,8 @@ void
 MainWindow::saveSettings()
 {
   Settings *settings = Settings::globalSettings();
-  settings->setRecentSize(size());
+  //settings->setRecentSize(size());
+  settings->setLanguageIndex(languageCombo_->currentIndex());
   settings->sync();
 }
 
@@ -581,6 +603,20 @@ MainWindow::openUrl(const QUrl &url)
   QString t = url.toString();
   showMessage(tr("opening") + ": " + t);
   browserDelegate_->openUrl(t);
+}
+
+void
+MainWindow::highlightText(const QString &input)
+{
+  if (input.isEmpty())
+    return;
+  QString t = input.trimmed();
+  if (t.isEmpty())
+    return;
+
+  translateEdit_->highlightText(input);
+  BOOST_FOREACH (TranslateBrowser *e, browsers_)
+    e->highlightText(input);
 }
 
 // EOF

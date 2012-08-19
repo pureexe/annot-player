@@ -159,9 +159,11 @@ EmbeddedPlayerUi::createLayout()
     //nextButton()->setProperty("radius", int(ButtonSize));
     //menuButton()->setProperty("radius", int(ButtonSize));
 
-    enum { PlayButtonSize = 35 };
+    enum { PlayButtonSize = 35, LibraryButtonSize = 25 };
     playButton()->setProperty("radius", int(PlayButtonSize));
     //playButton()->setProperty("minimumRadius", int(PlayButtonMinimumSize));
+
+    //libraryButton()->setProperty("radius", int(LibraryButtonSize));
   }
 
   auto
@@ -215,6 +217,8 @@ EmbeddedPlayerUi::createLayout()
     input->addWidget(inputCountButton(), Qt::AlignRight);
     input->setContentsMargins(0, 0, 0, 0);
     row->addLayout(input);
+
+    row->addWidget(libraryButton());
 
     //row->addStretch();
     //row->addWidget(volumeSlider());
@@ -456,6 +460,10 @@ EmbeddedPlayerUi::setVisible(bool visible)
   }
 
   Base::setVisible(visible);
+  if (top_) {
+    canvas_->hide();
+    infoView_->hide();
+  }
   updateTrackingTimer();
   emit visibleChanged(visible);
 }

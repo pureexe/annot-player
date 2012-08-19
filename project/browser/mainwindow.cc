@@ -11,6 +11,7 @@
 #include "project/common/acsettings.h"
 #include "project/common/acui.h"
 #include "project/common/acbrowser.h"
+#include "project/common/actranslator.h"
 #include "project/common/acplayer.h"
 #include "project/common/acdownloader.h"
 #include "project/common/acconsole.h"
@@ -150,12 +151,16 @@ MainWindow::MainWindow(QWidget *parent)
   DOUT("create app delegates");
   playerDelegate_ = new AcPlayer(this);
   downloaderDelegate_ = new AcDownloader(this);
+  translatorDelegate_ = new AcTranslator(this);
   connect(this, SIGNAL(openUrlWithAcPlayerRequested(QString)), SLOT(openUrlWithAcPlayer(QString)));
   connect(this, SIGNAL(importUrlToAcPlayerRequested(QString)), SLOT(importUrlToAcPlayer(QString)));
   connect(this, SIGNAL(openUrlWithAcDownloaderRequested(QString)), SLOT(openUrlWithAcDownloader(QString)));
   connect(this, SIGNAL(downloadAnnotationUrlRequested(QString)), SLOT(downloadAnnotationUrl(QString)));
   connect(this, SIGNAL(newWindowRequested()), SLOT(newWindow()));
   connect(this, SIGNAL(fullScreenRequested()), SLOT(toggleFullScreen()));
+
+  // TODO: Translate selected text
+  //connect(this, SIGNAL(selectedTextChanged(QString)), SLOT(translateText(QString)));
 
   //AC_CONNECT_MESSAGES(AcBrowserController::globalController(), this, Qt::QueuedConnection);
   //connect(AcBrowserController::globalController(), SIGNAL(arguments(QStringList)),
@@ -666,6 +671,12 @@ MainWindow::saveCookieJar()
   Q_UNUSED(ok);
   DOUT("ok =" << ok);
 }
+
+// - Translate -
+
+void
+MainWindow::translateText(const QString &text)
+{ translatorDelegate_->translate(text); }
 
 // - Window -
 

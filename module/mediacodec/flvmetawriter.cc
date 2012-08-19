@@ -291,17 +291,17 @@ FlvMetaWriter::updateScriptTagDoubleValue(OutputStream *out, const QString &var)
       update = true;
       value = meta_.duration / 1000.0;
     }
-  } if (var == "lasttimestamp") {
+  } else if (var == "lasttimestamp") {
     if (meta_.lastTimestamp) {
       update = true;
       value = meta_.lastTimestamp / 1000.0;
     }
-  } if (var == "lastkeyframetimestamp") {
+  } else if (var == "lastkeyframetimestamp") {
     if (meta_.lastKeyFrameTimestamp) {
       update = true;
       value = meta_.lastKeyFrameTimestamp / 1000.0;
     }
-  } if (var == "filesize") {
+  } else if (var == "filesize") {
     if (meta_.fileSize) {
       update = true;
       value = meta_.fileSize;

@@ -62,7 +62,7 @@ signals:
   void loginRequested();
   void showPositionPanelRequested();
   void updateUserMenuRequested();
-
+  void toggleLibraryRequested();
 
 public slots:
   void setVisible(bool visible) override;

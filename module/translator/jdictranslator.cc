@@ -35,20 +35,23 @@ JdicTranslator::JdicTranslator(QObject *parent)
 const char*
 JdicTranslator::dictionaryForLanguage(const QString &lang)
 {
-  if (lang.isEmpty())
-    return JDIC_DICT_EN;
-  else if (lang == "es")
-    return JDIC_DICT_ES;
-  else if (lang == "it")
-    return JDIC_DICT_IT;
-  else if (lang == "de")
-    return JDIC_DICT_DE;
-  else if (lang == "fr")
-    return JDIC_DICT_FR;
-  else if (lang == "ru")
-    return JDIC_DICT_RU;
-  else
-    return JDIC_DICT_EN;
+  // FIXME: only enlish dictionary is working, others would incur network error
+  Q_UNUSED(lang);
+  return JDIC_DICT_EN;
+  //if (lang.isEmpty())
+  //  return JDIC_DICT_EN;
+  //else if (lang == "es")
+  //  return JDIC_DICT_ES;
+  //else if (lang == "it")
+  //  return JDIC_DICT_IT;
+  //else if (lang == "de")
+  //  return JDIC_DICT_DE;
+  //else if (lang == "fr")
+  //  return JDIC_DICT_FR;
+  //else if (lang == "ru")
+  //  return JDIC_DICT_RU;
+  //else
+  //  return JDIC_DICT_EN;
 }
 
 

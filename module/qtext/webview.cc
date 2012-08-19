@@ -4,12 +4,11 @@
 #include "module/qtext/webview.h"
 #include "module/qtext/actionwithid.h"
 #include "module/qtext/ss.h"
-#include "module/qtext/webpage.h"
 #include "module/qtext/filesystem.h"
+#include "module/qtext/webpage.h"
 #ifdef WITH_MODULE_DOWNLOAD
 # include "module/download/download.h"
 #endif // WITH_MODULE_DOWNLOAD
-#include <QtCore>
 #include <QtGui>
 #include <QtWebKit>
 
@@ -233,7 +232,7 @@ WebView::fileNameFromUrl(const QUrl &url, const QString &suffix)
       if (fileName.isEmpty())
         fileName = tr("Unnamed");
     }
-    fileName.prepend(SAVE_PATH + FILE_PATH_SEP);
+    fileName.prepend(SAVE_PATH + QDir::separator());
   }
   QString suf = suffix;
   if (suf.isEmpty()) {

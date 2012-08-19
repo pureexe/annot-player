@@ -1,7 +1,7 @@
 # translator.pro
 # 8/13/2012
 
-VERSION = 0.1.0.0
+VERSION = 0.1.0.1
 
 DEFINES += PROJECT_TRANSLATOR
 
@@ -41,6 +41,11 @@ DEFINES += WITH_QT_CORE \
            WITH_QT_GUI \
            WITH_QT_NETWORK \
            WITH_QT_XML
+
+win32 {
+  DEFINES += AC_ENABLE_GAME
+  DEFINES += AC_ENABLE_UPDATE
+}
 
 ## Sources
 

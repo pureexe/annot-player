@@ -44,10 +44,6 @@ namespace { namespace detail {
 
   // Conversions between qt and win32 data structures
 
-  inline QString qpath2win(const QString &fileName)
-  { return QString(fileName).replace('/', '\\'); }
-
-
   inline QPoint POINT2QPoint(const POINT &pt)
   { return QPoint(pt.x, pt.y); }
 
@@ -281,10 +277,10 @@ QtWin::getModulesInfo()
 bool
 QtWin::createProcessWithExecutablePath(const QString &filePath)
 {
-  std::wstring wszExePath = detail::qpath2win(filePath).toStdWString();
+  std::wstring wszExePath = QDir::toNativeSeparators(filePath).toStdWString();
 
   QString fileDir = QFileInfo(filePath).absolutePath();
-  std::wstring wszExeDir = detail::qpath2win(fileDir).toStdWString();
+  std::wstring wszExeDir = QDir::toNativeSeparators(fileDir).toStdWString();
 
   STARTUPINFOW siStartupInfo;
   ::ZeroMemory(&siStartupInfo, sizeof(siStartupInfo));
@@ -743,6 +739,10 @@ QtWin::getMousePos()
 // It is suggested to use SHGetFolderPath or SHGetKnownFolderPath, which is not available to Windows XP
 
 QString
+QtWin::getPath()
+{ return qgetenv("PATH"); }
+
+QString
 QtWin::getWinDirPath()
 { return qgetenv("windir"); }
 
@@ -811,6 +811,40 @@ QtWin::isWindowsXpOrLater()
 }
 
 bool
+QtWin::setPath(const QString &path)
+{ return qputenv("PATH", path.toLocal8Bit()); }
+
+bool
+QtWin::prependPath(const QString &path)
+{
+  if (path.isEmpty())
+    return true;
+  QString winpath = QDir::toNativeSeparators(path);
+  QString value = getPath();
+  if (value.isEmpty())
+    value = winpath;
+  else
+    value.prepend(';').prepend(winpath);
+  return setPath(value);
+}
+
+bool
+QtWin::appendPath(const QString &path)
+{
+  if (path.isEmpty())
+    return true;
+  QString winpath = QDir::toNativeSeparators(path);
+  QString value = getPath();
+  if (value.isEmpty())
+    value = winpath;
+  else if (value.endsWith(';'))
+    value.append(winpath);
+  else
+    value.append(';').append(winpath);
+  return setPath(value);
+}
+
+bool
 QtWin::isWindowsVistaOrLater()
 {
   static int ret = -1;
@@ -828,9 +862,9 @@ QtWin::createLink(const QString &lnkPath, const QString &targetPath, const QStri
   if (lnkPath.isEmpty() || targetPath.isEmpty())
     return false;
 
-  std::wstring wszLnkPath = detail::qpath2win(lnkPath).toStdWString(),
-               wszTargetPath = detail::qpath2win(targetPath).toStdWString(),
-               wszDescription = detail::qpath2win(description).toStdWString();
+  std::wstring wszLnkPath = QDir::toNativeSeparators(lnkPath).toStdWString(),
+               wszTargetPath = QDir::toNativeSeparators(targetPath).toStdWString(),
+               wszDescription = QDir::toNativeSeparators(description).toStdWString();
 
   // See: http://msdn.microsoft.com/en-us/library/bb776891(VS.85).aspx
   //
@@ -893,7 +927,7 @@ QtWin::resolveLink(const QString &lnkPath, HWND hwnd)
   if (lnkPath.isEmpty())
     return ret;
 
-  std::wstring wszLnkPath = detail::qpath2win(lnkPath).toStdWString();
+  std::wstring wszLnkPath = QDir::toNativeSeparators(lnkPath).toStdWString();
   //WCHAR wszRet[MAX_PATH];
 
   // ResolveIt - Uses the Shell's IShellLink and IPersistFile interfaces
@@ -987,7 +1021,7 @@ bool
 QtWin::trashFile(const QString &fileName, bool confirm, WId hwnd)
 {
   enum { BufferSize = MAX_PATH + 1 };
-  QString filePath = detail::qpath2win(fileName);
+  QString filePath = QDir::toNativeSeparators(fileName);
   if (BufferSize < filePath.size())
     return false;
   //std::wstring wszFilePath = filePath.toStdWString();
@@ -1011,7 +1045,7 @@ bool
 QtWin::isFileExists(const QString &fileName)
 {
 #ifdef _INC_SHLWAPI // Require Shlwapi.sll
-  return ::PathFileExistsW(QSTRING_LPCWSTR(detail::qpath2win(fileName)));
+  return ::PathFileExistsW(QSTRING_LPCWSTR(QDir::toNativeSeparators(fileName)));
 #else
   return QFile::exists(fileName);
 #endif // _INC_SHLWAPI
@@ -1019,7 +1053,7 @@ QtWin::isFileExists(const QString &fileName)
 
 bool
 QtWin::deleteFile(const QString &fileName)
-{ return ::DeleteFileW(QSTRING_LPCWSTR(detail::qpath2win(fileName))); }
+{ return ::DeleteFileW(QSTRING_LPCWSTR(QDir::toNativeSeparators(fileName))); }
 
 // - Devices -
 
@@ -1198,7 +1232,7 @@ bool
 QtWin::setFileAttributes(const QString &fileName, uint flags)
 {
   return ::SetFileAttributesW(
-        QSTRING_LPCWSTR(detail::qpath2win(fileName)),
+        QSTRING_LPCWSTR(QDir::toNativeSeparators(fileName)),
         flags);
 }
 
@@ -1210,7 +1244,7 @@ QtWin::addRecentDocument(const QString &fileName)
 {
   ::SHAddToRecentDocs(
         SHARD_PATHW,
-        QSTRING_LPCWSTR(detail::qpath2win(fileName)));
+        QSTRING_LPCWSTR(QDir::toNativeSeparators(fileName)));
 }
 
 // EOF

@@ -5,126 +5,151 @@
         <file>tr/tr_zh_CN.qm</file>
         <file>tr/tr_zh_TW.qm</file>
         <file>images/comment.png</file>
+        <file>images/comment_blank.png</file>
         <file>images/comment_checked.png</file>
         <file>images/comment_disabled.png</file>
         <file>images/comment_hover.png</file>
         <file>images/comment_pressed.png</file>
         <file>images/downarrow.png</file>
+        <file>images/downarrow_blank.png</file>
         <file>images/downarrow_checked.png</file>
         <file>images/downarrow_disabled.png</file>
         <file>images/downarrow_hover.png</file>
         <file>images/downarrow_pressed.png</file>
         <file>images/fastforward.png</file>
+        <file>images/fastforward_blank.png</file>
         <file>images/fastforward_checked.png</file>
         <file>images/fastforward_disabled.png</file>
         <file>images/fastforward_hover.png</file>
         <file>images/fastforward_pressed.png</file>
         <file>images/fastfastforward.png</file>
+        <file>images/fastfastforward_blank.png</file>
         <file>images/fastfastforward_checked.png</file>
         <file>images/fastfastforward_disabled.png</file>
         <file>images/fastfastforward_hover.png</file>
         <file>images/fastfastforward_pressed.png</file>
         <file>images/fullscreen.png</file>
+        <file>images/fullscreen_blank.png</file>
         <file>images/fullscreen_checked.png</file>
         <file>images/fullscreen_disabled.png</file>
         <file>images/fullscreen_hover.png</file>
         <file>images/fullscreen_pressed.png</file>
-        <file>images/live.png</file>
-        <file>images/live_checked.png</file>
-        <file>images/live_disabled.png</file>
-        <file>images/live_hover.png</file>
-        <file>images/live_pressed.png</file>
+        <file>images/library.png</file>
+        <file>images/library_blank.png</file>
+        <file>images/library_checked.png</file>
+        <file>images/library_disabled.png</file>
+        <file>images/library_hover.png</file>
+        <file>images/library_pressed.png</file>
         <file>images/maximize.png</file>
+        <file>images/maximize_blank.png</file>
         <file>images/maximize_checked.png</file>
         <file>images/maximize_disabled.png</file>
         <file>images/maximize_hover.png</file>
         <file>images/maximize_pressed.png</file>
         <file>images/menu.png</file>
+        <file>images/menu_blank.png</file>
         <file>images/menu_checked.png</file>
         <file>images/menu_disabled.png</file>
         <file>images/menu_hover.png</file>
         <file>images/menu_pressed.png</file>
         <file>images/mini.png</file>
+        <file>images/mini_blank.png</file>
         <file>images/mini_checked.png</file>
         <file>images/mini_disabled.png</file>
         <file>images/mini_hover.png</file>
         <file>images/mini_pressed.png</file>
         <file>images/minimize.png</file>
+        <file>images/minimize_blank.png</file>
         <file>images/minimize_checked.png</file>
         <file>images/minimize_disabled.png</file>
         <file>images/minimize_hover.png</file>
         <file>images/minimize_pressed.png</file>
         <file>images/next.png</file>
+        <file>images/next_blank.png</file>
         <file>images/next_checked.png</file>
         <file>images/next_disabled.png</file>
         <file>images/next_hover.png</file>
         <file>images/next_pressed.png</file>
         <file>images/nextframe.png</file>
+        <file>images/nextframe_blank.png</file>
         <file>images/nextframe_checked.png</file>
         <file>images/nextframe_disabled.png</file>
         <file>images/nextframe_hover.png</file>
         <file>images/nextframe_pressed.png</file>
         <file>images/open.png</file>
+        <file>images/open_blank.png</file>
         <file>images/open_checked.png</file>
         <file>images/open_disabled.png</file>
         <file>images/open_hover.png</file>
         <file>images/open_pressed.png</file>
         <file>images/pause.png</file>
+        <file>images/pause_blank.png</file>
         <file>images/pause_checked.png</file>
         <file>images/pause_disabled.png</file>
         <file>images/pause_hover.png</file>
         <file>images/pause_pressed.png</file>
         <file>images/play.png</file>
+        <file>images/play_blank.png</file>
         <file>images/play_checked.png</file>
         <file>images/play_disabled.png</file>
         <file>images/play_hover.png</file>
         <file>images/play_pressed.png</file>
         <file>images/previous.png</file>
+        <file>images/previous_blank.png</file>
         <file>images/previous_checked.png</file>
         <file>images/previous_disabled.png</file>
         <file>images/previous_hover.png</file>
         <file>images/previous_pressed.png</file>
         <file>images/restore.png</file>
+        <file>images/restore_blank.png</file>
         <file>images/restore_checked.png</file>
         <file>images/restore_disabled.png</file>
         <file>images/restore_hover.png</file>
         <file>images/restore_pressed.png</file>
         <file>images/rewind.png</file>
+        <file>images/rewind_blank.png</file>
         <file>images/rewind_checked.png</file>
         <file>images/rewind_disabled.png</file>
         <file>images/rewind_hover.png</file>
         <file>images/rewind_pressed.png</file>
         <file>images/stop.png</file>
+        <file>images/stop_blank.png</file>
         <file>images/stop_checked.png</file>
         <file>images/stop_disabled.png</file>
         <file>images/stop_hover.png</file>
         <file>images/stop_pressed.png</file>
         <file>images/sync.png</file>
+        <file>images/sync_blank.png</file>
         <file>images/sync_checked.png</file>
         <file>images/sync_disabled.png</file>
         <file>images/sync_hover.png</file>
         <file>images/sync_pressed.png</file>
         <file>images/uparrow.png</file>
+        <file>images/uparrow_blank.png</file>
         <file>images/uparrow_checked.png</file>
         <file>images/uparrow_disabled.png</file>
         <file>images/uparrow_hover.png</file>
         <file>images/uparrow_pressed.png</file>
         <file>images/E.png</file>
+        <file>images/E_blank.png</file>
         <file>images/E_checked.png</file>
         <file>images/E_disabled.png</file>
         <file>images/E_hover.png</file>
         <file>images/E_pressed.png</file>
         <file>images/F.png</file>
+        <file>images/F_blank.png</file>
         <file>images/F_checked.png</file>
         <file>images/F_disabled.png</file>
         <file>images/F_hover.png</file>
         <file>images/F_pressed.png</file>
         <file>images/M.png</file>
+        <file>images/M_blank.png</file>
         <file>images/M_checked.png</file>
         <file>images/M_disabled.png</file>
         <file>images/M_hover.png</file>
         <file>images/M_pressed.png</file>
         <file>images/T.png</file>
+        <file>images/T_blank.png</file>
         <file>images/T_checked.png</file>
         <file>images/T_disabled.png</file>
         <file>images/T_hover.png</file>

@@ -2,6 +2,7 @@
 // 10/16/2011
 
 #include "messageview.h"
+#include "radiobuttongrid.h"
 #include "textcodecmanager.h"
 #include "tr.h"
 #include "global.h"
@@ -27,7 +28,7 @@
 #define HOOKCOMBOBOX_MINWIDTH       40
 #define HOOKCOMBOBOX_MAXWIDTH       60
 
-// - Constructions -
+// - Construction -
 
 MessageView::MessageView(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), active_(false)
@@ -43,14 +44,20 @@ MessageView::createLayout()
   AcUi *ui = AcUi::globalInstance();
   ui->setWindowStyle(this);
 
-  textEdit_ = ui->makeTextEdit(0, tr("Process message")); {
+
+  enum { MaxChannelCount = 50, GridColumn = 4 };
+  channelGrid_ = new RadioButtonGrid(MaxChannelCount, GridColumn, this);
+  connect(channelGrid_, SIGNAL(valueChanged(int)), SLOT(setCurrentText(int)));
+  connect(channelGrid_, SIGNAL(valueChanged(int)), SLOT(invalidateSelectButton()));
+
+  textEdit_ = ui->makeTextEdit(AcUi::ReadOnlyHint, tr("Process message")); {
     //QTextCharFormat fmt;
     //fmt.setBackground(Qt::red);
     //QTextCursor tc = textEdit_->textCursor();
     //tc.mergeCharFormat(fmt);
     //textEdit_->setTextCursor(tc);
   }
-  connect(textEdit_, SIGNAL(cursorPositionChanged()), SLOT(invalidateCurrentCharFormat()));
+  //connect(textEdit_, SIGNAL(cursorPositionChanged()), SLOT(invalidateCurrentCharFormat()));
 
   QString ja = tr("ja"),
           en = tr("en"),
@@ -73,45 +80,44 @@ MessageView::createLayout()
   encodingEdit_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Text Encoding"), tr("Encoding"), defaultEncodings);
   connect(encodingEdit_, SIGNAL(activated(QString)), SLOT(setEncoding(QString)));
 
-  hookIndexEdit_ = new QtExt::SpinBox; {
-    hookIndexEdit_->setToolTip(tr("Signal channel"));
-    //hookIndexEdit_->setMinimumWidth(HOOKCOMBOBOX_MINWIDTH);
-    //hookIndexEdit_->setMaximumWidth(HOOKCOMBOBOX_MAXWIDTH);
-    //if (hookIndexEdit_->isEditable())
-    //  hookIndexEdit_->lineEdit()->setAlignment(Qt::AlignRight);
-    hookIndexEdit_->setMaximum(0);
-    hookIndexEdit_->setMinimum(0);
-    hookIndexEdit_->setEnabled(false);
-  }
-  connect(hookIndexEdit_, SIGNAL(valueChanged(int)), SLOT(selectHookIndex(int)));
-  connect(hookIndexEdit_, SIGNAL(valueChanged(int)), SLOT(invalidateSelectButton()));
+  //hookIndexEdit_ = new QtExt::SpinBox; {
+  //  hookIndexEdit_->setToolTip(tr("Signal channel"));
+  //  //hookIndexEdit_->setMinimumWidth(HOOKCOMBOBOX_MINWIDTH);
+  //  //hookIndexEdit_->setMaximumWidth(HOOKCOMBOBOX_MAXWIDTH);
+  //  //if (hookIndexEdit_->isEditable())
+  //  //  hookIndexEdit_->lineEdit()->setAlignment(Qt::AlignRight);
+  //  hookIndexEdit_->setMaximum(0);
+  //  hookIndexEdit_->setMinimum(0);
+  //  hookIndexEdit_->setEnabled(false);
+  //}
 
-  autoButton_ = ui->makeToolButton(
-        AcUi::CheckHint, TR(T_AUTO), tr("Auto-detect signal"), this, SLOT(invalidateCurrentHook()));
-  autoButton_->setChecked(false);
+  //autoButton_ = ui->makeToolButton(
+  //      AcUi::CheckHint, TR(T_AUTO), tr("Auto-detect signal"), this, SLOT(invalidateCurrentHook()));
+  //autoButton_->setChecked(false);
 
   selectButton_ = ui->makeToolButton(
-        AcUi::PushHint | AcUi::HighlightHint | AcUi::InvertHint, TR(T_OK), tr("Use selected signal"), this, SLOT(selectCurrentHook()));
+        AcUi::PushHint | AcUi::HighlightHint | AcUi::InvertHint, TR(T_OK), tr("Listen to selected channel"), this, SLOT(select()));
 
   QToolButton *resetButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_RESET), tr("Reset changes and texts"), this, SLOT(clear()));
 
-  hookCountLabel_ = ui->makeLabel(0, "/0", tr("Current signal"), hookIndexEdit_);
+  //hookCountLabel_ = ui->makeLabel(0, "/0", tr("Current signal"), hookIndexEdit_);
 
   // Set layout
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *header = new QHBoxLayout;
     rows->addLayout(header);
+    rows->addLayout(channelGrid_->layout());
     rows->addWidget(textEdit_);
 
     header->addWidget(encodingEdit_);
-    header->addWidget(hookIndexEdit_);
-    header->addWidget(hookCountLabel_);
-    header->addWidget(selectButton_);
+    //header->addWidget(hookIndexEdit_);
+    //header->addWidget(hookCountLabel_);
     //header->addWidget(autoButton_); // TODO: auto detect is disabled, because hookName is unimplemented
     //header->addStretch();
     header->addWidget(resetButton);
+    header->addWidget(selectButton_);
 
     // left, top, right, bottom
     header->setContentsMargins(0, 0, 0, 0);
@@ -121,10 +127,11 @@ MessageView::createLayout()
   // Start up status
   clear();
 
-  invalidateCurrentCharFormat();
+  //invalidateCurrentCharFormat();
   invalidateSelectButton();
 
-  hookIndexEdit_->setFocus();
+  encodingEdit_->setFocus();
+  //hookIndexEdit_->setFocus();
 }
 
 // - Properties -
@@ -135,13 +142,13 @@ MessageView::setActive(bool active)
   active_ = active;
 #ifdef WITH_WIN_TEXTHOOK
   if (active_) {
-    connect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,ulong)),
-            SLOT(processMessage(QByteArray,ulong)));
+    connect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,QString)),
+            SLOT(processMessage(QByteArray,ulong,QString)));
     connect(TextCodecManager::globalInstance(), SIGNAL(encodingChanged(QString)),
             SLOT(refresh()));
   } else {
-    disconnect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,ulong)),
-               this, SLOT(processMessage(QByteArray,ulong)));
+    disconnect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,QString)),
+               this, SLOT(processMessage(QByteArray,ulong,QString)));
     disconnect(TextCodecManager::globalInstance(), SIGNAL(encodingChanged(QString)),
                this, SLOT(refresh()));
   }
@@ -151,7 +158,7 @@ MessageView::setActive(bool active)
 void
 MessageView::refresh()
 {
-  selectHookIndex(currentIndex());
+  setCurrentText(currentIndex());
   refreshEncodingEdit();
 }
 
@@ -173,79 +180,93 @@ MessageView::setVisible(bool visible)
   Base::setVisible(visible);
 }
 
+bool
+MessageView::isEmpty() const
+{ return channelGrid_->isEmpty(); }
+
 int
 MessageView::currentIndex() const
-{ return hookIndexEdit_->value(); }
+{ return channelGrid_->value(); }
 
 void
 MessageView::setCurrentIndex(int index)
 {
-  hookIndexEdit_->setValue(index);
+  channelGrid_->setValue(index);
   invalidateSelectButton();
 }
 
 ulong
-MessageView::currentHookId() const
+MessageView::currentAnchor() const
 {
-  int hookIndex = currentIndex();
-  return hookIndex < 0 || hookIndex >= hooks_.size() ? 0
-       : hooks_[hookIndex];
+  int index = currentIndex();
+  return index < 0 || index >= anchors_.size() ? 0
+       : anchors_[index];
+}
+
+QString
+MessageView::currentFunction() const
+{
+  int index = currentIndex();
+  return index < 0 || index >= functions_.size() ? 0
+       : functions_[index];
 }
 
 // - Actions -
 
 void
-MessageView::addMessages(const QList<QByteArray> &l, ulong hookId)
+MessageView::addMessages(const QList<QByteArray> &l, ulong anchor, const QString &function)
 {
   foreach (const QByteArray &data, l)
-    processMessage(data, hookId);
+    processMessage(data, anchor, function);
 }
 
 void
-MessageView::selectCurrentHook()
+MessageView::select()
 {
-  ulong hookId = currentHookId();
-  if (hookId) {
-    emit message(QString("%1 (hid = %2)").arg(tr("process signal selected")).arg(QString::number(hookId, 16)));
-    emit hookSelected(hookId);
+  ulong anchor = currentAnchor();
+  if (anchor) {
+    QString func = currentFunction();
+    emit message(tr("channel selected") + ": " + func);
+    emit channelSelected(anchor, func);
   }
 }
 
 void
 MessageView::clear()
 {
-  hookIndexEdit_->clear();
-  hooks_.clear();
+  channelGrid_->clear();
+  anchors_.clear();
+  functions_.clear();
   messages_.clear();
 
-  hookIndexEdit_->setValue(0);
-  hookIndexEdit_->setMaximum(0);
-  hookIndexEdit_->setEnabled(false);
-  hooks_.append(0);
-  messages_.append(QList<QByteArray>());
+  //hookIndexEdit_->setValue(0);
+  //hookIndexEdit_->setMaximum(0);
+  //hookIndexEdit_->setEnabled(false);
+  //anchors_.append(0);
+  //messages_.append(QList<QByteArray>());
 
   textEdit_->clear();
 
-  invalidateHookCountLabel();
+  //invalidateHookCountLabel();
   invalidateSelectButton();
 }
 
-void
-MessageView::invalidateHookCountLabel()
-{
-  int count = hooks_.size() - 1;
-  hookCountLabel_->setText(QString("/%1 ").arg(QString::number(count)));
-}
+//void
+//MessageView::invalidateHookCountLabel()
+//{
+//  int count = anchors_.size() - 1;
+//  hookCountLabel_->setText(QString("/%1 ").arg(QString::number(count)));
+//}
 
 void
 MessageView::invalidateSelectButton()
 {
-  ulong hookId = currentHookId();
-  selectButton_->setEnabled(hookId);
+  ulong index = currentIndex();
+  selectButton_->setEnabled(index > 0);
 }
 
 void
-MessageView::selectHookIndex(int index)
+MessageView::setCurrentText(int index)
 {
   //if (index < 0 || index >= messages_.size())
   //  return;
@@ -254,43 +275,50 @@ MessageView::selectHookIndex(int index)
     setData(messages_[index]);
 }
 
-bool
-MessageView::isBetterHook(ulong goodHookId, ulong badHookId)
-{
-  QString badHookName = TextHook::globalInstance()->hookNameById(badHookId);
-  if (badHookName.isEmpty())
-    return true;
-  QString goodHookName = TextHook::globalInstance()->hookNameById(goodHookId);
-  if (goodHookName.isEmpty())
-    return false;
-
-  return TextHook::globalInstance()->isStandardHookName(badHookName) ||
-         !TextHook::globalInstance()->isStandardHookName(goodHookName);
-}
+//bool
+//MessageView::isBetterHook(ulong goodHookId, ulong badHookId)
+//{
+//  QString badHookName = TextHook::globalInstance()->hookNameById(badHookId);
+//  if (badHookName.isEmpty())
+//    return true;
+//  QString goodHookName = TextHook::globalInstance()->hookNameById(goodHookId);
+//  if (goodHookName.isEmpty())
+//    return false;
+//
+//  return TextHook::globalInstance()->isStandardHookName(badHookName) ||
+//         !TextHook::globalInstance()->isStandardHookName(goodHookName);
+//}
 
 void
-MessageView::processMessage(const QByteArray &data, ulong hookId)
+MessageView::processMessage(const QByteArray &data, ulong anchor, const QString &function)
 {
-  DOUT("enter: hookId =" << hookId << ", data size =" << data.size());
+  DOUT("enter: anchor =" << anchor << ", data size =" << data.size());
 
-  if (data.isEmpty()) {
-    DOUT("exit: skip empty text");
+  if (data.isEmpty() || !anchor) {
+    DOUT("exit: skip empty message");
     return;
   }
 
-  int index = hooks_.indexOf(hookId);
-  if (index < 0) {
-    index = hooks_.size();
-    hooks_.append(hookId);
+  if (isEmpty()) {
+    channelGrid_->addItem(tr("All"));
+    anchors_.append(0);
+    functions_.append(QString());
     messages_.append(QList<QByteArray>());
-    hookIndexEdit_->setMaximum(index);
-    hookIndexEdit_->setEnabled(true);
-    invalidateHookCountLabel();
+  }
 
-    emit message(QString("%1 (hid = %2)").arg(tr("new signal discovered")).arg(QString::number(hookId, 16)));
+  int index = anchors_.indexOf(anchor);
+  if (index < 0) {
+    index = anchors_.size();
+    anchors_.append(anchor);
+    functions_.append(function);
+    messages_.append(QList<QByteArray>());
+    channelGrid_->addItem(function);
+    //invalidateHookCountLabel();
 
-    if (isBetterHook(hookId, currentHookId()))
-      setCurrentIndex(index);
+    emit message(tr("new channel discovered") + ": " + function);
+
+    //if (isBetterHook(id, currentHookId()))
+    setCurrentIndex(index);
   }
 
   messages_[index].append(data);
@@ -303,22 +331,22 @@ MessageView::processMessage(const QByteArray &data, ulong hookId)
   else if (ci == 0)
     setData(messages_[0]);
 
-  invalidateCurrentHook();
+  //invalidateCurrentHook();
 
   DOUT("exit");
 }
 
-void
-MessageView::invalidateCurrentHook()
-{
-  if (!autoButton_->isChecked() || processName_.isEmpty())
-    return;
-
-  ulong hid = currentHookId();
-  QString hookName = TextHook::globalInstance()->hookNameById(hid);
-  if (!hookName.isEmpty() && TextHook::globalInstance()->isKnownHookForProcess(hookName, processName_))
-    selectCurrentHook();
-}
+//void
+//MessageView::invalidateCurrentHook()
+//{
+//  if (processName_.isEmpty())
+//    return;
+//
+//  ulong hid = currentHookId();
+//  QString hookName = TextHook::globalInstance()->hookNameById(hid);
+//  if (!hookName.isEmpty() && TextHook::globalInstance()->isKnownHookForProcess(hookName, processName_))
+//    selectCurrentHook();
+//}
 
 void
 MessageView::setData(const QList<QByteArray> &l)
@@ -338,9 +366,9 @@ MessageView::setData(const QList<QByteArray> &l)
 
   textEdit_->setHtml(html);
 
-  QTextCursor tc = textEdit_->textCursor();
-  tc.movePosition(QTextCursor::End);
-  textEdit_->setTextCursor(tc);
+  //QTextCursor tc = textEdit_->textCursor();
+  //tc.movePosition(QTextCursor::End);
+  //textEdit_->setTextCursor(tc);
 }
 
 void

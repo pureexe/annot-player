@@ -4,7 +4,7 @@
 DEFINES += PROJECT_PLAYER
 
 VERSION_MAJOR = 0.1.8.
-VERSION_MINOR = 1
+VERSION_MINOR = 2
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -131,9 +131,9 @@ HEADERS += \
     annot/annotationgraphicsitempool.h \
     annot/annotationgraphicsitemscheduler.h \
     annot/annotationgraphicsview.h \
+    annot/annotationlistmodel.h \
+    annot/annotationlistview.h \
     annot/annotationsettings.h \
-    annot/annotationstandardmodel.h \
-    annot/annotationtableview.h \
     annot/blacklistview.h \
     annot/blacklistview_p.h \
     annot/textformathandler.h \
@@ -172,11 +172,14 @@ HEADERS += \
     global/global.h \
     global/rc.h \
     global/stylesheet.h \
+    library/game.h \
+    library/gamelibrary.h \
+    library/gameview.h \
+    library/mainlibraryview.h \
     library/media.h \
-    library/mediaitemmodel.h \
     library/medialibrary.h \
     library/medialibraryview.h \
-    library/mediastandardmodel.h \
+    library/mediamodel.h \
     osd/osdwindow.h \
     osd/videoview.h \
     player/mainplayer.h \
@@ -198,6 +201,7 @@ HEADERS += \
     util/closewidgetthread.h \
     util/grabber.h \
     util/icons.h \
+    util/radiobuttongrid.h \
     util/textedittabview.h \
     util/textview.h
 
@@ -219,9 +223,9 @@ SOURCES += \
     annot/annotationgraphicsitempool.cc \
     annot/annotationgraphicsitemscheduler.cc \
     annot/annotationgraphicsview.cc \
+    annot/annotationlistmodel.cc \
+    annot/annotationlistview.cc \
     annot/annotationsettings.cc \
-    annot/annotationstandardmodel.cc \
-    annot/annotationtableview.cc \
     annot/blacklistview.cc \
     annot/blacklistview_p.cc \
     annot/textformathandler.cc \
@@ -257,14 +261,19 @@ SOURCES += \
     dialog/timeinputdialog.cc \
     dialog/urldialog.cc \
     game/signalhub.cc \
+    library/game.cc \
+    library/gamelibrary.cc \
+    library/gameview.cc \
+    library/mainlibraryview.cc \
+    library/mainlibraryview_dock.cc \
     library/media.cc \
-    library/mediaitemmodel.cc \
     library/medialibrary.cc \
     library/medialibraryview.cc \
-    library/mediastandardmodel.cc \
+    library/mediamodel.cc \
     osd/osdwindow.cc \
     osd/videoview.cc \
     player/mainplayer.cc \
+    player/mainplayer_dock.cc \
     player/mediathumbnail.cc \
     player/miniplayer.cc \
     player/embeddedcanvas.cc \
@@ -282,6 +291,7 @@ SOURCES += \
     util/clipboardmonitor.cc \
     util/grabber.cc \
     util/icons.cc \
+    util/radiobuttongrid.cc \
     util/textedittabview.cc \
     util/textview.cc
 
@@ -289,7 +299,8 @@ win32 {
   HEADERS += associationprefs.h windowsregistry.h
   SOURCES += associationprefs.cc windowsregistry.cc
 
-  DEFINES += PLAYER_ENABLE_GAME
+  DEFINES += AC_ENABLE_GAME
+  DEFINES += AC_ENABLE_UPDATE
 
   HEADERS += \
     game/messagehandler.h \

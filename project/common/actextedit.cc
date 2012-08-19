@@ -4,7 +4,7 @@
 #include "project/common/actextedit.h"
 #include "project/common/acss.h"
 
-// - Constructions -
+// - Construction -
 
 void
 AcTextEdit::init()

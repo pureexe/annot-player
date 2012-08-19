@@ -6,9 +6,9 @@
 
 #include "project/common/acwindow.h"
 
-#ifdef PLAYER_ENABLE_GAME
+#ifdef AC_ENABLE_GAME
 # define BACKLOGDIALOG_HAS_TEXT_TAB
-#endif // PLAYER_ENABLE_GAME
+#endif // AC_ENABLE_GAME
 
 class TextEditTabView;
 

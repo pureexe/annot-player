@@ -24,6 +24,7 @@ HEADERS += \
     $$PWD/filesystem.h \
     $$PWD/fontcombobox.h \
     $$PWD/hash.h \
+    $$PWD/highlighttextedit.h \
     $$PWD/htmltag.h \
     $$PWD/layoutwidget.h \
     $$PWD/namedcheckbox.h \
@@ -40,6 +41,7 @@ HEADERS += \
     $$PWD/stoppable.h \
     $$PWD/string.h \
     $$PWD/systemtrayicon.h \
+    $$PWD/texthighlighter.h \
     $$PWD/textedit.h \
     $$PWD/timeedit.h \
     $$PWD/toolbutton.h \
@@ -63,6 +65,7 @@ SOURCES += \
     $$PWD/filedeleter.cc \
     $$PWD/filesystem.cc \
     $$PWD/fontcombobox.cc \
+    $$PWD/highlighttextedit.cc \
     $$PWD/networkcookie.cc \
     $$PWD/os.cc \
     $$PWD/radiobutton.cc \
@@ -70,6 +73,7 @@ SOURCES += \
     $$PWD/slider.cc \
     $$PWD/spinbox.cc \
     $$PWD/string.cc \
+    $$PWD/texthighlighter.cc \
     $$PWD/textedit.cc \
     $$PWD/timeedit.cc \
     $$PWD/toolbutton.cc \
@@ -92,5 +96,3 @@ OTHER_FILES += \
     $$IMAGE_FILES
 
 # EOF
-
-

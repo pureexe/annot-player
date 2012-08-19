@@ -28,6 +28,7 @@
 #define SK_PATH           "Path"
 
 #define SK_ANNOTLANGUAGES "AnnotLanguages"
+#define SK_SHOWLIBRARY "ShowLibrary"
 #define SK_LIVE         "Live"
 #define SK_PREFERLOCALDB  "PreferLocalDatabase"
 #define SK_MENUBAR      "MenuBar"
@@ -366,6 +367,14 @@ Settings::isAutoPlayNext() const
 void
 Settings::setAutoPlayNext(bool t)
 { setValue(SK_AUTOPLAYNEXT, t); }
+
+bool
+Settings::showLibrary() const
+{ return value(SK_SHOWLIBRARY, true).toBool(); }
+
+void
+Settings::setShowLibrary(bool t)
+{ setValue(SK_SHOWLIBRARY, t); }
 
 bool
 Settings::isMenuBarVisible() const

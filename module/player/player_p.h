@@ -18,6 +18,7 @@
 #ifdef WITH_MODULE_VLCHTTP
 # include "module/vlchttp/httpplugin.h"
 #endif // WITH_MODULE_VLCHTTP
+#include <QtCore/QDir>
 #include <QtCore/QObject>
 #include <QtCore/QList>
 #include <memory>
@@ -54,7 +55,7 @@ namespace { namespace detail {
   QByteArray vlcpath(const QString &path)
   {
 #ifdef Q_OS_WIN
-    return _cs(QString(path).replace("/", "\\"));
+    return _cs(QDir::toNativeSeperators(path));
 #else
     return _cs(path);
 #endif // Q_OS_WIN

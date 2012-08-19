@@ -181,6 +181,10 @@ namespace QtWin {
   bool isMouseRightButtonPressed();
 
   // - Environments -
+  bool isWindowsVistaOrLater();
+  bool isWindowsXpOrLater();
+
+  QString getPath();
   QString getWinDirPath();
   QString getSystemRoot();
   QString getProgramFilesPath();
@@ -192,8 +196,9 @@ namespace QtWin {
   QString getDocumentsPath();
   QString getDownloadsPath();
 
-  bool isWindowsVistaOrLater();
-  bool isWindowsXpOrLater();
+  bool setPath(const QString &value);
+  bool prependPath(const QString &path);
+  bool appendPath(const QString &path);
 
   // - Files -
 

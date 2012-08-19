@@ -1567,4 +1567,11 @@
 
 #define T_EDIT   0x1046
 
+#define T_LIBRARY  0x1047
+
+#define T_MENUTEXT_LIBRARY      T_LIBRARY
+#define T_TIP_LIBRARY           T_LIBRARY
+#define T_TOOLTIP_LIBRARY       T_TIP_LIBRARY
+#define T_STATUSTIP_LIBRARY     T_TIP_LIBRARY
+
 #endif // TR_H

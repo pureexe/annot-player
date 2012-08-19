@@ -15,7 +15,7 @@ PACKAGE_ARCH=i386
 PACKAGE_SECTION=video
 PACKAGE_PRIORITY=optional
 
-SRC_PREFIX=/Volumes/local/devel/annot
+SRC_PREFIX=/Volumes/local/dev/annot
 SRC_RULES="$SRC_PREFIX/project/player/debian.rules"
 SRC_CONTROL="$SRC_PREFIX/project/player/debian.control"
 SRC_COPYRIGHT="$SRC_PREFIX/licenses/annot-player.txt"

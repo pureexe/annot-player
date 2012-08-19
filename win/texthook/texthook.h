@@ -19,8 +19,8 @@ public:
 
 signals: // No import/export needed for Qt signals.
   void enabledChanged(bool value);
-  //void textReceived(const QString &text, ulong hookId, ulong processId);
-  void messageReceived(const QByteArray &data, ulong hookId, ulong processId);
+  void messageReceived(const QByteArray &data, ulong methodId, const QString &methodName);
+
   void processAttached(qint64 pid);
   //void processDetached(qint64 pid);
 
@@ -38,15 +38,16 @@ public:
   // - Profiles -
   // TODO: move game profiles to another class
 public:
-  TEXTHOOKAPI bool isStandardHookName(const QString &name) const;
-  TEXTHOOKAPI bool isKnownHookForProcess(const QString &hookName, const QString &processName) const;
+  //TEXTHOOKAPI bool isStandardHookName(const QString &name) const;
+  //TEXTHOOKAPI bool isKnownHookForProcess(const QString &hookName, const QString &processName) const;
 
-  TEXTHOOKAPI QString hookNameById(ulong hookId) const; ///< Broken in ITH3
+  //TEXTHOOKAPI QString hookNameById(ulong hookId) const; ///< Broken in ITH3
 
   static TEXTHOOKAPI QString guessEncodingForFile(const QString &fileName);
 
   // - Injection -
 public:
+  TEXTHOOKAPI bool attachOneProcess(ulong pid, bool checkActive = false);
   TEXTHOOKAPI bool attachProcess(ulong pid, bool checkActive = false);
   TEXTHOOKAPI bool detachProcess(ulong pid, bool checkActive = false);
   TEXTHOOKAPI void detachAllProcesses();
@@ -68,10 +69,10 @@ public:
   //void sendText(const QString &text, ulong tid, ulong pid) // text thread callback
   //{ emit textReceived(text, tid, pid); }
 
-  void sendMessage(const QByteArray &data, ulong tid, ulong pid) // text thread callback
+  void sendMessage(const QByteArray &text, ulong methodId, const QString &methodName) // text thread callback
   {
     if (enabled_)
-      emit messageReceived(data, tid, pid);
+      emit messageReceived(text, methodId, methodName);
   }
 
 private:

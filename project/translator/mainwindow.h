@@ -100,6 +100,8 @@ protected slots:
   void translate(const QString &text);
   void saveSettings();
 
+  void highlightText(const QString &text);
+
   void autoTranslate();
   void autoTranslate(const QString &text);
 

@@ -36,7 +36,7 @@ UrlDialog::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
 
-  QString holder = "http://www.nicovideo.jp/watch/1327400176";
+  QString holder = "e.g. " "http://www.nicovideo.jp/watch/1327400176";
   edit_ = ui->makeComboBox(AcUi::EditHint, "", TR(T_URL), holder);
   editStyleSheet_ = edit_->styleSheet();
   connect(edit_, SIGNAL(editTextChanged(QString)), SLOT(verifyEditText()));

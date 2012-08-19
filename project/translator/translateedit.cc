@@ -3,6 +3,7 @@
 
 #include "translateedit.h"
 #include "project/common/acss.h"
+#include "module/qtext/texthighlighter.h"
 
 //#define DEBUG "translateedit"
 #include "module/debug/debug.h"
@@ -17,10 +18,16 @@ TranslateEdit::TranslateEdit(QWidget *parent)
 
   setStyleSheet(ACSS_TEXTEDIT);
 
+  highlighter_ = new QtExt::TextHighlighter(this);
+
   connect(this, SIGNAL(selectionChanged()), SLOT(updateSelectedText()));
 }
 
 // - Actions -
+
+void
+TranslateEdit::highlightText(const QString &t)
+{ highlighter_->setHighlightText(t); }
 
 void
 TranslateEdit::updateSelectedText()

@@ -10,7 +10,6 @@
 #ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
-#include "module/qtext/filesystem.h"
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
@@ -57,7 +56,7 @@ AcLocationManager::defaultDownloadsLocation() const
   static QString ret;
   if (ret.isEmpty()) {
     QString desktop = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
-    ret = desktop + FILE_PATH_SEP + tr("Video");
+    ret = desktop + QDir::separator() + tr("Video");
   }
   return ret;
 }
@@ -68,7 +67,7 @@ AcLocationManager::openDownloadsLocation()
   QString url = downloadsLocation();
   if (QFile::exists(url)) {
 #ifdef Q_OS_WIN
-    url.replace('\\', '/');
+    url = QDir::fromNativeSeparators(url);
     url.prepend('/');
 #endif // Q_OS_WIN
     url.prepend("file://");

@@ -10,11 +10,11 @@
 
 QT_BEGIN_NAMESPACE
 class QComboBox;
-class QLabel;
-class QSpinBox;
 class QTextEdit;
 class QToolButton;
 QT_END_NAMESPACE
+
+class RadioButtonGrid;
 
 class MessageView : public QtExt::Dialog
 {
@@ -23,16 +23,16 @@ class MessageView : public QtExt::Dialog
   typedef MessageView Self;
   typedef QtExt::Dialog Base;
 
-  enum HookIndex {
-    HI_AllHooks = 0,
-    HI_Count
-  };
+  //enum HookIndex {
+  //  HI_AllHooks = 0,
+  //  HI_Count
+  //};
 
 public:
   explicit MessageView(QWidget *parent = nullptr);
 
 signals:
-  void hookSelected(ulong hookId);
+  void channelSelected(ulong anchor, const QString &function);
 
   void message(QString msg);
   void warning(QString msg);
@@ -57,29 +57,31 @@ public slots:
    }
 
 protected:
-  ulong currentHookId() const;
+  ulong currentAnchor() const;
+  QString currentFunction() const;
   int currentIndex() const;
+  bool isEmpty() const;
 
   // - Actions -
 
 public slots:
   void clear();
-  void selectCurrentHook();
-  //void processHookedText(const QString &text, ulong hookId);
-  void processMessage(const QByteArray &data, ulong hookId);
+  void select();
+  //void processHookedText(const QString &text, ulong id);
+  void processMessage(const QByteArray &data, ulong anchor, const QString &function);
 
   void setActive(bool active);
 
-  void addMessages(const QList<QByteArray> &l, ulong hookId);
+  void addMessages(const QList<QByteArray> &l, ulong id, const QString &function);
   void setCurrentIndex(int index);
 
 protected slots:
   void setData(const QList<QByteArray> &l);
-  void selectHookIndex(int index);
-  void invalidateHookCountLabel();
+  void setCurrentText(int index);
+  //void invalidateHookCountLabel();
   void invalidateCurrentCharFormat();
   void invalidateSelectButton();
-  void invalidateCurrentHook();
+  //void invalidateCurrentHook();
 
   void refresh();
   void refreshEncodingEdit();
@@ -102,7 +104,7 @@ public:
 
   // - Implementation -
 protected:
-  static bool isBetterHook(ulong goodHookId, ulong badHookId);
+  //static bool isBetterHook(ulong goodHookId, ulong badHookId);
 
 protected slots:
   void setEncoding(const QString &name);
@@ -113,16 +115,20 @@ private:
 private:
   bool active_;
   QString processName_;
-  QSpinBox *hookIndexEdit_;
   QTextEdit *textEdit_;
-  QLabel *hookCountLabel_;
+
+  //QSpinBox *hookIndexEdit_;
+  //QLabel *hookCountLabel_;
 
   QComboBox *encodingEdit_;
 
-  QVector<ulong> hooks_;
+  QVector<ulong> anchors_;
+  QVector<QString> functions_;
   QVector<QList<QByteArray> > messages_;
 
-  QToolButton *autoButton_, *selectButton_;
+  QToolButton *selectButton_;
+
+  RadioButtonGrid *channelGrid_;
 };
 
 #endif // MESSAGEVIEW_H

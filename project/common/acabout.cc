@@ -4,6 +4,7 @@
 #include "project/common/acabout.h"
 #include "project/common/acglobal.h"
 #include "project/common/acui.h"
+#include "project/common/acupdater.h"
 #include "module/qtext/htmltag.h"
 #include <QtGui>
 
@@ -78,24 +79,36 @@ AcAbout::createLayout()
   // Components
 
   QToolButton *okButton = AcUi::globalInstance()->makeToolButton(
-       AcUi::PushHint, tr("OK"), this, SLOT(fadeOut()));
+       AcUi::PushHint | AcUi::HighlightHint, tr("OK"), this, SLOT(fadeOut()));
+  QToolButton *updateButton = AcUi::globalInstance()->makeToolButton(
+       AcUi::PushHint, tr("Update"), this, SLOT(showUpdater()));
+
+#ifdef AC_ENABLE_UPDATE
+  connect(updateButton, SIGNAL(clicked()), SLOT(fadeOut()));
+#endif // AC_ENABLE_UPDATE
 
   textEdit_ = AcUi::globalInstance()->makeTextEdit(
       AcUi::ReadOnlyHint, tr("About"));
 
   // Layout
 
-  QVBoxLayout *col = new QVBoxLayout; {
-    col->addWidget(textEdit_);
-    col->addWidget(okButton, 0, Qt::AlignHCenter); // stretch = 0
-  } setLayout(col);
+  QVBoxLayout *rows = new QVBoxLayout; {
 
-  // l, t, r, b
-  int patch = 0;
-  if (!AcUi::isAeroAvailable())
-    patch = 4;
-  col->setContentsMargins(patch, patch, patch, 0);
-  setContentsMargins(4, 4, 4, patch);
+    QHBoxLayout *footer = new QHBoxLayout;
+
+    rows->addWidget(textEdit_);
+    rows->addLayout(footer);
+
+    footer->addWidget(updateButton);
+    footer->addWidget(okButton);
+
+    // l, t, r, b
+    int patch = 0;
+    if (!AcUi::isAeroAvailable())
+      patch = 4;
+    rows->setContentsMargins(patch, patch, patch, 0);
+    setContentsMargins(4, 4, 4, patch);
+  } setLayout(rows);
 
   resize(WINDOW_SIZE);
 
@@ -109,6 +122,19 @@ AcAbout::setVisible(bool visible)
   if (visible)
     textEdit_->setHtml(text());
   Base::setVisible(visible);
+}
+
+void
+AcAbout::showUpdater()
+{
+#ifdef AC_ENABLE_UPDATE
+  static AcUpdater *updaterDelegate = 0;
+  if (!updaterDelegate)
+    updaterDelegate = new AcUpdater(this);
+  updaterDelegate->open();
+#else
+  QDesktopServices::openUrl(QUrl(AC_DOWNLOADPAGE));
+#endif // AC_ENABLE_UPDATE
 }
 
 // EOF

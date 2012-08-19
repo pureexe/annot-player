@@ -761,8 +761,8 @@ Player::openMedia(const QString &path)
   //libvlc_media_list_player_set_media_player(mlp, d_->player());
   //libvlc_media_list_t *ml = ::libvlc_media_list_new(d_->instance());
   //libvlc_media_list_add_media(ml, d_->media());
-  //libvlc_media_list_add_file_content(ml, "d:/devel/mp4.mp4");
-  //libvlc_media_list_add_file_content(ml, "d:/devel/mp4.mp4");
+  //libvlc_media_list_add_file_content(ml, "d:/dev/mp4.mp4");
+  //libvlc_media_list_add_file_content(ml, "d:/dev/mp4.mp4");
   //libvlc_media_list_player_set_media_list(mlp, ml);
 
   if (!d_->media()) {

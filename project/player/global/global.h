@@ -14,6 +14,7 @@ enum { ALPHA = 0 };
 //#define USE_MODE_DEBUG
 
 #define INIT_WINDOW_SIZE   QSize(570, 175)
+#define LIBRARY_WINDOW_SIZE   QSize(804, 400)
 
 #define G_PREFIXLINE_MAXWIDTH       100
 
@@ -83,11 +84,11 @@ enum { ALPHA = 0 };
 #define G_FILTER_ANNOTATION     G_FORMAT_ANNOTATION(" *.")
 #define G_FILTER_PREVIEW        G_FORMAT_PREVIEW(" *.")
 #define G_FILTER_MEDIA          G_FILTER_VIDEO G_FILTER_AUDIO G_FILTER_PICTURE
-#ifdef PLAYER_ENABLE_GAME
+#ifdef AC_ENABLE_GAME
 # define G_FILTER_SUPPORTED    G_FILTER_PROGRAM G_FILTER_MEDIA
 #else
 # define G_FILTER_SUPPORTED    G_FILTER_MEDIA
-#endif // PLAYER_ENABLE_GAME
+#endif // AC_ENABLE_GAME
 
 #define VLC_AUTOHIDE_TIMEOUT    1500    // in msecs, same as VLC
 #define G_AUTOHIDE_TIMEOUT (VLC_AUTOHIDE_TIMEOUT * 2)
@@ -127,7 +128,8 @@ enum { ALPHA = 0 };
 
 #define G_PATH_CACHEDB  G_PATH_CACHES "/" "online.db"
 #define G_PATH_QUEUEDB  G_PATH_CACHES "/" "offline.db"
-#define G_PATH_HISTORY  G_PATH_CACHES "/" "history.xml"
+#define G_PATH_MEDIADB  G_PATH_CACHES "/" "mediadb.xml"
+#define G_PATH_GAMEDB   G_PATH_CACHES "/" "gamedb.xml"
 
 #define G_PATH_DOWNLOADS AC_PATH_DOWNLOADS
 

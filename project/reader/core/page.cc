@@ -2,6 +2,7 @@
 // 6/28/2011
 
 #include "core/page.h"
+#include <QtAlgorithms>
 
 namespace Core {
   void
@@ -12,8 +13,7 @@ namespace Core {
     else {
       QList<Poppler::TextBox*> l = page_->textList();
       catalog_ = new TextRectCatalog(l, const_cast<Self *>(this));
-      foreach (Poppler::TextBox *t, l)
-        delete t;
+      qDeleteAll(l);
     }
   }
 

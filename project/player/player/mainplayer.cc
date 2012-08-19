@@ -5,35 +5,12 @@
 #include "positionslider.h"
 #include "module/qtext/ss.h"
 #include "module/qtext/overlaylayout.h"
-#include <QtCore>
 #include <QtGui>
 
 //#define VOLUMN_SLIDE_MAX_WIDTH 30
-#define PLAY_BUTTON_SIZE        30
+enum { PLAY_BUTTON_SIZE = 30 };
 
-// + MainPlayerDock +
-
-MainPlayerDock::MainPlayerDock(QWidget *parent)
-  : Base(parent)
-{
-  setContentsMargins(0, 0, 0, 0);
-  setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-
-  setTitleBarWidget(new QWidget(this));
-  setFeatures(QDockWidget::NoDockWidgetFeatures);
-}
-
-void
-MainPlayerDock::setVisible(bool visible)
-{
-  auto p = qobject_cast<MainPlayerUi *>(widget());
-  if (p)
-    p->setActive(visible);
-
-  Base::setVisible(visible);
-}
-
-// + MainPlayerUi +
+// - Construction -
 
 MainPlayerUi::MainPlayerUi(SignalHub *hub, Player *player, AnnotationServerAgent *server, QWidget *parent)
   : Base(hub, player, server, parent)
@@ -72,9 +49,10 @@ MainPlayerUi::createLayout()
     row1->addWidget(toggleMiniModeButton());
     row1->addWidget(toggleFullScreenModeButton());
     row1->addWidget(toggleTraceWindowButton());
-    row1->addStretch(1);
+    row1->addStretch();
     row1->addWidget(volumeSlider());
     row1->addWidget(positionButton());
+    row1->addWidget(libraryButton());
 
     row2->addWidget(userButton());
     row2->addWidget(prefixComboBox());
@@ -112,24 +90,3 @@ MainPlayerUi::createLayout()
 }
 
 // EOF
-
-  /*
-  // Comment panel
-  QDockWidget *bottomDock = new QDockWidget(this);
-  {
-    QWidget *bottom = new QWidget(bottomDock);
-    QHBoxLayout *row = new QHBoxLayout(bottom);
-    row->addWidget(userButton());
-    row->addWidget(prefixLineEdit());
-    row->addWidget(lineEdit());
-
-    bottom->setLayout(row);
-    bottom->setContentsMargins(0, 0, 0, 0);
-    //row->setContentsMargins(0, 0, 0, 0);
-    bottomDock->setContentsMargins(0, 0, 0, 0);
-    bottomDock->setTitleBarWidget(new QWidget(bottomDock));
-    bottomDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
-    bottomDock->setWidget(bottom);
-    addDockWidget(Qt::BottomDockWidgetArea, bottomDock);
-  }
-  */

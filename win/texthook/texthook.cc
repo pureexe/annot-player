@@ -63,6 +63,35 @@ TextHook::clear()
 }
 
 bool
+TextHook::attachOneProcess(ulong pid, bool checkActive)
+{
+  DOUT("enter: pid =" << pid);
+  DOUT("isAttached =" << isProcessAttached(pid));
+  if (!isActive())
+    start();
+
+  if (checkActive && !QtWin::isProcessActiveWithId(pid)) {
+    DOUT("exit: ret = false, isActive = false");
+    return false;
+  }
+
+  if (isProcessAttached(pid))
+    return true;
+
+  detachAllProcesses();
+
+  bool ret = Ith::attachProcess(pid);
+  if (ret && !isProcessAttached(pid)) {
+    pids_.removeAll(pid);
+    pids_.append(pid);
+    emit processAttached(pid);
+  }
+
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+bool
 TextHook::attachProcess(ulong pid, bool checkActive)
 {
   DOUT("enter: pid =" << pid);
@@ -125,59 +154,59 @@ TextHook::isProcessAttached(ulong pid) const
 
 // - Helpers -
 
-bool
-TextHook::isStandardHookName(const QString &name) const
-{
-  static QSet<uint> hashes;
-  if (hashes.isEmpty()) {
-#define ADD(_text)  hashes.insert(qHash(QString(_text)))
-    ADD("ConsoleOutput");
-    ADD("GetTextExtentPoint32A");
-    ADD("GetGlyphOutlineA");
-    ADD("ExtTextOutA");
-    ADD("TextOutA");
-    ADD("GetCharABCWidthsA");
-    ADD("DrawTextA");
-    ADD("DrawTextExA");
-    ADD("GetTextExtentPoint32W");
-    ADD("GetGlyphOutlineW");
-    ADD("ExtTextOutW");
-    ADD("TextOutW");
-    ADD("GetCharABCWidthsW");
-    ADD("DrawTextW");
-    ADD("DrawTextExW");
-#undef ADD
-  }
-  uint h = qHash(name);
-  return hashes.contains(h);
-}
-
-bool
-TextHook::isKnownHookForProcess(const QString &hook, const QString &proc) const
-{
-  // TODO: update database on line periodically
-  qDebug() << "qth::isKnownHookForProcess: hook ="  << hook << ", proc =" << proc;
-
-  static QSet<uint> hashes;
-  if (hashes.isEmpty()) {
-#define ADD(_hook, _proc)  hashes.insert(qHash(QString(_hook) + "\n" + _proc))
-    //ADD("Malie", "malie"); // light
-    ADD("GetGlyphOutlineA", "STEINSGATE");
-    ADD("StuffScriptEngine", "EVOLIMIT");
-#undef ADD
-  }
-  uint h = qHash(hook + "\n" + proc);
-  return hashes.contains(h);
-}
-
-QString
-TextHook::hookNameById(ulong hookId) const
-{
-  //return Ith::getHookNameById(hookId);
-  // FIXME: supposed to be the engine name, unimplemented
-  Q_UNUSED(hookId);
-  return QString();
-}
+//bool
+//TextHook::isStandardHookName(const QString &name) const
+//{
+//  static QSet<uint> hashes;
+//  if (hashes.isEmpty()) {
+//#define ADD(_text)  hashes.insert(qHash(QString(_text)))
+//    ADD("ConsoleOutput");
+//    ADD("GetTextExtentPoint32A");
+//    ADD("GetGlyphOutlineA");
+//    ADD("ExtTextOutA");
+//    ADD("TextOutA");
+//    ADD("GetCharABCWidthsA");
+//    ADD("DrawTextA");
+//    ADD("DrawTextExA");
+//    ADD("GetTextExtentPoint32W");
+//    ADD("GetGlyphOutlineW");
+//    ADD("ExtTextOutW");
+//    ADD("TextOutW");
+//    ADD("GetCharABCWidthsW");
+//    ADD("DrawTextW");
+//    ADD("DrawTextExW");
+//#undef ADD
+//  }
+//  uint h = qHash(name);
+//  return hashes.contains(h);
+//}
+//
+//bool
+//TextHook::isKnownHookForProcess(const QString &hook, const QString &proc) const
+//{
+//  // TODO: update database on line periodically
+//  qDebug() << "qth::isKnownHookForProcess: hook ="  << hook << ", proc =" << proc;
+//
+//  static QSet<uint> hashes;
+//  if (hashes.isEmpty()) {
+//#define ADD(_hook, _proc)  hashes.insert(qHash(QString(_hook) + "\n" + _proc))
+//    //ADD("Malie", "malie"); // light
+//    ADD("GetGlyphOutlineA", "STEINSGATE");
+//    ADD("StuffScriptEngine", "EVOLIMIT");
+//#undef ADD
+//  }
+//  uint h = qHash(hook + "\n" + proc);
+//  return hashes.contains(h);
+//}
+//
+//QString
+//TextHook::hookNameById(ulong hookId) const
+//{
+//  //return Ith::getHookNameById(hookId);
+//  // FIXME: supposed to be the engine name, unimplemented
+//  Q_UNUSED(hookId);
+//  return QString();
+//}
 
 QString
 TextHook::guessEncodingForFile(const QString &fileName)

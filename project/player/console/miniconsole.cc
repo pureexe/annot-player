@@ -7,17 +7,19 @@
 #include "global.h"
 #include "project/common/acui.h"
 #include "module/qtext/ss.h"
+#include "module/animation/fadeanimation.h"
 #include <QtGui>
 
 #define DEBUG "miniconsole"
 #include "module/debug/debug.h"
 
+#define WINDOW_OPACITY 0.95
+
 // - Constructions -
 
 MiniConsole::MiniConsole(QWidget *parent)
-  : Base(parent), dragPos_(BAD_POS)
+  : Base(parent), dragPos_(BAD_POS), fadeAni_(0)
 {
-
   { // Font color and size
     setStyleSheet(
       SS_BEGIN(QLabel)
@@ -34,8 +36,11 @@ MiniConsole::MiniConsole(QWidget *parent)
   { // Outline font
     QGraphicsEffect *e = AcUi::globalInstance()->makeHaloEffect(Qt::magenta);
     if (e) {
-      e->setProperty("opacity", 0.95);
+      e->setProperty("opacity", WINDOW_OPACITY);
       setGraphicsEffect(e);
+
+      fadeAni_ = new FadeAnimation(e, "opacity", e);
+      //connect(fadeAni_, SIGNAL(finished()), SLOT(clear()));
     }
   }
 
@@ -44,10 +49,9 @@ MiniConsole::MiniConsole(QWidget *parent)
 
   timer_ = new QTimer(this);
   timer_->setSingleShot(true);
-  connect(timer_, SIGNAL(timeout()), SLOT(clear()));
+  connect(timer_, SIGNAL(timeout()), SLOT(fadeOut()));
 
-  connect(this, SIGNAL(restartAutoClearTimerRequested()), SLOT(restartAutoClearTimer()), Qt::QueuedConnection);
-  connect(this, SIGNAL(asyncSetText(QString)), SLOT(setText(QString)), Qt::QueuedConnection);
+  connect(this, SIGNAL(showTextRequested(QString)), SLOT(showText(QString)), Qt::QueuedConnection);
 
   //createActions();
   //createMenus();
@@ -84,8 +88,43 @@ void
 MiniConsole::sendMessage(const QString &text)
 {
   QMutexLocker lock(&mutex_);
-  emit restartAutoClearTimerRequested();
-  emit asyncSetText(text);
+  emit showTextRequested(text);
+}
+
+// - Fade -
+
+qreal
+MiniConsole::opacity() const
+{
+  QGraphicsEffect *e = graphicsEffect();
+  return e ? e->property("opacity").toReal() : 1.0;
+}
+
+void
+MiniConsole::setOpacity(qreal value)
+{
+  QGraphicsEffect *e = graphicsEffect();
+  if (e)
+    e->setProperty("opacity", value);
+}
+
+void
+MiniConsole::fadeOut()
+{
+  if (fadeAni_)
+    fadeAni_->fadeOut(opacity());
+  else
+    clear();
+}
+
+void
+MiniConsole::showText(const QString &text)
+{
+  restartAutoClearTimer();
+  if (fadeAni_)
+    fadeAni_->stop();
+  setText(text);
+  setOpacity(WINDOW_OPACITY);
 }
 
 // EOF

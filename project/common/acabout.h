@@ -41,6 +41,9 @@ public slots:
 protected:
   QString templateText() const; ///< %1:app
 
+protected slots:
+  void showUpdater();
+
 private:
   void init();
   void createLayout();

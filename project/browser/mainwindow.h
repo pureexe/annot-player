@@ -10,6 +10,7 @@
 QT_FORWARD_DECLARE_CLASS(QPropertyAnimation)
 
 class AcPlayer;
+class AcTranslator;
 class AcDownloader;
 class AcConsole;
 class FadeAnimation;
@@ -26,6 +27,7 @@ class MainWindow: public WebBrowser
 
   AcPlayer *playerDelegate_;
   AcDownloader *downloaderDelegate_;
+  AcTranslator *translatorDelegate_;
   AcConsole * console_;
   AnnotationDownloader *annotationDownloader_;
   Magnifier *magnifier_;
@@ -82,12 +84,14 @@ protected:
 
   bool isGlobalPosAroundToolBar(const QPoint &pos) const;
 
+  bool isValidWindowSize(const QSize &sz) const;
+
 protected slots:
   void showConsole();
   void toggleMagnifier();
   void autoHideToolBar();
 
-  bool isValidWindowSize(const QSize &sz) const;
+  void translateText(const QString &text);
 
 protected slots:
   void notifyFileSaved(const QString &fileName);

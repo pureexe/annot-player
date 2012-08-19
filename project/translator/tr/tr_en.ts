@@ -5,14 +5,19 @@
 <context>
     <name>AcAbout</name>
     <message>
-        <location filename="../../common/acabout.cc" line="69"/>
-        <location filename="../../common/acabout.cc" line="84"/>
+        <location filename="../../common/acabout.cc" line="70"/>
+        <location filename="../../common/acabout.cc" line="91"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../common/acabout.cc" line="81"/>
+        <location filename="../../common/acabout.cc" line="82"/>
         <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../common/acabout.cc" line="84"/>
+        <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -162,7 +167,7 @@
 <context>
     <name>AcLocationManager</name>
     <message>
-        <location filename="../../common/acpaths.cc" line="60"/>
+        <location filename="../../common/acpaths.cc" line="59"/>
         <source>Video</source>
         <translation type="unfinished"></translation>
     </message>
@@ -332,8 +337,8 @@
 <context>
     <name>JdicTranslator</name>
     <message>
-        <location filename="../../../module/translator/jdictranslator.cc" line="106"/>
-        <location filename="../../../module/translator/jdictranslator.cc" line="132"/>
+        <location filename="../../../module/translator/jdictranslator.cc" line="109"/>
+        <location filename="../../../module/translator/jdictranslator.cc" line="135"/>
         <source>network error from WWWJDIC Translator</source>
         <translation type="unfinished"></translation>
     </message>
@@ -341,187 +346,197 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="45"/>
+        <location filename="../mainwindow.cc" line="46"/>
         <source>Annot Translator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="112"/>
+        <location filename="../mainwindow.cc" line="113"/>
         <source>Translate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="114"/>
+        <location filename="../mainwindow.cc" line="115"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="114"/>
+        <location filename="../mainwindow.cc" line="115"/>
         <source>Automatically translate selected text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="115"/>
+        <location filename="../mainwindow.cc" line="116"/>
         <source>Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="115"/>
+        <location filename="../mainwindow.cc" line="116"/>
         <source>Monitor and translate clipboard text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="116"/>
+        <location filename="../mainwindow.cc" line="117"/>
         <source>Top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="116"/>
+        <location filename="../mainwindow.cc" line="117"/>
         <source>Window stays on top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="118"/>
+        <location filename="../mainwindow.cc" line="119"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="119"/>
+        <location filename="../mainwindow.cc" line="120"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="120"/>
+        <location filename="../mainwindow.cc" line="121"/>
         <source>Chinese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="121"/>
+        <location filename="../mainwindow.cc" line="122"/>
         <source>Simplified Chinese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="122"/>
+        <location filename="../mainwindow.cc" line="123"/>
         <source>Korean</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="123"/>
+        <location filename="../mainwindow.cc" line="124"/>
         <source>French</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="124"/>
+        <location filename="../mainwindow.cc" line="125"/>
         <source>German</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="125"/>
+        <location filename="../mainwindow.cc" line="126"/>
         <source>Italian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="126"/>
+        <location filename="../mainwindow.cc" line="127"/>
         <source>Spanish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="127"/>
+        <location filename="../mainwindow.cc" line="128"/>
         <source>Portuguese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="128"/>
+        <location filename="../mainwindow.cc" line="129"/>
         <source>Russian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="129"/>
+        <location filename="../mainwindow.cc" line="130"/>
         <source>Japanese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="133"/>
+        <location filename="../mainwindow.cc" line="138"/>
         <source>WWWJDIC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="133"/>
+        <location filename="../mainwindow.cc" line="138"/>
         <source>WWWJDIC Translator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="134"/>
+        <location filename="../mainwindow.cc" line="139"/>
         <source>Romaji</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="134"/>
+        <location filename="../mainwindow.cc" line="139"/>
         <source>Romaji Translator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="135"/>
+        <location filename="../mainwindow.cc" line="140"/>
         <source>Microsoft</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="135"/>
+        <location filename="../mainwindow.cc" line="140"/>
         <source>Microsoft Translator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="136"/>
+        <location filename="../mainwindow.cc" line="141"/>
         <source>Google</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="136"/>
+        <location filename="../mainwindow.cc" line="141"/>
         <source>Google Translator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="279"/>
+        <location filename="../mainwindow.cc" line="287"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="289"/>
+        <source>Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="295"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="280"/>
+        <location filename="../mainwindow.cc" line="301"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="288"/>
+        <location filename="../mainwindow.cc" line="309"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="298"/>
+        <location filename="../mainwindow.cc" line="319"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="307"/>
+        <location filename="../mainwindow.cc" line="328"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="308"/>
+        <location filename="../mainwindow.cc" line="329"/>
         <source>&amp;Preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="310"/>
+        <location filename="../mainwindow.cc" line="331"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="312"/>
+        <location filename="../mainwindow.cc" line="333"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="582"/>
+        <location filename="../mainwindow.cc" line="604"/>
         <source>opening</source>
         <translation type="unfinished"></translation>
     </message>
@@ -538,87 +553,87 @@
 <context>
     <name>QtExt::WebView</name>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="104"/>
+        <location filename="../../../module/qtext/webview.cc" line="103"/>
         <source>Clip the Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="105"/>
+        <location filename="../../../module/qtext/webview.cc" line="104"/>
         <source>Save the web page as image to disk and clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="111"/>
         <location filename="../../../module/qtext/webview.cc" line="112"/>
-        <location filename="../../../module/qtext/webview.cc" line="113"/>
         <source>Zoom In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="119"/>
         <location filename="../../../module/qtext/webview.cc" line="120"/>
-        <location filename="../../../module/qtext/webview.cc" line="121"/>
         <source>Zoom Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="127"/>
         <location filename="../../../module/qtext/webview.cc" line="128"/>
-        <location filename="../../../module/qtext/webview.cc" line="129"/>
         <source>Actual Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="135"/>
         <location filename="../../../module/qtext/webview.cc" line="136"/>
-        <location filename="../../../module/qtext/webview.cc" line="137"/>
         <source>Clear Highlight</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="140"/>
         <location filename="../../../module/qtext/webview.cc" line="141"/>
-        <location filename="../../../module/qtext/webview.cc" line="142"/>
         <source>Open in System Default Browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="234"/>
+        <location filename="../../../module/qtext/webview.cc" line="233"/>
         <source>Unnamed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="273"/>
+        <location filename="../../../module/qtext/webview.cc" line="272"/>
         <source>opening</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="297"/>
+        <location filename="../../../module/qtext/webview.cc" line="296"/>
         <source>clipping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="321"/>
+        <location filename="../../../module/qtext/webview.cc" line="320"/>
         <source>saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="323"/>
+        <location filename="../../../module/qtext/webview.cc" line="322"/>
         <source>unable to save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="343"/>
+        <location filename="../../../module/qtext/webview.cc" line="342"/>
         <source>failed to download %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="347"/>
+        <location filename="../../../module/qtext/webview.cc" line="346"/>
         <source>download is not allowed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="366"/>
+        <location filename="../../../module/qtext/webview.cc" line="365"/>
         <source>History</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="383"/>
+        <location filename="../../../module/qtext/webview.cc" line="382"/>
         <source>Blank</source>
         <translation type="unfinished"></translation>
     </message>

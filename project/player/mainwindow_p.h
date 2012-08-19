@@ -99,7 +99,7 @@ namespace detail {
   };
   */
 
-#ifdef PLAYER_ENABLE_GAME
+#ifdef AC_ENABLE_GAME
   class OpenProcessId : public QObject
   {
     Q_OBJECT
@@ -117,11 +117,10 @@ namespace detail {
     void trigger()
     {
       w_->openProcessId(pid_);
-      w_->openProcess();
       QTimer::singleShot(0, this, SLOT(deleteLater()));
     }
   };
-#endif // PLAYER_ENABLE_GAME
+#endif // AC_ENABLE_GAME
 
 } // namespace detail
 

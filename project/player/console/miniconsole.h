@@ -14,6 +14,8 @@ class QMenu;
 class QTimer;
 QT_END_NAMESPACE
 
+class FadeAnimation;
+
 class MiniConsole : public QLabel
 {
   Q_OBJECT
@@ -27,6 +29,8 @@ class MiniConsole : public QLabel
 
   QSize areaSize_;
 
+  FadeAnimation *fadeAni_;
+
 public:
   explicit MiniConsole(QWidget *parent = nullptr);
 
@@ -35,22 +39,28 @@ public:
   bool isEmpty() { return text().isEmpty(); }
 
 signals:
-  void asyncSetText(const QString &text); ///< \internal
+  void showTextRequested(const QString &text); ///< \internal
 
-  // - Output -
+  // - Properties -
 public:
   bool isAutoClearTimerActive() const;
+
 public slots:
+  void fadeOut();
+  void showText(const QString &text);
+
   void resize(const QSize &sz) { Base::resize(sz); }
   void sendMessage(const QString &text);
-
-signals:
-  void restartAutoClearTimerRequested();
 
 public slots:
   ///  Restart timer for automatic clear the text after specified interval.
   void restartAutoClearTimer();
   void stopAutoClearTimer();
+
+protected:
+  qreal opacity() const;
+protected slots:
+  void setOpacity(qreal value);
 
 private:
   //void createActions();

@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/dev/build || exit /b 1
 
-set VERSION=0.1.8.1
+set VERSION=0.1.8.2
 set APP=annot-player
 set TARGET=Annot Stream
 set ZIPFILE=%APP%-%VERSION%-win.zip
@@ -32,6 +32,7 @@ set OPENSSL_HOME=/Volumes/win/dev/openssl/1.0.0j
 set OPENSSL_DLLS=libeay32.dll,ssleay32.dll
 
 set CYGWIN_HOME=
+set CYGWIN_VERSION=cygwin1
 set CYGWIN_EXES=lftp.exe,chmod.exe
 set CYGWIN_DLLS=cyggcc_s-1.dll,cygstdc++-6.dll,cygcrypto-1.0.0.dll,cygncurses-10.dll,cygncursesw-10.dll,cygwin1.dll,cygexpat-1.dll,cygiconv-2.dll,cygintl-8.dll,cygreadline7.dll,cygssl-1.0.0.dll,cygz.dll
 
@@ -80,14 +81,15 @@ cp -v "%BUILD%/[ Update ].exe" . || exit /b 1
 cp -v "%SOURCE%/README" "Read Me.txt" || exit /b 1
 unix2dos "Read Me.txt"
 
-cp -v "%SOURCE%/UPDATE" "Update.txt" || exit /b 1
-unix2dos "Update.txt"
+::cp -v "%SOURCE%/UPDATE" "Update.txt" || exit /b 1
+::unix2dos "Update.txt"
 
 cp -v "%SOURCE%/ChangeLog" "ChangeLog.txt" || exit /b 1
 unix2dos "ChangeLog.txt"
 
-rm -Rf licenses
-cp -R "%SOURCE%/licenses" Licenses
+::rm -Rf licenses
+::cp -R "%SOURCE%/licenses" Licenses
+
 cp "%SOURCE%/COPYING" COPYING.txt || exit /b 1
 unix2dos COPYING.txt
 
@@ -134,6 +136,10 @@ rm -fv plugins/*.dat* || exit /b 1
 :: FIXME: playlist plugin bug in VLC 2.0.2+
 cp -v "%VLC_HOME%"/../VLC-2.0.1/plugins/demux/libplaylist_plugin.dll plugins/demux/ || exit /b 1
 
+:: Remove useless VLC data
+rm -Rfv plugins/gui
+rm -Rfv lua/http
+
 ::cp -v "%BUILD%"/*.{exe,dll} . || exit /b 1
 cp -v "%BUILD%"/*.{exe,dll} .
 
@@ -176,7 +182,9 @@ mkdir Update
 cd Update || exit /b 1
 
 cp -Rv "%SOURCE%"/project/updater/scripts/* .
-cp -v "%CYGWIN_HOME%"/bin/{%CYGWIN_EXES%,%CYGWIN_DLLS%} */. || exit /b 1
+
+mkdir %CYGWIN_VERSION% || exit /b 1
+cp -v "%CYGWIN_HOME%"/bin/{%CYGWIN_EXES%,%CYGWIN_DLLS%} %CYGWIN_VERSION%/ || exit /b 1
 
 cp -v "%BUILD%/annot-update.exe" . || exit /b 1
 

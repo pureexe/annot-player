@@ -30,7 +30,7 @@ public:
   MessageView *messageView() const { return messageView_; }
 
 signals:
-  void hookSelected(ulong hookId, ProcessInfo pi);
+  void channelSelected(ulong anchor, const QString &function, ProcessInfo pi);
 
   // - Events -
 public:
@@ -49,7 +49,7 @@ public:
 //  void dropEventReceived(QDropEvent *event);
 
 private slots:
-  void selectHookAndHide(ulong hookId);
+  void select(ulong anchor, const QString &function);
 private:
   void createLayout();
 };

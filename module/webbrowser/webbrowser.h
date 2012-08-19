@@ -40,6 +40,7 @@ public:
   ~WebBrowser();
 
 signals:
+  void selectedTextChanged(const QString &text);
   void searchEngineChanged(int);
   void openUrlWithAcPlayerRequested(const QString &url);
   void importUrlToAcPlayerRequested(const QString &url);

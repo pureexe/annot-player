@@ -39,12 +39,14 @@ private:
 public:
   qint64 tokenId() const { return tokenId_; }
   void setTokenId(qint64 id) { tokenId_ = id; }
+  bool hasTokenId() const { return tokenId_; }
 
 private:
   int type_;
 public:
   int type() const { return type_; }
   void setType(int type) { type_ = type; }
+  bool hasType() const { return type_; }
 
   bool isUrl() const { return type_ == Url; }
   bool isVideo() const { return type_ == Video; }
@@ -69,6 +71,7 @@ private:
   QString location_;
 public:
   const QString &location() const { return location_; }
+  QString &location() { return location_; }
   void setLocation(const QString &location) { location_ = location; }
   bool hasLocation() const { return !location_.isEmpty(); }
 
@@ -112,8 +115,8 @@ public:
   template <typename L>
     static bool write(const L &l, const QString &fileName);
 
-  static QList<Media> readList(const QString &fileName);
-  static QHash<QString, Media> readHash(const QString &fileName);
+  static QList<Self> readList(const QString &fileName);
+  static QHash<QString, Self> readHash(const QString &fileName);
 };
 
 QT_BEGIN_NAMESPACE

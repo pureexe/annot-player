@@ -436,7 +436,7 @@ FlvMerge::updateScriptTagDoubleValue(quint8 *data, const QString &var) const
   if (var == "duration") {
     update = true;
     value = duration_ / 1000.0;
-  } else if (var == "duration" ||
+  } else if (
       var == "datasize" ||
       var == "videosize" ||
       var == "audiosize" ||

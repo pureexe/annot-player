@@ -1,7 +1,7 @@
 # browser.pro
 # 3/29/2012
 
-VERSION = 0.1.3.3
+VERSION = 0.1.3.4
 
 DEFINES += PROJECT_BROWSER
 
@@ -50,6 +50,11 @@ DEFINES += WITH_QT_CORE \
            WITH_QT_NETWORK \
            WITH_QT_WEBKIT \
            WITH_QT_XML
+
+win32 {
+  DEFINES += AC_ENABLE_GAME
+  DEFINES += AC_ENABLE_UPDATE
+}
 
 ## Sources
 

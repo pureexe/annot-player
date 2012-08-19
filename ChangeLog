@@ -2,8 +2,14 @@ ChangeLog (UTF-8)
 Annot Stream
 Since 6/18/2011
 
+8/18/2012 SAT	player,down,browser,translator	0.1.8.2,0.1.3.4,0.1.2.4,0.1.0.1
+        * Show media library on startup.
+        * Game launch settings (encoding & channel) will be saved for the next launch.
+        * Highlight selected text in yellow in all textedit widgets.
+        * Fix a bug in updater.
+
 8/14/2012 TUE	player,down,browser,translator	0.1.8.1,0.1.3.3,0.1.2.3,0.1.0.0
-        * Add intremental updater.
+        * Add intremental updater (Windows only).
           Alternatively, latest binaries could be found at ftp.annot.me/release/annot-player.
           Versions before 0.1.8.1 are now broken and won't work propertly.
         * Add Annot Translator using WWWJDIC (beta). Internet access is indispensible.

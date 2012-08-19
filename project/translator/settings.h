@@ -31,6 +31,9 @@ public:
   QSize recentSize() const;
   void setRecentSize(const QSize &size);
   void clearRecentSize();
+
+  int languageIndex() const;
+  void setLanguageIndex(int index);
 };
 
 #endif // SETTINGS_H

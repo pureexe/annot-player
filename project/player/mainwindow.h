@@ -9,9 +9,9 @@
 #include "module/mrlresolver/mrlinfo.h"
 #include "module/searchengine/searchenginefactory.h"
 #include "module/translator/translatormanager.h"
-#ifdef PLAYER_ENABLE_GAME
+#ifdef AC_ENABLE_GAME
 # include "processinfo.h"
-#endif // PLAYER_ENABLE_GAME
+#endif // AC_ENABLE_GAME
 #include <QtCore/QMutex>
 #include <QtCore/QHash>
 #include <QtCore/QStringList>
@@ -49,8 +49,10 @@ class EventLogger;
 class FadeAnimation;
 class Grabber;
 class Magnifier;
+class GameLibrary;
 class MediaLibrary;
 class MediaLibraryView;
+class MainLibraryView;
 class MrlResolver;
 class Player;
 class RippleImageFilter;
@@ -62,6 +64,7 @@ class AcPlayerServer;
 class AcDownloader;
 class AcBrowser;
 class AcTranslator;
+class AcUpdater;
 
 class MouseClickEventListener;
 
@@ -69,7 +72,7 @@ class MouseClickEventListener;
 class AnnotationGraphicsView;
 class AnnotationAnalyticsView;
 class AnnotationEditor;
-class AnnotationTableView;
+class AnnotationListView;
 //class CommentView;
 class MainPlayerUi;
 class MessageHandler;
@@ -202,6 +205,8 @@ public slots:
   void setAutoPlayNext();
   void setRepeatCurrent();
   void setNoRepeat();
+
+  void prepareLibrary();
 
   void maximizedToFullScreen();
 
@@ -361,6 +366,9 @@ protected slots:
   void showTranslator();
   void translateUsingTranslator(const QString &text);
 
+  void toggleMainLibrary();
+  void toggleMediaLibrary();
+
 public slots:
   void invalidateMediaAndPlay(bool async = true);
 protected slots:
@@ -375,9 +383,9 @@ protected slots:
 
   // - Live -
 public slots:
-  void openChannel();
-  void closeChannel();
-  void updateLiveAnnotations(bool async = true);
+  //void openChannel();
+  //void closeChannel();
+  //void updateLiveAnnotations(bool async = true);
 
   // - Cursor -
 //protected:
@@ -426,6 +434,7 @@ protected slots:
   void toggleMagnifierVisible();
 
   void showLibrary();
+  void showGameWithDigest(const QString &digest);
 
   //void setNetworkProxyDialogVisible(bool visible);
 
@@ -789,19 +798,23 @@ signals:
   void detached(ProcessInfo pi);
 public slots:
   void openProcessPath(const QString &path);
-  void openProcessHook(ulong hHook, const ProcessInfo &pi = ProcessInfo());
+  void openChannel(ulong anchor, const QString &function, const ProcessInfo &pi);
+  void updateChannel(ulong anchor, const QString &function);
   void openProcessWindow(WId hwnd);
   void openProcessId(ulong pid);
 
 protected slots:
-  void rememberGameEncoding(const ProcessInfo &pi);
-  void resumeGameEncoding(const ProcessInfo &pi);
+  void synchronizeProcess(const ProcessInfo &pi);
+
+//protected slots:
+//  void rememberGameEncoding(const ProcessInfo &pi);
+//  void resumeGameEncoding(const ProcessInfo &pi);
 #endif // WITH_WIN_TEXTHOOK
 
 public slots:
   void setWindowTrackingEnabled(bool t);
 
-#ifdef PLAYER_ENABLE_GAME
+#ifdef AC_ENABLE_GAME
 public slots:
   void showSyncView();
   void hideSyncView();
@@ -818,7 +831,7 @@ private:
 
   QAction *toggleSyncViewVisibleAct_,
           *toggleRecentMessageViewVisibleAct_;
-#endif // PLAYER_ENABLE_GAME
+#endif // AC_ENABLE_GAME
 
   // - Helpers -
 protected:
@@ -933,7 +946,8 @@ private:
 
   Magnifier *magnifier_;
 
-  MediaLibrary *library_;
+  MediaLibrary *mediaLibrary_;
+  GameLibrary *gameLibrary_;
 
   MouseClickEventListener *clickListener_;
 
@@ -946,7 +960,7 @@ private:
                         *resumeAudioChannelTimer_,
                         *resumeAspectRatioTimer_;
 
-  QTimer *liveTimer_;
+  //QTimer *liveTimer_;
   QTimer *windowStaysOnTopTimer_;
   QTimer *navigationTimer_;
   QTimer *saveSettingsTimer_;
@@ -959,7 +973,7 @@ private:
 
   QStringList recentFiles_;
   QHash<QString,QString> recentUrlTitles_;
-  QHash<QString,QString> recentGameEncodings_;
+  //QHash<QString,QString> recentGameEncodings_;
   QString browsedUrl_;
   QFileInfoList browsedFiles_;
 
@@ -971,6 +985,7 @@ private:
   AcBrowser *browserDelegate_;
   AcDownloader *downloaderDelegate_;
   AcTranslator *translatorDelegate_;
+  AcUpdater *updaterDelegate_;
   AnnotationDownloader *annotationDownloader_;
 
   AnnotationServerAgent *server_;
@@ -994,7 +1009,8 @@ private:
   TokenView *tokenView_;
   VideoView *videoView_;
 
-  MediaLibraryView *libraryView_;
+  MediaLibraryView *libraryWindow_;
+  MainLibraryView *libraryView_;
 
   MainPlayerUi *mainPlayer_;
   MiniPlayerUi *miniPlayer_;
@@ -1004,7 +1020,7 @@ private:
   AnnotationGraphicsView *annotationView_;
   AnnotationAnalyticsView *annotationAnalyticsView_;
   UserAnalyticsView *userAnalyticsView_;
-  AnnotationTableView *annotationBrowser_;
+  AnnotationListView *annotationBrowser_;
   AnnotationEditor *annotationEditor_;
   AnnotationFilter *annotationFilter_;
 

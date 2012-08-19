@@ -27,8 +27,8 @@
 # define WINDOW_FLAGS WINDOW_FLAGS_BASE
 #endif // Q_OS_MAC
 
-#define INPUTLINE_MAXIMUM_WIDTH 300
-#define PLAY_BUTTON_SIZE        30
+enum { INPUTLINE_MAXIMUM_WIDTH = 300 };
+enum { PLAY_BUTTON_SIZE = 30 };
 
 // - Constructions -
 
@@ -91,6 +91,7 @@ MiniPlayerUi::createLayout()
     row1->addWidget(toggleTraceWindowButton());
     row1->addWidget(positionButton());
     row1->addWidget(volumeSlider());
+    row1->addWidget(libraryButton());
 
     row2->addWidget(userButton());
     row2->addWidget(prefixComboBox());

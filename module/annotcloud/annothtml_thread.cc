@@ -5,6 +5,7 @@
 #include "module/qtext/datetime.h"
 #include "module/qtext/os.h"
 #include <QtCore/QCoreApplication>
+#include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <boost/tuple/tuple.hpp>
 
@@ -39,7 +40,7 @@ namespace { namespace detail {
   {
     static QString fmt =
 #ifdef Q_OS_WIN
-      QString("file:///" + RC_AVATAR_PREFIX "/user_%1.jpg").replace('\\', '/')
+      QDir::fromNativeSeparators("file:///" + RC_AVATAR_PREFIX "/user_%1.jpg")
 #else
       "file://" + QString(RC_AVATAR_PREFIX) + "/user_%1.jpg"
 #endif  // Q_OS_WIN
@@ -174,13 +175,13 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title, bool
     QString img = detail::rc_jsf_i();
     QString img_title = titles[i];
     QString img_file = QtExt::mktemp(".svg");
-    QString img_src;
+    QString img_src =
 #ifdef Q_OS_WIN
-    img_src = "file:///" + img_file;
-    img_src.replace('\\', '/');
+      "file:///" + QDir::fromNativeSeparators(img_file)
 #else
-    img_src = "file://" + img_file;
+      "file://" + img_file
 #endif // Q_OS_WIN
+    ;
     img.replace(EL_I_WIDTH, QString::number(img_width))
        .replace(EL_I_HEIGHT, QString::number(img_height))
        .replace(EL_I_TITLE, img_title)

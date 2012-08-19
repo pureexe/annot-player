@@ -8,7 +8,7 @@ VERSION=0.1.2.0
 PACKAGE_NAME=annot-dict
 PACKAGE_VERSION=$VERSION
 
-SRC_PREFIX=/Volumes/local/devel/annot
+SRC_PREFIX=/Volumes/local/dev/annot
 SRC_SPEC="$SRC_PREFIX/project/translator/rpm.spec"
 BUILD_PREFIX=$HOME/rpmbuild
 BUILD_SRC="$BUILD_PREFIX/SOURCES/$PACKAGE_NAME-$PACKAGE_VERSION"

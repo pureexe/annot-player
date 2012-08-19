@@ -43,7 +43,7 @@ copy "%TYPEMAP_URL%"
 :: -1: generate SOAP 1.1 bindings
 :: -2: generate SOAP 1.2 bindings
 
-wsdl2h -q%NAMESPACE% -o"%HEADER%" "%WSDL_URL%" && soapcpp2 -C -i -1 -I"%GSOAP_INCLUDE%" "%HEADER%"
+wsdl2h -q%NAMESPACE% -o"%HEADER%" "%WSDL_URL%" && soapcpp2 -C -i -1 -I"%GSOAP_INCLUDE%" -I"%GSOAP_INCLUDE%/import" "%HEADER%"
 
 ::wsdl2h -q%NAMESPACE% -o"%HEADER%" "%WSDL_URL%"
 ::pause

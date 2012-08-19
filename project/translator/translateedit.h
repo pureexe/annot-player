@@ -8,6 +8,8 @@
 
 QT_FORWARD_DECLARE_CLASS(QMenu)
 
+namespace QtExt { class TextHighlighter; }
+
 class TranslateEdit : public QTextEdit
 {
   Q_OBJECT
@@ -18,9 +20,13 @@ class TranslateEdit : public QTextEdit
   QString selectedText_;
 
   QMenu *contextMenu;
+  QtExt::TextHighlighter *highlighter_;
 
 public:
   explicit TranslateEdit(QWidget *parent = nullptr);
+
+public slots:
+  void highlightText(const QString &t);
 
 signals:
   void selectedTextChanged(const QString &text);

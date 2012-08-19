@@ -2,6 +2,7 @@
 // Download multiple parts.
 // 2/20/2012
 #include "module/downloadtask/mrldownloadtask.h"
+#include "module/qtext/filesystem.h"
 #ifdef WITH_MODULE_STREAM
 # include "module/stream/bufferedremotestream.h"
 # include "module/stream/bufferedstreampipe.h"
@@ -15,7 +16,7 @@
 #else
 # error "mediacodec module is required"
 #endif // WITH_MODULE_MEDIACODEC
-#include "module/qtext/filesystem.h"
+#include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtNetwork/QNetworkAccessManager>
 
@@ -91,9 +92,9 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
 
   FileOutputStream out;
   QString name = QtExt::escapeFileName(title);
-  QString tmpFile = downloadPath() + FILE_PATH_SEP "_" + name + suf;
+  QString tmpFile = downloadPath() + QDir::separator() + "_" + name + suf;
   for (int i = 2; QFile::exists(tmpFile); i++)
-    tmpFile = downloadPath() + FILE_PATH_SEP "_" + name + " " + QString::number(i) + suf;
+    tmpFile = downloadPath() + QDir::separator() + "_" + name + " " + QString::number(i) + suf;
 
   DOUT("fileName =" << tmpFile);
   setFileName(tmpFile);
@@ -124,9 +125,9 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   if (ok) {
     suf = flv ? ".flv" : ".mp4";
 
-    QString fileName = downloadPath() + FILE_PATH_SEP + name + suf;
+    QString fileName = downloadPath() + QDir::separator() + name + suf;
     //for (int i = 2; QFile::exists(fileName); i++)
-    //  fileName = downloadPath() + FILE_PATH_SEP + name + " " + QString::number(i) + suf;
+    //  fileName = downloadPath() + QDir::separator() + name + " " + QString::number(i) + suf;
     QtExt::trashOrRemoveFile(fileName);
     ok =  QFile::rename(tmpFile, fileName);
     if (ok)

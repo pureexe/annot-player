@@ -13,6 +13,7 @@
 #include "module/stream/inputstream.h"
 #include "module/stream/outputstream.h"
 #include "module/qtext/stoppable.h"
+#include <QtAlgorithms>
 #include <QtCore/QStringList>
 #include <QtCore/QThreadPool>
 
@@ -197,8 +198,7 @@ FlvCodec::mergeFlvFiles(const QStringList &input, const QString &output)
     ins.append(new FileInputStream(fileName));
   globalInstance()->mergeFlvStreams(ins, &fout, false); // async = false
   fout.finish();
-  foreach (InputStream *p, ins)
-    delete p;
+  qDeleteAll(ins);
   return QFile::exists(output);
 }
 

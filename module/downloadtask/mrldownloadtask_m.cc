@@ -24,8 +24,9 @@
 #else
 # error "mrlresolver module is required"
 #endif // WITH_MODULE_MRLRESOLVER
-#include "module/qtext/filesystem.h"
 #include "module/qtext/network.h"
+#include "module/qtext/filesystem.h"
+#include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkCookieJar>
@@ -253,9 +254,9 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
 
   FileOutputStream out;
   QString name = QtExt::escapeFileName(title);
-  QString tmpFile = downloadPath() + FILE_PATH_SEP "_" + name + suf;
+  QString tmpFile = downloadPath() + QDir::separator() + "_" + name + suf;
   for (int i = 2; QFile::exists(tmpFile); i++)
-    tmpFile = downloadPath() + FILE_PATH_SEP "_" + name + " " + QString::number(i) + suf;
+    tmpFile = downloadPath() + QDir::separator() + "_" + name + " " + QString::number(i) + suf;
 
   DOUT("fileName =" << tmpFile);
   setFileName(tmpFile);
@@ -341,9 +342,9 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
 
     qint64 size = QFile(tmpFile).size();
 
-    QString fileName = downloadPath() + FILE_PATH_SEP + name + suf;
+    QString fileName = downloadPath() + QDir::separator() + name + suf;
     //for (int i = 2; QFile::exists(fileName); i++)
-    //  fileName = downloadPath() + FILE_PATH_SEP + name + " " + QString::number(i) + suf;
+    //  fileName = downloadPath() + QDir::separator() + name + " " + QString::number(i) + suf;
     QtExt::trashOrRemoveFile(fileName);
     ok =  QFile::rename(tmpFile, fileName);
     if (ok)

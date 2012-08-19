@@ -166,6 +166,7 @@ TranslationManager::translate(int tid) const
   case T_INTERNET:      return tr("Internet");
   case T_WINDOWS:       return tr("Windows");
   case T_SOURCE:        return tr("Source");
+  case T_LIBRARY:       return tr("Library");
   case T_OPEN:          return tr("Open");
   case T_PLAY:          return tr("Play");
   case T_START:         return tr("Start");
@@ -608,8 +609,8 @@ TranslationManager::translate(int tid) const
   case T_MENUTEXT_REFRESHPROCESS: return tr("Refresh Process");
   case T_TIP_REFRESHPROCESS:    return tr("Refresh process");
 
-  case T_MENUTEXT_RECENTMESSAGES: return tr("Switch Channel");
-  case T_TIP_RECENTMESSAGES:    return tr("Switch channel");
+  case T_MENUTEXT_RECENTMESSAGES: return tr("Game Preferences");
+  case T_TIP_RECENTMESSAGES:    return tr("Game Preferences");
 
   case T_MENUTEXT_PLAYLIST:     return tr("Playlist");
   case T_TIP_PLAYLIST:          return tr("Playlist");

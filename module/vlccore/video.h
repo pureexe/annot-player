@@ -76,10 +76,12 @@ namespace vlccore {
       if (vbs & vlcbutton_left) {
         bts |= Qt::LeftButton;
         bt = Qt::LeftButton;
-      } if (vbs & vlcbutton_right) {
+      }
+      if (vbs & vlcbutton_right) {
         bts |= Qt::RightButton;
         if (!bt) bt = Qt::RightButton;
-      } if (vbs & vlcbutton_mid) {
+      }
+      if (vbs & vlcbutton_mid) {
         bts |= Qt::MidButton;
         if (!bt) bt = Qt::MidButton;
       }

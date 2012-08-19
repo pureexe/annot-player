@@ -11,10 +11,9 @@
 #include <QtCore/QSet>
 #include <QtCore/QString>
 
-QT_FORWARD_DECLARE_CLASS(QAbstractItemModel)
 QT_FORWARD_DECLARE_CLASS(QStandardItemModel)
 
-class MediaStandardModel;
+class MediaModel;
 class MediaLibrary : public QObject
 {
   Q_OBJECT
@@ -27,8 +26,7 @@ class MediaLibrary : public QObject
   QString libraryLocation_;
   bool dirty_;
 
-  mutable MediaStandardModel *standardModel_;
-  mutable QAbstractItemModel *treeModel_;
+  mutable MediaModel *model_;
 
   QSet<QString> folders_;
   QSet<Media> games_;
@@ -39,12 +37,13 @@ public:
 
   bool isDirty() const { return dirty_; }
 
-  QStandardItemModel *standardModel() const;
-  QAbstractItemModel *treeModel() const;
+  QStandardItemModel *model() const;
 
   const QSet<QString> &folders() const;
   const QSet<Media> &games() const;
   const QSet<Media> &urls() const;
+
+  bool exists() const;
 
 public slots:
   void save();

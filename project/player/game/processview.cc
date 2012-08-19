@@ -34,7 +34,7 @@ namespace { namespace detail {
 (H(BitComet))(H(BookmarkDAV_client))(H(BoonSutazio))(H(Bootcamp))(H(BtStackServer))(H(BTTray))(H(btwdins))
 (H(CamtasiaStudio))(H(chrome))
 (H(distnoted))(H(Dropbox))(H(DTLite))
-(H(eclipse))(H(Evernote))(H(EvernoteTray))
+(H(eclipse))(H(Evernote))(H(EvernoteClipper))(H(EvernoteTray))
 (H(firefox))(H(foobar2000))
 (H(GoogleIMEJaConverter))(H(GoogleIMEJaRenderer))(H(gvim))
 (H(Hamana))(H(HidFind))
@@ -288,7 +288,7 @@ void
 ProcessView::attachProcess()
 {
   ulong pid = currentPid();
-  if (pid && TextHook::globalInstance()->attachProcess(pid)) {
+  if (pid && TextHook::globalInstance()->attachOneProcess(pid)) {
     setCurrentItemAttached(true);
     invalidateButtons();
     emit message(QString("%1 (pid = %2)").arg(tr("process attached")).arg(QString::number(pid)));

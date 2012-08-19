@@ -1,8 +1,8 @@
 README (UTF-8)
 
 Product:	Annot Stream
-Version:	0.1.8.1
-Release:	2012/8/14 TUE
+Version:	0.1.8.2
+Release:	2012/8/18 SAT
 Homepage:	http://annot.me
 Download:	http://code.google.com/p/annot-player/downloads
 Source (Git):	https://code.google.com/p/annot-player
@@ -23,10 +23,8 @@ Distribution (Windows):
 - ChangeLog.txt         Log of changes (UTF-8)
 - COPYING.txt           GPLv3 license
 - Read Me.txt           Readme (UTF-8)
-- Update.txt            Instructions on update (UTF-8)
 - Reset Preferences.reg Remove all registry settings (HKCU/Software/Annot)
 - Data/      (hidden)   Apps' data files
-- Licenses/  (hidden)   Apps' licenses
 - Update/    (hidden)   Self updater
 
 Contributions:

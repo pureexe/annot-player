@@ -9,8 +9,8 @@ cd "$PREFIX"  || exit 1
 
 ## environment
 
-COLOR=purple
-VERSION=0.1.8.0
+COLOR=green
+VERSION=0.1.8.2
 DMG_SIZE=250m
 
 TARGET="Annot Stream"

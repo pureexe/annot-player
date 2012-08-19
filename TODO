@@ -4,6 +4,13 @@
 http://db.tt/SrtkzxIJ
 http://qt-project.org/wiki/Category:Add-ons
 
+# Changes
+my *.exe
+my *.dll
+my update/*
+README & ChangeLog
+
+
 # key ideas
 - stream trial games, and sub trial games in chinese
     - librsync for downloading files?
@@ -27,27 +34,62 @@ work on streaming
 - windows driver
 - sync
 
+# 0.1.8.3
+
+- hack qnetworkaccessmanager source code to get the orignal stream
+  - make stable download session
+    - maybe, sth is wrong in createRequest?
+- able to subscribe to bilibili session
+- able to grab all downloadable to bilibili session
+
+- grant edit permission for token
+
+- library view
+  - redesign searchengine mechanism, using a global search engine pool
+    rather then create for each of them
+  - copy title / location, search title
+
+- listen to more than one signals
+
+- dict, translator for kotobabank
+http://kotobank.jp/search/???
+http://kotobank.jp/word/???
+
+# 0.1.8.4
+
+- able to show more than one channels
+- context menu to show launch settings for the current game
+  - open/opendir
+  - change language
+  - remember or not recent settings
+
+
+- able to select more than one thread to listen
+- use osdwindow for tracking, rather than full screen
+
+- able to move imported annotations
+  - add alias.pos to media_alias
+  - add annot.url to mark alias
+
+- Windows
+  - able to listen to more than 1 channels, change GUI interface
+  change ui from number comboedit to multiple checkbox of text channels
+  create a special combonent for a group of checkbox
+  - always keep recent 3 text from all channels
+  - listen to more than text
+    - add up to 3 channel to listen
+
 # 0.1.9
 
-fix cloudserviceudatre.cmd
-fixme: lftp permission on ntfs
-
-- add annot permission instead
-add group of annot
-
-- windows
-- able to listen to more than 1 channels, change GUI interface
-change ui from number comboedit to multiple checkbox of text channels
-create a special combonent for a group of checkbox
-- always keep recent 3 text from all channels
-- listen to more than text
-  - add up to 3 channel to listen
+- game
+  - add ITH profile support
+  - try if it can hook white_album
 
 - game
-  - figure out how to utilize ITH profiles
-    - using SHA1256 in qt5
-     compute sha1 256 for game as well
+  - save scenario text
 
+- translator
+  - fixme: openlinke locale
 - windows game
   - submit game text as context as well
     figure how to use heuristics for scene_text
@@ -61,9 +103,6 @@ create a special combonent for a group of checkbox
   - database: dict_term
     term_id term_status term_flag user_id term_create_ip term_create_time term_update_time term_update_ip term_type term_from term_to term_source, term_target
     term_bless_count term_curse_count term_block_count
-
-# 0.1.9.1
-
 
 - option to integrate native applocale to launch galgame
   systemroot/AppPatch

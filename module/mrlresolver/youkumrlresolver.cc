@@ -128,7 +128,7 @@ YoukuMrlResolver::resolveMedia(QNetworkReply *reply)
           continue;
 
         QString hd = "0", st = "flv";
-        if (type == ("mp4")) {
+        if (type == "mp4") {
           hd = "1";
           st = "mp4";
         } else if (type == "hd2")

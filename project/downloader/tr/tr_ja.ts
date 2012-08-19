@@ -5,15 +5,20 @@
 <context>
     <name>AcAbout</name>
     <message>
-        <location filename="../../common/acabout.cc" line="69"/>
-        <location filename="../../common/acabout.cc" line="84"/>
+        <location filename="../../common/acabout.cc" line="70"/>
+        <location filename="../../common/acabout.cc" line="91"/>
         <source>About</source>
         <translation>ソフトについて</translation>
     </message>
     <message>
-        <location filename="../../common/acabout.cc" line="81"/>
+        <location filename="../../common/acabout.cc" line="82"/>
         <source>OK</source>
         <translation>確認</translation>
+    </message>
+    <message>
+        <location filename="../../common/acabout.cc" line="84"/>
+        <source>Update</source>
+        <translation>更新</translation>
     </message>
 </context>
 <context>
@@ -240,7 +245,7 @@
 <context>
     <name>AcLocationManager</name>
     <message>
-        <location filename="../../common/acpaths.cc" line="60"/>
+        <location filename="../../common/acpaths.cc" line="59"/>
         <source>Video</source>
         <translation>動画</translation>
     </message>
@@ -438,17 +443,17 @@
 <context>
     <name>AnnotCloud::AnnotationHtmlParser</name>
     <message>
-        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="169"/>
+        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="170"/>
         <source>Time - Count</source>
         <translation>再生時間 - 弾幕数</translation>
     </message>
     <message>
-        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="169"/>
+        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="170"/>
         <source>Date - Count</source>
         <translation>弾幕日付 - 弾幕数</translation>
     </message>
     <message>
-        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="169"/>
+        <location filename="../../../module/annotcloud/annothtml_thread.cc" line="170"/>
         <source>User - Count</source>
         <translation>ユーザー - 弾幕数</translation>
     </message>
@@ -456,48 +461,48 @@
 <context>
     <name>AnnotationDownloader</name>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="66"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="67"/>
         <source>analyzing</source>
         <translation>分析中</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="91"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="92"/>
         <source>downloading</source>
         <translation>会話中</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="106"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="125"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="160"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="107"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="126"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="161"/>
         <source>network error, failed to resolve URL</source>
         <translation>URLの解析に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="109"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="110"/>
         <source>saving</source>
         <translation>保存中</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="133"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="147"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="167"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="134"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="148"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="168"/>
         <source>failed to resolve URL</source>
         <translation>URLの解析に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="181"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="195"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="182"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="196"/>
         <source>file saved</source>
         <translation>セーブした</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="183"/>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="200"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="184"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="201"/>
         <source>failed to save file</source>
         <translation>ファイルの保存に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/annotdown/annotationdownloader.cc" line="189"/>
+        <location filename="../../../module/annotdown/annotationdownloader.cc" line="190"/>
         <source>failed to cache annotation from URL</source>
         <translation>弾幕をキャッシュできない</translation>
     </message>
@@ -997,8 +1002,8 @@
     </message>
     <message>
         <location filename="../../../module/downloadtask/mrldownloadtask.cc" line="105"/>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="48"/>
-        <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="34"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="49"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="35"/>
         <source>unknown</source>
         <translation>未知</translation>
     </message>
@@ -1012,36 +1017,36 @@
         <translation type="obsolete">ﾀﾞｳﾝﾛｰﾄﾞ失敗</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="94"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="95"/>
         <source>failed to fetch part %1, retry</source>
         <translation>パート%1のﾀﾞｳﾝﾛｰﾄﾞに失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="103"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="104"/>
         <source>wait %1 seconds and try again</source>
         <translation>%1秒まつ</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="233"/>
-        <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="82"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="234"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="83"/>
         <source>access denied to download URL</source>
         <translation>URLにアクセスできません</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="266"/>
-        <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="104"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="267"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="105"/>
         <source>failed to open file to write</source>
         <translation>ファイルの保存に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="352"/>
-        <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="135"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="353"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="136"/>
         <source>failed to rename downloaded file</source>
         <translation>ファイル名の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="361"/>
-        <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="145"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="362"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_s.cc" line="146"/>
         <source>download incomplete</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ失敗した</translation>
     </message>
@@ -1054,7 +1059,7 @@
         <translation type="obsolete">リトライ</translation>
     </message>
     <message>
-        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="304"/>
+        <location filename="../../../module/downloadtask/mrldownloadtask_m.cc" line="305"/>
         <source>failed to parse FLV streams</source>
         <translation>FLVデータの分析に失敗した</translation>
     </message>
@@ -1113,7 +1118,7 @@
         <translation type="obsolete">ページを保存</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="105"/>
+        <location filename="../../../module/qtext/webview.cc" line="104"/>
         <source>Save the web page as image to disk and clipboard</source>
         <translation>ページをイメージに保存します</translation>
     </message>
@@ -1130,82 +1135,82 @@
         <translation type="obsolete">ズームをリセット</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="104"/>
+        <location filename="../../../module/qtext/webview.cc" line="103"/>
         <source>Clip the Page</source>
         <translation>ページを保存</translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="111"/>
         <location filename="../../../module/qtext/webview.cc" line="112"/>
-        <location filename="../../../module/qtext/webview.cc" line="113"/>
         <source>Zoom In</source>
         <translation>ズームイン</translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="119"/>
         <location filename="../../../module/qtext/webview.cc" line="120"/>
-        <location filename="../../../module/qtext/webview.cc" line="121"/>
         <source>Zoom Out</source>
         <translation>ズームアウト</translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="127"/>
         <location filename="../../../module/qtext/webview.cc" line="128"/>
-        <location filename="../../../module/qtext/webview.cc" line="129"/>
         <source>Actual Size</source>
         <translation>ズームをリセット</translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="135"/>
         <location filename="../../../module/qtext/webview.cc" line="136"/>
-        <location filename="../../../module/qtext/webview.cc" line="137"/>
         <source>Clear Highlight</source>
         <translation>ハイライトを非表示</translation>
     </message>
     <message>
+        <location filename="../../../module/qtext/webview.cc" line="140"/>
         <location filename="../../../module/qtext/webview.cc" line="141"/>
-        <location filename="../../../module/qtext/webview.cc" line="142"/>
         <source>Open in System Default Browser</source>
         <translation>用系统默认浏览器打开</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="234"/>
+        <location filename="../../../module/qtext/webview.cc" line="233"/>
         <source>Unnamed</source>
         <translation>名前無し</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="273"/>
+        <location filename="../../../module/qtext/webview.cc" line="272"/>
         <source>opening</source>
         <translation>開く</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="297"/>
+        <location filename="../../../module/qtext/webview.cc" line="296"/>
         <source>clipping</source>
         <translation>保存中</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="321"/>
+        <location filename="../../../module/qtext/webview.cc" line="320"/>
         <source>saved</source>
         <translation>保存成功</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="323"/>
+        <location filename="../../../module/qtext/webview.cc" line="322"/>
         <source>unable to save</source>
         <translation>保存失敗</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="343"/>
+        <location filename="../../../module/qtext/webview.cc" line="342"/>
         <source>failed to download %1</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞに失敗した：%1</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="347"/>
+        <location filename="../../../module/qtext/webview.cc" line="346"/>
         <source>download is not allowed</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞできません</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="366"/>
+        <location filename="../../../module/qtext/webview.cc" line="365"/>
         <source>History</source>
         <translation>歴史</translation>
     </message>
     <message>
-        <location filename="../../../module/qtext/webview.cc" line="383"/>
+        <location filename="../../../module/qtext/webview.cc" line="382"/>
         <source>Blank</source>
         <translation>ブランク</translation>
     </message>

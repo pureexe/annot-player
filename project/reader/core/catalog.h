@@ -5,6 +5,7 @@
 // 7/5/2011
 // Describe document catalog
 
+#include <QtAlgorithms>
 #include <QAbstractItemModel>
 #include <QDomDocument>
 #include <QHash>
@@ -38,9 +39,8 @@ namespace Core {
 
     ~CatalogItem()
     {
-      if (!children_.empty())
-        foreach (Self* child, children_)
-          delete child;
+      if (!children_.isEmpty())
+        qDeleteAll(children_);
     }
 
     int row() const { return row_; }

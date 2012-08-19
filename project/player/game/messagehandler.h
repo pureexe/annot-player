@@ -37,7 +37,8 @@ signals:
   // - Properties -
 public:
   bool isActive() const { return active_; }
-  ulong hookId() const { return hookId_; }
+  ulong anchor() const { return anchor_; }
+  const QString &function() const { return function_; }
   const ProcessInfo &processInfo() const { return pi_; }
 
   ///  Most recent on the top.
@@ -48,14 +49,15 @@ public:
 
 public slots:
   void setActive(bool active);
-  void setHookId(ulong hid) { hookId_ = hid; }
+  void setAnchor(ulong hid) { anchor_ = hid; }
+  void setFunction(const QString &value) { function_ = value; }
   void setProcessInfo(const ProcessInfo &pi) { pi_ = pi; }
 
   void clearRecentMessages();
 
   // - Actions
 protected slots:
-  void processMessage(const QByteArray &data, ulong hookId);
+  void processMessage(const QByteArray &data, ulong anchor);
 
   void connectTextHook();
   void disconnectTextHook();
@@ -66,7 +68,8 @@ protected slots:
 
 private:
   bool active_;
-  ulong hookId_;
+  ulong anchor_;
+  QString function_;
   ProcessInfo pi_;
 
   QVector<QByteArray> messages_; // recent messages queue

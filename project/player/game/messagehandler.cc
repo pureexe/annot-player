@@ -32,17 +32,17 @@ namespace { enum { HASH_COUNT = 4}; }
 // - Constructions -
 
 MessageHandler::MessageHandler(QObject *parent)
-  : Base(parent), active_(false), hookId_(0),
+  : Base(parent), active_(false), anchor_(0),
     messageCount_(HASH_COUNT)
 { }
 
 void
 MessageHandler::connectTextHook()
-{ connect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,ulong)), SLOT(processMessage(QByteArray,ulong))); }
+{ connect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,QString)), SLOT(processMessage(QByteArray,ulong))); }
 
 void
 MessageHandler::disconnectTextHook()
-{ disconnect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,ulong)), this, SLOT(processMessage(QByteArray,ulong))); }
+{ disconnect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,QString)), this, SLOT(processMessage(QByteArray,ulong))); }
 
 // - Properties -
 
@@ -68,10 +68,10 @@ MessageHandler::clearRecentMessages()
 }
 
 void
-MessageHandler::processMessage(const QByteArray &data, ulong hookId)
+MessageHandler::processMessage(const QByteArray &data, ulong anchor)
 {
-  DOUT("enter: hookId =" << hookId << ", data size =" << data.size());
-  if (hookId != hookId_) {
+  DOUT("enter: anchor =" << anchor << ", data size =" << data.size());
+  if (anchor != anchor_) {
     //lastMessageHash_.clear();
     DOUT("exit: hook mismatch");
     return;

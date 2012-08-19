@@ -9,7 +9,7 @@
 
 class HookManager;
 class TextThread;
-class TextThreadProperty;
+class TextThreadDelegate;
 
 class Ith
 {
@@ -17,7 +17,7 @@ class Ith
   typedef Ith Self;
   typedef QObject Base;
 
-  static QHash<TextThread *, TextThreadProperty *> threadProperties_;
+  static QHash<TextThread *, TextThreadDelegate *> threadDelegates_;
   static HookManager *hookManager_;
   static qint64 messageInterval_;
   static WId parentWindow_;

@@ -1,11 +1,11 @@
 #!/bin/bash -v
 # 4/1/2012
 
-VERSION=0.1.7.1
+VERSION=0.1.8.2
 APP=annot-player
 ZIPFILE=$APP-$VERSION-debian.zip
 
-SRC_PREFIX=/Volumes/local/devel/annot
+SRC_PREFIX=/Volumes/local/dev/annot
 BUILD_PREFIX=$HOME/build
 
 export DEBFULLNAME=$PACKAGE_AUTHOR

@@ -7,6 +7,7 @@
 # include "gpac/gpac.h"
 #endif // WITH_GPAC
 #include <QtCore/QCoreApplication>
+#include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <cstdio>
@@ -15,7 +16,7 @@
 #define MP4BOX_BIN      QCoreApplication::applicationDirPath() + "/" "MP4Box"
 
 #ifdef _MSC_VER
-  #pragma warning(disable:4996) // C4996: unsafe function or variable used such as strncpy
+# pragma warning(disable:4996) // C4996: unsafe function or variable used such as strncpy
 #endif // _MSC_VER
 
 #define DEBUG "mp4box"
@@ -48,9 +49,6 @@ namespace { namespace detail {
       delete[] *p++;
     delete[] argv;
   }
-
-  inline QString fix_win_path(const QString &path)
-  { return QString(path).replace("/", "\\"); }
 
 #ifdef Q_OS_WIN
   class FileMangler
@@ -109,15 +107,15 @@ Mp4Box::muxMp4File(const QString &mp4, const QStringList &tracks,
     }
   }
 
-  QStringList args(detail::fix_win_path(MP4BOX_BIN));
+  QStringList args(QDir::toNativeSeparators(MP4BOX_BIN));
 
 #ifdef Q_OS_WIN
   detail::FileMangler m;
-  #define _qs(_path)      detail::fix_win_path(m.mangle(_path))
-  #define _qt(_path)      detail::fix_win_path(m.mangleLater(_path))
+# define _qs(_path)      QDir::toNativeSeparators(m.mangle(_path))
+# define _qt(_path)      QDir::toNativeSeparators(m.mangleLater(_path))
 #else
-  #define _qs(_path)      (_path)
-  #define _qt(_path)      (_path)
+# define _qs(_path)      (_path)
+# define _qt(_path)      (_path)
 #endif // Q_OS_WIN
 
   foreach (const QString &t, tracks) {

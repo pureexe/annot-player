@@ -5,6 +5,7 @@
 // 6/28/2011
 // Describe text in document.
 
+#include <QtAlgorithms>
 #include <QObject>
 #include <QRectF>
 #include <QList>
@@ -91,9 +92,7 @@ namespace Core {
     ~TextRectCatalog()
     {
       if (!blocks_.empty())
-        foreach (TextRect *p, blocks_)
-          if (p)
-            delete p;
+        qDeleteAll(blocks_);
     }
 
     void build(const TextList &l);
@@ -101,8 +100,7 @@ namespace Core {
     void clear()
     {
       if (!blocks_.empty())
-        foreach (TextRect *p, blocks_)
-          delete p;
+        qDeleteAll(blocks_);
       blocks_.clear();
       lines_.clear();
       words_.clear();

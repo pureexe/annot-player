@@ -6,19 +6,22 @@
 #include <QtCore/QByteArray>
 
 class TextThread;
-class TextThreadProperty
+class TextThreadDelegate
 {
-  Q_DISABLE_COPY(TextThreadProperty)
-  typedef TextThreadProperty Self;
+  Q_DISABLE_COPY(TextThreadDelegate)
+  typedef TextThreadDelegate Self;
 
   TextThread *t_;
   QByteArray buffer_;
   WmTimer flushTimer_; // as QTimer does not work with windows remote thread, use native WM_TIMER instead
 
+  mutable QString threadMethod_; // buffered
+  mutable ulong threadAnchor_; // buffered
+
   // - Construction -
 public:
-  TextThreadProperty(TextThread *t, qint64 flushInterval, WId parentWindow = 0)
-    : t_(t), flushTimer_(parentWindow)
+  TextThreadDelegate(TextThread *t, qint64 flushInterval, WId parentWindow = 0)
+    : t_(t), flushTimer_(parentWindow), threadAnchor_(0)
   {
     Q_ASSERT(t);
     Q_ASSERT(flushInterval);
@@ -27,7 +30,7 @@ public:
     flushTimer_.setSingleShot(true);
   }
 
-  ~TextThreadProperty()
+  ~TextThreadDelegate()
   {
     if (flushTimer_.isActive())
       flushTimer_.stop();
@@ -48,7 +51,18 @@ public:
       buffer_.append(data, len);
   }
 
+protected: // not used by outside
   QString text() const { return QString::fromLocal8Bit(buffer_); }
+
+  ulong processId() const;
+
+  QString threadSummary() const; ///< entry string, example: "0006:2908:0x0041A620:0x0041F4F9:0x00000017:MAJIRO"
+
+  QString threadMethod() const; ///< thread string
+  ulong threadContext() const;
+  ulong threadSubcontext() const;
+
+  ulong threadAnchor() const;
 
   // - Actions -
 public:

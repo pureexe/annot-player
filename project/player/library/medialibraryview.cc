@@ -3,9 +3,11 @@
 
 #include "medialibraryview.h"
 #include "medialibrary.h"
-#include "mediastandardmodel.h"
+#include "mediamodel.h"
+#include "media.h"
 #include "tr.h"
 #include "global.h"
+#include "rc.h"
 #include "project/common/acui.h"
 #include "project/common/acss.h"
 #include "module/qtext/layoutwidget.h"
@@ -30,6 +32,13 @@
   Qt::WindowCloseButtonHint | \
   Qt::WindowStaysOnTopHint)
 
+#define SS_HEADER_BUTTON \
+  ACSS_TOOLBUTTON_TEXT_NORMAL \
+  SS_BEGIN(QToolButton) \
+    SS_NO_MARGIN \
+    SS_NO_PADDING \
+  SS_END
+
 MediaLibraryView::MediaLibraryView(MediaLibrary *library, QWidget *parent)
   : Base(parent, WINDOW_FLAGS), library_(library)
 {
@@ -37,10 +46,40 @@ MediaLibraryView::MediaLibraryView(MediaLibrary *library, QWidget *parent)
   setWindowTitle(tr("Library"));
 
   createLayout();
+  createActions();
 
-  listView_->sortByColumn(MediaStandardModel::HD_Location);
+  connect(this, SIGNAL(toggled()), SLOT(hide()));
+
+  listView_->sortByColumn(MediaModel::HD_Location, Qt::AscendingOrder);
+  listView_->sortByColumn(MediaModel::HD_TypeNo, Qt::AscendingOrder);
 
   resize(800, 400);
+}
+
+void
+MediaLibraryView::createActions()
+{
+  contextMenu_ = new QMenu(this);
+  AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
+
+  showGameAct_ = contextMenu_->addAction(tr("Game Preferences"), this, SLOT(showGame()));
+  contextMenu_->addSeparator();
+
+  openAct_ = contextMenu_->addAction(QIcon(RC_IMAGE_PLAY), TR(T_OPEN), this, SLOT(open()));
+  browseAct_ = contextMenu_->addAction(tr("Browse"), this, SLOT(browse()));
+  contextMenu_->addSeparator();
+
+  contextMenu_->addAction(tr("Hide View"), this, SLOT(fadeOut()));
+  toggleAct_ = contextMenu_->addAction(tr("Toggle View"), this, SIGNAL(toggled()));
+  contextMenu_->addSeparator();
+
+  autoHideAct_ = contextMenu_->addAction(tr("Hide After Opening Media"));
+  autoHideAct_->setCheckable(true);
+  autoHideAct_->setChecked(true);
+
+  autoRunAct_ = contextMenu_->addAction(tr("Show On Startup"));
+  autoRunAct_->setCheckable(true);
+  autoRunAct_->setChecked(true);
 }
 
 void
@@ -49,41 +88,42 @@ MediaLibraryView::createLayout()
   AcUi *ui = AcUi::globalInstance();
 
   // Create models
-  QStandardItemModel *standardModel = library_->standardModel();
+  QStandardItemModel *sourceModel = library_->model();
 
-  standardFilterModel_ = new QSortFilterProxyModel; {
-    standardFilterModel_->setSourceModel(standardModel);
-    standardFilterModel_->setDynamicSortFilter(true);
-    standardFilterModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
-    standardFilterModel_->setFilterKeyColumn(MediaStandardModel::HD_Type);
+  filterModel_ = new QSortFilterProxyModel; {
+    filterModel_->setSourceModel(sourceModel);
+    filterModel_->setDynamicSortFilter(true);
+    filterModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+    filterModel_->setFilterKeyColumn(MediaModel::HD_Type);
   }
 
-  standardProxyModel_ = new QSortFilterProxyModel; {
-    standardProxyModel_->setSourceModel(standardFilterModel_);
-    standardProxyModel_->setDynamicSortFilter(true);
-    standardProxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
-    standardProxyModel_->setFilterKeyColumn(-1);
+  proxyModel_ = new QSortFilterProxyModel; {
+    proxyModel_->setSourceModel(filterModel_);
+    proxyModel_->setDynamicSortFilter(true);
+    proxyModel_->setSortCaseSensitivity(Qt::CaseInsensitive);
+    proxyModel_->setFilterKeyColumn(-1);
   }
 
-  standardSelectionModel_ = new QItemSelectionModel(standardProxyModel_); // shared selections
-  connect(standardSelectionModel_, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(showSelection()));
-  connect(standardSelectionModel_, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(updateButtons()));
+  selectionModel_ = new QItemSelectionModel(proxyModel_); // shared selections
+  connect(selectionModel_, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(showSelection()));
+  connect(selectionModel_, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(updateButtons()));
 
   // Create views
 
   iconView_ = new QListView(this); {
     iconView_->setViewMode(QListView::IconMode);
     iconView_->setStyleSheet(ACSS_LISTVIEW);
-    //listView_->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    //listView_->setAlternatingRowColors(false);
-    //listView_->viewport()->setAttribute(Qt::WA_StaticContents);
-    //listView_->setAttribute(Qt::WA_MacShowFocusRect, false);
+    iconView_->setResizeMode(QListView::Adjust);
+    //iconView_->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    //iconView_->setAlternatingRowColors(false);
+    //iconView_->viewport()->setAttribute(Qt::WA_StaticContents);
+    //iconView_->setAttribute(Qt::WA_MacShowFocusRect, false);
     //iconView_->setWrapping(true);
     //iconView_->setWordWrap(false);
     iconView_->setGridSize(QSize(260, 60)); // (260*3 = 780) < 800 - margin
 
-    iconView_->setModel(standardProxyModel_);
-    iconView_->setSelectionModel(standardSelectionModel_);
+    iconView_->setModel(proxyModel_);
+    iconView_->setSelectionModel(selectionModel_);
   }
 
   listView_ = new QTreeView(this); {
@@ -94,29 +134,13 @@ MediaLibraryView::createLayout()
     //tableView_->horizontalHeader()->setMovable(true);
     //tableView_->verticalHeader()->setMovable(true);
     //tableView_->viewport()->setAttribute(Qt::WA_StaticContents); // Set StaticContents to enable minimal repaints on resizes.
+    listView_->setModel(proxyModel_);
+    listView_->setSelectionModel(selectionModel_);
     listView_->setColumnWidth(0, 350);
-
-    listView_->setModel(standardProxyModel_);
-    listView_->setSelectionModel(standardSelectionModel_);
-  }
-
-  treeView_ = new QTreeView(this); {
-    treeView_->setStyleSheet(ACSS_TREEVIEW);
-    //treeView_->setRootIsDecorated(true);
-    treeView_->setSortingEnabled(true);
-    treeView_->setAlternatingRowColors(true);
-    //treeView_->setUniformRowHeights(true);
-    //treeView_->header()->setStretchLastSection(false);
-    //treeView_->viewport()->setAttribute(Qt::WA_StaticContents);
-    //treeView_->setAttribute(Qt::WA_MacShowFocusRect, false); // Disable the focus rect to get minimal repaints when scrolling on Mac.
-
-    //treeView_->setModel(standardProxyModel_);
-    //treeView_->setSelectionModel(standardSelectionModel_);
   }
 
   connect(iconView_, SIGNAL(doubleClicked(QModelIndex)), SLOT(open()));
   connect(listView_, SIGNAL(doubleClicked(QModelIndex)), SLOT(open()));
-  connect(treeView_, SIGNAL(doubleClicked(QModelIndex)), SLOT(open()));
 
   // Create header widgets
 
@@ -129,44 +153,47 @@ MediaLibraryView::createLayout()
   filterType_ = ui->makeComboBox(AcUi::ReadOnlyHint, QString(), tr("Type")); {
     filterType_->setMinimumWidth(70);
     filterType_->addItem(tr("All"));
-    filterType_->addItem(tr("Game"));
-    filterType_->addItem(tr("Video"));
-    //filterType_->addItem(tr("Audio"));
-    filterType_->addItem(tr("URL"));
+    filterType_->addItem(TR(T_FOLDER));
+    filterType_->addItem(TR(T_GALGAME));
+    filterType_->addItem(TR(T_VIDEO));
+    //filterType_->addItem(TR(T_Audio));
+    filterType_->addItem(TR(T_URL));
   } connect(filterType_, SIGNAL(activated(int)), SLOT(setFilterType(int)));
 
-  dirButton_ = ui->makeToolButton(AcUi::PushHint, tr("Dir"), tr("Open Directory"), this, SLOT(openDirectory()));
+  browseButton_ = ui->makeToolButton(AcUi::PushHint, tr("Browse"), tr("Browse location"), this, SLOT(browse()));
   openButton_ = ui->makeToolButton(AcUi::PushHint | AcUi::HighlightHint, TR(T_PLAY), TR(T_PLAY), tr("Double Click"), this, SLOT(open()));
 
   QToolButton *refreshButton = ui->makeToolButton(AcUi::PushHint, TR(T_REFRESH), tr("Rebuild the library index"), K_CTRL "+R", this, SLOT(refresh())),
-              *clearButton = ui->makeToolButton(AcUi::PushHint, TR(T_CLEAR),tr("Clear library"), this, SLOT(clear()));
+              *clearButton = ui->makeToolButton(AcUi::PushHint, TR(T_CLEAR), tr("Clear library"), this, SLOT(clear()));
+
+  QToolButton *hideButton = ui->makeToolButton(0, "[X]", tr("Hide view"), this, SLOT(hide())),
+              *toggleButton = ui->makeToolButton(0, "[-]", tr("Toggle view"), this, SIGNAL(toggled()));
+  hideButton->setStyleSheet(SS_HEADER_BUTTON);
+  toggleButton->setStyleSheet(SS_HEADER_BUTTON);
+  hideButton->setGraphicsEffect(ui->makeHaloEffect(Qt::yellow));
+  toggleButton->setGraphicsEffect(ui->makeHaloEffect(Qt::yellow));
 
   new QShortcut(QKeySequence("CTRL+R"), refreshButton, SLOT(click()));
 
-  QRadioButton *iconButton = ui->makeRadioButton(0, QString(), tr("Icon View"), K_CTRL "+1"),
-               *listButton = ui->makeRadioButton(0, QString(), tr("List View"), K_CTRL "+2"),
-               *treeButton = ui->makeRadioButton(0, QString(), tr("Tree View"), K_CTRL "+3");
+  QRadioButton *iconButton = ui->makeRadioButton(AcUi::DefaultHint, QString(), tr("Icon View"), K_CTRL "+1"),
+               *listButton = ui->makeRadioButton(AcUi::DefaultHint, QString(), tr("List View"), K_CTRL "+2");
   iconButton->setChecked(true);
 
   connect(iconButton, SIGNAL(clicked()), SLOT(showIcon()));
   connect(listButton, SIGNAL(clicked()), SLOT(showList()));
-  connect(treeButton, SIGNAL(clicked()), SLOT(showTree()));
 
   new QShortcut(QKeySequence("CTRL+1"), iconButton, SLOT(click()));
   new QShortcut(QKeySequence("CTRL+2"), listButton, SLOT(click()));
-  new QShortcut(QKeySequence("CTRL+3"), treeButton, SLOT(click()));
-#ifndef Q_OS_MAC
-  new QShortcut(QKeySequence("ALT+1"), iconButton, SLOT(click()));
-  new QShortcut(QKeySequence("ALT+2"), listButton, SLOT(click()));
-  new QShortcut(QKeySequence("ALT+3"), treeButton, SLOT(click()));
-#endif // Q_OS_MAC
+//#ifndef Q_OS_MAC
+//  new QShortcut(QKeySequence("ALT+1"), iconButton, SLOT(click()));
+//  new QShortcut(QKeySequence("ALT+2"), listButton, SLOT(click()));
+//#endif // Q_OS_MAC
 
   // Create layout
 
   views_ = new QStackedLayout;
   views_->addWidget(iconView_);
   views_->addWidget(listView_);
-  views_->addWidget(treeView_);
 
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *header = new QHBoxLayout,
@@ -179,9 +206,10 @@ MediaLibraryView::createLayout()
     //header->addWidget(clearButton);
     //header->addStretch();
 
+    header->addWidget(hideButton);
+    header->addWidget(toggleButton);
     header->addWidget(iconButton);
     header->addWidget(listButton);
-    header->addWidget(treeButton);
     header->addStretch();
     header->addWidget(filterType_);
 
@@ -193,7 +221,7 @@ MediaLibraryView::createLayout()
     footer->addWidget(refreshButton);
     footer->addWidget(clearButton);
     footer->addStretch();
-    footer->addWidget(dirButton_);
+    footer->addWidget(browseButton_);
     footer->addWidget(openButton_);
 
     int patch = 0;
@@ -207,6 +235,16 @@ MediaLibraryView::createLayout()
   }  setCentralWidget(new LayoutWidget(rows, this));
 }
 
+// - Properties -
+
+bool
+MediaLibraryView::autoHide() const
+{ return autoHideAct_->isChecked(); }
+
+bool
+MediaLibraryView::autoRun() const
+{ return autoRunAct_->isChecked(); }
+
 // - Actions -
 
 void
@@ -216,10 +254,6 @@ MediaLibraryView::showIcon()
 void
 MediaLibraryView::showList()
 { views_->setCurrentWidget(listView_); }
-
-void
-MediaLibraryView::showTree()
-{ views_->setCurrentWidget(treeView_); }
 
 void
 MediaLibraryView::refresh()
@@ -248,55 +282,87 @@ MediaLibraryView::clear(bool confirm)
 }
 
 void
+MediaLibraryView::showGame()
+{
+  if (!selectionModel_->hasSelection())
+    return;
+  QModelIndex index = selectionModel_->currentIndex();
+  int type  = MediaModel::indexType(index);
+  if (type != Media::Game)
+    return;
+  QString digest = MediaModel::indexDigest(index);
+  if (digest.isEmpty())
+    return;
+  emit showGameRequested(digest);
+}
+
+void
 MediaLibraryView::open()
 {
-  if (standardSelectionModel_->hasSelection())  {
-    QModelIndex index = standardSelectionModel_->currentIndex();
-    QString location = MediaStandardModel::indexLocation(index);
-    if (!location.isEmpty()) {
-      showMessage(tr("opening") + ": " + location);
-      emit openRequested(location);
-    }
+  if (!selectionModel_->hasSelection())
+    return;
+
+  QModelIndex index = selectionModel_->currentIndex();
+  QString location = MediaModel::indexLocation(index);
+  if (location.isEmpty())
+    return;
+
+  if (!location.contains("://") && !QFile::exists(location)) {
+    warn(tr("not exist") + ": " + location);
+    return;
   }
+
+  showMessage(tr("opening") + ": " + location);
+  emit openRequested(location);
+  if (autoHide())
+    fadeOut();
 }
 
 void
 MediaLibraryView::showSelection()
 {
-  if (standardSelectionModel_->hasSelection())  {
-    QModelIndex index = standardSelectionModel_->currentIndex();
-    QString location = MediaStandardModel::indexLocation(index);
+  if (selectionModel_->hasSelection())  {
+    QModelIndex index = selectionModel_->currentIndex();
+    QString location = MediaModel::indexLocation(index);
     if (!location.isEmpty())
       showMessage(location);
   }
 }
 
 void
-MediaLibraryView::openDirectory()
+MediaLibraryView::browse()
 {
-  if (standardSelectionModel_->hasSelection())  {
-    QModelIndex index = standardSelectionModel_->currentIndex();
-    QString location = MediaStandardModel::indexLocation(index);
-    if (!location.isEmpty()) {
-      QFileInfo fi(location);
+  if (!selectionModel_->hasSelection())
+    return;
+
+  QModelIndex index = selectionModel_->currentIndex();
+  QString location = MediaModel::indexLocation(index);
+  if (location.isEmpty())
+    return;
+
+  QString url;
+  if (location.contains("://"))
+    url = location;
+  else {
+    QFileInfo fi(location);
+    if (!fi.isDir())
       fi = QFileInfo(fi.absolutePath());
-      QString path = fi.absoluteFilePath();
-      if (!fi.exists()) {
-        warn(tr("not exist") + ": " + path);
-        return;
-      }
-      showMessage(tr("opening") + ": " + path);
-      if (!path.contains("://")) {
-#ifdef Q_OS_WIN
-        path.replace('\\', '/');
-        path.prepend("file:///");
-#else
-        path.prepend("file://");
-#endif // Q_OS_WIN
-      }
-      QDesktopServices::openUrl(path);
+    url = fi.absoluteFilePath();
+    if (!fi.exists()) {
+      warn(tr("not exist") + ": " + url);
+      return;
     }
   }
+  showMessage(tr("opening") + ": " + url);
+  if (!url.contains("://")) {
+#ifdef Q_OS_WIN
+    url = QDir::fromNativeSeparators(url);
+    url.prepend("file:///");
+#else
+    url.prepend("file://");
+#endif // Q_OS_WIN
+  }
+  QDesktopServices::openUrl(url);
 }
 
 // - Filters -
@@ -304,7 +370,7 @@ MediaLibraryView::openDirectory()
 void
 MediaLibraryView::updateFilterEdit()
 {
-  standardProxyModel_->setFilterRegExp(
+  proxyModel_->setFilterRegExp(
     QRegExp(filterEdit_->text().trimmed(), Qt::CaseInsensitive)
   );
   updateCount();
@@ -324,11 +390,12 @@ MediaLibraryView::setFilterType(int type)
 {
   QString key;
   switch (type) {
-  case FT_Game:  key = TR(T_GALGAME); break;
-  case FT_Video: key = TR(T_VIDEO); break;
-  case FT_Url:   key = TR(T_URL); break;
+  case FT_Folder: key = TR(T_FOLDER); break;
+  case FT_Game:   key = TR(T_GALGAME); break;
+  case FT_Video:  key = TR(T_VIDEO); break;
+  case FT_Url:    key = TR(T_URL); break;
   }
-  standardFilterModel_->setFilterFixedString(key);
+  filterModel_->setFilterFixedString(key);
   updateCount();
 }
 
@@ -337,16 +404,16 @@ MediaLibraryView::setFilterType(int type)
 void
 MediaLibraryView::updateButtons()
 {
-  bool t = standardSelectionModel_->hasSelection();
+  bool t = selectionModel_->hasSelection();
   openButton_->setEnabled(t);
-  dirButton_->setEnabled(t);
+  browseButton_->setEnabled(t);
 }
 
 void
 MediaLibraryView::updateCount()
 {
-  int total = library_->standardModel()->rowCount(),
-      count = standardProxyModel_->rowCount();
+  int total = library_->model()->rowCount(),
+      count = proxyModel_->rowCount();
   countButton_->setText(
     QString("%1/%2")
       .arg(QString::number(count))
@@ -360,6 +427,30 @@ MediaLibraryView::setVisible(bool visible)
   if (visible && library_->isDirty())
     refresh();
   Base::setVisible(visible);
+}
+
+void
+MediaLibraryView::contextMenuEvent(QContextMenuEvent *event)
+{
+  Q_ASSERT(event);
+  updateContextMenu();
+  contextMenu_->exec(event->globalPos());
+  event->accept();
+}
+
+void
+MediaLibraryView::updateContextMenu()
+{
+  bool v = selectionModel_->hasSelection();
+  openAct_->setVisible(v);
+  browseAct_->setVisible(v);
+
+  if (v) {
+    QModelIndex index = selectionModel_->currentIndex();
+    int type  = MediaModel::indexType(index);
+    showGameAct_->setVisible(type == Media::Game);
+  } else
+    showGameAct_->setVisible(false);
 }
 
 // EOF
