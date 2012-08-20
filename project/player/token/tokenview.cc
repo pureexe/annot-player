@@ -10,6 +10,7 @@
 #include "project/common/acui.h"
 #include "project/common/acfilteredtableview.h"
 #include "module/annotservice/annotserveragent.h"
+#include "module/qtext/layoutwidget.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
@@ -147,7 +148,7 @@ TokenView::createLayout()
 
     grid->setContentsMargins(6, 6, 6, 6);
     //setContentsMargins(0, 0, 0, 0);
-  } setLayout(grid);
+  } setCentralWidget(new LayoutWidget(grid, this));
 }
 
 void
@@ -573,10 +574,11 @@ TokenView::deleteAlias()
   if (id) {
     qint64 userId = server_->user().id();
     if (!userId || userId != currentAliasUserId()) {
-      tr("cannot delete other's alias");
+      warn(tr("cannot delete other's alias"));
       return;
     }
     tableView_->removeCurrentRow();
+    showMessage(tr("don't forget to update annotations!"));
     emit aliasDeletedWithId(id);
   }
 }
@@ -591,9 +593,9 @@ TokenView::copyAlias()
   QClipboard *clipboard = QApplication::clipboard();
   if (clipboard) {
     clipboard->setText(text);
-    emit message(TR(T_SUCCEED_COPIED) + ": " + text);
+    showMessage(TR(T_SUCCEED_COPIED) + ": " + text);
   } else
-    emit warning(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
+    warn(TR(T_ERROR_CLIPBOARD_UNAVAILABLE));
 }
 
 void
@@ -627,7 +629,7 @@ TokenView::openAliasUrl()
 {
   QString url = currentAliasText();
   if (!url.isEmpty()) {
-    emit message(TR(T_MENUTEXT_OPENURL) + ": " + url);
+    showMessage(TR(T_MENUTEXT_OPENURL) + ": " + url);
     emit openUrlRequested(url);
   }
 }

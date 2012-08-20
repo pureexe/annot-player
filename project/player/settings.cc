@@ -29,6 +29,7 @@
 
 #define SK_ANNOTLANGUAGES "AnnotLanguages"
 #define SK_SHOWLIBRARY "ShowLibrary"
+#define SK_LIBRARYVIEW "LibraryView"
 #define SK_LIVE         "Live"
 #define SK_PREFERLOCALDB  "PreferLocalDatabase"
 #define SK_MENUBAR      "MenuBar"
@@ -375,6 +376,14 @@ Settings::showLibrary() const
 void
 Settings::setShowLibrary(bool t)
 { setValue(SK_SHOWLIBRARY, t); }
+
+int
+Settings::libraryView() const
+{ return value(SK_LIBRARYVIEW).toInt(); }
+
+void
+Settings::setLibraryView(int value)
+{ setValue(SK_LIBRARYVIEW, value); }
 
 bool
 Settings::isMenuBarVisible() const

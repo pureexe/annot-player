@@ -255,7 +255,7 @@ YoukuMrlResolver::decodeFileId(QString fileId, long seed)
   QString ret;
   QString alphabet = decodeFileIdAlphabet(seed);
   DOUT("alphabet =" << alphabet);
-  QStringList ids = fileId.split('*');
+  QStringList ids = fileId.split('*', QString::SkipEmptyParts);
   foreach (const QString &id, ids) {
     if (id.isEmpty())
       continue;

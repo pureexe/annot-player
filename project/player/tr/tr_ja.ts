@@ -820,115 +820,115 @@
 <context>
     <name>AnnotationGraphicsItem</name>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="435"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="522"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="438"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="525"/>
         <source>Mon</source>
         <translation>月</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="436"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="523"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="439"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="526"/>
         <source>Tue</source>
         <translation>火</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="437"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="524"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="440"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="527"/>
         <source>Wed</source>
         <translation>水</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="438"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="525"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="441"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="528"/>
         <source>Thu</source>
         <translation>木</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="439"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="526"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="442"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="529"/>
         <source>Fri</source>
         <translation>金</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="440"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="527"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="443"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="530"/>
         <source>Sat</source>
         <translation>土</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="441"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="528"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="444"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="531"/>
         <source>Sun</source>
         <translation>日</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="515"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="518"/>
         <source>days</source>
         <translation>日前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="516"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="519"/>
         <source>weeks</source>
         <translation>週前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="517"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="520"/>
         <source>months</source>
         <translation>ヶ月前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="539"/>
         <location filename="../annot/annotationgraphicsitem.cc" line="542"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="545"/>
         <source>hr</source>
         <translation>時間前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="545"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="548"/>
         <source>min</source>
         <translation>分前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="548"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="551"/>
         <source>sec</source>
         <translation>秒前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1265"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1282"/>
         <source>Search</source>
         <translation>検索</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1266"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1283"/>
         <source>Translate</source>
         <translation>翻訳</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1272"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1289"/>
         <source>Edit</source>
         <translation>編集</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1276"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1293"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1277"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1294"/>
         <source>Hide</source>
         <translation>非表示</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1279"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1296"/>
         <source>Release</source>
         <translation>逃がす</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1279"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1296"/>
         <source>MButton</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1281"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1298"/>
         <source>Analytics</source>
         <translation>ｱﾅﾘﾃｨｸｽ</translation>
     </message>
@@ -937,12 +937,12 @@
         <translation type="obsolete">ﾀﾞﾌﾞﾙｸﾘｯｸ</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1305"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1322"/>
         <source>Show Traditional Chinese</source>
         <translation>繁体中国語に変換</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1465"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1482"/>
         <source>cannot edit other&apos;s annotation text</source>
         <translation>ほかのユーザーの編集しないでください</translation>
     </message>
@@ -2925,7 +2925,7 @@
         <translation>ビリビリｱｶｳﾝﾄでURLの解析に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="326"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="328"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>ニコURLの解析に失敗した、ニコｶｳﾝﾄを設定してください</translation>
     </message>
@@ -2966,12 +2966,12 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="4718"/>
+        <location filename="../mainwindow.cc" line="4737"/>
         <source>Select annots window</source>
         <translation>再生ウィンドウの変更</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4738"/>
+        <location filename="../mainwindow.cc" line="4757"/>
         <source>Select process window to open</source>
         <translation>新たな再生ウィンドウを選択</translation>
     </message>
@@ -2984,84 +2984,84 @@
         <translation type="obsolete">ビュー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1364"/>
+        <location filename="../mainwindow.cc" line="1368"/>
         <source>Help</source>
         <translation>ヘルプ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1348"/>
+        <location filename="../mainwindow.cc" line="1352"/>
         <source>About</source>
         <translation>ソフトについて</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1225"/>
-        <location filename="../mainwindow.cc" line="2177"/>
-        <location filename="../mainwindow.cc" line="2178"/>
+        <location filename="../mainwindow.cc" line="1229"/>
+        <location filename="../mainwindow.cc" line="2181"/>
+        <location filename="../mainwindow.cc" line="2182"/>
         <source>Open</source>
         <translation>開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1230"/>
+        <location filename="../mainwindow.cc" line="1234"/>
         <source>Pause</source>
         <translation>一時停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1233"/>
+        <location filename="../mainwindow.cc" line="1237"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1235"/>
+        <location filename="../mainwindow.cc" line="1239"/>
         <source>Replay</source>
         <translation>もう一度再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1237"/>
+        <location filename="../mainwindow.cc" line="1241"/>
         <source>Previous</source>
         <translation>前へ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1239"/>
+        <location filename="../mainwindow.cc" line="1243"/>
         <source>Next</source>
         <translation>次へ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1241"/>
+        <location filename="../mainwindow.cc" line="1245"/>
         <source>Next Frame</source>
         <translation>次のフレーム</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1243"/>
+        <location filename="../mainwindow.cc" line="1247"/>
         <source>Snapshot</source>
         <translation>スナップショット</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1245"/>
+        <location filename="../mainwindow.cc" line="1249"/>
         <source>Snapshot All</source>
         <translation>スナップショット（弾幕含めて）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1248"/>
+        <location filename="../mainwindow.cc" line="1252"/>
         <source>Login</source>
         <translation>ログイン</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1250"/>
+        <location filename="../mainwindow.cc" line="1254"/>
         <source>Logout</source>
         <translation>ログアウト</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1258"/>
+        <location filename="../mainwindow.cc" line="1262"/>
         <source>Remove All</source>
         <translation>全て消す</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1260"/>
+        <location filename="../mainwindow.cc" line="1264"/>
         <source>Remove Non-existed</source>
         <translation>存在しないアイテムを消す</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1273"/>
+        <location filename="../mainwindow.cc" line="1277"/>
         <source>Translator</source>
         <translation>翻訳</translation>
     </message>
@@ -3070,52 +3070,52 @@
         <translation type="obsolete">ライブラリ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1292"/>
+        <location filename="../mainwindow.cc" line="1296"/>
         <source>Show Subtitle On Top</source>
         <translation>字幕を上に表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1295"/>
+        <location filename="../mainwindow.cc" line="1299"/>
         <source>Show Subtitle</source>
         <translation>字幕を表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1298"/>
+        <location filename="../mainwindow.cc" line="1302"/>
         <source>Show Non-Subtitle Annotation</source>
         <translation>非字幕の弾幕を表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1302"/>
+        <location filename="../mainwindow.cc" line="1306"/>
         <source>Image Filter</source>
         <translation>画像フィルター</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1308"/>
+        <location filename="../mainwindow.cc" line="1312"/>
         <source>Limit Bandwidth</source>
         <translation>勢い弾幕を制御</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1312"/>
+        <location filename="../mainwindow.cc" line="1316"/>
         <source>Convert to Traditional Chinese</source>
         <translation>繁体中国語に変換</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1316"/>
+        <location filename="../mainwindow.cc" line="1320"/>
         <source>Always Show Avatar</source>
         <translation>アバターを表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1342"/>
+        <location filename="../mainwindow.cc" line="1346"/>
         <source>Download Annotations (XML/JSON)</source>
         <translation>弾幕XMLをﾀﾞｳﾝﾛｰﾄﾞ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3715"/>
+        <location filename="../mainwindow.cc" line="3734"/>
         <source>Paused</source>
         <translation>一時停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3741"/>
+        <location filename="../mainwindow.cc" line="3760"/>
         <source>Stopped</source>
         <translation>再生停止</translation>
     </message>
@@ -3124,13 +3124,13 @@
         <translation type="obsolete">再生中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4133"/>
-        <location filename="../mainwindow.cc" line="8184"/>
+        <location filename="../mainwindow.cc" line="4152"/>
+        <location filename="../mainwindow.cc" line="8203"/>
         <source>new version released at Google Code</source>
         <translation>Google Codeで新たな魔道書を見つかった</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4915"/>
+        <location filename="../mainwindow.cc" line="4934"/>
         <source>unknown media</source>
         <translation>未知なメディア</translation>
     </message>
@@ -3139,29 +3139,29 @@
         <translation type="obsolete">弾幕を静止して表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1328"/>
+        <location filename="../mainwindow.cc" line="1332"/>
         <source>Trace Window</source>
         <translation>ｳｨﾝﾄﾞｳを追跡する</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1332"/>
-        <location filename="../mainwindow.cc" line="6854"/>
+        <location filename="../mainwindow.cc" line="1336"/>
+        <location filename="../mainwindow.cc" line="6873"/>
         <source>Audio Delay</source>
         <translation>遅延時間</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1335"/>
-        <location filename="../mainwindow.cc" line="2900"/>
+        <location filename="../mainwindow.cc" line="1339"/>
+        <location filename="../mainwindow.cc" line="2909"/>
         <source>Open Annotation Files</source>
         <translation>弾幕ファイルを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1338"/>
+        <location filename="../mainwindow.cc" line="1342"/>
         <source>Import Annotations from URL</source>
         <translation>URLから弾幕だけを導入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1345"/>
+        <location filename="../mainwindow.cc" line="1349"/>
         <source>Save Annotation File</source>
         <translation>弾幕をXMLで保存</translation>
     </message>
@@ -3170,95 +3170,95 @@
         <translation type="obsolete">更新</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1370"/>
+        <location filename="../mainwindow.cc" line="1374"/>
         <source>Quit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1374"/>
+        <location filename="../mainwindow.cc" line="1378"/>
         <source>Google Translator</source>
         <translation>Google翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1377"/>
+        <location filename="../mainwindow.cc" line="1381"/>
         <source>Microsoft Translator</source>
         <translation>Microsoft翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1380"/>
+        <location filename="../mainwindow.cc" line="1384"/>
         <source>Romaji Translator</source>
         <translation>ローマ字に変換</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1384"/>
+        <location filename="../mainwindow.cc" line="1388"/>
         <source>Stereo</source>
         <translation>ステレオ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1387"/>
+        <location filename="../mainwindow.cc" line="1391"/>
         <source>Reverse</source>
         <translation>反転</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1390"/>
+        <location filename="../mainwindow.cc" line="1394"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1393"/>
+        <location filename="../mainwindow.cc" line="1397"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1396"/>
+        <location filename="../mainwindow.cc" line="1400"/>
         <source>Dolby&apos;s</source>
         <translation>ドルビー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1934"/>
-        <location filename="../mainwindow.cc" line="1935"/>
+        <location filename="../mainwindow.cc" line="1938"/>
+        <location filename="../mainwindow.cc" line="1939"/>
         <source>Translation Service</source>
         <translation>翻訳サービス</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2067"/>
-        <location filename="../mainwindow.cc" line="2068"/>
+        <location filename="../mainwindow.cc" line="2071"/>
+        <location filename="../mainwindow.cc" line="2072"/>
         <source>Subtitle Color</source>
         <translation>字幕の色</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2119"/>
-        <location filename="../mainwindow.cc" line="2120"/>
+        <location filename="../mainwindow.cc" line="2123"/>
+        <location filename="../mainwindow.cc" line="2124"/>
         <source>Adjust Video</source>
         <translation>ビデオを調整</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2183"/>
-        <location filename="../mainwindow.cc" line="2184"/>
+        <location filename="../mainwindow.cc" line="2187"/>
+        <location filename="../mainwindow.cc" line="2188"/>
         <source>Import Annotations</source>
         <translation>弾幕を導入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2195"/>
-        <location filename="../mainwindow.cc" line="2196"/>
+        <location filename="../mainwindow.cc" line="2199"/>
+        <location filename="../mainwindow.cc" line="2200"/>
         <source>Subtitle</source>
         <translation>字幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2207"/>
-        <location filename="../mainwindow.cc" line="2208"/>
+        <location filename="../mainwindow.cc" line="2211"/>
+        <location filename="../mainwindow.cc" line="2212"/>
         <source>Audio Track</source>
         <translation>ｵｰﾃﾞｨｵを調整</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2213"/>
-        <location filename="../mainwindow.cc" line="2214"/>
+        <location filename="../mainwindow.cc" line="2217"/>
+        <location filename="../mainwindow.cc" line="2218"/>
         <source>Audio Channel</source>
         <translation>ｵｰﾃﾞｨｵ・ﾁｬﾝﾈﾙ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2227"/>
-        <location filename="../mainwindow.cc" line="2228"/>
+        <location filename="../mainwindow.cc" line="2231"/>
+        <location filename="../mainwindow.cc" line="2232"/>
         <source>Adjust Audio</source>
         <translation>ｵｰﾃﾞｨｵを調整</translation>
     </message>
@@ -3267,58 +3267,68 @@
         <translation type="obsolete">再生停止後</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2367"/>
+        <location filename="../mainwindow.cc" line="2371"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2383"/>
+        <location filename="../mainwindow.cc" line="2387"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2400"/>
-        <location filename="../mainwindow.cc" line="2401"/>
+        <location filename="../mainwindow.cc" line="2404"/>
+        <location filename="../mainwindow.cc" line="2405"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2402"/>
+        <location filename="../mainwindow.cc" line="2406"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3454"/>
+        <location filename="../mainwindow.cc" line="3463"/>
         <source>play file with unknown extension</source>
         <translation>未知な拡張子</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3572"/>
+        <location filename="../mainwindow.cc" line="3482"/>
+        <source>Analyzing ...</source>
+        <translation>分析中・・・</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="3483"/>
+        <source>analyzing</source>
+        <translation>分析中</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="3591"/>
         <source>analyzing media ...</source>
         <translation>メデアを分析中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3738"/>
+        <location filename="../mainwindow.cc" line="3757"/>
         <source>detaching all processes ...</source>
         <translation>プロセスの同期を切断中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3809"/>
+        <location filename="../mainwindow.cc" line="3828"/>
         <source>Synchronized</source>
         <translation>同期した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3885"/>
+        <location filename="../mainwindow.cc" line="3904"/>
         <source>saved</source>
         <translation>保存成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3887"/>
+        <location filename="../mainwindow.cc" line="3906"/>
         <source>failed to save snapshot</source>
         <translation>保存失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3911"/>
+        <location filename="../mainwindow.cc" line="3930"/>
         <source>snapshot saved on the destop</source>
         <translation>スナップショットが保存された</translation>
     </message>
@@ -3327,17 +3337,17 @@
         <translation type="obsolete">ソフトを更新する</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4138"/>
+        <location filename="../mainwindow.cc" line="4157"/>
         <source>opening update URL ...</source>
         <translation>アップデートURLを開く…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4194"/>
+        <location filename="../mainwindow.cc" line="4213"/>
         <source>Buffering ...</source>
         <translation>読み込み中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4224"/>
+        <location filename="../mainwindow.cc" line="4243"/>
         <source>Download finished</source>
         <translation>ﾀﾞｳﾝﾛｰﾄﾞ完成</translation>
     </message>
@@ -3370,7 +3380,7 @@
         <translation type="obsolete">カシューで捜索中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5494"/>
+        <location filename="../mainwindow.cc" line="5513"/>
         <source>offline database</source>
         <translation>オフラインのデーターベース</translation>
     </message>
@@ -3379,12 +3389,12 @@
         <translation type="obsolete">弾幕を保存中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6018"/>
+        <location filename="../mainwindow.cc" line="6037"/>
         <source>remove annotations</source>
         <translation>弾幕を消す</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6030"/>
+        <location filename="../mainwindow.cc" line="6049"/>
         <source>capture annotations</source>
         <translation>弾幕を捕まえる</translation>
     </message>
@@ -3397,30 +3407,30 @@
         <translation type="obsolete">%1/%2+マウスを使って、弾幕を捕まえる</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7685"/>
+        <location filename="../mainwindow.cc" line="7704"/>
         <source>always on top enabled</source>
         <translation>常に手前に表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7687"/>
+        <location filename="../mainwindow.cc" line="7706"/>
         <source>always on top disabled</source>
         <translation>手前に表示しない</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7715"/>
-        <location filename="../mainwindow.cc" line="7758"/>
-        <location filename="../mainwindow.cc" line="7805"/>
-        <location filename="../mainwindow.cc" line="7850"/>
-        <location filename="../mainwindow.cc" line="7895"/>
+        <location filename="../mainwindow.cc" line="7734"/>
+        <location filename="../mainwindow.cc" line="7777"/>
+        <location filename="../mainwindow.cc" line="7824"/>
+        <location filename="../mainwindow.cc" line="7869"/>
+        <location filename="../mainwindow.cc" line="7914"/>
         <source>invalid cast id</source>
         <translation>無効な魔法対象</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7721"/>
-        <location filename="../mainwindow.cc" line="7764"/>
-        <location filename="../mainwindow.cc" line="7811"/>
-        <location filename="../mainwindow.cc" line="7856"/>
-        <location filename="../mainwindow.cc" line="7901"/>
+        <location filename="../mainwindow.cc" line="7740"/>
+        <location filename="../mainwindow.cc" line="7783"/>
+        <location filename="../mainwindow.cc" line="7830"/>
+        <location filename="../mainwindow.cc" line="7875"/>
+        <location filename="../mainwindow.cc" line="7920"/>
         <source>cannot perform cast when offline</source>
         <translation>オフラインで魔法きない</translation>
     </message>
@@ -3453,13 +3463,13 @@
         <translation type="obsolete">ログアウト中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1227"/>
-        <location filename="../mainwindow.cc" line="2201"/>
+        <location filename="../mainwindow.cc" line="1231"/>
+        <location filename="../mainwindow.cc" line="2205"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2202"/>
+        <location filename="../mainwindow.cc" line="2206"/>
         <source>Play menu</source>
         <translation>再生メニュー</translation>
     </message>
@@ -3472,14 +3482,14 @@
         <translation type="obsolete">URLから弾幕を導入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2820"/>
-        <location filename="../mainwindow.cc" line="2851"/>
+        <location filename="../mainwindow.cc" line="2826"/>
+        <location filename="../mainwindow.cc" line="2860"/>
         <source>analyzing URL ...</source>
         <translation>URLを分析中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2824"/>
-        <location filename="../mainwindow.cc" line="3209"/>
+        <location filename="../mainwindow.cc" line="2830"/>
+        <location filename="../mainwindow.cc" line="3218"/>
         <source>failed to resolve URL</source>
         <translation>URLの解析に失敗した</translation>
     </message>
@@ -3516,54 +3526,54 @@
         <translation type="obsolete">終了…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7816"/>
-        <location filename="../mainwindow.cc" line="7861"/>
-        <location filename="../mainwindow.cc" line="7906"/>
+        <location filename="../mainwindow.cc" line="7835"/>
+        <location filename="../mainwindow.cc" line="7880"/>
+        <location filename="../mainwindow.cc" line="7925"/>
         <source>cannot perform cast to yourself</source>
         <translation>スペルに失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7822"/>
+        <location filename="../mainwindow.cc" line="7841"/>
         <source>blessing user ...</source>
         <translation>ﾕｰｻﾞｰを祝福する…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7833"/>
+        <location filename="../mainwindow.cc" line="7852"/>
         <source>user blessed</source>
         <translation>ﾕｰｻﾞｰを祝福された</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7867"/>
+        <location filename="../mainwindow.cc" line="7886"/>
         <source>cursing user ...</source>
         <translation>ﾕｰｻﾞｰを呪う…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7878"/>
+        <location filename="../mainwindow.cc" line="7897"/>
         <source>user cursed</source>
         <translation>ﾕｰｻﾞｰを呪われた</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7912"/>
+        <location filename="../mainwindow.cc" line="7931"/>
         <source>blocking user ...</source>
         <translation>ﾕｰｻﾞｰをブロックする…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7923"/>
+        <location filename="../mainwindow.cc" line="7942"/>
         <source>user blocked</source>
         <translation>ﾕｰｻﾞｰをブロックされた</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8023"/>
+        <location filename="../mainwindow.cc" line="8042"/>
         <source>connecting to server ...</source>
         <translation>サーバーと接続中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8040"/>
+        <location filename="../mainwindow.cc" line="8059"/>
         <source>server connected</source>
         <translation>サーバーと接続しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8042"/>
+        <location filename="../mainwindow.cc" line="8061"/>
         <source>server disconnected</source>
         <translation>サーバーと接続できません</translation>
     </message>
@@ -3572,60 +3582,60 @@
         <translation type="obsolete">新しいバージョンの魔道書を見つかりました：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2320"/>
-        <location filename="../mainwindow.cc" line="2321"/>
+        <location filename="../mainwindow.cc" line="2324"/>
+        <location filename="../mainwindow.cc" line="2325"/>
         <source>Annotation Information</source>
         <translation>弾幕情報</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2396"/>
+        <location filename="../mainwindow.cc" line="2400"/>
         <source>&amp;Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2397"/>
+        <location filename="../mainwindow.cc" line="2401"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2816"/>
-        <location filename="../mainwindow.cc" line="2953"/>
+        <location filename="../mainwindow.cc" line="2822"/>
+        <location filename="../mainwindow.cc" line="2962"/>
         <source>importing annotations to Galgame is not allowed</source>
         <translation>ニコの弾幕をエロゲに導入できません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2878"/>
+        <location filename="../mainwindow.cc" line="2887"/>
         <source>Open File</source>
         <translation>ファイルを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2965"/>
+        <location filename="../mainwindow.cc" line="2974"/>
         <source>annotations already imported</source>
         <translation>弾幕を既に導入された</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2971"/>
+        <location filename="../mainwindow.cc" line="2980"/>
         <source>annotations not found</source>
         <translation>弾幕がみつがりません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3128"/>
+        <location filename="../mainwindow.cc" line="3137"/>
         <source>Open Subtitles</source>
         <translation>字幕ファイルを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3319"/>
+        <location filename="../mainwindow.cc" line="3328"/>
         <source>annotation file removed</source>
         <translation>弾幕ファイルを削除された</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3891"/>
-        <location filename="../mainwindow.cc" line="3897"/>
+        <location filename="../mainwindow.cc" line="3910"/>
+        <location filename="../mainwindow.cc" line="3916"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4131"/>
+        <location filename="../mainwindow.cc" line="4150"/>
         <source>you are using the lastest version</source>
         <translation>既に最新バーションです</translation>
     </message>
@@ -3634,38 +3644,38 @@
         <translation type="obsolete">新しいバージョンの魔道書を見つかりました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4762"/>
+        <location filename="../mainwindow.cc" line="4781"/>
         <source>please log in to save media information</source>
         <translation>情報の保存にはログインが必要</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4767"/>
+        <location filename="../mainwindow.cc" line="4786"/>
         <source>information not saved for unknown media</source>
         <translation>知らないメデアのため、情報の保存に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4770"/>
-        <location filename="../mainwindow.cc" line="4812"/>
+        <location filename="../mainwindow.cc" line="4789"/>
+        <location filename="../mainwindow.cc" line="4831"/>
         <source>saving media information ...</source>
         <translation>メディアの情報を保存中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4800"/>
+        <location filename="../mainwindow.cc" line="4819"/>
         <source>similar information already exists</source>
         <translation>同じ情報は既に存在した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4806"/>
+        <location filename="../mainwindow.cc" line="4825"/>
         <source>alias is not a valid URL</source>
         <translation>有効のURLではありません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4828"/>
+        <location filename="../mainwindow.cc" line="4847"/>
         <source>media information saved</source>
         <translation>メディアの情報を保存した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4910"/>
+        <location filename="../mainwindow.cc" line="4929"/>
         <source>not connected to the Internet</source>
         <translation>Internetに接触出来ません</translation>
     </message>
@@ -3674,210 +3684,210 @@
         <translation type="obsolete">未知なトーケン</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4920"/>
-        <location filename="../mainwindow.cc" line="4998"/>
+        <location filename="../mainwindow.cc" line="4939"/>
+        <location filename="../mainwindow.cc" line="5017"/>
         <source>updating annotations ...</source>
         <translation>弾幕を更新中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4994"/>
+        <location filename="../mainwindow.cc" line="5013"/>
         <source>no changes</source>
         <translation>変更なし</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5204"/>
+        <location filename="../mainwindow.cc" line="5223"/>
         <source>searching for media information ...</source>
         <translation>メディアの情報を捜索中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5393"/>
+        <location filename="../mainwindow.cc" line="5412"/>
         <source>searching for media information in cache ...</source>
         <translation>カシューで捜索中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5617"/>
-        <location filename="../mainwindow.cc" line="5689"/>
+        <location filename="../mainwindow.cc" line="5636"/>
+        <location filename="../mainwindow.cc" line="5708"/>
         <source>saving annotation ...</source>
         <translation>弾幕を保存中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6397"/>
+        <location filename="../mainwindow.cc" line="6416"/>
         <source>use %1 with mouse or wheel to control annotations</source>
         <translation>%1とマウスホイールを使って、弾幕を捕まえる</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6690"/>
-        <location filename="../mainwindow.cc" line="6697"/>
+        <location filename="../mainwindow.cc" line="6709"/>
+        <location filename="../mainwindow.cc" line="6716"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6857"/>
+        <location filename="../mainwindow.cc" line="6876"/>
         <source> sec.</source>
         <translation>秒</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7727"/>
+        <location filename="../mainwindow.cc" line="7746"/>
         <source>blessing media ...</source>
         <translation>メディアに祝福魔法をかけます…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7739"/>
+        <location filename="../mainwindow.cc" line="7758"/>
         <source>media blessed</source>
         <translation>メディアを祝福された</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7745"/>
+        <location filename="../mainwindow.cc" line="7764"/>
         <source>failed to bless media</source>
         <translation>メディアの祝福に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7770"/>
+        <location filename="../mainwindow.cc" line="7789"/>
         <source>cursing media ...</source>
         <translation>メディアに呪い魔法をかけます…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7782"/>
+        <location filename="../mainwindow.cc" line="7801"/>
         <source>media cursed</source>
         <translation>メディアを呪われた</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7788"/>
+        <location filename="../mainwindow.cc" line="7807"/>
         <source>failed to curse media</source>
         <translation>メディアの呪いに失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8247"/>
+        <location filename="../mainwindow.cc" line="8266"/>
         <source>found process id for window</source>
         <translation>プロセスが発見されまいた</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8250"/>
+        <location filename="../mainwindow.cc" line="8269"/>
         <source>process id for window was not found</source>
         <translation>プロセスが見つかりません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8264"/>
+        <location filename="../mainwindow.cc" line="8283"/>
         <source>process was attached</source>
         <translation>プロセスと同期した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8268"/>
+        <location filename="../mainwindow.cc" line="8287"/>
         <source>process attached</source>
         <translation>プロセスの同期を切断した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8280"/>
+        <location filename="../mainwindow.cc" line="8299"/>
         <source>failed to attach process </source>
         <translation>プロセスの同期に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8282"/>
+        <location filename="../mainwindow.cc" line="8301"/>
         <source>Is the process running now?</source>
         <translation>プログラムが有効なの？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8284"/>
+        <location filename="../mainwindow.cc" line="8303"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation>管理者としても一度実行してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8286"/>
+        <location filename="../mainwindow.cc" line="8305"/>
         <source>Restart the target process might help -_-</source>
         <translation>プロセスを再起動してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8299"/>
+        <location filename="../mainwindow.cc" line="8318"/>
         <source>process was started</source>
         <translation>プロセスがすでに起動しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8302"/>
+        <location filename="../mainwindow.cc" line="8321"/>
         <source>told process to start</source>
         <translation>プロセスを起動しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8310"/>
+        <location filename="../mainwindow.cc" line="8329"/>
         <source>failed to start process</source>
         <translation>プロセスの起動に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8314"/>
+        <location filename="../mainwindow.cc" line="8333"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>%1秒待つ…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8384"/>
+        <location filename="../mainwindow.cc" line="8403"/>
         <source>please synchronize with a game first</source>
         <translation>まずはゲームを同期しなさい</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8392"/>
+        <location filename="../mainwindow.cc" line="8411"/>
         <source>channel selected</source>
         <translation>ﾁｬﾝﾈﾙを選択</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8417"/>
+        <location filename="../mainwindow.cc" line="8436"/>
         <source>opening process</source>
         <translation>プロセスを起動中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9676"/>
+        <location filename="../mainwindow.cc" line="9695"/>
         <source>Reaching End Soon ...</source>
         <translation>すぐに終わる…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11129"/>
+        <location filename="../mainwindow.cc" line="11148"/>
         <source>opening</source>
         <translation>開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11407"/>
+        <location filename="../mainwindow.cc" line="11429"/>
         <source>load Google Translator</source>
         <translation>Google翻訳を使う</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11409"/>
+        <location filename="../mainwindow.cc" line="11431"/>
         <source>offload Google Translator</source>
         <translation>Google翻訳を禁止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11419"/>
+        <location filename="../mainwindow.cc" line="11441"/>
         <source>load Microsoft Translator</source>
         <translation>Microsoft翻訳を使う</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11421"/>
+        <location filename="../mainwindow.cc" line="11443"/>
         <source>offload Microsoft Translator</source>
         <translation>Microsoft翻訳を禁止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11431"/>
+        <location filename="../mainwindow.cc" line="11453"/>
         <source>load Romaji Translator</source>
         <translation>ローマ字の変換を有効</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11433"/>
+        <location filename="../mainwindow.cc" line="11455"/>
         <source>offload Romaji Translator</source>
         <translation>ローマ字の変換を無効</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8351"/>
+        <location filename="../mainwindow.cc" line="8370"/>
         <source>resuming last game encoding</source>
         <translation>前のｴﾝｺｰﾃﾞｨﾝｸﾞを設定した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8360"/>
+        <location filename="../mainwindow.cc" line="8379"/>
         <source>detect game encoding</source>
         <translation>ゲームのｴﾝｺｰﾃﾞｨﾝｸﾞを設定した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8632"/>
+        <location filename="../mainwindow.cc" line="8651"/>
         <source>updating anonymous status ...</source>
         <translation>匿名の状態を変更中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8673"/>
+        <location filename="../mainwindow.cc" line="8692"/>
         <source>updating user language ...</source>
         <translation>ユーザーの言語を変更中…</translation>
     </message>
@@ -3886,17 +3896,17 @@
         <translation type="obsolete">匿名の設定を変更中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8644"/>
+        <location filename="../mainwindow.cc" line="8663"/>
         <source>failed to change user anonymous state</source>
         <translation>匿名の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8654"/>
+        <location filename="../mainwindow.cc" line="8673"/>
         <source>you are anonymous now</source>
         <translation>匿名状態になった</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8656"/>
+        <location filename="../mainwindow.cc" line="8675"/>
         <source>you are not anonymous now</source>
         <translation>公開状態になった</translation>
     </message>
@@ -3905,65 +3915,65 @@
         <translation type="obsolete">言語設定を変更中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8685"/>
+        <location filename="../mainwindow.cc" line="8704"/>
         <source>failed to change user language</source>
         <translation>言語の変更に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8694"/>
+        <location filename="../mainwindow.cc" line="8713"/>
         <source>your language is </source>
         <translation>今の言語は</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8788"/>
+        <location filename="../mainwindow.cc" line="8807"/>
         <source>restart the app to use the new language</source>
         <translation>プログラムを再起動してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9512"/>
+        <location filename="../mainwindow.cc" line="9531"/>
         <source>less files to browse</source>
         <translation>レス・ファイル</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9547"/>
+        <location filename="../mainwindow.cc" line="9566"/>
         <source>more files added</source>
         <translation>モア・ファイル</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9863"/>
-        <location filename="../mainwindow.cc" line="9884"/>
+        <location filename="../mainwindow.cc" line="9882"/>
+        <location filename="../mainwindow.cc" line="9903"/>
         <source>file saved</source>
         <translation>ファイルをセーブした</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9865"/>
-        <location filename="../mainwindow.cc" line="9886"/>
+        <location filename="../mainwindow.cc" line="9884"/>
+        <location filename="../mainwindow.cc" line="9905"/>
         <source>failed to save file</source>
         <translation>ファイルの保存に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10025"/>
-        <location filename="../mainwindow.cc" line="10038"/>
+        <location filename="../mainwindow.cc" line="10044"/>
+        <location filename="../mainwindow.cc" line="10057"/>
         <source>copied</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10365"/>
+        <location filename="../mainwindow.cc" line="10384"/>
         <source>loading last audio channel</source>
         <translation>前回のｵｰﾃﾞｨｵ・ﾁｬﾝﾈﾙを選択</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10424"/>
+        <location filename="../mainwindow.cc" line="10443"/>
         <source>using last aspect ratio</source>
         <translation>前回のアスペクト比で再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10544"/>
+        <location filename="../mainwindow.cc" line="10563"/>
         <source>annotation URL already imported</source>
         <translation>弾幕URLを既に導入しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10690"/>
+        <location filename="../mainwindow.cc" line="10709"/>
         <source>please enable Multiple Window from context menu</source>
         <translation>多重起動を有効にしてください</translation>
     </message>
@@ -3984,22 +3994,22 @@
         <translation type="obsolete">ブラウザの起動に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10698"/>
+        <location filename="../mainwindow.cc" line="10717"/>
         <source>new window launched</source>
         <translation>新しいウィンドウを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10772"/>
+        <location filename="../mainwindow.cc" line="10791"/>
         <source>buffered video will be saved</source>
         <translation>動画を自動で保存します</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10774"/>
+        <location filename="../mainwindow.cc" line="10793"/>
         <source>buffered video will not be saved</source>
         <translation>動画を自動で保存しない</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10817"/>
+        <location filename="../mainwindow.cc" line="10836"/>
         <source>resume annotations</source>
         <translation>全ての弾幕を逃がす</translation>
     </message>
@@ -4008,51 +4018,51 @@
         <translation type="obsolete">前回のアスペクト比で再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10530"/>
+        <location filename="../mainwindow.cc" line="10549"/>
         <source>annot URL is already used</source>
         <translation>弾幕URLを既に導入した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10536"/>
-        <location filename="../mainwindow.cc" line="10568"/>
+        <location filename="../mainwindow.cc" line="10555"/>
+        <location filename="../mainwindow.cc" line="10587"/>
         <source>media URL is being played </source>
         <translation>メデアURLを既に再生中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10591"/>
+        <location filename="../mainwindow.cc" line="10610"/>
         <source>do nothings after finished playing all files</source>
         <translation>再生停止後、何もしない</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10600"/>
+        <location filename="../mainwindow.cc" line="10619"/>
         <source>put the computer to sleep after finished playing all files</source>
         <translation>再生停止後、自動でスリープします</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10609"/>
+        <location filename="../mainwindow.cc" line="10628"/>
         <source>shutdown the computer after finished playing all files</source>
         <translation>再生停止後、パソコンをシャットダウンします</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10676"/>
+        <location filename="../mainwindow.cc" line="10695"/>
         <source>allow multiple player windows</source>
         <translation>ウィンドウの多重表示を有効にする</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10678"/>
+        <location filename="../mainwindow.cc" line="10697"/>
         <source>allow single player window</source>
         <translation>ウィンドウの多重表示を無効にする</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2989"/>
-        <location filename="../mainwindow.cc" line="4939"/>
-        <location filename="../mainwindow.cc" line="5496"/>
-        <location filename="../mainwindow.cc" line="9826"/>
+        <location filename="../mainwindow.cc" line="2998"/>
+        <location filename="../mainwindow.cc" line="4958"/>
+        <location filename="../mainwindow.cc" line="5515"/>
+        <location filename="../mainwindow.cc" line="9845"/>
         <source>annotations found</source>
         <translation>弾幕を発見しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1253"/>
+        <location filename="../mainwindow.cc" line="1257"/>
         <source>Update Annotations</source>
         <translation>弾幕を更新</translation>
     </message>
@@ -4061,8 +4071,8 @@
         <translation type="obsolete">拡大鏡</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1994"/>
-        <location filename="../mainwindow.cc" line="1995"/>
+        <location filename="../mainwindow.cc" line="1998"/>
+        <location filename="../mainwindow.cc" line="1999"/>
         <source>Sync with Galgame</source>
         <translation>エロゲーと同期</translation>
     </message>
@@ -4071,8 +4081,8 @@
         <translation type="obsolete">ビデオを調整</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1837"/>
-        <location filename="../mainwindow.cc" line="1838"/>
+        <location filename="../mainwindow.cc" line="1841"/>
+        <location filename="../mainwindow.cc" line="1842"/>
         <source>Search</source>
         <translation>検索</translation>
     </message>
@@ -4081,13 +4091,13 @@
         <translation type="obsolete">URLをコピー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1844"/>
+        <location filename="../mainwindow.cc" line="1848"/>
         <source>Search with %1</source>
         <translation>検索：%1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1921"/>
-        <location filename="../mainwindow.cc" line="1922"/>
+        <location filename="../mainwindow.cc" line="1925"/>
+        <location filename="../mainwindow.cc" line="1926"/>
         <source>Current media</source>
         <translation>メデアURL</translation>
     </message>
@@ -4096,24 +4106,24 @@
         <translation type="obsolete">再生停止後</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2246"/>
+        <location filename="../mainwindow.cc" line="2250"/>
         <source>After finished playing all files in the same folder</source>
         <translation>再生停止後</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2256"/>
-        <location filename="../mainwindow.cc" line="2257"/>
+        <location filename="../mainwindow.cc" line="2260"/>
+        <location filename="../mainwindow.cc" line="2261"/>
         <source>Utilities</source>
         <translation>ツール</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2276"/>
-        <location filename="../mainwindow.cc" line="2277"/>
+        <location filename="../mainwindow.cc" line="2280"/>
+        <location filename="../mainwindow.cc" line="2281"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1353"/>
+        <location filename="../mainwindow.cc" line="1357"/>
         <source>Preferences</source>
         <translation>偏好</translation>
     </message>
@@ -4122,44 +4132,44 @@
         <translation type="obsolete">字幕を上に表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1320"/>
+        <location filename="../mainwindow.cc" line="1324"/>
         <source>Always Show Timestamp</source>
         <translation>日時を表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1324"/>
+        <location filename="../mainwindow.cc" line="1328"/>
         <source>No Floating Annotations</source>
         <translation>弾幕の動きを制する</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1350"/>
+        <location filename="../mainwindow.cc" line="1354"/>
         <source>Check for Update</source>
         <translation>更新を確認</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2245"/>
+        <location filename="../mainwindow.cc" line="2249"/>
         <source>After Finished Playing</source>
         <translation>再生停止後</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2327"/>
-        <location filename="../mainwindow.cc" line="2328"/>
+        <location filename="../mainwindow.cc" line="2331"/>
+        <location filename="../mainwindow.cc" line="2332"/>
         <source>Annotation Settings</source>
         <translation>弾幕設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3470"/>
+        <location filename="../mainwindow.cc" line="3489"/>
         <source>failed to open media</source>
         <translation>メデアの再生に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4135"/>
-        <location filename="../mainwindow.cc" line="8186"/>
+        <location filename="../mainwindow.cc" line="4154"/>
+        <location filename="../mainwindow.cc" line="8205"/>
         <source>updater launched, please close Annot Player</source>
         <translation>ソフトを更新のため、プレーヤーを閉じてください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4190"/>
+        <location filename="../mainwindow.cc" line="4209"/>
         <source>Complete</source>
         <translation>完成</translation>
     </message>
@@ -4168,37 +4178,37 @@
         <translation type="obsolete">読み込む中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5086"/>
+        <location filename="../mainwindow.cc" line="5105"/>
         <source>login is requied to to submit annotation URL</source>
         <translation>弾幕URLを保存のため、ログインが必要です</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5091"/>
+        <location filename="../mainwindow.cc" line="5110"/>
         <source>File saved</source>
         <translation>ファイルをセーブした</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5103"/>
+        <location filename="../mainwindow.cc" line="5122"/>
         <source>URL is too long</source>
         <translation>URLは長すぎ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5107"/>
+        <location filename="../mainwindow.cc" line="5126"/>
         <source>signing media ...</source>
         <translation>弾幕URLを保存中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5115"/>
+        <location filename="../mainwindow.cc" line="5134"/>
         <source>failed to analyze media</source>
         <translation>メデアの分析に失敗した</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5186"/>
+        <location filename="../mainwindow.cc" line="5205"/>
         <source>media signed</source>
         <translation>弾幕URLを保存しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5188"/>
+        <location filename="../mainwindow.cc" line="5207"/>
         <source>failed to sign media</source>
         <translation>弾幕URLの保存に失敗した</translation>
     </message>
@@ -4211,29 +4221,29 @@
         <translation type="obsolete">Google Codeで新たな魔道書を見つかりました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9909"/>
+        <location filename="../mainwindow.cc" line="9928"/>
         <source>analyzing annotation URL ...</source>
         <translation>弾幕URLを分析中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10181"/>
+        <location filename="../mainwindow.cc" line="10200"/>
         <source>resuming last play</source>
         <translation>前回のﾎﾟｼﾞｼｮﾝから再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10241"/>
-        <location filename="../mainwindow.cc" line="10243"/>
+        <location filename="../mainwindow.cc" line="10260"/>
+        <location filename="../mainwindow.cc" line="10262"/>
         <source>loading last subtitle</source>
         <translation>前回の字幕を表示する</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10248"/>
+        <location filename="../mainwindow.cc" line="10267"/>
         <source>hide last subtitle</source>
         <translation>前の字幕を非表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10307"/>
-        <location filename="../mainwindow.cc" line="10309"/>
+        <location filename="../mainwindow.cc" line="10326"/>
+        <location filename="../mainwindow.cc" line="10328"/>
         <source>loading last audio track</source>
         <translation>前回のｵｰﾃﾞｨｵ・ﾄﾗｯｸを再生</translation>
     </message>
@@ -4266,7 +4276,7 @@
         <translation type="obsolete">ファイルが見つかりません</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9090"/>
+        <location filename="../mainwindow.cc" line="9109"/>
         <source>invalid lnk</source>
         <translation>lnkのターゲットファイルが見つかりません</translation>
     </message>
@@ -4316,63 +4326,72 @@
         <translation type="obsolete">切り替える</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="72"/>
+        <location filename="../library/medialibraryview.cc" line="76"/>
         <source>Hide View</source>
         <translation>非表示</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="73"/>
+        <location filename="../library/medialibraryview.cc" line="77"/>
         <source>Toggle View</source>
         <translation>切り替える</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="76"/>
+        <location filename="../library/medialibraryview.cc" line="80"/>
         <source>Hide After Opening Media</source>
         <translation>再生すろと非表示する</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="80"/>
+        <location filename="../library/medialibraryview.cc" line="84"/>
         <source>Show On Startup</source>
         <translation>起動時に表示する</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="147"/>
+        <location filename="../library/medialibraryview.cc" line="151"/>
         <source>Count</source>
         <translation>数</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="149"/>
         <source>Search with Regular Expression</source>
-        <translation>正規表現で検索</translation>
+        <translation type="obsolete">正規表現で検索</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="149"/>
+        <location filename="../library/medialibraryview.cc" line="153"/>
         <source>Search</source>
         <translation>検索</translation>
     </message>
     <message>
         <location filename="../library/medialibraryview.cc" line="153"/>
+        <source>Search with regular expression splitted by spaces</source>
+        <translation>正規表現で検索</translation>
+    </message>
+    <message>
+        <location filename="../library/medialibraryview.cc" line="157"/>
         <source>Type</source>
         <translation>種類</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="155"/>
+        <location filename="../library/medialibraryview.cc" line="159"/>
         <source>All</source>
         <translation>全て</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="69"/>
-        <location filename="../library/medialibraryview.cc" line="163"/>
+        <location filename="../library/medialibraryview.cc" line="408"/>
+        <source>regex</source>
+        <translation>正規表現</translation>
+    </message>
+    <message>
+        <location filename="../library/medialibraryview.cc" line="73"/>
+        <location filename="../library/medialibraryview.cc" line="167"/>
         <source>Browse</source>
         <translation>ブラウズ</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="65"/>
+        <location filename="../library/medialibraryview.cc" line="69"/>
         <source>Game Preferences</source>
         <translation>エロゲ偏好</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="163"/>
+        <location filename="../library/medialibraryview.cc" line="167"/>
         <source>Browse location</source>
         <translation>位置をブラウズ</translation>
     </message>
@@ -4397,7 +4416,7 @@
         <translation type="obsolete">フォルダを開く</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="164"/>
+        <location filename="../library/medialibraryview.cc" line="168"/>
         <source>Double Click</source>
         <translation>ﾀﾞﾌﾞﾙｸﾘｯｸ</translation>
     </message>
@@ -4410,32 +4429,32 @@
         <translation type="obsolete">ウィンドウを常に表示</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="166"/>
+        <location filename="../library/medialibraryview.cc" line="170"/>
         <source>Rebuild the library index</source>
         <translation>リフレッシュ</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="167"/>
+        <location filename="../library/medialibraryview.cc" line="171"/>
         <source>Clear library</source>
         <translation>クリア</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="169"/>
+        <location filename="../library/medialibraryview.cc" line="173"/>
         <source>Hide view</source>
         <translation>非表示</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="170"/>
+        <location filename="../library/medialibraryview.cc" line="174"/>
         <source>Toggle view</source>
         <translation>切り替える</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="178"/>
+        <location filename="../library/medialibraryview.cc" line="182"/>
         <source>Icon View</source>
         <translation>アイコン</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="179"/>
+        <location filename="../library/medialibraryview.cc" line="183"/>
         <source>List View</source>
         <translation>リスト</translation>
     </message>
@@ -4444,24 +4463,24 @@
         <translation type="obsolete">ツリー</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="273"/>
+        <location filename="../library/medialibraryview.cc" line="299"/>
         <source>Confirm</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="274"/>
+        <location filename="../library/medialibraryview.cc" line="300"/>
         <source>Do you want to clear the media library?</source>
         <translation>ライブラリをクレアますか？</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="315"/>
-        <location filename="../library/medialibraryview.cc" line="356"/>
+        <location filename="../library/medialibraryview.cc" line="341"/>
+        <location filename="../library/medialibraryview.cc" line="382"/>
         <source>opening</source>
         <translation>開く</translation>
     </message>
     <message>
-        <location filename="../library/medialibraryview.cc" line="311"/>
-        <location filename="../library/medialibraryview.cc" line="352"/>
+        <location filename="../library/medialibraryview.cc" line="337"/>
+        <location filename="../library/medialibraryview.cc" line="378"/>
         <source>not exist</source>
         <translation>存在しない</translation>
     </message>
@@ -5417,55 +5436,60 @@
         <translation type="obsolete">マークがすでに呪われた</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="34"/>
+        <location filename="../token/tokenview.cc" line="35"/>
         <source>Annotation Source</source>
         <translation>弾幕ソースの管理</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="102"/>
+        <location filename="../token/tokenview.cc" line="103"/>
         <source>Add Source</source>
         <translation>弾幕のソースを追加</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="104"/>
+        <location filename="../token/tokenview.cc" line="105"/>
         <source>Update Annotations</source>
         <translation>弾幕を更新</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="180"/>
         <location filename="../token/tokenview.cc" line="181"/>
+        <location filename="../token/tokenview.cc" line="182"/>
         <source>Search</source>
         <translation>検索</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="547"/>
+        <location filename="../token/tokenview.cc" line="548"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="548"/>
+        <location filename="../token/tokenview.cc" line="549"/>
         <source>File</source>
         <translation>ファイル</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="549"/>
+        <location filename="../token/tokenview.cc" line="550"/>
         <source>Tag</source>
         <translation>タッグ</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="551"/>
+        <location filename="../token/tokenview.cc" line="552"/>
         <source>Name</source>
         <translation>名前</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="552"/>
+        <location filename="../token/tokenview.cc" line="553"/>
         <source>Folder</source>
         <translation>フォルダ</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="553"/>
+        <location filename="../token/tokenview.cc" line="554"/>
         <source>Brand</source>
         <translation>ブランド</translation>
+    </message>
+    <message>
+        <location filename="../token/tokenview.cc" line="581"/>
+        <source>don&apos;t forget to update annotations!</source>
+        <translation>弾幕の更新を忘れないで！</translation>
     </message>
     <message>
         <source>Product</source>
@@ -5488,7 +5512,7 @@
         <translation type="obsolete">タッグ</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="550"/>
+        <location filename="../token/tokenview.cc" line="551"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
@@ -5497,7 +5521,7 @@
         <translation type="obsolete">タイトル</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="576"/>
+        <location filename="../token/tokenview.cc" line="577"/>
         <source>cannot delete other&apos;s alias</source>
         <translation>他人の別名が削除できません</translation>
     </message>

@@ -11,6 +11,7 @@ QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
 class QListView;
+class QRadioButton;
 class QStackedLayout;
 class QToolButton;
 class QTreeView;
@@ -37,6 +38,12 @@ class MediaLibraryView : public AcMainWindow
     FT_Count
   };
 
+  enum View {
+    IconView = 0,
+    ListView,
+    ViewCount
+  };
+
 public:
   explicit MediaLibraryView(MediaLibrary *library, QWidget *parent = nullptr);
 
@@ -49,9 +56,18 @@ public:
   bool autoHide() const;
   bool autoRun() const;
 
+  int viewIndex() const;
+
   // -  Events -
 public slots:
   void setVisible(bool visible) override;
+
+  void setAutoHide(bool t);
+  void setAutoRun(bool t);
+
+  void setViewIndex(int index);
+
+  void focus();
 
 protected:
   void contextMenuEvent(QContextMenuEvent *event) override;
@@ -90,6 +106,7 @@ private:
   QComboBox *filterType_;
 
   QToolButton *openButton_, *browseButton_, *countButton_;
+  QRadioButton *iconButton_, *listButton_;
 
   QSortFilterProxyModel *proxyModel_, *filterModel_;
   QItemSelectionModel *selectionModel_;

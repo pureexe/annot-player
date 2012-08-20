@@ -71,6 +71,9 @@ public:
   bool showLibrary() const;
   void setShowLibrary(bool t);
 
+  int libraryView() const;
+  void setLibraryView(int id);
+
   bool isLive() const;
   void setLive(bool t);
 

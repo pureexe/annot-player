@@ -4,7 +4,7 @@
 // tokenview.h
 // 8/13/2011
 
-#include "project/common/acwindow.h"
+#include "project/common/acmainwindow.h"
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/alias.h"
 #include "module/searchengine/searchenginefactory.h"
@@ -27,12 +27,12 @@ class AddAliasDialog;
 class DataManager;
 class SignalHub;
 
-class TokenView : public AcWindow
+class TokenView : public AcMainWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(TokenView)
   typedef TokenView Self;
-  typedef AcWindow Base;
+  typedef AcMainWindow Base;
 
   typedef AnnotCloud::Token Token;
   typedef AnnotCloud::TokenList TokenList;

@@ -1,7 +1,7 @@
 # downloader.pro
 # 3/29/2012
 
-VERSION = 0.1.2.4
+VERSION = 0.1.2.5
 
 DEFINES += PROJECT_DOWNLOADER
 

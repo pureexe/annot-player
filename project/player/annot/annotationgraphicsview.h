@@ -241,7 +241,8 @@ public:
 
 public slots:
   void setItemMetaVisible(bool visible)
-  { if (metaVisible_ != visible) emit itemMetaVisibleChanged(metaVisible_ = visible); }
+  //{ if (metaVisible_ != visible) emit itemMetaVisibleChanged(metaVisible_ = visible); }
+  { emit itemMetaVisibleChanged(metaVisible_ = visible); }
 
   void setItemVisible(bool visible)
   { emit itemVisibleChanged( itemVisible_ = visible); }

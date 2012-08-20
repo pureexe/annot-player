@@ -55,6 +55,11 @@ MiniPlayerUi::MiniPlayerUi(SignalHub *hub, Player *player, AnnotationServerAgent
   connect(new QShortcut(QKeySequence("CTRL+1"), this), SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
   connect(new QShortcut(QKeySequence("CTRL+2"), this), SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
   connect(new QShortcut(QKeySequence("CTRL+3"), this), SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
+#ifndef Q_OS_MAC
+  connect(new QShortcut(QKeySequence("ALT+1"), this), SIGNAL(activated()), hub, SLOT(toggleEmbeddedPlayerMode()));
+  connect(new QShortcut(QKeySequence("ALT+2"), this), SIGNAL(activated()), hub, SLOT(toggleMiniPlayerMode()));
+  connect(new QShortcut(QKeySequence("ALT+3"), this), SIGNAL(activated()), hub, SLOT(toggleFullScreenWindowMode()));
+#endif // Q_OS_MAC
 }
 
 void

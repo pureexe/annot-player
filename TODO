@@ -5,11 +5,10 @@ http://db.tt/SrtkzxIJ
 http://qt-project.org/wiki/Category:Add-ons
 
 # Changes
-my *.exe
-my *.dll
-my update/*
-README & ChangeLog
-
+annot-player
+annot-down
+README
+ChangeLog
 
 # key ideas
 - stream trial games, and sub trial games in chinese
@@ -34,37 +33,52 @@ work on streaming
 - windows driver
 - sync
 
-# 0.1.8.3
+# 0.1.8.4
 
-- hack qnetworkaccessmanager source code to get the orignal stream
+- save db version with the next app version
+  - to avoid remove app everytime!
+  
+- dict, translator for kotobabank
+http://kotobank.jp/search/???
+http://kotobank.jp/word/???
+
+- media library
+    type: add RECENT filter/sorting comboedit critera
+  - recent files
+
+- game
+  - grant edit permission for token
+  - listen to more than one signals
+
+- hack qnetworkaccessmanager source code to get a stable orignal download stream
   - make stable download session
     - maybe, sth is wrong in createRequest?
 - able to subscribe to bilibili session
 - able to grab all downloadable to bilibili session
 
-- grant edit permission for token
-
-- library view
+- search engine
   - redesign searchengine mechanism, using a global search engine pool
     rather then create for each of them
+  - consider integrate search engine from translator
+    - need a better way for grouping translator
+  - library view and others, redesign
   - copy title / location, search title
 
-- listen to more than one signals
+# 0.1.8.5
 
-- dict, translator for kotobabank
-http://kotobank.jp/search/???
-http://kotobank.jp/word/???
-
-# 0.1.8.4
+- avoid osdwindow to fulls creen
 
 - able to show more than one channels
 - context menu to show launch settings for the current game
   - open/opendir
   - change language
   - remember or not recent settings
+- create serverdb at annot.me for saving anchor and encoding
+  - everyone will overrite the old db
 
+- downloader:
+  - always prompt when try to clear and clearall
 
-- able to select more than one thread to listen
 - use osdwindow for tracking, rather than full screen
 
 - able to move imported annotations
@@ -172,6 +186,7 @@ enable offline annotation edit
 
 # 0.1.8.3
 - annot-down
+  - use highlighter to recognize video
   - rewrite thread using qtconcurrent and QFuture for blocking, rather then eventloop to block
     eliminate eventloops and signals
   - rewrite  qnetworkaccessmanager using qtconcurrent and qfuture

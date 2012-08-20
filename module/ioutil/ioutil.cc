@@ -98,7 +98,10 @@ IOUtil::readBytes(const QString &input, qint64 maxSize)
         return QByteArray();
       }
 
-      data = file.read(qMin(file.size(), maxSize));
+      DOUT("start reading file header");
+      //data = file.read(qMin(file.size(), maxSize));
+      data = file.read(maxSize);
+      DOUT("end reading");
       //file.close();
     }
   }
@@ -112,6 +115,7 @@ IOUtil::readBytes(const QString &input, qint64 maxSize)
      DOUT("truncate from" << data.size() << " to" << maxSize);
      data.truncate(maxSize);
   }
+  DOUT("exit: size =" << data.size());
   return data;
 }
 // EOF

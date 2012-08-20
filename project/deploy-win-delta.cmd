@@ -1,15 +1,17 @@
 :: deploy-win-delta.cmd
 :: 5/23/2012
+:: 
+:: Note: only locales of ja,ko,zh_CN,zh_TW are deployed
 setlocal
 cd /d d:/dev/build || exit /b 1
 
-::set VERSION=0.1.8.2
+::set VERSION=0.1.8.3
 ::set APP=annot-player
 ::set TARGET=Annot Stream
 ::set ZIPFILE=%APP%-%VERSION%-win.zip
 
 set MAJOR=0.1.8
-set MINOR=2
+set MINOR=3
 set VERSION=%MAJOR%.%MINOR%
 ::set VERSION=%MAJOR%
 set PREVMAJOR=%MAJOR%
@@ -101,8 +103,8 @@ unix2dos "ChangeLog.txt"
 ::rm -Rf licenses
 ::cp -R "%SOURCE%/licenses" Licenses
 
-cp "%SOURCE%/COPYING" COPYING.txt || exit /b 1
-unix2dos COPYING.txt
+::cp "%SOURCE%/COPYING" COPYING.txt || exit /b 1
+::unix2dos COPYING.txt
 
 :: deploy modules
 mkdir Data

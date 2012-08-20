@@ -55,7 +55,7 @@ namespace { namespace detail {
   QByteArray vlcpath(const QString &path)
   {
 #ifdef Q_OS_WIN
-    return _cs(QDir::toNativeSeperators(path));
+    return _cs(QDir::toNativeSeparators(path));
 #else
     return _cs(path);
 #endif // Q_OS_WIN

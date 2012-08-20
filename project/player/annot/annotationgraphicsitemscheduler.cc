@@ -34,9 +34,9 @@ AnnotationGraphicsItemScheduler::clear()
   lastCell_ = std::make_pair(QPoint(), qint64(0));
   pauseTime_ = resumeTime_ = 0;
 
-  qMemSet(flyLaneTime_, 0, sizeof(flyLaneTime_)/sizeof(*flyLaneTime_));
-  qMemSet(topLaneTime_, 0, sizeof(topLaneTime_)/sizeof(*topLaneTime_));
-  qMemSet(bottomLaneTime_, 0, sizeof(bottomLaneTime_)/sizeof(*bottomLaneTime_));
+  qMemSet(flyLane_, 0, sizeof(flyLane_)/sizeof(*flyLane_));
+  qMemSet(topLane_, 0, sizeof(topLane_)/sizeof(*topLane_));
+  qMemSet(bottomLane_, 0, sizeof(bottomLane_)/sizeof(*bottomLane_));
   qMemSet(subLaneStyle_, 0, sizeof(subLaneStyle_)/sizeof(*subLaneStyle_));
 }
 
@@ -46,8 +46,8 @@ AnnotationGraphicsItemScheduler::clearSubtitles()
   for (int i = 0; i < LaneCount; i++)
     if (subLaneStyle_[i]) {
       switch (subLaneStyle_[i]) {
-      case AnnotationGraphicsItem::TopStyle: topLaneTime_[i] = 0; break;
-      case AnnotationGraphicsItem::BottomStyle: bottomLaneTime_[i] = 0; break;
+      case AnnotationGraphicsItem::TopStyle: topLane_[i].time = 0; break;
+      case AnnotationGraphicsItem::BottomStyle: bottomLane_[i].time = 0; break;
       }
       subLaneStyle_[i] = 0;
     }
@@ -55,9 +55,36 @@ AnnotationGraphicsItemScheduler::clearSubtitles()
 
 // - Float Scheduling -
 
+namespace { namespace detail { // anonymous detail
+  // 1: old, 2: now, ww: window width, now:time2
+  // v1 = (ww+width1)/life1
+  // v2 = (ww+width2)/life2
+  // is available if
+  //   v1 * (time2 - time1) - width1 > 0 && (
+  //     v2 < v1 ||
+  //     ((v1 * (time2 - time1) - width1) / (v2-v1)) * v2 >= ww
+  //   )
+  //
+  // Return if 1 is available to save 2
+  inline bool available(qint64 now, qreal v2, const AnnotationGraphicsItemScheduler::Item &item1, int ww)
+  {
+    if (!item1.time)
+      return true;
+
+    Q_ASSERT(item1.life);
+    qreal v1 = (ww + item1.width) / qreal(item1.life);
+          //v2 = (ww + width2) / qreal(life2);
+    qreal d = v1 * (now - item1.time) - item1.width;
+    return d > 0 && (
+      v2 < v1 ||
+      d * v2 > ww * (v2 - v1)
+    );
+  }
+} } // anonymous namespace detail
+
 // Use std time() rather than QTime::currentTime() to improve performance.
 int
-AnnotationGraphicsItemScheduler::nextY(int windowHeight, int itemHeight, int visibleTime, AnnotationGraphicsItem::Style style, bool sub)
+AnnotationGraphicsItemScheduler::nextY(const QSize &windowSize, const QSizeF &itemSize, int visibleTime, AnnotationGraphicsItem::Style style, bool sub)
 {
   Q_ASSERT(hub_);
   // min scale is 1/2 (0.5), LaneHeight is around 30, 2000 is the max vertical resolution
@@ -67,49 +94,55 @@ AnnotationGraphicsItemScheduler::nextY(int windowHeight, int itemHeight, int vis
   if (!laneHeight)
     return 0;
 
+  enum { WaitTime = 500 }; // in msecs, less than 1 second
   Q_ASSERT(visibleTime > 0);
-  int waitTime = 500; // in msecs
-  switch (style) {
-  case AnnotationGraphicsItem::FloatStyle:
-  case AnnotationGraphicsItem::FlyStyle: waitTime += visibleTime / 3; break;
-  default: waitTime += visibleTime;
-  }
+  visibleTime += WaitTime;
+  Q_ASSERT(visibleTime > 0);
 
-  qint64 *lastLaneTime;
+  //int waitTime = 500; // in msecs
+  //switch (style) {
+  //case AnnotationGraphicsItem::FloatStyle:
+  //case AnnotationGraphicsItem::FlyStyle: waitTime += visibleTime / 3; break;
+  //default: waitTime += visibleTime;
+  //}
+
+  Item *laneItem;
   switch (style) {
   case AnnotationGraphicsItem::FloatStyle:
-  case AnnotationGraphicsItem::FlyStyle:      lastLaneTime = flyLaneTime_; break;
-  case AnnotationGraphicsItem::TopStyle:      lastLaneTime = topLaneTime_; break;
+  case AnnotationGraphicsItem::FlyStyle:      laneItem = flyLane_; break;
+  case AnnotationGraphicsItem::TopStyle:      laneItem = topLane_; break;
   case AnnotationGraphicsItem::BottomStyle:
-  case AnnotationGraphicsItem::SubtitleStyle: lastLaneTime = bottomLaneTime_; break;
-  default : Q_ASSERT(0);                      lastLaneTime = flyLaneTime_;
+  case AnnotationGraphicsItem::SubtitleStyle: laneItem = bottomLane_; break;
+  default : Q_ASSERT(0);                      laneItem = flyLane_;
   }
+  Q_ASSERT(laneItem);
 
-  if (windowHeight <= laneHeight * 2) // Do not schedule when window size is so small
+  if (windowSize.height() <= laneHeight * 2) // Do not schedule when window size is so small
     return 0;
 
   enum { ItemHaloHeight = 2 * 2 };
-  itemHeight = qMax(0, itemHeight - ItemHaloHeight);
+  int itemHeight = qMax<int>(0, itemSize.height() - ItemHaloHeight);
   int itemLaneCount = itemHeight <= laneHeight ? 1 :
                       itemHeight / laneHeight + 1;
   Q_ASSERT(itemLaneCount);
   //qDebug () << "itemLaneCount =" << itemLaneCount << ", itemHeight =" << itemHeight << ", laneHeight =" << laneHeight;
 
-  qint64 now = QDateTime::currentMSecsSinceEpoch();
-  int laneCount = qMin<int>(LaneCount, windowHeight / laneHeight);
+  const qint64 now = QDateTime::currentMSecsSinceEpoch();
+  int laneCount = qMin<int>(LaneCount, windowSize.height() / laneHeight);
 
+  qreal itemVelocity = (windowSize.width() + itemSize.width()) / qreal(visibleTime);
   int bestLane = 0;
   qint64 minTime = now;
   for (int lane = 0; lane < laneCount - itemLaneCount + 1; lane++) {
     if (itemLaneCount == 1) {
-      if (now >= lastLaneTime[lane] + waitTime) {
+      if (detail::available(now, itemVelocity, laneItem[lane], windowSize.width())) {
         bestLane = lane;
         break;
       }
     } else {
       bool best = true;
       for (int i = 0; i < itemLaneCount; i++) {
-        if (now < lastLaneTime[lane + i] + waitTime) {
+        if (!detail::available(now, itemVelocity, laneItem[lane+i], windowSize.width())) {
           best = false;
           break;
         }
@@ -120,19 +153,26 @@ AnnotationGraphicsItemScheduler::nextY(int windowHeight, int itemHeight, int vis
       }
     }
 
-    if (minTime > lastLaneTime[lane]) {
-      minTime = lastLaneTime[lane];
+    if (minTime > laneItem[lane].time) {
+      minTime = laneItem[lane].time;
       bestLane = lane;
     }
   }
 
   //qDebug() << bestLane;
 
-  if (itemLaneCount == 1)
-    lastLaneTime[bestLane] = now;
-  else
-    for (int i = 0; i < itemLaneCount; i++)
-      lastLaneTime[bestLane + i] = now;
+  if (itemLaneCount == 1) {
+    Item &item = laneItem[bestLane];
+    item.time = now;
+    item.life = visibleTime;
+    item.width = itemSize.width();
+  } else
+    for (int i = 0; i < itemLaneCount; i++) {
+      Item &item = laneItem[bestLane+i];
+      item.time = now;
+      item.life = visibleTime;
+      item.width = itemSize.width();
+    }
 
   if (hub_->isSignalTokenMode() && sub)
     for (int i = 0; i < itemLaneCount; i++)
@@ -143,7 +183,7 @@ AnnotationGraphicsItemScheduler::nextY(int windowHeight, int itemHeight, int vis
   case AnnotationGraphicsItem::SubtitleStyle:
     {
       int windowFooter = !hub_->isNormalPlayerMode() ? int(laneHeight * 1.5) : 0;
-      return windowHeight - (bestLane + 2) * laneHeight - windowFooter;
+      return windowSize.height() - (bestLane + 2) * laneHeight - windowFooter;
     }
   default:
     {
@@ -180,7 +220,7 @@ AnnotationGraphicsItemScheduler::nextPos(const QSize &windowSize, const QSizeF &
     return QPointF();
   if (maxXCount > MaxColumnCount)
     maxXCount = MaxColumnCount;
-  qint64 now = QDateTime::currentMSecsSinceEpoch();
+  const qint64 now = QDateTime::currentMSecsSinceEpoch();
   bool ok = false;
   qint64 pausedTime = resumeTime_ - pauseTime_;
   int x, y;

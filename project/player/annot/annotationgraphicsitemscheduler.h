@@ -28,6 +28,38 @@ class AnnotationGraphicsItemScheduler : public QObject
   typedef AnnotationGraphicsItemScheduler Self;
   typedef QObject Base;
 
+public:
+  struct Item { ///< \internal
+    qint64 time; // timestamp of appearance
+    int life;   // visible time
+    int width;  // item width
+  };
+  explicit AnnotationGraphicsItemScheduler(SignalHub *hub, QObject *parent = nullptr)
+    : Base(parent), hub_(hub), scale_(1.0), pauseTime_(0), resumeTime_(0)
+  { Q_ASSERT(hub); clear(); }
+
+  qreal scale() const { return scale_; }
+
+signals:
+  void message(const QString &text);
+
+public slots:
+  void pause();
+  void resume();
+  void clear();
+  void clearSubtitles();
+
+  void setScale(qreal value) { scale_ = value; }
+
+  // - Float scheduling, lane by lane -
+public:
+  int nextY(const QSize &windowSize, const QSizeF &itemSize, int visibleMsecs, AnnotationGraphicsItem::Style style, bool sub);
+
+  // - Motionless scheduling, cell by cell -
+public:
+  QPointF nextPos(const QSize &windowSize, const QSizeF &itemSize, int visibleMsecs);
+
+private:
   SignalHub *hub_;
 
   qreal scale_;
@@ -41,35 +73,10 @@ class AnnotationGraphicsItemScheduler : public QObject
 
   // Schedule by lane
   enum { LaneCount = 200 }; // number of vertical lanes, large enough
-  qint64 flyLaneTime_[LaneCount],
-         topLaneTime_[LaneCount],
-         bottomLaneTime_[LaneCount];
-  qint8 subLaneStyle_[LaneCount]; // qint8 must be able to cover AnnotationGraphicsItem::Style
-
-signals:
-  void message(const QString &text);
-
-public:
-  explicit AnnotationGraphicsItemScheduler(SignalHub *hub, QObject *parent = nullptr)
-    : Base(parent), hub_(hub), scale_(1.0), pauseTime_(0), resumeTime_(0) { Q_ASSERT(hub); }
-
-  qreal scale() const { return scale_; }
-
-public slots:
-  void pause();
-  void resume();
-  void clear();
-  void clearSubtitles();
-
-  void setScale(qreal value) { scale_ = value; }
-
-  // - Float scheduling, lane by lane -
-public:
-  int nextY(int windowHeight, int itemHeight, int visibleMsecs, AnnotationGraphicsItem::Style style, bool sub);
-
-  // - Motionless scheduling, cell by cell -
-public:
-  QPointF nextPos(const QSize &windowSize, const QSizeF &itemSize, int visibleMsecs);
+  Item flyLane_[LaneCount],
+       topLane_[LaneCount],
+       bottomLane_[LaneCount];
+  qint8 subLaneStyle_[LaneCount]; // qint8 must be able to hold AnnotationGraphicsItem::Style
 };
 
 #endif // ANNOTATIONGRAPHICSITEMSCHEDULER_H

@@ -57,6 +57,10 @@ MediaLibraryView::MediaLibraryView(MediaLibrary *library, QWidget *parent)
 }
 
 void
+MediaLibraryView::focus()
+{ filterEdit_->setFocus(); }
+
+void
 MediaLibraryView::createActions()
 {
   contextMenu_ = new QMenu(this);
@@ -146,7 +150,7 @@ MediaLibraryView::createLayout()
 
   countButton_ = ui->makeToolButton(0, "0/0", tr("Count"));
 
-  filterEdit_ = ui->makeLineEdit(0, QString(), tr("Search with Regular Expression"), tr("Search"));
+  filterEdit_ = ui->makeLineEdit(0, QString(), tr("Search with regular expression splitted by spaces"), tr("Search"));
   connect(filterEdit_, SIGNAL(textEdited(QString)), SLOT(updateFilterEdit()));
 
   // Must be consistent with FilterType enum.
@@ -175,18 +179,18 @@ MediaLibraryView::createLayout()
 
   new QShortcut(QKeySequence("CTRL+R"), refreshButton, SLOT(click()));
 
-  QRadioButton *iconButton = ui->makeRadioButton(AcUi::DefaultHint, QString(), tr("Icon View"), K_CTRL "+1"),
-               *listButton = ui->makeRadioButton(AcUi::DefaultHint, QString(), tr("List View"), K_CTRL "+2");
-  iconButton->setChecked(true);
+  iconButton_ = ui->makeRadioButton(AcUi::DefaultHint, QString(), tr("Icon View"), K_CTRL "+1"),
+  listButton_ = ui->makeRadioButton(AcUi::DefaultHint, QString(), tr("List View"), K_CTRL "+2");
+  iconButton_->setChecked(true);
 
-  connect(iconButton, SIGNAL(clicked()), SLOT(showIcon()));
-  connect(listButton, SIGNAL(clicked()), SLOT(showList()));
+  connect(iconButton_, SIGNAL(clicked()), SLOT(showIcon()));
+  connect(listButton_, SIGNAL(clicked()), SLOT(showList()));
 
-  new QShortcut(QKeySequence("CTRL+1"), iconButton, SLOT(click()));
-  new QShortcut(QKeySequence("CTRL+2"), listButton, SLOT(click()));
+  new QShortcut(QKeySequence("CTRL+1"), iconButton_, SLOT(click()));
+  new QShortcut(QKeySequence("CTRL+2"), listButton_, SLOT(click()));
 //#ifndef Q_OS_MAC
-//  new QShortcut(QKeySequence("ALT+1"), iconButton, SLOT(click()));
-//  new QShortcut(QKeySequence("ALT+2"), listButton, SLOT(click()));
+//  new QShortcut(QKeySequence("ALT+1"), iconButton_, SLOT(click()));
+//  new QShortcut(QKeySequence("ALT+2"), listButton_, SLOT(click()));
 //#endif // Q_OS_MAC
 
   // Create layout
@@ -208,8 +212,8 @@ MediaLibraryView::createLayout()
 
     header->addWidget(hideButton);
     header->addWidget(toggleButton);
-    header->addWidget(iconButton);
-    header->addWidget(listButton);
+    header->addWidget(iconButton_);
+    header->addWidget(listButton_);
     header->addStretch();
     header->addWidget(filterType_);
 
@@ -218,11 +222,11 @@ MediaLibraryView::createLayout()
     overlay->addWidget(countButton_, Qt::AlignRight);
     header->addLayout(overlay);
 
-    footer->addWidget(refreshButton);
-    footer->addWidget(clearButton);
-    footer->addStretch();
-    footer->addWidget(browseButton_);
     footer->addWidget(openButton_);
+    footer->addWidget(browseButton_);
+    footer->addStretch();
+    footer->addWidget(clearButton);
+    footer->addWidget(refreshButton);
 
     int patch = 0;
     if (!AcUi::isAeroAvailable())
@@ -237,6 +241,19 @@ MediaLibraryView::createLayout()
 
 // - Properties -
 
+int
+MediaLibraryView::viewIndex() const
+{ return views_->currentIndex(); }
+
+void
+MediaLibraryView::setViewIndex(int index)
+{
+  switch (index) {
+  case IconView: iconButton_->click(); break;
+  case ListView: listButton_->click(); break;
+  }
+}
+
 bool
 MediaLibraryView::autoHide() const
 { return autoHideAct_->isChecked(); }
@@ -244,6 +261,14 @@ MediaLibraryView::autoHide() const
 bool
 MediaLibraryView::autoRun() const
 { return autoRunAct_->isChecked(); }
+
+void
+MediaLibraryView::setAutoHide(bool t)
+{ autoHideAct_->setChecked(t); }
+
+void
+MediaLibraryView::setAutoRun(bool t)
+{ autoRunAct_->setChecked(t); }
 
 // - Actions -
 
@@ -262,6 +287,7 @@ MediaLibraryView::refresh()
   library_->refresh();
   updateCount();
   updateButtons();
+  //listView_->setColumnWidth(0, 350);
   //showMessage(tr("library refreshed"));
 }
 
@@ -370,10 +396,16 @@ MediaLibraryView::browse()
 void
 MediaLibraryView::updateFilterEdit()
 {
-  proxyModel_->setFilterRegExp(
-    QRegExp(filterEdit_->text().trimmed(), Qt::CaseInsensitive)
-  );
+  QString rx = filterEdit_->text().trimmed();
+  if (rx.isEmpty())
+    proxyModel_->setFilterRegExp(QString());
+  else {
+    rx.replace(QRegExp("\\s+"), ".*");
+    proxyModel_->setFilterRegExp(QRegExp(rx, Qt::CaseInsensitive));
+  }
   updateCount();
+  if (!rx.isEmpty())
+    showMessage(tr("regex") + ": " + rx);
 }
 
 // Must be consistent with FORMAT_TYPE in mediaitemmodel.cc
@@ -426,7 +458,10 @@ MediaLibraryView::setVisible(bool visible)
 {
   if (visible && library_->isDirty())
     refresh();
+  if (visible)
+    focus();
   Base::setVisible(visible);
+  //iconView_->setResizeMode(visible ? QListView::Adjust : QListView::Fixed);
 }
 
 void

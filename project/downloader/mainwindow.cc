@@ -293,9 +293,14 @@ MainWindow::createActions()
     a->setStatusTip(a->text());
     connect(a, SIGNAL(triggered()), SLOT(copyTitle()));
   }
-  a = copyUrlAct_ = new QAction(this); {
+  a = copyUrlAct_ = new QAction(tr("Copy URL"), this); {
     a->setStatusTip(a->text());
     connect(a, SIGNAL(triggered()), SLOT(copyUrl()));
+  }
+  a = toggleWindowOnTopAct_ = new QAction(tr("Always On Top"), this); {
+    a->setStatusTip(a->text());
+    a->setCheckable(true);
+    connect(a, SIGNAL(triggered(bool)), SLOT(setWindowOnTop(bool)));
   }
 
   // Copy menu
@@ -370,6 +375,7 @@ MainWindow::createActions()
     m->addAction(stopAllAct_);
     m->addAction(removeAllAct_);
     m->addSeparator();
+    m->addAction(toggleWindowOnTopAct_);
   #ifndef Q_OS_MAC
     m->addAction(menuBarAct_);
     m->addAction(tr("Preferences"), this, SLOT(preferences()), QKeySequence("CTRL+,"));
@@ -877,6 +883,8 @@ void
 MainWindow::updateActions()
 {
   menuBarAct_->setChecked(menuBar_->isVisible());
+
+  toggleWindowOnTopAct_->setChecked(isWindowOnTop());
 
   DownloadTask *t = currentTask();
   if (t) {

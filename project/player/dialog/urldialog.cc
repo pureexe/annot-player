@@ -180,7 +180,7 @@ UrlDialog::normalizeUrl(const QString &url)
     return ret;
   if (url.startsWith("ttp://"))
     ret.prepend('h');
-  else if (!url.startsWith("http://", Qt::CaseInsensitive))
+  else if (!url.contains("http://", Qt::CaseInsensitive))
     ret.prepend("http://");
 
   return MrlAnalysis::normalizeUrl(url);

@@ -205,6 +205,8 @@ private:
           *browseAct_,
           *openDirectoryAct_;
 
+  QAction *toggleWindowOnTopAct_;
+
   QAction *copyTitleAct_,
           *copyUrlAct_;
 

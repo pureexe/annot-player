@@ -9,8 +9,10 @@
 #include <QtGui/QColor>
 #include <QtGui/QFont>
 
-//QColor(r, g, b, a), sample color RGB palatte: http://www.tayloredmktg.com/rgb/
-#define ANNOTATION_COLOR_DEFAULT    QColor(255, 250, 250, 255) // Disable alpha for better performance.
+// QColor(r, g, b, a), sample color RGB palatte: http://www.tayloredmktg.com/rgb/
+// Disable alpha for better performance.
+//#define ANNOTATION_COLOR_DEFAULT    QColor(255, 250, 250) // Snow: 255,250,250
+#define ANNOTATION_COLOR_DEFAULT    QColor(248, 248, 255) // Ghost white: 248,248,255
 
 #define ANNOTATION_SIZE_DEFAULT         20
 #define ANNOTATION_SIZE_MARGIN          2
@@ -21,15 +23,6 @@
 #define ANNOTATION_SIZE_LARGE           "36"
 #define ANNOTATION_SIZE_HUGE            "60"
 
-#define ANNOTATION_STAY_TIME            2000
-#define ANNOTATION_STAY_TIME_SUBTITLE   3000
-//#define ANNOTATION_STAY_TIME_SUBTITLE_GAME 400 // Should be larger than translator delay. BTW, texthook interval is 200 msecs
-#define ANNOTATION_STAY_TIME_MIN        1000
-#define ANNOTATION_STAY_TIME_MAX        10000 // 10 seconds
-#define ANNOTATION_FLY_TIME             15000 // 15 seconds, the larger the slower
-#define ANNOTATION_FLY_TIME_MIN         1500
-#define ANNOTATION_FLY_TIME_MAX         20000 // 20 seconds
-
 #define ANNOTATION_JAPANESE_FONT_FAMILY "MS Gothic"
 
 #define ANNOTATION_CHINESE_FONT_FAMILY  "YouYuan"
@@ -38,7 +31,8 @@
 
 #define ANNOTATION_FONT_SIZE  18
 
-#define ANNOTATION_OUTLINE_COLOR        QColor(50,100,100)
+//#define ANNOTATION_OUTLINE_COLOR        QColor(50,100,100)
+#define ANNOTATION_OUTLINE_COLOR        QColor(40,90,90)
 #define ANNOTATION_OUTLINE_COLOR_HOVER  Qt::red
 #define ANNOTATION_OUTLINE_COLOR_SELF   Qt::darkYellow
 #define ANNOTATION_OUTLINE_COLOR_SUB    Qt::magenta

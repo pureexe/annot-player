@@ -153,7 +153,7 @@ NicovideoCodec::parsePrefix(const QString &text)
     return QString();
 
   QString ret;
-  foreach (const QString &attr, text.split(' '))
+  foreach (const QString &attr, text.split(' ',  QString::SkipEmptyParts))
     switch (qHash(attr)) {
     case NH_184:
     case NH_Docomo:

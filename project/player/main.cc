@@ -32,7 +32,7 @@
 #include "module/qtext/filesystem.h"
 #include "module/annotcloud/user.h"
 #include "module/annotcache/annotationcachemanager.h"
-//#include "module/qt/qtsettings.h"
+#include "module/qt/qtsettings.h"
 //#include "module/download/downloader.h"
 #include <QtGui>
 #include <QtNetwork/QNetworkProxy>
@@ -251,6 +251,7 @@ main(int argc, char *argv[])
     settings->setAnnotationJapaneseFontFamily(QString());
     settings->setAnnotationChineseFontFamily(QString());
     settings->setAnnotationPositionResolution(0);
+    settings->setAnnotationOutlineColor(ANNOTATION_OUTLINE_COLOR);
 
     settings->setWindowOnTop(false);
     settings->setMultipleWindowsEnabled(false);
@@ -389,11 +390,11 @@ main(int argc, char *argv[])
     QThreadPool::globalInstance()->setMaxThreadCount(MinThreadCount);
   DOUT("thread pool size =" << QThreadPool::globalInstance()->maxThreadCount());
 
-  // Reduce animation timing interval to improve animation rendering performance
+  // Increase animation timing interval to reduce CPU usage
   // DEFAULT_TIMING_INTERVAL defined in qabstractanimation.cpp is 16
   // As 1 sec / 24 frames = 41.6 msec, timing interval should be at lease 41 msec
-  //enum { AnimationTimingInterval = 40 };
-  //QtSettings::globalInstance()->setAnimationTimingInterval(AnimationTimingInterval);
+  enum { AnimationTimingInterval = 32 };
+  QtSettings::globalInstance()->setAnimationTimingInterval(AnimationTimingInterval);
 
 //#ifdef AC_ENABLE_GAME
 //  // Root window
@@ -432,7 +433,7 @@ main(int argc, char *argv[])
     bool showLibrary = args.size() <= 1 && QFile::exists(G_PATH_MEDIADB) && settings->showLibrary();
     w.resize(showLibrary ? LIBRARY_WINDOW_SIZE : INIT_WINDOW_SIZE);
     if (showLibrary)
-      w.prepareLibrary();
+      w.showMainLibrary();
     w.show();
     //QTimer::singleShot(0, &w, SLOT(show()));
 

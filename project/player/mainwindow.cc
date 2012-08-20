@@ -428,6 +428,9 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   AnnotationSettings::globalSettings()->setPositionResolution(settings->annotationPositionResolution());
   AnnotationSettings::globalSettings()->setSpeedFactor(settings->annotationSpeedFactor());
 
+  libraryView_->setAutoRun(settings->showLibrary());
+  libraryView_->setViewIndex(settings->libraryView());
+
   dataServer_->setPreferCache(settings->preferLocalDatabase());
 
   annotationFilter_->setEnabled(settings->isAnnotationFilterEnabled());
@@ -520,6 +523,7 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   setAutoPlayNext();
 
   gameLibrary_->load();
+  mediaLibrary_->load();
 
   // Enable keyboard shortcuts
   //updateContextMenu();
@@ -1035,7 +1039,7 @@ MainWindow::createConnections()
 
   PlayerPanel *players[] = { mainPlayer_, miniPlayer_, embeddedPlayer_ };
   BOOST_FOREACH(PlayerPanel *p, players) {
-    connect(p, SIGNAL(toggleLibraryRequested()), SLOT(toggleMainLibrary()));
+    connect(p, SIGNAL(toggleLibraryRequested()), SLOT(toggleLibrary()));
   }
 
   // Live mode
@@ -2419,10 +2423,11 @@ MainWindow::createMenus()
 #endif // Q_OS_WIN
     openButtonMenu_->addAction(openDeviceAct_);
     openButtonMenu_->addSeparator();
+    openButtonMenu_->addAction(downloadAnnotationsAct_);
+    openButtonMenu_->addSeparator();
     openButtonMenu_->addAction(openSubtitleAct_);
     openButtonMenu_->addAction(openAnnotationFileAct_);
     openButtonMenu_->addAction(openAnnotationUrlAct_);
-    openButtonMenu_->addAction(downloadAnnotationsAct_);
   }
 
   // PlayerUI
@@ -2457,6 +2462,7 @@ MainWindow::createDockWindows()
   QDockWidget *libraryDock = new MainLibraryDock(this);
   libraryDock->setWidget(libraryView_);
   addDockWidget(Qt::RightDockWidgetArea, libraryDock);
+  libraryView_->hide();
 
   // Mini player
   //miniPlayerDock_ = new MiniPlayerDock(this);
@@ -2844,6 +2850,9 @@ MainWindow::openAnnotationUrl(const QString &input, bool submit)
 void
 MainWindow::openUrl(const QString &input)
 {
+  if (libraryView_->isVisible() && libraryView_->autoHide())
+    libraryView_->hide();
+
   QString url = DataManager::normalizeUrl(input);
   if (url.startsWith("ttp://"))
     url.prepend('h');
@@ -3464,6 +3473,16 @@ MainWindow::openMrl(const QString &input, bool checkPath)
   DOUT("invoke openMedia");
   if (player_->hasMedia())
     closeMedia();
+
+  // Forward computing file digest to avoid IO conflict with VLC player
+  static bool once = true;
+  if (once)
+    once = false;
+  else if (recentDigest_.isEmpty() && isDigestReady(path)) {
+    emit messageOnce(tr("Analyzing ..."));
+    emit message(tr("analyzing") + ": " + path);
+    recentDigest_ = digestFromFile(removeUrlPrefix(path));
+  }
 
   bool ok = player_->openMedia(path);
   if (!ok) {
@@ -5350,7 +5369,7 @@ MainWindow::setToken(const QString &input, bool async)
     QString path = QDir::fromNativeSeparators(input);
     if (!programFiles.isEmpty() && path.startsWith(programFiles, Qt::CaseInsensitive)) {
       path.remove(programFiles, Qt::CaseInsensitive);
-      QStringList l = path.split('/');
+      QStringList l = path.split('/',  QString::SkipEmptyParts);
       l.removeLast();
       if (!l.isEmpty() && l.size() <= 2) {
         Alias a;
@@ -9057,7 +9076,7 @@ MainWindow::openSource(const QString &path)
     return;
 
   if (libraryView_->isVisible() && libraryView_->autoHide())
-    libraryView_->fadeOut();
+    libraryView_->hide();
 
   if (path.startsWith(ACSCHEME_PLAYER_IMPORT)) {
     QString url = path;
@@ -11227,9 +11246,9 @@ MainWindow::toggleMagnifierVisible()
 void
 MainWindow::updateAnnotationMetaVisible()
 {
-  bool v = hub_->isMediaTokenMode() && hub_->isFullScreenWindowMode() && player_->isPaused() ||
+  bool v = hub_->isMediaTokenMode() && hub_->isFullScreenWindowMode() && AnnotationSettings::globalSettings()->preferMotionless() && player_->isPaused() ||
            hub_->isSignalTokenMode() && hub_->isPaused() ||
-           embeddedPlayer_->isVisible() && !embeddedCanvas_->isVisible() &&
+           embeddedPlayer_->isVisible() && !embeddedCanvas_->isVisible() && AnnotationSettings::globalSettings()->preferMotionless() &&
              !(hub_->isMediaTokenMode() && !hub_->isFullScreenWindowMode());
   annotationView_->setItemMetaVisible(v);
 }
@@ -11293,7 +11312,9 @@ MainWindow::showAudioDelayDialog()
 void
 MainWindow::saveSettings()
 {
-  DOUT("enter");
+  DOUT("enter: inet mutex locked");
+  QMutexLocker locker(&inetMutex_);
+
   Settings *settings = Settings::globalSettings();
   AcSettings *ac = AcSettings::globalSettings();
   AnnotationSettings *annotationSettings = AnnotationSettings::globalSettings();
@@ -11331,6 +11352,7 @@ MainWindow::saveSettings()
   settings->setSubtitleColor(subtitleColor());
 
   settings->setShowLibrary(libraryView_->autoRun());
+  settings->setLibraryView(libraryView_->viewIndex());
   settings->setAnnotationBandwidthLimited(annotationView_->isItemCountLimited());
   settings->setAnnotationEffect(annotationView_->renderHint());
   settings->setAnnotationScale(annotationSettings->scale());
@@ -11388,7 +11410,7 @@ MainWindow::saveSettings()
 
   mediaLibrary_->save();
   gameLibrary_->save();
-  DOUT("exit");
+  DOUT("exit: inet mutex unlocked");
 }
 
 void
@@ -11453,6 +11475,7 @@ MainWindow::showLibrary()
 {
   if (!libraryWindow_) {
     libraryWindow_ = new MediaLibraryView(mediaLibrary_, this);
+    libraryWindow_->setViewIndex(libraryView_->viewIndex());
     connect(libraryWindow_, SIGNAL(openRequested(QString)), SLOT(openSource(QString)));
     connect(libraryWindow_, SIGNAL(toggled()), SLOT(toggleMainLibrary()));
     connect(libraryWindow_, SIGNAL(showGameRequested(QString)), SLOT(showGameWithDigest(QString)));
@@ -11479,7 +11502,23 @@ MainWindow::showGameWithDigest(const QString &digest)
 
 void
 MainWindow::toggleMainLibrary()
-{ libraryView_->setVisible(!libraryView_->isVisible()); }
+{
+  bool v = !libraryView_->isVisible();
+  bool adjust = !hub_->isFullScreenWindowMode() && !player_->isStopped();
+  if (adjust && !v) {
+    QSize sz = size();
+    sz.rwidth() -= libraryView_->width();
+    if (sz.isValid())
+      resize(sz);
+  }
+  libraryView_->setVisible(v);
+  if (adjust && v) {
+    QSize sz = size();
+    sz.rwidth() += libraryView_->width();
+    if (sz.isValid())
+      resize(sz);
+  }
+}
 
 void
 MainWindow::toggleMediaLibrary()
@@ -11492,13 +11531,19 @@ MainWindow::toggleMediaLibrary()
 }
 
 void
-MainWindow::prepareLibrary()
+MainWindow::toggleLibrary()
 {
-  if (mediaLibrary_->exists()) {
-    mediaLibrary_->load();
-    //QTimer::singleShot(0, libraryView_, SLOT(show()));
+  if (isVisible())
+    toggleMainLibrary();
+  else
+    toggleMediaLibrary();
+}
+
+void
+MainWindow::showMainLibrary()
+{
+  if (mediaLibrary_->exists())
     libraryView_->show();
-  }
 }
 
 // EOF

@@ -269,7 +269,7 @@ Downloader::parseHttpHeader(const QString &header)
     return ret;
   DOUT("enter: header =" << header);
 
-  QStringList l = header.split('\n');
+  QStringList l = header.split('\n',  QString::SkipEmptyParts);
   foreach (const QString &item, l) {
     int i = item.indexOf(':');
     if (i > 0) {

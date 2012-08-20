@@ -137,8 +137,10 @@ namespace { namespace curve_ { // anonymous curves
 int
 AnnotationGraphicsItem::nextY(int msecs, Style style) const
 {
-  int ret = view_->scheduler()->nextY(view_->height(), boundingRect().height(), msecs, style, isSubtitle());
-  int max = view_->height() - boundingRect().height() ;
+  QSize viewSize = view_->size();
+  QSizeF itemSize = boundingRect().size();
+  int ret = view_->scheduler()->nextY(viewSize, itemSize, msecs, style, isSubtitle());
+  int max = viewSize.height() - itemSize.height() ;
   if (ret > max - 5)
     ret = max;
   return ret;
@@ -199,6 +201,7 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   //setAcceptTouchEvents(true);
 
   setScale(view_->scale());
+
   setGraphicsEffect(effect_ = new AnnotationGraphicsEffect);
 
   Q_ASSERT(document());
@@ -1083,30 +1086,44 @@ AnnotationGraphicsItem::resume()
 int
 AnnotationGraphicsItem::stayTime() const
 {
-  int t = style_ != SubtitleStyle ? ANNOTATION_STAY_TIME : ANNOTATION_STAY_TIME_SUBTITLE;
+  enum {
+    AverageTime = 2000,
+    SubtitleTime = 3000,
+    MinTime = 1000, // 1 second
+    MaxTime = 10000 // 10 seconds
+  };
+
+  int t = style_ != SubtitleStyle ? AverageTime : SubtitleTime;
   int w0 = qMax<int>(view_->width(), 100),
       w = qMax<int>(boundingRect().width(), 50),
       h = qMax<int>(boundingRect().height(), 20);
   qreal f = qreal(w0 + 200)/ (w + 200),
         g = qreal(h + 20) / (ANNOTATION_SIZE_DEFAULT + 15);
   qreal q = hub_->isSignalTokenMode() ? 1.0 : 0.8;
-  int ret = t * qPow(f, 0.3)* g * q + ANNOTATION_STAY_TIME_MIN;
-  return qMin(ret, ANNOTATION_STAY_TIME_MAX);
+  int ret = t * qPow(f, 0.3)* g * q + MinTime;
+  return qMin<int>(ret, MaxTime);
 }
 
 int
 AnnotationGraphicsItem::flyTime() const
 {
-  Q_ASSERT(AnnotationSettings::globalSettings()->speedFactor());
-  int w0 = qMax<int>(view_->width(), 100),
-      w = qMax<int>(boundingRect().width(), 50);
-  int ret = ANNOTATION_FLY_TIME_MIN + ANNOTATION_FLY_TIME * (w0 + 200)/(w + 1000);
-  ret = qMin(ret, ANNOTATION_FLY_TIME_MAX);
-  if (style_ == FlyStyle) {
+  enum {
+    MovingFactor = 12, // the larger, the slower
+    MinTime = 500,  // half a second
+    MaxTime = 21000 // 30 seconds
+  };
+
+  int itemWidth = boundingRect().width(), // around 50~200
+      windowWidth = view_->width();       // around 800~1920
+  int ret = (windowWidth + itemWidth) * MovingFactor * (itemWidth + 800) / 1000;
+  //DOUT("time =" << ret << windowWidth << itemWidth);
+  if (ret > MaxTime)
+    ret = MaxTime;
+  if (style_ == FlyStyle)
     ret /= 5;
-    ret = qMax(ret, ANNOTATION_FLY_TIME_MIN);
-  }
-  return ret / AnnotationSettings::globalSettings()->speedup();
+  if (ret < MinTime)
+    ret = MinTime;
+  return ret * ANNOTATION_SPEED_FACTOR / AnnotationSettings::globalSettings()->speedFactor();
 }
 
 void

@@ -206,7 +206,7 @@ public slots:
   void setRepeatCurrent();
   void setNoRepeat();
 
-  void prepareLibrary();
+  void showMainLibrary();
 
   void maximizedToFullScreen();
 
@@ -366,6 +366,7 @@ protected slots:
   void showTranslator();
   void translateUsingTranslator(const QString &text);
 
+  void toggleLibrary();
   void toggleMainLibrary();
   void toggleMediaLibrary();
 

@@ -281,6 +281,7 @@ LuaMrlResolver::formatTitle(const QString &title)
     .remove(QRegExp(" - \xe8\xa7\x86\xe9\xa2\x91$"))
     .remove(QRegExp(" - ..\xe8\xa7\x86\xe9\xa2\x91 - .*"))
     .remove(QRegExp(" - \xe5\x8a\xa8\xe6\xbc\xab$"))
+    .remove(QRegExp("—\xe5\x9c\xa8\xe7\xba\xbf\xe6\x92\xad\xe6\x94\xbe—.*"))
     .remove(QRegExp("_\xe5\x9c\xa8\xe7\xba\xbf.*"))
 #else
     .remove(QRegExp(" - 电视剧 - .*"))
@@ -288,6 +289,7 @@ LuaMrlResolver::formatTitle(const QString &title)
     .remove(QRegExp(" - 视频$"))
     .remove(QRegExp(" - 优酷视频 - .*")) // Youku
     .remove(QRegExp(" - 动漫$")) // Youku
+    .remove(QRegExp("—在线播放—.*")) // Youku
     .remove(QRegExp("_在线.*")) // Tudou
 #endif // _MSC_VER
     .remove(QRegExp(" - 20[01]\\d$")) // Youku
