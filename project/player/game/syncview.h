@@ -7,6 +7,8 @@
 #include "processinfo.h"
 #include "project/common/acmainwindow.h"
 
+QT_FORWARD_DECLARE_CLASS(QToolButton)
+
 class ProcessView;
 class MessageView;
 //class TokenView;
@@ -22,15 +24,22 @@ class SyncView : public AcMainWindow
   MessageView *messageView_;
   //TokenView *tokenView_;
 
+  QToolButton *processButton_, *messageButton_;
+
 public:
   explicit SyncView(QWidget *parent = nullptr);
 
+signals:
+  void channelSelected(ulong anchor, const QString &function, ProcessInfo pi);
+
+public:
   //TokenView *tokenView() const { return tokenView_; }
   ProcessView *processView() const { return processView_; }
   MessageView *messageView() const { return messageView_; }
 
-signals:
-  void channelSelected(ulong anchor, const QString &function, ProcessInfo pi);
+public slots:
+  void setProcessViewVisible(bool t);
+  void setMessageViewVisible(bool t);
 
   // - Events -
 public:

@@ -6,9 +6,6 @@ http://qt-project.org/wiki/Category:Add-ons
 
 # Changes
 annot-player
-annot-down
-README
-ChangeLog
 
 # key ideas
 - stream trial games, and sub trial games in chinese
@@ -33,28 +30,47 @@ work on streaming
 - windows driver
 - sync
 
-# 0.1.8.4
+- stream: instead of file driver
+  - intercept all I/O operations, using create remote thread?
+  - or through File system filter driver
+  http://www.codeproject.com/Articles/43586/File-System-Filter-Driver-Tutorial
+  - in the future, use acipc to bypass license issue
 
-- save db version with the next app version
-  - to avoid remove app everytime!
-  
-- dict, translator for kotobabank
-http://kotobank.jp/search/???
-http://kotobank.jp/word/???
+# 0.1.9.1
+- more than one channels
+  - create checkboxngrid
 
-- media library
-    type: add RECENT filter/sorting comboedit critera
-  - recent files
+  - struct TextSource
+  {
+    void function
+    qint64 digest() { a + b }
+    quint32 type() { return 0; } // reserved
+  }
+
+  able to intercept ore
+
+- create serverdb at annot.me for saving anchor and encoding
+  - everyone will overrite the old db
 
 - game
-  - grant edit permission for token
-  - listen to more than one signals
+  - grant/share edit permission for token
 
-- hack qnetworkaccessmanager source code to get a stable orignal download stream
-  - make stable download session
-    - maybe, sth is wrong in createRequest?
-- able to subscribe to bilibili session
-- able to grab all downloadable to bilibili session
+# 0.1.9.2
+
+investigate atlas, etc
+  check the translate.cs source code
+- atlas: http://software.fujitsu.com/jp/atlas/
+
+- LEC
+
+- word by word translation
+  - refer to:
+    http://www.rikai.com/perl/Home.pl
+
+- qtext locale class
+  - add hash code for en, etc
+  - add iso 2 digit name
+  - handle english/chinese
 
 - search engine
   - redesign searchengine mechanism, using a global search engine pool
@@ -64,43 +80,65 @@ http://kotobank.jp/word/???
   - library view and others, redesign
   - copy title / location, search title
 
-# 0.1.8.5
+#
 
-- avoid osdwindow to fulls creen
+- hack qnetworkaccessmanager source code to get a stable orignal download stream
+  - make stable download session
+    - maybe, sth is wrong in createRequest?
+- able to subscribe to bilibili session
+- able to grab all downloadable to bilibili session
 
-- able to show more than one channels
+- slogan
+  annotated life
+- statisics
+  - save timeline of software usage by day
+    play time, play movie, play game
+  - generate svg graph of it
+  annotated time using this software
+  generate diary of yourself
+- media library
+    type: add RECENT filter/sorting comboedit critera
+  - recent files
+- library view
+  - mark visited media file in libarry to red
+  - able to remove game
+  - able to remove recent file in red
+  - save totaltime and saved pos in mediadb
+    show % percentage of watch
+  - save % percentage of watched internet movie as well
+  - save playtime of each galgame in minitues
+
+###
+- mac:
+  - able to share it online
+  - database: dict_term
+    term_id term_status term_flag user_id term_create_ip term_create_time term_update_time term_update_ip term_type term_from term_to term_source, term_target
+    term_bless_count term_curse_count term_block_count
+
 - context menu to show launch settings for the current game
   - open/opendir
   - change language
   - remember or not recent settings
-- create serverdb at annot.me for saving anchor and encoding
-  - everyone will overrite the old db
+
+- avoid osdwindow to fulls creen
 
 - downloader:
   - always prompt when try to clear and clearall
 
 - use osdwindow for tracking, rather than full screen
 
-- able to move imported annotations
-  - add alias.pos to media_alias
-  - add annot.url to mark alias
+# 0.1.10
+- option to convert ass/ssa subtitles to annotation
 
-- Windows
-  - able to listen to more than 1 channels, change GUI interface
-  change ui from number comboedit to multiple checkbox of text channels
-  create a special combonent for a group of checkbox
-  - always keep recent 3 text from all channels
-  - listen to more than text
-    - add up to 3 channel to listen
-
-# 0.1.9
-
-- game
-  - add ITH profile support
-  - try if it can hook white_album
+- debug why no textcreate after insert hook
+  - add support for koi to chocolate to xxx
 
 - game
   - save scenario text
+
+- able to move imported annotations
+  - add alias.pos to media_alias
+  - add annot.url to mark alias
 
 - translator
   - fixme: openlinke locale
@@ -110,13 +148,6 @@ http://kotobank.jp/word/???
   - also figure out how to sugmit game icon or scenario screenshots as well?
   - game_scene
     scene_text scene_context prev_scene_id
-
-- mac:
-- add user-defined keyword dictionary for special noun
-  - able to share it online
-  - database: dict_term
-    term_id term_status term_flag user_id term_create_ip term_create_time term_update_time term_update_ip term_type term_from term_to term_source, term_target
-    term_bless_count term_curse_count term_block_count
 
 - option to integrate native applocale to launch galgame
   systemroot/AppPatch
@@ -151,13 +182,6 @@ use curl or vlc native downloader to replace qt networkaccessmanager?
   - check subtitle rendering
 
 - finish library tree view
-
-- mac
-Honyaku: http://honyaku.yahoo.co.jp/
-Excite: http://www.excite.co.jp/
-SDL: http://www.freetranslation.com/
-OCN: http://www.ocn.ne.jp/translation/
-infoseek: http://translation.infoseek.ne.jp/
 
 - use QItemSelectionModel to enable multiple selection of models
 - utilize qt browser demo, how addressbar, etc are implemented

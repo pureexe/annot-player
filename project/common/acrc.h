@@ -6,7 +6,8 @@
 #define ACRC_NULL       ""
 
 #define ACRC_PREFIX_IMAGE ":/images/"
-#define ACRC_IMAGE_NULL   ACRC_NULL
+
+#define ACRC_IMAGE_NULL     ACRC_PREFIX_IMAGE "null.png"
 
 //#define ACRC_PREFIX_TR    ":/tr/"
 //#define ACRC_TR_NULL      ""

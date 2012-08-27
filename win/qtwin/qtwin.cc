@@ -744,11 +744,11 @@ QtWin::getPath()
 
 QString
 QtWin::getWinDirPath()
-{ return qgetenv("windir"); }
+{  return qgetenv("windir");  }
 
 QString
 QtWin::getSystemRoot()
-{ return qgetenv("SYSTEMROOT"); }
+{ return qgetenv("SYSTEMROOT");  }
 
 QString
 QtWin::getProgramFilesPath()
@@ -1227,6 +1227,10 @@ QtWin::toUtf8(const wchar_t *pStr)
 }
 
 // - File system -
+
+ulong
+QtWin::getFileAttributes(const QString &fileName)
+{ return ::GetFileAttributesW(QSTRING_LPCWSTR(QDir::toNativeSeparators(fileName))); }
 
 bool
 QtWin::setFileAttributes(const QString &fileName, uint flags)

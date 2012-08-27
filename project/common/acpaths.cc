@@ -97,7 +97,7 @@ AcLocationManager::createDownloadsLocation()
   bool ok = QFile::exists(srcIcon) &&
     QtUnix::cp(srcIcon, targetIcon) &&
     QtMac::setFileAttributes(path, QtMac::FA_CustomIcon);
-  Q_UNUSED(ok);
+  Q_UNUSED(ok)
   DOUT("ok =" << ok);
 
 #elif defined(Q_OS_WIN)
@@ -118,7 +118,7 @@ AcLocationManager::createDownloadsLocation()
     QFile::copy(srcIni, targetIni) &&
     QtWin::setFileAttributes(targetIni, QtWin::SystemAttribute | QtWin::HiddenAttribute | QtWin::ArchiveAttribute) &&
     QtWin::setFileAttributes(path, QtWin::ReadOnlyAttribute);
-  Q_UNUSED(ok);
+  Q_UNUSED(ok)
   DOUT("ok =" << ok);
 
 #else

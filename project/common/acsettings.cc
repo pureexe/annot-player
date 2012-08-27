@@ -111,7 +111,7 @@ AcSettings::setUserName(const QString &userName)
   else
     setValue(SK_USERNAME, Crypt::encrypt(userName));
 #else
-  Q_UNUSED(userName);
+  Q_UNUSED(userName)
   Q_ASSERT(0);
 #endif // WITH_MODULE_CRYPT
 }
@@ -137,7 +137,7 @@ AcSettings::setPassword(const QString &password)
   else
     setValue(SK_PASSWORD, Crypt::encrypt(password));
 #else
-  Q_UNUSED(password);
+  Q_UNUSED(password)
   Q_ASSERT(0);
 #endif // WITH_MODULE_CRYPT
 }
@@ -179,8 +179,8 @@ AcSettings::setNicovideoAccount(const QString &username, const QString &password
     emit nicovideoAccountChanged(username, password);
   }
 #else
-  Q_UNUSED(username);
-  Q_UNUSED(password);
+  Q_UNUSED(username)
+  Q_UNUSED(password)
   Q_ASSERT(0);
 #endif // WITH_MODULE_CRYPT
 }
@@ -223,8 +223,8 @@ AcSettings::setBilibiliAccount(const QString &username, const QString &password)
     emit bilibiliAccountChanged(username, password);
   }
 #else
-  Q_UNUSED(username);
-  Q_UNUSED(password);
+  Q_UNUSED(username)
+  Q_UNUSED(password)
   Q_ASSERT(0);
 #endif // WITH_MODULE_CRYPT
 }
@@ -354,7 +354,7 @@ AcSettings::setProxyUser(const QString &userName)
   else
     setValue(SK_PROXY_USER, Crypt::encrypt(userName));
 #else
-  Q_UNUSED(userName);
+  Q_UNUSED(userName)
   Q_ASSERT(0);
 #endif // WITH_MODULE_CRYPT
 }
@@ -380,7 +380,7 @@ AcSettings::setProxyPassword(const QString &password)
   else
     setValue(SK_PROXY_PASS, Crypt::encrypt(password));
 #else
-  Q_UNUSED(password);
+  Q_UNUSED(password)
   Q_ASSERT(0);
 #endif // WITH_MODULE_CRYPT
 }

@@ -4,23 +4,22 @@
 // romajitranslator.h
 // 7/15/2012
 
-#include "module/translator/translator.h"
+#include "module/translator/networktranslator.h"
 
 QT_BEGIN_NAMESPACE
-class QNetworkAccessManager;
 class QNetworkReply;
 class QTextEncoder;
 class QTextDecoder;
 QT_END_NAMESPACE
 
-class RomajiTranslator : public Translator
+class RomajiTranslator : public NetworkTranslator
 {
   Q_OBJECT
   Q_DISABLE_COPY(RomajiTranslator)
   typedef RomajiTranslator Self;
-  typedef Translator Base;
+  typedef NetworkTranslator Base;
 
-  QNetworkAccessManager *qnam_;
+  QNetworkReply *reply_;
   QTextDecoder *decoder_;
   QTextEncoder *encoder_;
 
@@ -30,12 +29,12 @@ public:
 
 public slots:
   void translate(const QString &text, const QString &to, const QString &from = QString()) override
-  { Q_UNUSED(to); Q_UNUSED(from); translate(text); }
+  { Q_UNUSED(to) Q_UNUSED(from) translate(text); }
 
   void translate(const QString &text);
 
 protected slots:
-  void processNetworkReply(QNetworkReply *reply);
+  void processReply(QNetworkReply *reply) override;
 
 protected:
   QString translateUrl(const QString &text) const;

@@ -165,6 +165,49 @@
     </message>
 </context>
 <context>
+    <name>AcLocalizer</name>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="21"/>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="29"/>
+        <source>Browse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="37"/>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="45"/>
+        <source>Translate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="53"/>
+        <source>Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="61"/>
+        <source>Readme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="69"/>
+        <source>Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="77"/>
+        <source>License</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AcLocationManager</name>
     <message>
         <location filename="../../common/acpaths.cc" line="59"/>
@@ -505,7 +548,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="328"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="331"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation type="unfinished"></translation>
     </message>

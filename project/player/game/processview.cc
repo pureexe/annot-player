@@ -2,6 +2,7 @@
 // 10/16/2011
 
 #include "processview.h"
+#include "processfilter.h"
 #include "tr.h"
 #include "rc.h"
 #include "global.h"
@@ -15,47 +16,9 @@
 #include "project/common/acfilteredtableview.h"
 #include "project/common/acui.h"
 #include <QtGui>
-#include <boost/assign/list_of.hpp>
-#include <set>
 
 #define DEBUG "processview"
 #include "module/debug/debug.h"
-
-// - Helpers -
-
-namespace { namespace detail {
-
-  bool processNameIsNotGalGame(const QString &procName)
-  {
-#define H(_cstr) qHash(QString(#_cstr))  // use std::set with qHash to improve search performance
-    static const std::set<uint> blacklist = boost::assign::list_of
-(H(annot-browser))(H(annot-down))(H(annot-player))
-(H(Activator))(H(ApMsgFwd))(H(Apntex))(H(Apoint))(H(AppleMobileDeviceService))(H(APSDaemon))(H(armsvc))(H(AutoHotkey))(H(ApplePhotoStreams))
-(H(BitComet))(H(BookmarkDAV_client))(H(BoonSutazio))(H(Bootcamp))(H(BtStackServer))(H(BTTray))(H(btwdins))
-(H(CamtasiaStudio))(H(chrome))
-(H(distnoted))(H(Dropbox))(H(DTLite))
-(H(eclipse))(H(Evernote))(H(EvernoteClipper))(H(EvernoteTray))
-(H(firefox))(H(foobar2000))
-(H(GoogleIMEJaConverter))(H(GoogleIMEJaRenderer))(H(gvim))
-(H(Hamana))(H(HidFind))
-(H(iCloudServices))(H(IELowutil))(H(IEXPLOR))(H(iTunes))(H(iTunesHelper))
-(H(java))(H(javaw))(H(jusched))
-(H(KHALMNPR))(H(KMPlayer))
-(H(MacDrive))(H(MacDrive8Service))(H(Maxthon))(H(mDNSResponder))(H(MouseGesture))(H(mpclaunch))(H(mspdbsrv))(H(mysql))(H(mysqld))
-(H(netdrive))
-(H(oacrmonitor))(H(ONENOTEM))(H(opera))
-(H(php-cgi))(H(plugin-container))
-(H(QQ))(H(qtcreator))
-(H(SecureCRT))(H(SetPoint))(H(sidebar))(H(Skype))(H(SogouCloud))(H(SROSVC))(H(sttray))(H(Switcher))(H(SUService))
-(H(thunderbird))(H(TSCHelper))(H(TXPlatform))
-(H(VIPAppService))(H(volumouse))
-(H(WINWORD))(H(wmpnetwk))
-    ;
-#undef H
-    return blacklist.find(qHash(procName)) != blacklist.end();
-  }
-
-} } // anonymous detail
 
 // - Constructions -
 
@@ -199,11 +162,15 @@ void
 ProcessView::invalidateSourceModel(bool showAll)
 {
   //using QtWin::ProcessInfo;
-  static QString windir = QtWin::getWinDirPath();
+  static const QString windir = QtWin::getWinDirPath();
 
   clear();
 
-  foreach (const QtWin::ProcessInfo &wpi, QtWin::getProcessesInfo()) {
+  // Revert search order, as the game usually comes at last
+  //foreach (const QtWin::ProcessInfo &wpi, QtWin::getProcessesInfo()) {
+  QList<QtWin::ProcessInfo> l = QtWin::getProcessesInfo();
+  for (auto p = l.constEnd(); p != l.constBegin();) {
+    const QtWin::ProcessInfo &wpi = *--p;
     ulong pid = wpi.id;
     QString name;
     QString folder;
@@ -230,7 +197,7 @@ ProcessView::invalidateSourceModel(bool showAll)
         continue;
 
       name = fi.baseName();
-      if (detail::processNameIsNotGalGame(name))
+      if (ProcessFilter::processNameIsNotGalGame(name))
         continue;
 
       folder = fi.dir().dirName();
@@ -254,8 +221,8 @@ ProcessView::invalidateSourceModel(bool showAll)
     sourceModel_->setData(sourceModel_->index(0, HD_Folder), folder);
     sourceModel_->setData(sourceModel_->index(0, HD_Path), filePath);
 
-    for (int i = 0; i < HD_Count; i++)
-      sourceModel_->setData(sourceModel_->index(0, i), sourceModel_->headerData(i, Qt::Horizontal), Qt::ToolTipRole);
+    //for (int i = 0; i < HD_Count; i++)
+    //  sourceModel_->setData(sourceModel_->index(0, i), sourceModel_->headerData(i, Qt::Horizontal), Qt::ToolTipRole);
   }
 }
 

@@ -48,7 +48,7 @@ MessageView::createLayout()
   enum { MaxChannelCount = 50, GridColumn = 4 };
   channelGrid_ = new RadioButtonGrid(MaxChannelCount, GridColumn, this);
   connect(channelGrid_, SIGNAL(valueChanged(int)), SLOT(setCurrentText(int)));
-  connect(channelGrid_, SIGNAL(valueChanged(int)), SLOT(invalidateSelectButton()));
+  connect(channelGrid_, SIGNAL(valueChanged(int)), SLOT(updateButtons()));
 
   textEdit_ = ui->makeTextEdit(AcUi::ReadOnlyHint, tr("Process message")); {
     //QTextCharFormat fmt;
@@ -98,7 +98,7 @@ MessageView::createLayout()
   selectButton_ = ui->makeToolButton(
         AcUi::PushHint | AcUi::HighlightHint | AcUi::InvertHint, TR(T_OK), tr("Listen to selected channel"), this, SLOT(select()));
 
-  QToolButton *resetButton = ui->makeToolButton(
+  resetButton_ = ui->makeToolButton(
         AcUi::PushHint, TR(T_RESET), tr("Reset changes and texts"), this, SLOT(clear()));
 
   //hookCountLabel_ = ui->makeLabel(0, "/0", tr("Current signal"), hookIndexEdit_);
@@ -116,7 +116,7 @@ MessageView::createLayout()
     //header->addWidget(hookCountLabel_);
     //header->addWidget(autoButton_); // TODO: auto detect is disabled, because hookName is unimplemented
     //header->addStretch();
-    header->addWidget(resetButton);
+    header->addWidget(resetButton_);
     header->addWidget(selectButton_);
 
     // left, top, right, bottom
@@ -128,7 +128,7 @@ MessageView::createLayout()
   clear();
 
   //invalidateCurrentCharFormat();
-  invalidateSelectButton();
+  updateButtons();
 
   encodingEdit_->setFocus();
   //hookIndexEdit_->setFocus();
@@ -192,7 +192,7 @@ void
 MessageView::setCurrentIndex(int index)
 {
   channelGrid_->setValue(index);
-  invalidateSelectButton();
+  updateButtons();
 }
 
 ulong
@@ -248,7 +248,9 @@ MessageView::clear()
   textEdit_->clear();
 
   //invalidateHookCountLabel();
-  invalidateSelectButton();
+  updateButtons();
+
+  emit message(tr("messages cleared"));
 }
 
 //void
@@ -259,10 +261,11 @@ MessageView::clear()
 //}
 
 void
-MessageView::invalidateSelectButton()
+MessageView::updateButtons()
 {
-  ulong index = currentIndex();
-  selectButton_->setEnabled(index > 0);
+  bool t = currentIndex() > 0;
+  selectButton_->setEnabled(t);
+  resetButton_->setEnabled(t);
 }
 
 void

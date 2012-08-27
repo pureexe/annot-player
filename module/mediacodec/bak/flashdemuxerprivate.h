@@ -201,7 +201,7 @@ public:
   const QString &path() const { return path_; }
   void setPath(const QString &path) { path_ = path; }
 
-  virtual void finish(const FractionUInt32 &averageFrameRate) { Q_UNUSED(averageFrameRate); }
+  virtual void finish(const FractionUInt32 &averageFrameRate) { Q_UNUSED(averageFrameRate) }
   virtual void writeChunk(const QByteArray &chunk, quint32 timeStamp, int frameType) = 0;
 };
 
@@ -256,13 +256,13 @@ public:
     DOUT("enter: path =" << _path);
     file_ = new QFile(_path, this);
     bool ok = file_->open(QIODevice::WriteOnly);
-    Q_UNUSED(ok);
+    Q_UNUSED(ok)
     DOUT("exit: isOpen =" << ok);
   }
 
   virtual void writeChunk(const QByteArray &chunk, quint32 timeStamp)
   {
-    Q_UNUSED(timeStamp);
+    Q_UNUSED(timeStamp)
     if (chunk.size() < 1) return;
 
     if (chunk[0] == 0) { // Header
@@ -345,14 +345,14 @@ public:
     DOUT("enter: path =" << _path);
     file_ = new QFile(_path, this);
     bool ok = file_->open(QIODevice::WriteOnly);
-    Q_UNUSED(ok);
+    Q_UNUSED(ok)
     DOUT("exit: isOpen =" << ok);
   }
 
   virtual void writeChunk(const QByteArray &chunk, quint32 timeStamp, int frameType)
   {
-    Q_UNUSED(timeStamp);
-    Q_UNUSED(frameType);
+    Q_UNUSED(timeStamp)
+    Q_UNUSED(frameType)
     static const quint8 _startCode[4] = { 0, 0, 0, 1 };
     enum { _startCodeSize = sizeof(_startCode)/sizeof(*_startCode) };
     if (chunk.size() < 4)
@@ -409,7 +409,7 @@ public:
 
   virtual void finish(const FractionUInt32 &averageFrameRate)
   {
-    Q_UNUSED(averageFrameRate);
+    Q_UNUSED(averageFrameRate)
     if (file_->isOpen()) file_->close();
   }
 
@@ -500,7 +500,7 @@ public:
     //}
 
     quint32 flags = readUInt8();
-    Q_UNUSED(flags);
+    Q_UNUSED(flags)
     quint32 dataOffset = readUInt32();
 
     seek(dataOffset);
@@ -523,7 +523,7 @@ private:
   void closeOutput(FractionUInt32 averageFrameRate, bool disposing)
   {
     DOUT("enter: videoWriter =" << _videoWriter << ", audioWriter =" << _audioWriter);
-    Q_UNUSED(disposing);
+    Q_UNUSED(disposing)
     if (_videoWriter)
       _videoWriter->finish(averageFrameRate.isNull() ? FractionUInt32(25, 1) : averageFrameRate);
     if (_audioWriter)
@@ -541,7 +541,7 @@ private:
     quint32 dataSize = readUInt24();
     quint32 timeStamp = readUInt24(); timeStamp |= readUInt8() << 24;
     quint32 streamID = readUInt24();
-    Q_UNUSED(streamID);
+    Q_UNUSED(streamID)
 
     // Read tag data
     if (dataSize == 0)
@@ -584,8 +584,8 @@ private:
     DOUT("enter: mediaInfo =" << mediaInfo);
     quint32 format = mediaInfo >> 4;
     quint32 rate = (mediaInfo >> 2) & 0x3;
-    quint32 bits = (mediaInfo >> 1) & 0x1; Q_UNUSED(bits);
-    quint32 chans = mediaInfo & 0x1; Q_UNUSED(chans);
+    quint32 bits = (mediaInfo >> 1) & 0x1; Q_UNUSED(bits)
+    quint32 chans = mediaInfo & 0x1; Q_UNUSED(chans)
     QString path;
 
     if ((format == 2) || (format == 14)) { // MP3

@@ -37,8 +37,8 @@ enum { MaxRetries = 5 };
 BilibiliCodec::BilibiliCodec(QObject *parent)
   : Base(parent)
 {
-  qnam_ = new QNetworkAccessManager(this);
-  connect(qnam_, SIGNAL(finished(QNetworkReply*)), SLOT(parseReply(QNetworkReply*)));
+  nam_ = new QNetworkAccessManager(this);
+  connect(nam_, SIGNAL(finished(QNetworkReply*)), SLOT(parseReply(QNetworkReply*)));
 }
 
 // - Fetch -
@@ -52,7 +52,7 @@ BilibiliCodec::fetch(const QString &url, const QString &originalUrl)
 {
   Q_ASSERT(match(url));
   DOUT("enter: url =" << url);
-  QNetworkReply *reply = qnam_->get(QNetworkRequest(url));
+  QNetworkReply *reply = nam_->get(QNetworkRequest(url));
   QtExt::PublicNetworkReply::fromReply(reply)
       ->setAttribute(RequestUrlAttribute, originalUrl);
   DOUT("exit");

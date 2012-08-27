@@ -2,8 +2,23 @@ ChangeLog (UTF-8)
 Annot Stream
 Since 6/18/2011
 
-8/?/2012 ?	player,down,browser,translator	0.1.8.4,0.1.3.5,0.1.2.5,0.1.0.2
-        * ?
+8/26/2012 SUN	annot-player	0.1.9.0
+        * Add word translation support from Kotobank (ja).
+        * Add more text translation options, including:
+          * Infoseek honyaku
+          * Yahoo! honyaku
+          * OCN translator (en, zh, ko) - the best for Chinese
+          * freshEYE honyaku (en,zh)
+          * @nifty honyaku (en)
+          * Excite hongyaku (en)
+          * SDL free translator (en)
+          The default translator switched to Ocn from Microsoft.
+        * Try to synchronize with any running game in the library on startup.
+        * Retry to reconnect on accidental soap error.
+        * Option to set annotation transparency from Preferences.
+          在设定中可以调整弹幕透明度。
+        * Option to set fullscreen annotation size, which is slightly larger than normal one.
+          在设定中可以调整全屏弹幕大小（默认略大于非全屏弹幕）。
 
 8/20/2012 MON	player,down,browser,translator	0.1.8.3,0.1.3.4,0.1.2.4,0.1.0.1
         * Fix a severe bug that might crash the app when opening new game/media in Windows.

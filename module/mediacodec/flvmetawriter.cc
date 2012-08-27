@@ -79,7 +79,7 @@ FlvMetaWriter::update()
   }
 
   quint32 flags = headerIn.readUInt8();
-  Q_UNUSED(flags); // supposed to be 0x5 for FLV with both a/v tracks
+  Q_UNUSED(flags) // supposed to be 0x5 for FLV with both a/v tracks
   DOUT("FLV flags =" << flags);
 
   qint64 dataOffset = headerIn.readUInt32();
@@ -322,8 +322,8 @@ FlvMetaWriter::updateScriptTagDoubleValue(OutputStream *out, const QString &var)
 bool
 FlvMetaWriter::updateScriptTagUInt8Value(OutputStream *out, const QString &var) const
 {
-  Q_UNUSED(out);
-  Q_UNUSED(var);
+  Q_UNUSED(out)
+  Q_UNUSED(var)
   return false;
 //#define IF_VAR(_var, _meta)
 //  if (var == _var) {

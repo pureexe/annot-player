@@ -1,7 +1,7 @@
 #ifndef CLOUDSERVICESOAP_P_H
 #define CLOUDSERVICESOAP_P_H
 
-// serversoap.h
+// cloudservicesoap_p.h.h
 // 9/10/2011
 // TODO: Automatic generate this file.
 // See: http://blog.csdn.net/tingsking18/article/details/5456831

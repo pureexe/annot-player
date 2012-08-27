@@ -295,6 +295,6 @@ MainWindow::mouseMoveEvent(QMouseEvent *event)
 
 void
 MainWindow::mouseReleaseEvent(QMouseEvent *event)
-{ Q_UNUSED(event); }
+{ Q_UNUSED(event) }
 
 // EOF

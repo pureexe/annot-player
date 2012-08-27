@@ -22,6 +22,9 @@ class TranslateEdit : public QTextEdit
   QMenu *contextMenu;
   QtExt::TextHighlighter *highlighter_;
 
+  QAction *translateAct_,
+          *clearAct_;
+
 public:
   explicit TranslateEdit(QWidget *parent = nullptr);
 
@@ -33,9 +36,10 @@ signals:
 
 protected slots:
   void updateSelectedText();
+  void invalidateSelectedText() { emit selectedTextChanged(selectedText_); }
 
-//protected:
-//  void contextMenuEvent(QContextMenuEvent *e) override;
+protected:
+  void contextMenuEvent(QContextMenuEvent *e) override;
 };
 
 #endif // TRANSLATEEDIT_H

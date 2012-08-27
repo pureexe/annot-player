@@ -243,6 +243,49 @@
     </message>
 </context>
 <context>
+    <name>AcLocalizer</name>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="21"/>
+        <source>Play</source>
+        <translation>再生</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="29"/>
+        <source>Browse</source>
+        <translation>ブラウズ</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="37"/>
+        <source>Download</source>
+        <translation>ダウンロード</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="45"/>
+        <source>Translate</source>
+        <translation>翻訳</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="53"/>
+        <source>Update</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="61"/>
+        <source>Readme</source>
+        <translation>説明書</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="69"/>
+        <source>Changes</source>
+        <translation>更新履歴</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="77"/>
+        <source>License</source>
+        <translation>著作権</translation>
+    </message>
+</context>
+<context>
     <name>AcLocationManager</name>
     <message>
         <location filename="../../common/acpaths.cc" line="59"/>
@@ -653,7 +696,7 @@
         <translation>ビリビリ動画の解析に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="326"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="331"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>ニコニコ動画のアカウントは必要です</translation>
     </message>
@@ -1345,22 +1388,22 @@
         <translation>完了</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="641"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="639"/>
         <source>opening</source>
         <translation>開く</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="671"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="669"/>
         <source>no recent closed tabs</source>
         <translation>閉じたタブがありません</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="753"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="751"/>
         <source>Start Page</source>
         <translation>世界の果て</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="855"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="853"/>
         <source>Annot Browser</source>
         <translation>とあるブラウザ</translation>
     </message>

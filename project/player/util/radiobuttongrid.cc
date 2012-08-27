@@ -93,8 +93,11 @@ RadioButtonGrid::addItem(const QString &title, const QString &tip)
 void
 RadioButtonGrid::clear()
 {
-  for (int i = 0; i < size_ ; i++)
-    buttons_[i]->hide();
+  if (size_) {
+    for (int i = 0; i < size_ ; i++)
+      buttons_[i]->hide();
+    size_ =  0;
+  }
 }
 
 void

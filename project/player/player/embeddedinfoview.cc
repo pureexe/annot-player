@@ -62,7 +62,7 @@ EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, SignalHub 
   connect(player_, SIGNAL(audioDelayChanged(qint64)), SLOT(refresh()));
   connect(player_, SIGNAL(audioChannelChanged(int)), SLOT(refresh()));
   connect(AnnotationSettings::globalSettings(), SIGNAL(scaleChanged(qreal)), SLOT(refresh()));
-  connect(AnnotationSettings::globalSettings(), SIGNAL(speedFactorChanged(int)), SLOT(refresh()));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(speedupChanged(qreal)), SLOT(refresh()));
   connect(AnnotationSettings::globalSettings(), SIGNAL(rotationChanged(qreal)), SLOT(refresh()));
   connect(AnnotationSettings::globalSettings(), SIGNAL(offsetChanged(int)), SLOT(refresh()));
 }

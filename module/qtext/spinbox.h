@@ -1,7 +1,7 @@
 #ifndef _QTEXT_SPINBOX_H
 #define _QTEXT_SPINBOX_H
 
-// qtext/spinbox.h
+// spinbox.h
 // 5/30/2012
 
 #include <QtGui/QSpinBox>

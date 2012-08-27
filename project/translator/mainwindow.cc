@@ -21,13 +21,14 @@
 #include "module/animation/fadeanimation.h"
 #include "module/translator/translatormanager.h"
 #include "module/translator/jdictranslator.h"
+#include "module/translator/kotobanktranslator.h"
 #include <QtGui>
 #include <boost/foreach.hpp>
 
 #define DEBUG "mainwindow"
 #include "module/debug/debug.h"
 
-#define DICT_CSS \
+#define JDIC_CSS \
   HTML_CSS_OPEN() \
     SS_BEGIN(div) \
       SS_MARGIN(1em 0.5em 1em 0.5em) \
@@ -38,11 +39,39 @@
     SS_END \
   HTML_CSS_CLOSE()
 
+#define KOTOBANK_CSS \
+  HTML_CSS_OPEN() \
+    SS_BEGIN(dt) \
+      SS_MARGIN(1em 0.5em 0 0.5em) \
+      SS_BACKGROUND_COLOR(rgba(144,238,144,64)) \
+      SS_FONT_WEIGHT(bold) \
+    SS_END \
+    SS_BEGIN(dd) \
+      SS_MARGIN(0 0.5em 0 0.5em) \
+      SS_BACKGROUND_COLOR(rgba(173,216,230,64)) \
+    SS_END \
+  HTML_CSS_CLOSE()
+
+//#ifdef Q_OS_MAC
+//# define K_CTRL     "cmd"
+//# define K_ENTER    "enter"
+//#else
+//# define K_ENTER    "Enter"
+//# define K_CTRL     "Ctrl"
+//#endif // Q_OS_MAC
+
 // - Construction -
 
+#define WINDOW_FLAGS \
+   Settings::globalSettings()->windowOnTop() ? \
+     Qt::WindowStaysOnTopHint : \
+     Qt::WindowType(0)
+
 MainWindow::MainWindow(QWidget *parent)
-  : Base(parent, Qt::WindowStaysOnTopHint), disposed_(false)
+  : Base(parent, WINDOW_FLAGS), disposed_(false), translatedTextChanged_(false)
 {
+  //if (Settings::globalSettings()->windowOnTop())
+  //  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
   setWindowTitle(tr("Annot Translator"));
   setWindowIcon(QIcon(RC_IMAGE_APP));
 
@@ -53,12 +82,27 @@ MainWindow::MainWindow(QWidget *parent)
   // - Translators -
 
   textTranslator_ = new TranslatorManager(this);
-  connect(textTranslator_, SIGNAL(translatedByGoogle(QString)), SLOT(showGoogleTranslation(QString)));
-  connect(textTranslator_, SIGNAL(translatedByMicrosoft(QString)), SLOT(showMicrosoftTranslation(QString)));
+  connect(textTranslator_, SIGNAL(translated(QString)), SLOT(invalidateTranslatedText()));
   connect(textTranslator_, SIGNAL(translatedByRomaji(QString)), SLOT(showRomajiTranslation(QString)));
+  connect(textTranslator_, SIGNAL(translatedByMicrosoft(QString)), SLOT(showMicrosoftTranslation(QString)));
+  connect(textTranslator_, SIGNAL(translatedByGoogle(QString)), SLOT(showGoogleTranslation(QString)));
+  connect(textTranslator_, SIGNAL(translatedByOcn(QString)), SLOT(showOcnTranslation(QString)));
+  connect(textTranslator_, SIGNAL(translatedByExcite(QString)), SLOT(showExciteTranslation(QString)));
+  connect(textTranslator_, SIGNAL(translatedBySdl(QString)), SLOT(showSdlTranslation(QString)));
+  connect(textTranslator_, SIGNAL(translatedByNifty(QString)), SLOT(showNiftyTranslation(QString)));
+  connect(textTranslator_, SIGNAL(translatedByInfoseek(QString)), SLOT(showInfoseekTranslation(QString)));
+  connect(textTranslator_, SIGNAL(translatedByYahoo(QString)), SLOT(showYahooTranslation(QString)));
+  connect(textTranslator_, SIGNAL(translatedByFresheye(QString)), SLOT(showFresheyeTranslation(QString)));
 
-  dictTranslator_ = new JdicTranslator(this);
-  connect(dictTranslator_, SIGNAL(translated(QString)), SLOT(showDictTranslation(QString)));
+  kotobankTranslator_ = new KotobankTranslator(this);
+  connect(kotobankTranslator_, SIGNAL(translated(QString)), SLOT(showKotobankTranslation(QString)));
+
+  jdicTranslator_ = new JdicTranslator(this);
+  connect(jdicTranslator_, SIGNAL(translated(QString)), SLOT(showJdicTranslation(QString)));
+
+  connect(kotobankTranslator_, SIGNAL(errorMessage(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(jdicTranslator_, SIGNAL(errorMessage(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(textTranslator_, SIGNAL(errorMessage(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
 
   // - IPC -
   browserDelegate_ = new AcBrowser(this);
@@ -78,12 +122,25 @@ MainWindow::MainWindow(QWidget *parent)
 
   // - Post status -
 
-  jdicButton_->setChecked(true);
-  romajiButton_->setChecked(true);
-  microsoftButton_->setChecked(true);
+  (Settings::globalSettings()->dictionary() == Kotobank ? kotobankButton_ : jdicButton_)
+    ->setChecked(true);
+
+  ulong t = Settings::globalSettings()->translationServices();
+  if (!t)
+    t = TranslatorManager::RomajiBit | TranslatorManager::InfoseekBit;
+  romajiButton_->setChecked(t & TranslatorManager::RomajiBit);
+  microsoftButton_->setChecked(t & TranslatorManager::MicrosoftBit);
+  googleButton_->setChecked(t & TranslatorManager::GoogleBit);
+  ocnButton_->setChecked(t & TranslatorManager::OcnBit);
+  exciteButton_->setChecked(t & TranslatorManager::ExciteBit);
+  sdlButton_->setChecked(t & TranslatorManager::SdlBit);
+  niftyButton_->setChecked(t & TranslatorManager::NiftyBit);
+  infoseekButton_->setChecked(t & TranslatorManager::InfoseekBit);
+  yahooButton_->setChecked(t & TranslatorManager::YahooBit);
+  fresheyeButton_->setChecked(t & TranslatorManager::FresheyeBit);
 
   autoButton_->setChecked(true);
-  topButton_->setChecked(true);
+  topButton_->setChecked(isWindowOnTop());
   //clipboardButton_->setChecked(true);
 
   updateLanguage();
@@ -111,6 +168,7 @@ MainWindow::createLayout()
   AcUi *ui = AcUi::globalInstance();
 
   translateButton_ = ui->makeToolButton(AcUi::PushHint | AcUi::HighlightHint, tr("Translate"), this, SLOT(translate()));
+  //new QShortcut(QKeySequence("CTRL+S"), this, SLOT(translate()));
 
   autoButton_ = ui->makeToolButton(AcUi::CheckHint, tr("Auto"), tr("Automatically translate selected text"));
   clipboardButton_ = ui->makeToolButton(AcUi::CheckHint, tr("Clipboard"), tr("Monitor and translate clipboard text"), this, SLOT(translateClipboard()));
@@ -135,10 +193,18 @@ MainWindow::createLayout()
   connect(languageCombo_, SIGNAL(activated(int)), SLOT(updateLanguage()));
   connect(languageCombo_, SIGNAL(activated(int)), SLOT(translate()));
 
-  jdicButton_ = ui->makeCheckBox(0, tr("WWWJDIC"), tr("WWWJDIC Translator"), this, SLOT(updateTranslators()));
+  kotobankButton_ = ui->makeRadioButton(0, tr("Kotobank"), tr("Kotobank Translator") + " (ja)", this, SLOT(updateTranslators()));
+  jdicButton_ = ui->makeRadioButton(0, tr("WWWJDIC"), tr("WWWJDIC Translator") + " (en)", this, SLOT(updateTranslators()));
   romajiButton_ = ui->makeCheckBox(0, tr("Romaji"), tr("Romaji Translator"), this, SLOT(updateTranslators()));
   microsoftButton_ = ui->makeCheckBox(0, tr("Microsoft"), tr("Microsoft Translator"), this, SLOT(updateTranslators()));
   googleButton_ = ui->makeCheckBox(0, tr("Google"), tr("Google Translator"), this, SLOT(updateTranslators()));
+  infoseekButton_ = ui->makeCheckBox(0, tr("Infoseek"), tr("Infoseek Honyaku"), this, SLOT(updateTranslators()));
+  yahooButton_ = ui->makeCheckBox(0, tr("Yahoo!"), tr("Yahoo! Honyaku"), this, SLOT(updateTranslators()));
+  fresheyeButton_ = ui->makeCheckBox(0, tr("freshEYE"), tr("freshEYE Honyaku") + " (en,zh)", this, SLOT(updateTranslators()));
+  ocnButton_ = ui->makeCheckBox(0, tr("OCN"), tr("OCN Honyaku") + " (en,zh,ko)", this, SLOT(updateTranslators()));
+  exciteButton_ = ui->makeCheckBox(0, tr("Excite"), tr("Excite Honyaku") + " (en)", this, SLOT(updateTranslators()));
+  sdlButton_ = ui->makeCheckBox(0, tr("SDL"), tr("SDL Translator") + " (en)", this, SLOT(updateTranslators()));
+  niftyButton_ = ui->makeCheckBox(0, tr("@nifty"), tr("@nifty honyaku") + " (en)", this, SLOT(updateTranslators()));
 
   translateEdit_ = new TranslateEdit;
   connect(translateEdit_, SIGNAL(textChanged()), SLOT(autoTranslate()));
@@ -147,7 +213,7 @@ MainWindow::createLayout()
 
   for (size_t i = 0; i < sizeof(browsers_)/sizeof(*browsers_); i++) {
     QTextBrowser *b = browsers_[i] = new TranslateBrowser;
-    connect(b, SIGNAL(anchorClicked(QUrl)), SLOT(openUrl(QUrl)));
+    connect(b, SIGNAL(anchorClicked(QUrl)), SLOT(processUrl(QUrl)));
     switch (i) {
     case DictBrowser0:
     case DictBrowser1:
@@ -160,19 +226,31 @@ MainWindow::createLayout()
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
-    QHBoxLayout *header = new QHBoxLayout;
-    rows->addLayout(header);
+    QHBoxLayout *options = new QHBoxLayout,
+                *translators = new QHBoxLayout;
+    rows->addLayout(translators);
+    rows->addLayout(options);
 
-    header->addWidget(translateButton_);
-    header->addWidget(languageCombo_);
-    header->addWidget(autoButton_);
-    header->addWidget(clipboardButton_);
-    header->addWidget(topButton_);
-    header->addStretch();
-    header->addWidget(jdicButton_);
-    header->addWidget(romajiButton_);
-    header->addWidget(microsoftButton_);
-    header->addWidget(googleButton_);
+    options->addWidget(translateButton_);
+    options->addWidget(languageCombo_);
+    options->addStretch();
+    options->addWidget(autoButton_);
+    options->addWidget(clipboardButton_);
+    options->addWidget(topButton_);
+
+    translators->addWidget(kotobankButton_);
+    translators->addWidget(jdicButton_);
+    translators->addStretch();
+    translators->addWidget(romajiButton_);
+    translators->addWidget(ocnButton_);
+    translators->addWidget(fresheyeButton_);
+    translators->addWidget(infoseekButton_);
+    translators->addWidget(yahooButton_);
+    translators->addWidget(googleButton_);
+    translators->addWidget(microsoftButton_);
+    translators->addWidget(niftyButton_);
+    translators->addWidget(exciteButton_);
+    translators->addWidget(sdlButton_);
 
     QSplitter *h = new QSplitter(Qt::Horizontal),
               *left = new QSplitter(Qt::Vertical),
@@ -195,7 +273,8 @@ MainWindow::createLayout()
     int patch = 0;
     if (!AcUi::isAeroAvailable())
       patch = 9;
-    header->setContentsMargins(0, 0, 0, 0);
+    options->setContentsMargins(0, 0, 0, 0);
+    translators->setContentsMargins(9, 0, 0, 0);
     rows->setContentsMargins(patch, patch, patch, patch);
     setContentsMargins(0, 0, 0, 0);
   } setCentralWidget(new LayoutWidget(rows, this));
@@ -340,6 +419,14 @@ MainWindow::createActions()
 
 // - Properties -
 
+MainWindow::Dictionary
+MainWindow::currentDictionary() const
+{
+  return jdicTranslator_->isEnabled() ? Wwwjdic :
+         kotobankTranslator_->isEnabled() ? Kotobank :
+         DictionaryCount;
+}
+
 // See: http://msdn.microsoft.com/en-us/library/hh456380.aspx
 // Must be consistent with Translator::languageCode
 void
@@ -365,14 +452,19 @@ MainWindow::updateLanguage()
 void
 MainWindow::updateTranslators()
 {
-  dictTranslator_->setEnabled(jdicButton_->isChecked());
+  kotobankTranslator_->setEnabled(kotobankButton_->isChecked());
+  jdicTranslator_->setEnabled(jdicButton_->isChecked());
 
+  textTranslator_->setService(TranslatorManager::Romaji, romajiButton_->isChecked());
   textTranslator_->setService(TranslatorManager::Google, googleButton_->isChecked());
   textTranslator_->setService(TranslatorManager::Microsoft, microsoftButton_->isChecked());
-  textTranslator_->setService(TranslatorManager::Romaji, romajiButton_->isChecked());
-
-  connect(dictTranslator_, SIGNAL(errorMessage(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
-  connect(textTranslator_, SIGNAL(errorMessage(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  textTranslator_->setService(TranslatorManager::Ocn, ocnButton_->isChecked());
+  textTranslator_->setService(TranslatorManager::Excite, exciteButton_->isChecked());
+  textTranslator_->setService(TranslatorManager::Sdl, sdlButton_->isChecked());
+  textTranslator_->setService(TranslatorManager::Nifty, niftyButton_->isChecked());
+  textTranslator_->setService(TranslatorManager::Infoseek, infoseekButton_->isChecked());
+  textTranslator_->setService(TranslatorManager::Yahoo, yahooButton_->isChecked());
+  textTranslator_->setService(TranslatorManager::Fresheye, fresheyeButton_->isChecked());
 }
 
 // - Events -
@@ -492,13 +584,20 @@ MainWindow::translate(const QString &input)
   QString t = input.trimmed();
   if (t.isEmpty())
     return;
+
+  showMessage(tr("translate") + ": " + input);
+
+  if (translatedTextChanged_) {
+    showTextTranslation(HTML_SS_OPEN(color:gray) "--------" HTML_SS_CLOSE());
+    translatedTextChanged_ = false;
+  }
   //textTranslator_->translate(t, language_); // FIXME: inlining is not working under clang T_T
   for (int service = 0; service < TranslatorManager::ServiceCount; service++)
     if (textTranslator_->hasService(service))
       textTranslator_->translate(service, t, languageCode_);
 
-  showTextTranslation(HTML_SS_OPEN(color:gray) "--------" HTML_SS_CLOSE());
-  dictTranslator_->translate(t, languageCode_);
+  jdicTranslator_->translate(t, languageCode_);
+  kotobankTranslator_->translate(t, languageCode_);
 }
 
 void
@@ -542,7 +641,7 @@ MainWindow::searchWithEngine(int engine, const QString &key)
     if (e) {
       QString url = e->search(key);
       if (!url.isEmpty())
-        openUrl(QUrl(url));
+        openUrl(url);
     }
   }
 }
@@ -553,10 +652,69 @@ MainWindow::saveSettings()
   Settings *settings = Settings::globalSettings();
   //settings->setRecentSize(size());
   settings->setLanguageIndex(languageCombo_->currentIndex());
+  settings->setDictionary(currentDictionary());
+  settings->setWindowOnTop(isWindowOnTop());
+  settings->setTranslationServices(textTranslator_->services());
   settings->sync();
 }
 
 // - Show Translations -
+
+void
+MainWindow::showYahooTranslation(const QString &text)
+{
+  showTextTranslation(
+    HTML_SS_OPEN(color:maroon) + text + HTML_SS_CLOSE()
+  );
+}
+
+void
+MainWindow::showFresheyeTranslation(const QString &text)
+{
+  showTextTranslation(
+    HTML_SS_OPEN(color:teal) + text + HTML_SS_CLOSE()
+  );
+}
+
+void
+MainWindow::showInfoseekTranslation(const QString &text)
+{
+  showTextTranslation(
+    HTML_SS_OPEN(color:red) + text + HTML_SS_CLOSE()
+  );
+}
+
+void
+MainWindow::showSdlTranslation(const QString &text)
+{
+  showTextTranslation(
+    HTML_SS_OPEN(color:brown) + text + HTML_SS_CLOSE()
+  );
+}
+
+void
+MainWindow::showNiftyTranslation(const QString &text)
+{
+  showTextTranslation(
+    HTML_SS_OPEN(color:black) + text + HTML_SS_CLOSE()
+  );
+}
+
+void
+MainWindow::showOcnTranslation(const QString &text)
+{
+  showTextTranslation(
+    HTML_SS_OPEN(color:blue) + text + HTML_SS_CLOSE()
+  );
+}
+
+void
+MainWindow::showExciteTranslation(const QString &text)
+{
+  showTextTranslation(
+    HTML_SS_OPEN(color:magenta) + text + HTML_SS_CLOSE()
+  );
+}
 
 void
 MainWindow::showGoogleTranslation(const QString &text)
@@ -570,7 +728,7 @@ void
 MainWindow::showMicrosoftTranslation(const QString &text)
 {
   showTextTranslation(
-    HTML_SS_OPEN(color:blue) + text + HTML_SS_CLOSE()
+    HTML_SS_OPEN(color:indigo) + text + HTML_SS_CLOSE()
   );
 }
 
@@ -583,6 +741,14 @@ MainWindow::showRomajiTranslation(const QString &text)
 }
 
 void
+MainWindow::showKotobankTranslation(const QString &text)
+{ showDictTranslation(KOTOBANK_CSS + text); }
+
+void
+MainWindow::showJdicTranslation(const QString &text)
+{ showDictTranslation(JDIC_CSS + text); }
+
+void
 MainWindow::showDictTranslation(const QString &text)
 {
   int j = -1;
@@ -590,7 +756,7 @@ MainWindow::showDictTranslation(const QString &text)
     if (browsers_[i]->hasFocus())
       j = i+1;
   j = qBound<int>(DictBrowser0, j, DictBrowser3);
-  browsers_[j]->setHtml(DICT_CSS + text);
+  browsers_[j]->setHtml(text);
 }
 
 void
@@ -598,11 +764,28 @@ MainWindow::showTextTranslation(const QString &text)
 { browsers_[TextBrowser]->append(text); }
 
 void
-MainWindow::openUrl(const QUrl &url)
+MainWindow::processUrl(const QUrl &url)
 {
   QString t = url.toString();
-  showMessage(tr("opening") + ": " + t);
-  browserDelegate_->openUrl(t);
+  if (!t.contains("://") &&
+      currentDictionary() == Kotobank) {
+    if (t.startsWith("/word/")) {
+      enum { PrefixSize = 6 }; // size of "/word/"
+      t = t.right(t.size() - PrefixSize );
+      t.remove(QRegExp("?.*"));
+      translate(t);
+      return;
+    }
+    t.prepend(KotobankTranslator::host());
+  }
+  openUrl(t);
+}
+
+void
+MainWindow::openUrl(const QString &url)
+{
+  showMessage(tr("opening") + ": " + url);
+  browserDelegate_->openUrl(url);
 }
 
 void

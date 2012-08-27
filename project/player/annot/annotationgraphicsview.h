@@ -35,10 +35,6 @@ class AnnotationGraphicsView : public QGraphicsView, public QtExt::EventForwarde
 
   // - Types -
 public:
-  enum AnnotationPosition {
-    AP_Top = 0, AP_Bottom
-  };
-
   enum RenderHint {
     DefaultRenderHint = 0,
     TransparentHint,    // implies QGraphicsOpacityEffect
@@ -56,9 +52,6 @@ public:
 public:
   qint64 userId() const { return userId_; }
   void setUserId(qint64 uid) { userId_ = uid; }
-
-  AnnotationPosition subtitlePosition() const { return subtitlePosition_; }
-  void setSubtitlePosition(AnnotationPosition ap) { subtitlePosition_ = ap; }
 
   void setSubtitlePrefix(const QString &prefix) { subtitlePrefix_ = prefix; }
   const QString &subtitlePrefix() const { return subtitlePrefix_; }
@@ -341,6 +334,8 @@ protected slots:
   void updateAnnotationText(const QString &text);
   void updateAnnotationTextWithId(const QString &text, qint64 aid);
 
+  void updateScale();
+
 public:
   bool isAnnotationBlocked(const Annotation &a) const;
   bool isItemBlocked(const AnnotationGraphicsItem *item) const;
@@ -382,11 +377,11 @@ private:
   qint64 userId_;
 
   bool playbackEnabled_;
-  AnnotationPosition subtitlePosition_;
 
   QList<qint64> filteredAnnotationIds_;
 
-  qreal scale_, rotation_;
+  qreal scale_;
+  qreal rotation_;
 
   bool hoveredItemPaused_, hoveredItemResumed_, hoveredItemRemoved_,
        nearbyItemExpelled_, nearbyItemAttracted_;

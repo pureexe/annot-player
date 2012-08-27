@@ -10,8 +10,9 @@
 namespace Crypt {
 
   QByteArray hex(const QByteArray &input);
-  QByteArray sha1(const QByteArray &input);
   QByteArray md5(const QByteArray &input);
+  QByteArray sha1(const QByteArray &input);
+  QByteArray sha256(const QByteArray &input);
 
   enum { SimpleCryptKey = 0 };
   QByteArray encrypt(const QByteArray &input, quint64 key = SimpleCryptKey);

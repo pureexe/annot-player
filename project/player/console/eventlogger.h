@@ -79,8 +79,11 @@ public slots:
   void logSaturationChanged(qreal value);
   void logGammaChanged(qreal value);
 
+  void logSubtitleOnTopChanged(bool value);
   void logAnnotationScaleChanged(qreal value);
-  void logAnnotationSpeedFactorChanged(int value);
+  void logAnnotationFullscreenScaleChanged(qreal value);
+  void logAnnotationOpacityFactorChanged(int value);
+  void logAnnotationSpeedupChanged(qreal value);
   void logAnnotationRotationChanged(qreal value);
   void logAnnotationOffsetChanged(int value);
   void logAnnotationCountLimitedChanged(bool value);
@@ -109,9 +112,6 @@ protected slots:
   void logUntilPlaying();
   void startLogUntilPlaying();
   void stopLogUntilPlaying();
-
-private:
-  void createConnections();
 };
 
 #endif // EVENTLOGGER_H

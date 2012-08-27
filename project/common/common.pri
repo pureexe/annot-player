@@ -20,6 +20,7 @@ HEADERS += \
     $$PWD/aciconbutton.h \
     $$PWD/acipc.h \
     $$PWD/aclineedit.h \
+    $$PWD/aclocalizer.h \
     $$PWD/aclocationprefs_p.h \
     $$PWD/acmainwindow.h \
     $$PWD/acnetworkproxyprefs_p.h \
@@ -39,6 +40,7 @@ HEADERS += \
     $$PWD/actranslator.h \
     $$PWD/acui.h \
     $$PWD/acupdater.h \
+    $$PWD/acversion.h \
     $$PWD/acwebwindow.h \
     $$PWD/acwindow.h
 
@@ -56,6 +58,7 @@ SOURCES += \
     $$PWD/aciconbutton.cc \
     $$PWD/acipc.cc \
     $$PWD/aclineedit.cc \
+    $$PWD/aclocalizer.cc \
     $$PWD/aclocationprefs_p.cc \
     $$PWD/acmainwindow.cc \
     $$PWD/acpaths.cc \
@@ -71,6 +74,7 @@ SOURCES += \
     $$PWD/actranslator.cc \
     $$PWD/acui.cc \
     $$PWD/acupdater.cc \
+    $$PWD/acversion.cc \
     $$PWD/acwebwindow.cc \
     $$PWD/acwindow.cc
 

@@ -145,7 +145,7 @@ FlvMerge::append(InputStream *in, bool writeHeader)
   }
 
   quint32 flags = headerIn.readUInt8();
-  Q_UNUSED(flags); // supposed to be 0x5 for FLV with both a/v tracks
+  Q_UNUSED(flags) // supposed to be 0x5 for FLV with both a/v tracks
   DOUT("FLV flags =" << flags);
 
   qint64 dataOffset = headerIn.readUInt32();
@@ -364,7 +364,7 @@ FlvMerge::updateScriptTag(QByteArray &data, int pos) const
   case DoubleType:
     {
       double value = in.readDouble(&ok); CHECK_OK;
-      Q_UNUSED(value);
+      Q_UNUSED(value)
       DOUT("meta:" << var << "double" << value);
       int offset = in.pos() - sizeof(double);
       updateScriptTagDoubleValue((quint8 *)data.data() + offset, var);
@@ -372,7 +372,7 @@ FlvMerge::updateScriptTag(QByteArray &data, int pos) const
   case UInt8Type:
     {
       quint8 value = in.readUInt8(&ok); CHECK_OK;
-      Q_UNUSED(value);
+      Q_UNUSED(value)
       DOUT("meta:" << var << "byte" << value);
       int offset = in.pos() - sizeof(quint8);
       updateScriptTagUInt8Value((quint8 *)data.data() + offset, var);
@@ -380,7 +380,7 @@ FlvMerge::updateScriptTag(QByteArray &data, int pos) const
   case UInt16Type:
     {
       quint16 value = in.readUInt16(&ok); CHECK_OK;
-      Q_UNUSED(value);
+      Q_UNUSED(value)
       DOUT("meta:" << var << "short" << value);
     } break;
   case DateType:
@@ -396,7 +396,7 @@ FlvMerge::updateScriptTag(QByteArray &data, int pos) const
       QByteArray valueData(valueLength, 0);
       ok = in.read(valueData) == valueLength; CHECK_OK;
       QString value(valueData);
-      Q_UNUSED(value);
+      Q_UNUSED(value)
       DOUT("meta:" << var << "string" << value);
     } break;
   case LongStringType:
@@ -405,7 +405,7 @@ FlvMerge::updateScriptTag(QByteArray &data, int pos) const
       QByteArray valueData(valueLength, 0);
       ok = in.read(valueData) == valueLength; CHECK_OK;
       QString value(valueData);
-      Q_UNUSED(value);
+      Q_UNUSED(value)
       DOUT("meta:" << var << "lstring" << value);
     } break;
   case ECMAArrayType:
@@ -460,8 +460,8 @@ FlvMerge::updateScriptTagDoubleValue(quint8 *data, const QString &var) const
 bool
 FlvMerge::updateScriptTagUInt8Value(quint8 *data, const QString &var) const
 {
-  Q_UNUSED(data);
-  Q_UNUSED(var);
+  Q_UNUSED(data)
+  Q_UNUSED(var)
   return false;
 /*
   bool update = false;

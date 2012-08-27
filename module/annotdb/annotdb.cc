@@ -133,7 +133,7 @@ AnnotationDatabase::tune()
   Q_ASSERT(isValid());
 
   bool ok = QSqlQuery(db_).exec("PRAGMA journal_mode = OFF");
-  Q_UNUSED(ok);
+  Q_UNUSED(ok)
 
   DOUT("exit: ok =" << ok);
 #endif // ANNOTDB_TUNE

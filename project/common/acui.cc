@@ -84,7 +84,7 @@ QGraphicsEffect*
 AcUi::makeHaloEffect(const QColor &c)
 {
 #ifdef Q_OS_MAC
-  Q_UNUSED(c);
+  Q_UNUSED(c)
   return 0;
 #else
   enum { offset = 1, radius = 16 };
@@ -361,7 +361,7 @@ void
 AcUi::setToolButtonStyle(QToolButton *w)
 {
   Q_ASSERT(w);
-  //Q_UNUSED(w);
+  //Q_UNUSED(w)
   //if (!w->text().isEmpty())
   w->setGraphicsEffect(makeHaloEffect(Qt::blue));
 }
@@ -465,7 +465,7 @@ QRadioButton*
 AcUi::makeRadioButton(ulong hints, const QString &text, const QString &tip, const QString &key,
                       QObject *receiver, const char *slot, Qt::ConnectionType type)
 {
-  Q_UNUSED(hints);
+  Q_UNUSED(hints)
   QRadioButton *ret = new QRadioButton;
   ret->setStyleSheet(ACSS_RADIOBUTTON);
   ret->setText(text);
@@ -486,7 +486,7 @@ QCheckBox*
 AcUi::makeCheckBox(ulong hints, const QString &text, const QString &tip, const QString &key,
                    QObject *receiver, const char *slot, Qt::ConnectionType type)
 {
-  Q_UNUSED(hints);
+  Q_UNUSED(hints)
   QCheckBox *ret = new QCheckBox;
   ret->setStyleSheet(ACSS_CHECKBOX);
   ret->setText(text);

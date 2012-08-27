@@ -196,7 +196,7 @@ Magnifier::contextMenuEvent(QContextMenuEvent *event)
   contextMenu_->exec(event->globalPos());
   event->accept();
 #else
-  Q_UNUSED(event);
+  Q_UNUSED(event)
   fadeOut();
 #endif // WITH_MODULE_IMAGEFILTER
 }

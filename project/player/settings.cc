@@ -53,9 +53,11 @@
 #define SK_ANNOTAVATAR  "AnnotationAvatar"
 #define SK_ANNOTMETA  "AnnotationMeta"
 #define SK_ANNOTSCALE   "AnnotationScale"
+#define SK_ANNOTFULLSCALE   "AnnotationFullscreenScale"
 //#define SK_ANNOTROTATE  "AnnotationRotation"
 #define SK_ANNOTRESOLUTION "AnnotationResolution"
-#define SK_ANNOTSPEED "AnnotationSpeed"
+#define SK_ANNOTOPACITY "AnnotationOpacity"
+#define SK_ANNOTSPEED   "AnnotationSpeed"
 #define SK_ANNOTFILTER  "AnnotationFilter"
 #define SK_ANNOTCOUNT   "AnnotationCount"
 #define SK_ANNOTEFFECT  "AnnotationEffect"
@@ -127,12 +129,12 @@ Settings::annotationPositionResolution() const
 { return value(SK_ANNOTRESOLUTION, ANNOTATION_POSITION_RESOLUTION).toInt(); }
 
 void
-Settings::setAnnotationSpeedFactor(int value)
+Settings::setAnnotationSpeedup(qreal value)
 { setValue(SK_ANNOTSPEED, value); }
 
-int
-Settings::annotationSpeedFactor() const
-{ return value(SK_ANNOTSPEED, ANNOTATION_SPEED_FACTOR).toInt(); }
+qreal
+Settings::annotationSpeedup() const
+{ return value(SK_ANNOTSPEED, 1.0).toDouble(); }
 
 void
 Settings::setAnnotationOffset(qint64 offset)
@@ -729,6 +731,14 @@ Settings::brightness() const
 // - Transform -
 
 void
+Settings::setAnnotationOpacityFactor(int v)
+{ setValue(SK_ANNOTOPACITY, v); }
+
+int
+Settings::annotationOpacityFactor() const
+{ return value(SK_ANNOTOPACITY, ANNOTATION_OPACITY_FACTOR).toInt(); }
+
+void
 Settings::setAnnotationScale(qreal v)
 {
   if (qFuzzyCompare(v, 1))
@@ -740,6 +750,14 @@ Settings::setAnnotationScale(qreal v)
 qreal
 Settings::annotationScale() const
 { return value(SK_ANNOTSCALE, 1.0).toReal(); }
+
+void
+Settings::setAnnotationFullscreenScale(qreal v)
+{ setValue(SK_ANNOTFULLSCALE, v); }
+
+qreal
+Settings::annotationFullscreenScale() const
+{ return value(SK_ANNOTFULLSCALE, ANNOTATION_FULLSCREEN_SCALE).toReal(); }
 
 // - Services -
 

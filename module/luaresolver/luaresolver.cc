@@ -471,7 +471,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
     if (L)
       printLastError(L);
 #else
-    Q_UNUSED(e);
+    Q_UNUSED(e)
 #endif // DEBUG
     if (L && closeL)
       lua_close(L);
@@ -486,7 +486,7 @@ QString
 LuaResolver::decodeUrl(const QString &url, const QString &href)
 {
 #ifndef USE_NICO_PROXY
-  Q_UNUSED(href);
+  Q_UNUSED(href)
   return url;
 #else
   if (url.isEmpty() ||

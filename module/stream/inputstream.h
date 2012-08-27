@@ -18,21 +18,21 @@ public:
   bool atEnd() const
   { qint64 s = size(); return s && pos() >= s; }
 
-  virtual void setBufferSize(qint64 size) { Q_UNUSED(size); }
+  virtual void setBufferSize(qint64 size) { Q_UNUSED(size) }
 
   virtual qint64 size() const { return 0; }
   virtual qint64 pos() const { return 0; }
 
   virtual qint64 read(char *data, qint64 maxSize) = 0;
-  virtual qint64 tryRead(char *data, qint64 maxSize) { Q_UNUSED(data); Q_UNUSED(maxSize); return 0; }
+  virtual qint64 tryRead(char *data, qint64 maxSize) { Q_UNUSED(data) Q_UNUSED(maxSize) return 0; }
 
   qint64 read(QByteArray &data)
   { return read(data.data(), data.size()); }
 
   virtual bool reset() = 0;
 
-  virtual bool seek(qint64 pos) { Q_UNUSED(pos); return false; }
-  virtual qint64 skip(qint64 count) { Q_UNUSED(count); return 0; }
+  virtual bool seek(qint64 pos) { Q_UNUSED(pos) return false; }
+  virtual qint64 skip(qint64 count) { Q_UNUSED(count) return 0; }
 
   virtual QByteArray readAll();
 

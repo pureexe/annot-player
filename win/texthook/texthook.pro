@@ -3,6 +3,7 @@
 
 include(../../config.pri)
 include($$ROOTDIR/win/qtwin/qtwin.pri)
+#include($$ROOTDIR/win/qtwinnt/qtwinnt.pri)
 include($$ROOTDIR/win/wmtimer/wmtimer.pri)
 
 ## Libraries
@@ -44,15 +45,17 @@ CONFIG  += dll
 DEFINES += TEXTHOOK_LIB
 
 HEADERS += \
-    ith.h \
+    ihf_p.h \
+    ith_p.h \
     texthook_config.h \
     texthook.h \
     textthread_p.h
 
 SOURCES += \
-    ith.cc \
+    ihf_p.cc \
+    ith_p.cc \
     texthook.cc \
-    textthread_p.cc 
+    textthread_p.cc
 
 !wince*: LIBS += -lshell32
 RC_FILE += texthook.rc

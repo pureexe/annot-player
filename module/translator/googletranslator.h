@@ -6,7 +6,6 @@
 
 #include "module/translator/translator.h"
 #include <QtCore/QStack>
-#include <QtCore/QUrl>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QWebPage)
@@ -29,7 +28,7 @@ public slots:
   void translate(const QString &text, const QString &to, const QString &from = QString()) override;
 
 protected:
-  static QUrl translateUrl(const QString &text, const QString &to, const QString &from = QString());
+  static QString translateUrl(const QString &text, const QString &to, const QString &from = QString());
   QNetworkAccessManager *networkAccessManager();
   QWebPage *createWebPage();
   QWebPage *allocateWebPage();

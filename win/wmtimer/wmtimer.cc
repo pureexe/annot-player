@@ -15,9 +15,9 @@ namespace { namespace detail {
     DWORD dwTime       // åªç›ÇÃÉVÉXÉeÉÄéûçè
   )
   {
-    Q_UNUSED(hwnd);
-    Q_UNUSED(dwTime);
-    Q_UNUSED(uMsg);
+    Q_UNUSED(hwnd)
+    Q_UNUSED(dwTime)
+    Q_UNUSED(uMsg)
     Q_ASSERT(idEvent);
     if (!idEvent)
       return;

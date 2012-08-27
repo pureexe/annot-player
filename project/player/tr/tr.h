@@ -5,9 +5,9 @@
 // 7/18/2011
 // Global parameters.
 
-#include "translationmanager.h"
+#include "localizer.h"
 
-#define TR(_tid)        TranslationManager::globalInstance()->translate(_tid)
+#define TR(_tid)        Localizer::translate(_tid)
 
 // TODO: Clean up id define
 // remove redundent translation

@@ -9,7 +9,7 @@
 #define RC_NULL         ACRC_NULL
 
 #define RC_PREFIX_IMAGE ":/images/"
-#define RC_IMAGE_NULL   RC_NULL
+//#define RC_IMAGE_NULL   ACRC_NULL
 
 #define RC_PREFIX_TR    ":/tr/"
 #define RC_TR_NULL      RC_NULL

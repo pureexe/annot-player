@@ -34,6 +34,7 @@ public slots:
 protected:
   void updateGame();
   void updateLabels();
+  void updateTitle();
 
 protected slots:
   void refresh();

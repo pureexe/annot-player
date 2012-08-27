@@ -520,9 +520,8 @@ WebBrowser::openUrl(const QString &url, QWebView *view)
 void
 WebBrowser::addRecentUrls(const QStringList &urls)
 {
-  auto p = urls.constEnd();
-  while (p != urls.constBegin())
-    addRecentUrl(*--p);
+  for (auto p = urls.constEnd(); p != urls.constBegin();
+       addRecentUrl(*--p));
 }
 
 void
@@ -573,9 +572,8 @@ WebBrowser::addRecentSearch(const QString &text)
 void
 WebBrowser::addRecentSearches(const QStringList &l)
 {
-  auto p = l.constEnd();
-  while (p != l.constBegin())
-    addRecentSearch(*--p);
+  for (auto p = l.constEnd(); p != l.constBegin();
+       addRecentSearch(*--p));
 }
 
 void
@@ -1103,7 +1101,7 @@ WebBrowser::download(const QNetworkRequest &req)
     warn(tr("failed to download %1").arg(req.url().toString()));
   QApplication::beep();
 #else
-  Q_UNUSED(req);
+  Q_UNUSED(req)
   warn(tr("download is not allowed"));
 #endif // WITH_MODULE_DOWNLOAD
 }

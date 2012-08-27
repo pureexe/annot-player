@@ -34,6 +34,11 @@ signals:
   void messageReceivedWithText(const QString &text);
   void messageReceivedWithId(qint64 pos);
 
+  void message(QString msg);
+  void warning(QString msg);
+  void errorMessage(QString msg);
+  void notification(QString msg);
+
   // - Properties -
 public:
   bool isActive() const { return active_; }

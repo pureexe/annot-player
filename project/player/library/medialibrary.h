@@ -11,6 +11,8 @@
 #include <QtCore/QSet>
 #include <QtCore/QString>
 
+#define MEDIA_LIBRARY_VERSION    "0.1.8"
+
 QT_FORWARD_DECLARE_CLASS(QStandardItemModel)
 
 class MediaModel;
@@ -44,6 +46,10 @@ public:
   const QSet<Media> &urls() const;
 
   bool exists() const;
+
+  bool hasGames() const { return !games_.isEmpty(); }
+  bool hasUrls() const { return !urls_.isEmpty(); }
+  bool hasFolders() const { return !folders_.isEmpty(); }
 
 public slots:
   void save();

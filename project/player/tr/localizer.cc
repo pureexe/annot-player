@@ -1,7 +1,7 @@
-// translationmanager.cc
+// localizer.cc
 // 9/16/2011
 
-#include "translationmanager.h"
+#include "localizer.h"
 #include "tr.h"
 #include "rc.h" // This breaks the modularity of this pri
 #include "module/qt/qtrc.h"
@@ -30,7 +30,7 @@
 // - Constructions -
 
 void
-TranslationManager::setLocale(int language, int script, bool updateTranslator)
+Localizer::setLocale(int language, int script, bool updateTranslator)
 {
   if (language_ != language || script_ != script) {
     if (updateTranslator)
@@ -46,8 +46,8 @@ TranslationManager::setLocale(int language, int script, bool updateTranslator)
 
 // - Properties -
 
-const TranslationManager::QTranslatorList&
-TranslationManager::tr_en() const
+const Localizer::QTranslatorList&
+Localizer::tr_en() const
 {
   if (tr_en_.isEmpty()) {
     QTranslator*
@@ -64,8 +64,8 @@ TranslationManager::tr_en() const
   return tr_en_;
 }
 
-const TranslationManager::QTranslatorList&
-TranslationManager::tr_ja() const
+const Localizer::QTranslatorList&
+Localizer::tr_ja() const
 {
   if (tr_ja_.isEmpty()) {
     QTranslator*
@@ -82,8 +82,8 @@ TranslationManager::tr_ja() const
   return tr_ja_;
 }
 
-const TranslationManager::QTranslatorList&
-TranslationManager::tr_zh_CN() const
+const Localizer::QTranslatorList&
+Localizer::tr_zh_CN() const
 {
   if (tr_zh_CN_.isEmpty()) {
     QTranslator*
@@ -100,8 +100,8 @@ TranslationManager::tr_zh_CN() const
   return tr_zh_CN_;
 }
 
-const TranslationManager::QTranslatorList&
-TranslationManager::tr_zh_TW() const
+const Localizer::QTranslatorList&
+Localizer::tr_zh_TW() const
 {
   if (tr_zh_TW_.isEmpty()) {
     QTranslator*
@@ -118,8 +118,8 @@ TranslationManager::tr_zh_TW() const
   return tr_zh_TW_;
 }
 
-TranslationManager::QTranslatorList
-TranslationManager::currentTranslators() const
+Localizer::QTranslatorList
+Localizer::currentTranslators() const
 {
   switch (language_) {
   case QLocale::English:   return tr_en();
@@ -130,7 +130,7 @@ TranslationManager::currentTranslators() const
 }
 
 void
-TranslationManager::installCurrentTranslator(QCoreApplication *a)
+Localizer::installCurrentTranslator(QCoreApplication *a)
 {
   if (a)
     foreach (QTranslator *t, currentTranslators())
@@ -138,7 +138,7 @@ TranslationManager::installCurrentTranslator(QCoreApplication *a)
 }
 
 void
-TranslationManager::removeCurrentTranslator(QCoreApplication *a)
+Localizer::removeCurrentTranslator(QCoreApplication *a)
 {
   if (a)
     foreach (QTranslator *t, currentTranslators())
@@ -148,7 +148,7 @@ TranslationManager::removeCurrentTranslator(QCoreApplication *a)
 // - Translations -
 
 QString
-TranslationManager::translate(int tid) const
+Localizer::translate(int tid)
 {
 #define SELF(_t)      translate(_t)
   switch (tid) {
@@ -884,7 +884,7 @@ TranslationManager::translate(int tid) const
   case T_EXPERIMENTAL:  return tr("experimental");
 
   default:
-    qWarning() << "TranslationManager:translate: Unknown tid =" << tid;
+    qWarning() << "Localizer:translate: Unknown tid =" << tid;
     Q_ASSERT(0);
     return QString();
   }

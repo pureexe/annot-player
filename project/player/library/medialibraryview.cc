@@ -67,6 +67,7 @@ MediaLibraryView::createActions()
   AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 
   showGameAct_ = contextMenu_->addAction(tr("Game Preferences"), this, SLOT(showGame()));
+  syncGameAct_ = contextMenu_->addAction(tr("Sync with Running Galgame"), this, SLOT(syncGame()));
   contextMenu_->addSeparator();
 
   openAct_ = contextMenu_->addAction(QIcon(RC_IMAGE_PLAY), TR(T_OPEN), this, SLOT(open()));
@@ -268,7 +269,12 @@ MediaLibraryView::setAutoHide(bool t)
 
 void
 MediaLibraryView::setAutoRun(bool t)
-{ autoRunAct_->setChecked(t); }
+{
+  if (t != autoRun()) {
+    autoRunAct_->setChecked(t);
+    emit autoRunChanged(t);
+  }
+}
 
 // - Actions -
 
@@ -401,6 +407,15 @@ MediaLibraryView::updateFilterEdit()
     proxyModel_->setFilterRegExp(QString());
   else {
     rx.replace(QRegExp("\\s+"), ".*");
+    //QStringList l = rx.split(' ', QString::SkipEmptyParts);
+    //if (l.size() > 1) {
+    //  rx = "(?:";
+    //  foreach (const QString &t, l)
+    //    rx.append("(?:")
+    //      .append(t)
+    //      .append(")");
+    //  rx.append(")+");
+    //}
     proxyModel_->setFilterRegExp(QRegExp(rx, Qt::CaseInsensitive));
   }
   updateCount();
@@ -474,13 +489,21 @@ MediaLibraryView::contextMenuEvent(QContextMenuEvent *event)
 }
 
 void
+MediaLibraryView::syncGame()
+{
+  showMessage(tr("searching for running game ..."));
+  emit syncGameRequested();
+}
+
+void
 MediaLibraryView::updateContextMenu()
 {
   bool v = selectionModel_->hasSelection();
   openAct_->setVisible(v);
   browseAct_->setVisible(v);
 
-  if (v) {
+  syncGameAct_->setVisible(library_->hasGames());
+  if (v && library_->hasGames()) {
     QModelIndex index = selectionModel_->currentIndex();
     int type  = MediaModel::indexType(index);
     showGameAct_->setVisible(type == Media::Game);

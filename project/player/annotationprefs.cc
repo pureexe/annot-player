@@ -7,14 +7,17 @@
 #include "tr.h"
 #include "project/common/acss.h"
 #include "project/common/acui.h"
+#include "module/qtext/doublespinbox.h"
 #include "module/qtext/spinbox.h"
 #include "module/qtext/fontcombobox.h"
 #include "module/qtext/toolbutton.h"
 #include <QtGui>
 
-enum { FONTEDIT_WIDTH = 100, OFFSETEDIT_WIDTH = 50, SPEEDEDIT_WIDTH = 50 };
+enum { FONTEDIT_WIDTH = 100 };
+enum { SPINEDIT_WIDTH = 60 };
 
 enum { SPEED_FACTOR = 10 };
+enum { SCALE_FACTOR = 10 };
 
 #define ICON_SIZE QSize(32, 16)
 
@@ -29,7 +32,7 @@ AnnotationPreferencesTab::init()
   createLayout();
 
   connect(settings_, SIGNAL(offsetChanged(int)), SLOT(loadOffsetIfVisible()));
-  connect(settings_, SIGNAL(speedFactorChanged(int)), SLOT(loadSpeedIfVisible()));
+  connect(settings_, SIGNAL(speedupChanged(qreal)), SLOT(loadSpeedIfVisible()));
 }
 
 void
@@ -53,62 +56,101 @@ AnnotationPreferencesTab::createLayout()
   connect(subtitleColorButton_, SIGNAL(clicked()), SLOT(promptSubtitleColor()));
 
   QLabel *subtitleColorLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_SUBTITLE), tr("Halo Color"), subtitleColorButton_);
-  QToolButton *subtitleColorReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetSubtitleColor()));
+  QToolButton *subtitleColorReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetSubtitleColor()));
 
   highlightColorButton_ = new QtExt::ToolButton; {
     highlightColorButton_->setStyleSheet(SS_TRANSPARENT);
     highlightColorButton_->setToolTip(tr("Highlight Color"));
-  }
-  connect(highlightColorButton_, SIGNAL(clicked()), SLOT(promptHighlightColor()));
-
+  } connect(highlightColorButton_, SIGNAL(clicked()), SLOT(promptHighlightColor()));
   QLabel *highlightColorLabel = ui->makeLabel(AcUi::BuddyHint, tr("Highlight"), tr("Halo Color"), highlightColorButton_);
-  QToolButton *highlightColorReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetHighlightColor()));
+  QToolButton *highlightColorReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetHighlightColor()));
 
   fontEdit_ = new QtExt::FontComboBox; {
     fontEdit_->setStyleSheet(ACSS_COMBOBOX);
     fontEdit_->setFixedWidth(FONTEDIT_WIDTH);
     fontEdit_->setToolTip(tr("Font Family"));
-  }
-  connect(fontEdit_, SIGNAL(activated(QString)), SLOT(saveFont()));
+  } connect(fontEdit_, SIGNAL(activated(QString)), SLOT(saveFont()));
   QLabel *fontLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_DEFAULT), tr("Font Family"), fontEdit_);
-  QToolButton *fontReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetFont()));
+  QToolButton *fontReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetFont()));
 
   japaneseFontEdit_ = new QtExt::FontComboBox; {
     japaneseFontEdit_->setStyleSheet(ACSS_COMBOBOX);
     japaneseFontEdit_->setFixedWidth(FONTEDIT_WIDTH);
     japaneseFontEdit_->setToolTip(tr("Font Family"));
-  }
-  connect(japaneseFontEdit_, SIGNAL(activated(QString)), SLOT(saveJapaneseFont()));
+  } connect(japaneseFontEdit_, SIGNAL(activated(QString)), SLOT(saveJapaneseFont()));
   QLabel *japaneseFontLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_JAPANESE), tr("Font Family"), japaneseFontEdit_);
-  QToolButton *japaneseFontReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetJapaneseFont()));
+  QToolButton *japaneseFontReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetJapaneseFont()));
 
   chineseFontEdit_ = new QtExt::FontComboBox; {
     chineseFontEdit_->setStyleSheet(ACSS_COMBOBOX);
     chineseFontEdit_->setFixedWidth(FONTEDIT_WIDTH);
     chineseFontEdit_->setToolTip(tr("Font Family"));
-  }
-  connect(chineseFontEdit_, SIGNAL(activated(QString)), SLOT(saveChineseFont()));
+  } connect(chineseFontEdit_, SIGNAL(activated(QString)), SLOT(saveChineseFont()));
   QLabel *chineseFontLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_CHINESE), tr("Font Family"), chineseFontEdit_);
-  QToolButton *chineseFontReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetChineseFont()));
+  QToolButton *chineseFontReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetChineseFont()));
 
-  enum { TimeRange = 3600 * 3 }; // 3 houre
-  offsetEdit_ = new QtExt::SpinBox;
-  offsetEdit_->setMaximum(TimeRange);
-  offsetEdit_->setMinimum(-TimeRange);
-  offsetEdit_->setToolTip(TR(T_SECOND));
-  offsetEdit_->setFixedWidth(OFFSETEDIT_WIDTH);
-  offsetEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-  connect(offsetEdit_, SIGNAL(valueChanged(int)), SLOT(saveOffset()));
+  offsetEdit_ = new QtExt::SpinBox; {
+    enum { TimeRange = 3600 * 3 }; // 3 houre
+    offsetEdit_->setSuffix(tr(" sec."));
+    offsetEdit_->setMaximum(TimeRange);
+    offsetEdit_->setMinimum(-TimeRange);
+    offsetEdit_->setToolTip(TR(T_SECOND));
+    offsetEdit_->setFixedWidth(SPINEDIT_WIDTH);
+    offsetEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  } connect(offsetEdit_, SIGNAL(valueChanged(int)), SLOT(saveOffset()));
+  QLabel *offsetLabel = ui->makeLabel(AcUi::BuddyHint, tr("Delay Time"), tr("Delay time"), offsetEdit_);
+  QToolButton *offsetReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetOffset()));
 
-  enum { MinSpeed = SPEED_FACTOR/10, MaxSpeed = SPEED_FACTOR*10 }; // 10 times
-  Q_ASSERT(MinSpeed);
-  speedEdit_ = new QtExt::SpinBox;
-  speedEdit_->setMaximum(MaxSpeed);
-  speedEdit_->setMinimum(MinSpeed);
-  speedEdit_->setToolTip(tr("Speedup") + " x" + QString::number(SPEED_FACTOR));
-  speedEdit_->setFixedWidth(SPEEDEDIT_WIDTH);
-  speedEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-  connect(speedEdit_, SIGNAL(valueChanged(int)), SLOT(saveSpeed()));
+  opacityEdit_ = new QtExt::SpinBox; {
+    enum { Min = 50, Max = 100 };
+    opacityEdit_->setSuffix(" %");
+    opacityEdit_->setMaximum(Max);
+    opacityEdit_->setMinimum(Min);
+    opacityEdit_->setToolTip(tr("Opacity"));
+    opacityEdit_->setFixedWidth(SPINEDIT_WIDTH);
+    opacityEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  } connect(opacityEdit_, SIGNAL(valueChanged(int)), SLOT(saveOpacity()));
+  QLabel *opacityLabel = ui->makeLabel(AcUi::BuddyHint, tr("Opacity"), tr("Annotation Transparency"), opacityEdit_);
+  QToolButton *opacityReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetOpacity()));
+
+  speedEdit_ = new QtExt::DoubleSpinBox; {
+    Q_ASSERT(MinSpeed);
+    speedEdit_->setPrefix("x ");
+    speedEdit_->setMaximum(1.0 * SPEED_FACTOR);
+    speedEdit_->setMinimum(1.0 / SPEED_FACTOR);
+    speedEdit_->setSingleStep(1.0 / (SPEED_FACTOR * 2));
+    speedEdit_->setToolTip(tr("Speedup") + " x" + QString::number(SPEED_FACTOR));
+    speedEdit_->setFixedWidth(SPINEDIT_WIDTH);
+    speedEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  } connect(speedEdit_, SIGNAL(valueChanged(double)), SLOT(saveSpeed()));
+  QLabel *speedLabel = ui->makeLabel(AcUi::BuddyHint, tr("Moving Speed"), tr("Moving speed, the larger the faster"), speedEdit_);
+  QToolButton *speedReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetSpeed()));
+
+  scaleEdit_ = new QtExt::DoubleSpinBox; {
+    //enum { MinSize = SCALE_FACTOR/10, MaxSize = SCALE_FACTOR*10 };
+    scaleEdit_->setPrefix("x ");
+    scaleEdit_->setMaximum(1.0 * SCALE_FACTOR);
+    scaleEdit_->setMinimum(1.0 / SCALE_FACTOR);
+    scaleEdit_->setSingleStep(1.0 / (SCALE_FACTOR * 2));
+    scaleEdit_->setToolTip(tr("Scale"));
+    scaleEdit_->setFixedWidth(SPINEDIT_WIDTH);
+    scaleEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  } connect(scaleEdit_, SIGNAL(valueChanged(double)), SLOT(saveScale()));
+  QLabel *scaleLabel = ui->makeLabel(AcUi::BuddyHint, tr("Normal Size"), tr("Annotation size"), scaleEdit_);
+  QToolButton *scaleReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetScale()));
+
+  fullscreenScaleEdit_ = new QtExt::DoubleSpinBox; {
+    //enum { MinSize = SCALE_FACTOR/10, MaxSize = SCALE_FACTOR*10 };
+    fullscreenScaleEdit_->setPrefix("x ");
+    fullscreenScaleEdit_->setMaximum(1.0 * SCALE_FACTOR);
+    fullscreenScaleEdit_->setMinimum(1.0 / SCALE_FACTOR);
+    fullscreenScaleEdit_->setSingleStep(1.0 / (SCALE_FACTOR * 2));
+    fullscreenScaleEdit_->setToolTip(tr("Scale"));
+    fullscreenScaleEdit_->setFixedWidth(SPINEDIT_WIDTH);
+    fullscreenScaleEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  } connect(fullscreenScaleEdit_, SIGNAL(valueChanged(double)), SLOT(saveFullscreenScale()));
+  QLabel *fullscreenScaleLabel = ui->makeLabel(AcUi::BuddyHint, tr("Fullscreen Size"), tr("Annotation size in fullscreen"), fullscreenScaleEdit_);
+  QToolButton *fullscreenScaleReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetFullscreenScale()));
 
   // See: http://qt-project.org/doc/qt-4.8/stylesheet-examples.html#customizing-qspinbox
   //offsetEdit_->setStyleSheet(
@@ -118,12 +160,6 @@ AnnotationPreferencesTab::createLayout()
   //    SS_BORDER_RADIUS(3px)
   //  SS_END
   //);
-
-  QLabel *offsetLabel = ui->makeLabel(AcUi::BuddyHint, tr("Offset"), tr("Offset in time"), offsetEdit_);
-  QToolButton *offsetReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetOffset()));
-
-  QLabel *speedLabel = ui->makeLabel(AcUi::BuddyHint, tr("Speed"), tr("Moving speed, the larger the faster"), speedEdit_);
-  QToolButton *speedReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetSpeed()));
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {
@@ -161,6 +197,21 @@ AnnotationPreferencesTab::createLayout()
     grid->addWidget(offsetEdit_, r, ++c);
     grid->addWidget(offsetReset, r, ++c);
 
+    grid->addWidget(scaleLabel, ++r, c=0, Qt::AlignRight);
+    grid->addWidget(scaleEdit_, r, ++c);
+    grid->addWidget(scaleReset, r, ++c);
+
+    grid->addWidget(fullscreenScaleLabel, r, ++c, Qt::AlignRight);
+    grid->addWidget(fullscreenScaleEdit_, r, ++c);
+    grid->addWidget(fullscreenScaleReset, r, ++c);
+
+    grid->addWidget(opacityLabel, ++r, c=0, Qt::AlignRight);
+    grid->addWidget(opacityEdit_, r, ++c);
+    grid->addWidget(opacityReset, r, ++c);
+
+    //grid->addWidget(fullscreenScaleLabel, r, ++c, Qt::AlignRight);
+    //grid->addWidget(fullscreenScaleEdit_, r, ++c);
+    //grid->addWidget(fullscreenScaleReset, r, ++c);
 
     //grid->addWidget(cancelButton, ++r, c=0, Qt::AlignHCenter);
     //grid->addWidget(loginButton, r, ++c, Qt::AlignHCenter);
@@ -181,6 +232,11 @@ AnnotationPreferencesTab::save()
   saveJapaneseFont();
   saveOffset();
   saveSpeed();
+  saveOpacity();
+
+  //saveScale(); // avoid loosing precision
+  //saveFullscreenScale(); // avoid loosing precision
+
   //saveAnnotationColor();
   //saveSubtitleColor();
   //saveHighlightColor();
@@ -195,6 +251,9 @@ AnnotationPreferencesTab::load()
   loadJapaneseFont();
   loadOffset();
   loadSpeed();
+  loadOpacity();
+  loadScale();
+  loadFullscreenScale();
   loadAnnotationColor();
   loadSubtitleColor();
   loadHighlightColor();
@@ -284,22 +343,79 @@ AnnotationPreferencesTab::resetOffset()
 }
 
 void
+AnnotationPreferencesTab::loadScale()
+{ scaleEdit_->setValue(settings_->scale()); }
+
+void
+AnnotationPreferencesTab::saveScale()
+{
+  settings_->setScale(scaleEdit_->value());
+  emit message(tr("annotation size saved"));
+}
+
+void
+AnnotationPreferencesTab::resetScale()
+{
+  settings_->resetScale();
+  loadScale();
+  emit message(tr("annotation size saved"));
+}
+
+void
+AnnotationPreferencesTab::loadFullscreenScale()
+{ fullscreenScaleEdit_->setValue(settings_->fullscreenScale()); }
+
+void
+AnnotationPreferencesTab::saveFullscreenScale()
+{
+  settings_->setFullscreenScale(fullscreenScaleEdit_->value());
+  emit message(tr("annotation size saved"));
+}
+
+void
+AnnotationPreferencesTab::resetFullscreenScale()
+{
+  settings_->resetFullscreenScale();
+  loadFullscreenScale();
+  emit message(tr("annotation size saved"));
+}
+
+void
 AnnotationPreferencesTab::loadSpeed()
-{ speedEdit_->setValue(settings_->speedFactor() / SPEED_FACTOR); }
+{ speedEdit_->setValue(settings_->speedup()); }
 
 void
 AnnotationPreferencesTab::saveSpeed()
 {
-  settings_->setSpeedFactor(speedEdit_->value() * SPEED_FACTOR);
+  settings_->setSpeedup(speedEdit_->value());
   emit message(tr("annotation speed saved"));
 }
 
 void
 AnnotationPreferencesTab::resetSpeed()
 {
-  settings_->resetSpeedFactor();
+  settings_->resetSpeedup();
   loadSpeed();
   emit message(tr("annotation speed saved"));
+}
+
+void
+AnnotationPreferencesTab::loadOpacity()
+{ opacityEdit_->setValue(settings_->opacityFactor()); }
+
+void
+AnnotationPreferencesTab::saveOpacity()
+{
+  settings_->setOpacityFactor(opacityEdit_->value());
+  emit message(tr("annotation opacity saved"));
+}
+
+void
+AnnotationPreferencesTab::resetOpacity()
+{
+  settings_->resetOpacityFactor();
+  loadOpacity();
+  emit message(tr("annotation opacity saved"));
 }
 
 // - Color -

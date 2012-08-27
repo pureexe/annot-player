@@ -41,6 +41,7 @@ public slots:
 
 public:
   QString decode(const QByteArray &data) const;
+  QString transcode(const QString &t) const { return decode(t.toLocal8Bit()); }
 };
 
 #endif // TEXTCODECMANAGER_H

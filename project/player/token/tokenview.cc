@@ -526,7 +526,7 @@ TokenView::languageToString(int lang)
 QStringList
 TokenView::aliasFlagsToStringList(int flags)
 {
-  Q_UNUSED(flags);
+  Q_UNUSED(flags)
   return QStringList(TR(T_NA));
 }
 

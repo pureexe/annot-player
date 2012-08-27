@@ -34,6 +34,15 @@ public:
 
   int languageIndex() const;
   void setLanguageIndex(int index);
+
+  int dictionary() const;
+  void setDictionary(int index);
+
+  ulong translationServices() const;
+  void setTranslationServices(ulong mask);
+
+  bool windowOnTop() const;
+  void setWindowOnTop(bool value);
 };
 
 #endif // SETTINGS_H

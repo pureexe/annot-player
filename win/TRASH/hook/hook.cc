@@ -157,9 +157,9 @@ namespace { // anonymous, low level mouse procedure with double-click support
   VOID CALLBACK
   TimerProc(__in HWND hwnd = 0, __in UINT uMsg = 0, __in UINT_PTR idEvent = 0, __in DWORD dwTime = 0)
   {
-    Q_UNUSED(hwnd);
-    Q_UNUSED(uMsg);
-    Q_UNUSED(dwTime);
+    Q_UNUSED(hwnd)
+    Q_UNUSED(uMsg)
+    Q_UNUSED(dwTime)
     //Q_ASSERT(!hwnd);
     //Q_ASSERT(idEvent == shared_::timer_id);
 

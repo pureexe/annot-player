@@ -191,7 +191,7 @@ DownloadManager::downloadAnnotation(const QString &url)
 #ifdef WITH_MODULE_ANNOTDOWN
   downloader_->download(url);
 #else
-  Q_UNUSED(url);
+  Q_UNUSED(url)
 #endif // WITH_MODULE_ANNOTDOWN
 }
 
@@ -202,9 +202,9 @@ DownloadManager::downloadAnnotation(const QString &url, const QString &refurl, c
 #ifdef WITH_MODULE_ANNOTDOWN
   downloader_->download(url, refurl, title);
 #else
-  Q_UNUSED(url);
-  Q_UNUSED(refurl);
-  Q_UNUSED(title);
+  Q_UNUSED(url)
+  Q_UNUSED(refurl)
+  Q_UNUSED(title)
 #endif // WITH_MODULE_ANNOTDOWN
 }
 

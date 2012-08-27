@@ -3,7 +3,7 @@
 setlocal
 cd /d d:/dev/build || exit /b 1
 
-set VERSION=0.1.2.1
+set VERSION=0.1.2.3
 set APP=annot-player-updater
 set TARGET=Annot Stream
 set ZIPFILE=%APP%-%VERSION%-win.zip
@@ -30,8 +30,8 @@ cp -v "%BUILD%/[ Update ].exe" . || exit /b 1
 cp -v "%SOURCE%/UPDATE" "Update.txt" || exit /b 1
 unix2dos "Update.txt"
 
-cp "%SOURCE%/COPYING" COPYING.txt || exit /b 1
-unix2dos COPYING.txt
+cp "%SOURCE%/COPYING" License.txt || exit /b 1
+unix2dos License.txt
 
 mkdir Update
 cd Update || exit /b 1
@@ -55,6 +55,11 @@ chown -R jichi .
 chmod -R 755 .
 
 attrib +h Update
+
+attrib +r License.tx || exit /b 1
+::attrib +r Readme.txt
+::attrib +r Changes.txt
+attrib +r Update.tx || exit /b 1
 
 :: See: http://msdn.microsoft.com/en-us/library/windows/desktop/cc144102(v=vs.85).aspx
 attrib +h icon.ico

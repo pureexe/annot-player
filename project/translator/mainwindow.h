@@ -10,6 +10,7 @@
 #include <QtCore/QString>
 
 QT_BEGIN_NAMESPACE
+class QRadioButton;
 class QCheckBox;
 class QComboBox;
 class QMenu;
@@ -50,6 +51,12 @@ class MainWindow : public AcMainWindow
     LanguageCount
   };
 
+  enum Dictionary {
+    Wwwjdic = 0,
+    Kotobank,
+    DictionaryCount
+  };
+
   enum {
     TextBrowser = 0,
     DictBrowser0,
@@ -60,7 +67,7 @@ class MainWindow : public AcMainWindow
   };
   TranslateBrowser *browsers_[BrowserCount];
 
-  Translator *dictTranslator_;
+  Translator *jdicTranslator_, *kotobankTranslator_;
   TranslatorManager *textTranslator_;
 
   TranslateEdit *translateEdit_;
@@ -69,7 +76,10 @@ class MainWindow : public AcMainWindow
   QComboBox *languageCombo_;
 
   QToolButton *autoButton_, *clipboardButton_, *topButton_;
-  QCheckBox *jdicButton_, *romajiButton_, *microsoftButton_, *googleButton_;
+  QCheckBox *romajiButton_, *yahooButton_, *microsoftButton_, *googleButton_,
+            *exciteButton_, *ocnButton_, *fresheyeButton_, *sdlButton_,
+            *niftyButton_, *infoseekButton_;
+  QRadioButton *kotobankButton_, *jdicButton_;
 
   QString languageCode_;
 
@@ -80,6 +90,9 @@ public:
 protected slots:
   void updateTranslators();
   void updateLanguage();
+
+protected:
+  Dictionary currentDictionary() const;
 
   // - Events -
 public slots:
@@ -125,14 +138,27 @@ protected slots:
   //void searchCurrentTitleWithWikiZh() { searchWithEngine(SearchEngineFactory::WikiZh, currentTitle()); }
 
 protected slots:
+  void showExciteTranslation(const QString &text);
   void showGoogleTranslation(const QString &text);
   void showMicrosoftTranslation(const QString &text);
+  void showOcnTranslation(const QString &text);
   void showRomajiTranslation(const QString &text);
+  void showSdlTranslation(const QString &text);
+  void showNiftyTranslation(const QString &text);
+  void showInfoseekTranslation(const QString &text);
+  void showYahooTranslation(const QString &text);
+  void showFresheyeTranslation(const QString &text);
+
+  void showKotobankTranslation(const QString &text);
+  void showJdicTranslation(const QString &text);
 
   void showDictTranslation(const QString &text);
   void showTextTranslation(const QString &text);
 
-  void openUrl(const QUrl &url);
+  void processUrl(const QUrl &url);
+  void openUrl(const QString &url);
+
+  void invalidateTranslatedText() { translatedTextChanged_ = true; }
 
 private:
   void createLayout();
@@ -141,6 +167,7 @@ private:
 
 private:
   bool disposed_;
+  bool translatedTextChanged_;
   AcTranslatorServer *appServer_;
   AcBrowser *browserDelegate_;
 

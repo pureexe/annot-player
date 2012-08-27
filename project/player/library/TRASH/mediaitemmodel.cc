@@ -49,7 +49,7 @@ MediaItemModel::rowCount(const QModelIndex &parent) const
 int
 MediaItemModel::columnCount(const QModelIndex &parent) const
 {
-  Q_UNUSED(parent);
+  Q_UNUSED(parent)
   return cc_;
 }
 

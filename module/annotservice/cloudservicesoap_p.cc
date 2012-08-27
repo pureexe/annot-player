@@ -1,7 +1,8 @@
 // cloudservicesoap_p.cc
 // 9/10/2011
 
-#include "module/annotservice/cloudservicesoap_p.h"
+//#include "module/annotservice/cloudservicesoap_p.h"
+#include <stdsoap2.h>
 
 #ifdef _MSC_VER
 # pragma warning (disable:4100)  // C4100: unreferenced formal parameter

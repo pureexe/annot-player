@@ -4,22 +4,21 @@
 // microsofttranslator.h
 // 11/2/2011
 
-#include "module/translator/translator.h"
+#include "module/translator/networktranslator.h"
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkRequest>
 
 QT_FORWARD_DECLARE_CLASS(QAuthenticator)
-QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 
-class MicrosoftTranslator : public Translator
+class MicrosoftTranslator : public NetworkTranslator
 {
   Q_OBJECT
   Q_DISABLE_COPY(MicrosoftTranslator)
   typedef MicrosoftTranslator Self;
-  typedef Translator Base;
+  typedef NetworkTranslator Base;
 
-  QNetworkAccessManager *qnam_;
+  QNetworkReply *reply_;
 
   // - Constructions -
 public:
@@ -29,7 +28,7 @@ public slots:
   void translate(const QString &text, const QString &to, const QString &from = QString()) override;
 
 protected slots:
-  void processNetworkReply(QNetworkReply *reply);
+  void processReply(QNetworkReply *reply) override;
   void authenticate(QNetworkReply *, QAuthenticator *auth) const { authenticate(auth); }
 
 protected:

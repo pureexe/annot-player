@@ -94,7 +94,7 @@ namespace { namespace detail {
     if (::ioctl(fd, IOCTL_BLOCKSIZE, &blockSize) >= 0)
       ret = blockSize == CD_FRAMESIZE_RAW;
 #else
-    Q_UNUSED(fd);
+    Q_UNUSED(fd)
 #endif // Q_OS_
     return ret;
   }
@@ -333,8 +333,8 @@ BlockIODevice::writeData(const char *data, qint64 maxSize)
   else
     ret = ::write(fd_, data, maxSize);
 #else
-  Q_UNUSED(data);
-  Q_UNUSED(maxSize);
+  Q_UNUSED(data)
+  Q_UNUSED(maxSize)
   // Not implemented yet.
 #endif // Q_OS_UNIX
   DOUT("writeData:exit: ret =" << ret);

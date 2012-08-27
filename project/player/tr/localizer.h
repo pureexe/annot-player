@@ -1,7 +1,7 @@
-#ifndef TRANSLATIONMANAGER_H
-#define TRANSLATIONMANAGER_H
+#ifndef LOCALIZER_H
+#define LOCALIZER_H
 
-// translationmanager.h
+// localizer.h
 // 8/7/2011
 
 #include <QObject>
@@ -11,11 +11,11 @@
 QT_FORWARD_DECLARE_CLASS(QTranslator)
 QT_FORWARD_DECLARE_CLASS(QCoreApplication)
 
-class TranslationManager : public QObject
+class Localizer : public QObject
 {
   Q_OBJECT
-  Q_DISABLE_COPY(TranslationManager)
-  typedef TranslationManager Self;
+  Q_DISABLE_COPY(Localizer)
+  typedef Localizer Self;
   typedef QObject Base;
 
   int language_,
@@ -24,7 +24,7 @@ class TranslationManager : public QObject
 protected:
   typedef QList<QTranslator *> QTranslatorList;
 
-  explicit TranslationManager(QObject *parent = nullptr)
+  explicit Localizer(QObject *parent = nullptr)
     : Base(parent), language_(0), script_(0) { }
 public:
   static Self *globalInstance() { static Self g; return &g; }
@@ -37,7 +37,7 @@ signals:
   void localeChanged(); // Use this signal instead of LanguageChangeEvent to avoid refresh tr twice for replacing tr
 
 public:
-  QString translate(int id) const;
+  static QString translate(int id);
 
   void installCurrentTranslator(QCoreApplication *a);
   void removeCurrentTranslator(QCoreApplication *a);
@@ -57,4 +57,4 @@ private:
                           tr_zh_CN_;
 };
 
-#endif // TRANSLATIONMANAGER_H
+#endif // LOCALIZER_H

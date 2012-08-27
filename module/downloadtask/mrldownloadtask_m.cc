@@ -210,8 +210,8 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
    if (!ok || isStopped()) {
      DOUT("ins size =" << ins.size());
      if (!ins.isEmpty()) {
-       auto p = ins.constEnd(); // revert list so that nam will be deleted later
-       while (p != ins.constBegin()) { // foreach (InputStream *in, QtExt::revertList(ins)) {
+       // revert list so that nam will be deleted later
+       for (auto p = ins.constEnd(); p != ins.constBegin();) {
          DOUT("deleting input stream");
          auto in = static_cast<RemoteStream *>(*--p);
          in->stop();
@@ -266,8 +266,8 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     setState(Error);
     emit errorMessage(tr("failed to open file to write") + ": " + tmpFile);
     emit stopped();
-    auto p = ins.constEnd(); // revert list so that nam will be deleted later
-    while (p != ins.constBegin()) { // foreach (InputStream *in, QtExt::revertList(ins)) {
+    // revert list so that nam will be deleted later
+    for (auto p = ins.constEnd(); p != ins.constBegin();) {
       auto in = static_cast<RemoteStream *>(*--p);
       in->stop();
       DOUT("deleting previous stream");
@@ -305,8 +305,8 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     emit errorMessage(tr("failed to parse FLV streams"));
     emit stopped();
 
-    auto p = ins.constEnd(); // revert list so that nam will be deleted later
-    while (p != ins.constBegin()) { // foreach (InputStream *in, QtExt::revertList(ins))
+    // revert list so that nam will be deleted later
+    for (auto p = ins.constEnd(); p != ins.constBegin();) {
       auto in = static_cast<RemoteStream *>(*--p);
       in->stop();
       DOUT("deleting previous stream");
@@ -364,8 +364,8 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
 
   emit stopped();
 
-  auto p = ins.constEnd(); // revert list so that nam will be deleted later
-  while (p != ins.constBegin()) { // foreach (InputStream *in, QtExt::revertList(ins))
+  // revert list so that nam will be deleted later
+  for (auto p = ins.constEnd(); p != ins.constBegin();) {
     auto in = static_cast<RemoteStream *>(*--p);
     in->stop();
     DOUT("deleting previous stream");

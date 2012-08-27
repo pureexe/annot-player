@@ -1,6 +1,6 @@
 #pragma once
 
-// ith.h
+// ihf_p.h
 // 10/15/2011
 
 #include <QtCore/QByteArray>
@@ -11,16 +11,16 @@ class HookManager;
 class TextThread;
 class TextThreadDelegate;
 
-class Ith
+class Ihf
 {
-  Q_DISABLE_COPY(Ith)
-  typedef Ith Self;
-  typedef QObject Base;
+  Q_DISABLE_COPY(Ihf)
 
-  static QHash<TextThread *, TextThreadDelegate *> threadDelegates_;
   static HookManager *hookManager_;
   static qint64 messageInterval_;
   static WId parentWindow_;
+
+  static QHash<TextThread *, TextThreadDelegate *> threadDelegates_;
+  static QHash<QString, ulong> hookAddresses_;
 
 public:
 
@@ -39,6 +39,10 @@ public:
   // - Injection -
   static bool attachProcess(ulong pid);
   static bool detachProcess(ulong pid);
+
+  static bool addHook(ulong pid, const QString &code, const QString &name = QString());
+  static bool updateHook(ulong pid, const QString &code);
+  static bool removeHook(ulong pid, const QString &code);
 
   // - Callbacks -
 protected:

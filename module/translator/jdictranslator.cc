@@ -4,6 +4,7 @@
 #include "module/translator/jdictranslator.h"
 #include "module/translator/jdictranslator_p.h"
 #include "module/qtext/bytearray.h"
+#include "module/translator/translatorsettings.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QRegExp>
 #include <QtCore/QTextCodec>
@@ -19,11 +20,8 @@
 // - Construction -
 
 JdicTranslator::JdicTranslator(QObject *parent)
-  : Base(parent)
+  : Base(parent), reply_(0)
 {
-  qnam_ = new QNetworkAccessManager(this);
-  connect(qnam_, SIGNAL(finished(QNetworkReply*)), SLOT(processNetworkReply(QNetworkReply*)));
-
   QTextCodec *codec = QTextCodec::codecForName(JDIC_ENCODING);
   Q_ASSERT(codec);
   decoder_ = codec->makeDecoder();
@@ -36,7 +34,7 @@ const char*
 JdicTranslator::dictionaryForLanguage(const QString &lang)
 {
   // FIXME: only enlish dictionary is working, others would incur network error
-  Q_UNUSED(lang);
+  Q_UNUSED(lang)
   return JDIC_DICT_EN;
   //if (lang.isEmpty())
   //  return JDIC_DICT_EN;
@@ -53,7 +51,6 @@ JdicTranslator::dictionaryForLanguage(const QString &lang)
   //else
   //  return JDIC_DICT_EN;
 }
-
 
 // - Encoding -
 
@@ -84,10 +81,15 @@ JdicTranslator::translate(const QString &text, const char *dict)
   if (!isEnabled())
     return;
   DOUT("enter: text =" << text);
+  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+    //reply_->abort();
+    reply_->deleteLater();
+    DOUT("abort previous reply");
+  }
   QByteArray data = postData(text, dict);
   QNetworkRequest req(QUrl(JDIC_API));
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-  qnam_->post(req, data);
+  reply_ = networkAccessManager()->post(req, data);
   DOUT("exit");
 }
 
@@ -99,11 +101,18 @@ JdicTranslator::translate(const QString &text, const char *dict)
 // ...
 //
 void
-JdicTranslator::processNetworkReply(QNetworkReply *reply)
+JdicTranslator::processReply(QNetworkReply *reply)
 {
   DOUT("enter");
   Q_ASSERT(reply);
   reply->deleteLater();
+
+  if (TranslatorSettings::globalSettings()->isSynchronized() &&
+      reply_ != reply) {
+    DOUT("exit: reply changed");
+    return;
+  }
+  reply_ = 0;
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit errorMessage(tr("network error from WWWJDIC Translator") + ": " + reply->errorString());
@@ -126,6 +135,7 @@ JdicTranslator::processNetworkReply(QNetworkReply *reply)
         DOUT("text =" << text);
         if (!text.isEmpty()) {
           emit translated(text);
+          DOUT("exit: ok");
           return;
         }
       }

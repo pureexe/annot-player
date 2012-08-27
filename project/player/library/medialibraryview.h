@@ -49,8 +49,10 @@ public:
 
 signals:
   void openRequested(const QString &fileName);
+  void syncGameRequested();
   void toggled();
   void showGameRequested(const QString &digest);
+  void autoRunChanged(bool t);
 
 public:
   bool autoHide() const;
@@ -91,6 +93,8 @@ protected slots:
 
   void updateContextMenu();
 
+  void syncGame();
+
 private:
   void createLayout();
   void createActions();
@@ -113,7 +117,7 @@ private:
 
   QMenu *contextMenu_;
   QAction *autoHideAct_, *toggleAct_, *autoRunAct_,
-          *openAct_, *browseAct_, *showGameAct_;
+          *openAct_, *browseAct_, *showGameAct_, *syncGameAct_;
 };
 
 #endif // MEDIALIBRARYVIEW_H

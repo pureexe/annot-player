@@ -44,7 +44,7 @@ Icons::iconForFile(const QFileInfo &fi)
 QIcon
 Icons::iconForSuffix(const QString &suffix)
 {
-  Q_UNUSED(suffix);
+  Q_UNUSED(suffix)
   // TODO
   // CHECKPOINT
   return fileIcon();

@@ -6,9 +6,12 @@
 
 #include "project/common/acpreferencestab.h"
 
-QT_FORWARD_DECLARE_CLASS(QFontComboBox)
-QT_FORWARD_DECLARE_CLASS(QSpinBox)
-QT_FORWARD_DECLARE_CLASS(QToolButton)
+QT_BEGIN_NAMESPACE
+class QDoubleSpinBox;
+class QFontComboBox;
+class QSpinBox;
+class QToolButton;
+QT_END_NAMESPACE
 
 class AnnotationSettings;
 class AnnotationPreferencesTab : public AcPreferencesTab
@@ -22,8 +25,11 @@ class AnnotationPreferencesTab : public AcPreferencesTab
 
   //QComboBox *scaleEdit_,
   //          *rotationEdit_,
-  QSpinBox *speedEdit_,
-           *offsetEdit_;
+  QDoubleSpinBox *scaleEdit_,
+                 *fullscreenScaleEdit_;
+  QDoubleSpinBox *speedEdit_;
+  QSpinBox *offsetEdit_,
+           *opacityEdit_;
   QFontComboBox *fontEdit_,
                 *japaneseFontEdit_,
                 *chineseFontEdit_;
@@ -52,6 +58,21 @@ protected slots:
   void saveChineseFont();
   void loadChineseFont();
   void resetChineseFont();
+
+  void saveOpacity();
+  void loadOpacity();
+  void loadOpacityIfVisible() { if (isVisible()) loadOpacity(); }
+  void resetOpacity();
+
+  void saveScale();
+  void loadScale();
+  void loadScaleIfVisible() { if (isVisible()) loadScale(); }
+  void resetScale();
+
+  void saveFullscreenScale();
+  void loadFullscreenScale();
+  void loadFullscreenScaleIfVisible() { if (isVisible()) loadFullscreenScale(); }
+  void resetFullscreenScale();
 
   void saveSpeed();
   void loadSpeed();

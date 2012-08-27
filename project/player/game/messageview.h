@@ -80,9 +80,9 @@ protected slots:
   void setCurrentText(int index);
   //void invalidateHookCountLabel();
   void invalidateCurrentCharFormat();
-  void invalidateSelectButton();
   //void invalidateCurrentHook();
 
+  void updateButtons();
   void refresh();
   void refreshEncodingEdit();
 
@@ -126,7 +126,7 @@ private:
   QVector<QString> functions_;
   QVector<QList<QByteArray> > messages_;
 
-  QToolButton *selectButton_;
+  QToolButton *selectButton_, *resetButton_;
 
   RadioButtonGrid *channelGrid_;
 };

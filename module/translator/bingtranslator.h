@@ -4,24 +4,24 @@
 // bingtranslator.h
 // 11/2/2011
 
-#include "module/translator/translator.h"
+#include "module/translator/networktranslator.h"
 #include <QtCore/QUrl>
 
-QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 
-class BingTranslator : public Translator
+class BingTranslator : public NetworkTranslator
 {
   Q_OBJECT
   Q_DISABLE_COPY(BingTranslator)
   typedef BingTranslator Self;
-  typedef Translator Base;
+  typedef NetworkTranslator Base;
 
-  QNetworkAccessManager *qnam_;
+  QNetworkReply *reply_;
 
   // - Constructions -
 public:
-  explicit BingTranslator(QObject *parent = nullptr);
+  explicit BingTranslator(QObject *parent = nullptr)
+    : Base(parent), reply_(0) { }
 
 public slots:
   void translate(const QString &text, const QString &to, const QString &from = QString()) override;
@@ -29,7 +29,7 @@ public slots:
 protected:
   static QUrl translateUrl(const QString &text, const QString &to, const QString &from = QString());
 protected slots:
-  void processNetworkReply(QNetworkReply *reply);
+  void processReply(QNetworkReply *reply) override;
 };
 
 #endif // BINGTRANSLATOR_H

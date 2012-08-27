@@ -3,8 +3,8 @@
 
 DEFINES += PROJECT_PLAYER
 
-VERSION_MAJOR = 0.1.8.
-VERSION_MINOR = 3
+VERSION_MAJOR = 0.1.9.
+VERSION_MINOR = 0
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -121,6 +121,7 @@ HEADERS += \
     mainwindow.h \
     mainwindow_p.h \
     settings.h \
+    signalhub.h \
     textcodecmanager.h \
     tray.h \
     annot/annotationanalyticsview.h \
@@ -156,7 +157,6 @@ HEADERS += \
     dialog/helpdialog.h \
     dialog/infoview.h \
     dialog/inputdialog.h \
-    dialog/livedialog.h \
     dialog/logindialog.h \
     dialog/mediainfoview.h \
     dialog/mediaurldialog.h \
@@ -165,10 +165,8 @@ HEADERS += \
     dialog/seekdialog.h \
     dialog/shutdowndialog.h \
     dialog/sleepdialog.h \
-    dialog/syncdialog.h \
     dialog/timeinputdialog.h \
     dialog/urldialog.h \
-    game/signalhub.h \
     global/global.h \
     global/rc.h \
     global/stylesheet.h \
@@ -209,10 +207,11 @@ SOURCES += \
     annotationprefs.cc \
     application.cc \
     main.cc \
-    preferences.cc \
     mainwindow.cc \
     mainwindow_log.cc \
+    preferences.cc \
     settings.cc \
+    signalhub.cc \
     textcodecmanager.cc \
     tray.cc \
     annot/annotationanalyticsview.cc \
@@ -248,7 +247,6 @@ SOURCES += \
     dialog/helpdialog.cc \
     dialog/infoview.cc \
     dialog/inputdialog.cc \
-    dialog/livedialog.cc \
     dialog/logindialog.cc \
     dialog/mediainfoview.cc \
     dialog/mediaurldialog.cc \
@@ -257,10 +255,8 @@ SOURCES += \
     dialog/seekdialog.cc \
     dialog/shutdowndialog.cc \
     dialog/sleepdialog.cc \
-    dialog/syncdialog.cc \
     dialog/timeinputdialog.cc \
     dialog/urldialog.cc \
-    game/signalhub.cc \
     library/game.cc \
     library/gamelibrary.cc \
     library/gameview.cc \
@@ -300,12 +296,14 @@ win32 {
   SOURCES += associationprefs.cc windowsregistry.cc
 
   DEFINES += AC_ENABLE_GAME
+  DEFINES += AC_ENABLE_LAUNCHER
   DEFINES += AC_ENABLE_UPDATE
 
   HEADERS += \
     game/messagehandler.h \
     game/messageview.h \
     game/processinfo.h \
+    game/processfilter.h \
     game/processview.h \
     game/syncview.h
 
@@ -313,6 +311,7 @@ win32 {
     game/messagehandler.cc \
     game/messageview.cc \
     game/processinfo.cc \
+    game/processfilter.cc \
     game/processview.cc \
     game/syncview.cc
 }

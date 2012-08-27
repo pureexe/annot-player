@@ -16,6 +16,7 @@ HEADERS += \
     $$PWD/dateedit.h \
     $$PWD/datetime.h \
     $$PWD/datetimeedit.h \
+    $$PWD/doublespinbox.h \
     $$PWD/dialog.h \
     $$PWD/draggablemainwindow.h \
     $$PWD/draggablewidget.h \
@@ -60,6 +61,7 @@ SOURCES += \
     $$PWD/datetime.cc \
     $$PWD/datetimeedit.cc \
     $$PWD/dialog.cc \
+    $$PWD/doublespinbox.cc \
     $$PWD/draggablemainwindow.cc \
     $$PWD/draggablewidget.cc \
     $$PWD/filedeleter.cc \

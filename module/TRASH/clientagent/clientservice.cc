@@ -47,7 +47,7 @@ ClientServant::run()
 {
   DOUT("enter");
   int err = SoapBase::run(port_);
-  Q_UNUSED(err);
+  Q_UNUSED(err)
   DOUT("exit, errcode =" << err);
 }
 
@@ -64,8 +64,8 @@ ClientServant::authorize(tns__authorize *request, tns__authorizeResponse *respon
 int
 ClientServant::deauthorize(tns__deauthorize *request, tns__deauthorizeResponse *response)
 {
-  Q_UNUSED(request);
-  Q_UNUSED(response);
+  Q_UNUSED(request)
+  Q_UNUSED(response)
   DOUT("enter");
   if (delegate_)
     delegate_->deauthorize();
@@ -76,7 +76,7 @@ ClientServant::deauthorize(tns__deauthorize *request, tns__deauthorizeResponse *
 int
 ClientServant::isAuthorized(tns__isAuthorized *request, tns__isAuthorizedResponse *response)
 {
-  Q_UNUSED(request);
+  Q_UNUSED(request)
   DOUT("enter");
   if (delegate_)
     response->return_ = delegate_->isAuthorized();
@@ -87,7 +87,7 @@ ClientServant::isAuthorized(tns__isAuthorized *request, tns__isAuthorizedRespons
 int
 ClientServant::isConnected(tns__isConnected *request, tns__isConnectedResponse *response)
 {
-  Q_UNUSED(request);
+  Q_UNUSED(request)
   DOUT("enter");
   if (delegate_)
     response->return_ = delegate_->isConnected();
@@ -98,7 +98,7 @@ ClientServant::isConnected(tns__isConnected *request, tns__isConnectedResponse *
 int
 ClientServant::chat(tns__chat *request, tns__chatResponse *response)
 {
-  Q_UNUSED(response);
+  Q_UNUSED(response)
   DOUT("enter");
   if (delegate_) {
     if (request->arg0)

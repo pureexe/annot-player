@@ -40,6 +40,8 @@
 # define NOINLINE
 #endif // __GNUC__
 
+enum { HoldTimeOut = 1000 }; // in msecs
+
 //#define DEBUG "annotationgraphicsitem"
 #include "module/debug/debug.h"
 
@@ -50,7 +52,8 @@ namespace { namespace detail {
   inline bool isBadPosF(const QPointF &pos) { return pos.x() < 0 || pos.y() < 0; }
 } } // anonymous detail
 
-enum { MOTIONLESS_STAY_TIME = 7000 }; // 7 seconds
+enum { MotionlessStayTime = 7000 }; // 7 seconds
+enum { FadeInDuration = 800, FadeOutDuration = 600 };
 
 // - RC -
 
@@ -83,7 +86,7 @@ namespace { namespace detail {
 // - Helpers -
 
 #define ANNOTATION_LIFE_SCHEDULE   ((ANNOTATION_LIFE_ViSIBLE + 1) / 4)
-#define OPACITY                    ANNOTATION_EFFECT_OPACITY
+#define OPACITY                    AnnotationSettings::globalSettings()->opacity()
 
 namespace { namespace curve_ { // anonymous curves
 
@@ -135,12 +138,23 @@ namespace { namespace curve_ { // anonymous curves
 } } // anonymous namespace curve_
 
 int
-AnnotationGraphicsItem::nextY(int msecs, Style style) const
+AnnotationGraphicsItem::nextY(int msecs) const
 {
-  QSize viewSize = view_->size();
   QSizeF itemSize = boundingRect().size();
-  int ret = view_->scheduler()->nextY(viewSize, itemSize, msecs, style, isSubtitle());
-  int max = viewSize.height() - itemSize.height() ;
+  int ret;
+  switch (style_) {
+  case FlyStyle:
+  case FloatStyle:
+    ret = view_->scheduler()->nextMovingY(itemSize, msecs);
+    break;
+  case TopStyle:
+  case BottomStyle:
+  case SubtitleStyle:
+    ret = view_->scheduler()->nextStationaryY(itemSize.height(), msecs, style_);
+    break;
+  default: Q_ASSERT(0); ret = 0;
+  }
+  int max = view_->height() - itemSize.height();
   if (ret > max - 5)
     ret = max;
   return ret;
@@ -186,7 +200,7 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
     view_(view), data_(data), hub_(hub), style_(FloatStyle), positionResolution_(0),
     removeLaterTimer_(nullptr),
     flyAni_(nullptr), flyOpacityAni_(nullptr), escapeAni_(nullptr), rushAni_(nullptr), appearOpacityAni_(nullptr), fadeAni_(nullptr),
-    dragPos_(BAD_POSF)
+    dragPos_(BAD_POSF), pressTime_(0)
 {
   DOUT("enter");
   Q_ASSERT(data_);
@@ -194,13 +208,13 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   Q_ASSERT(view_);
   scene_ = view_->scene();
   Q_ASSERT(scene_);
-
   connect(this, SIGNAL(message(QString)), view_, SIGNAL(message(QString)));
 
-  setAcceptHoverEvents(true);
-  //setAcceptTouchEvents(true);
-
-  setScale(view_->scale());
+  setAcceptHoverEvents(false);
+  setAcceptTouchEvents(false);
+  setAcceptDrops(false);
+  setFlags(QGraphicsItem::ItemClipsToShape | QGraphicsItem::ItemIgnoresParentOpacity);
+  setCacheMode(QGraphicsItem::DeviceCoordinateCache,  QSize(400,40));
 
   setGraphicsEffect(effect_ = new AnnotationGraphicsEffect);
 
@@ -261,6 +275,8 @@ AnnotationGraphicsItem::reset()
     fadeAni_->stop();
   if (appearOpacityAni_ && appearOpacityAni_->state() != QAbstractAnimation::Stopped)
     appearOpacityAni_->stop();
+
+  setScale(view_->scale());
 
   //effect_->setOpacity(0);
   resetOutlineColor();
@@ -875,23 +891,21 @@ AnnotationGraphicsItem::addMe()
 void
 AnnotationGraphicsItem::disappear()
 {
-  enum { timeout = 600 };
-
   switch (style_) {
   case TopStyle:
   case BottomStyle:
   case MotionlessStyle:
     //removeMe();
-    fadeOut(timeout);
-    removeLater(timeout);
+    fadeOut(FadeOutDuration);
+    removeLater(FadeOutDuration);
     break;
   case SubtitleStyle:
   case FlyStyle:
   case FloatStyle:
   default:
     if (!removeLaterTimer_ || !removeLaterTimer_->isActive()) {
-      fadeOut(timeout);
-      removeLater(timeout);
+      fadeOut(FadeOutDuration);
+      removeLater(FadeOutDuration);
     }
   }
 }
@@ -945,7 +959,7 @@ AnnotationGraphicsItem::showMe()
   case TopStyle:
   case BottomStyle:
   case SubtitleStyle:
-    stay(style_);
+    stay();
     break;
   case FloatStyle:
   case FlyStyle:
@@ -954,8 +968,8 @@ AnnotationGraphicsItem::showMe()
         isOwner())
       fly();
     else {
-      int msecs = MOTIONLESS_STAY_TIME; //stayTime();
-      QPointF pos = view_->scheduler()->nextPos(view_->size(), boundingRect().size(), msecs);
+      int msecs = MotionlessStayTime; //stayTime();
+      QPointF pos = view_->scheduler()->nextStationaryPos(boundingRect().size(), msecs);
       if (pos.isNull()) {
         style_ = FloatStyle;
         fly();
@@ -1087,60 +1101,52 @@ int
 AnnotationGraphicsItem::stayTime() const
 {
   enum {
-    AverageTime = 2000,
-    SubtitleTime = 3000,
-    MinTime = 1000, // 1 second
-    MaxTime = 10000 // 10 seconds
+    AnnotationTime = 5000,
+    SubtitleTime = 5000
+    //MinTime = 1000, // 1 second
+    //MaxTime = 10000 // 10 seconds
   };
+  return isSubtitle() ? SubtitleTime : AnnotationTime;
 
-  int t = style_ != SubtitleStyle ? AverageTime : SubtitleTime;
-  int w0 = qMax<int>(view_->width(), 100),
-      w = qMax<int>(boundingRect().width(), 50),
-      h = qMax<int>(boundingRect().height(), 20);
-  qreal f = qreal(w0 + 200)/ (w + 200),
-        g = qreal(h + 20) / (ANNOTATION_SIZE_DEFAULT + 15);
-  qreal q = hub_->isSignalTokenMode() ? 1.0 : 0.8;
-  int ret = t * qPow(f, 0.3)* g * q + MinTime;
-  return qMin<int>(ret, MaxTime);
+  //QRectF r = boundingRect();
+  //int t = style_ != SubtitleStyle ? AverageTime : SubtitleTime;
+  //int w0 = qMax<int>(view_->width(), 100),
+  //    w = qMax<int>(r.width(), 50),
+  //    h = qMax<int>(r.height(), 20);
+  //qreal f = qreal(w0 + 200)/ (w + 200),
+  //      g = qreal(h + 20) / (ANNOTATION_SIZE_DEFAULT + 15);
+  //qreal q = hub_->isSignalTokenMode() ? 1.0 : 0.8;
+  //int ret = t * qPow(f, 0.3)* g * q + MinTime;
+  //return qMin<int>(ret, MaxTime);
 }
 
 int
 AnnotationGraphicsItem::flyTime() const
 {
   enum {
-    MovingFactor = 12, // the larger, the slower
-    MinTime = 500,  // half a second
-    MaxTime = 21000 // 30 seconds
+    MovingFactor = 3000, // the larger, the slower
+    MinTime = 1000, // 1 second
+    MaxTime = 20000 // 20 seconds
   };
 
   int itemWidth = boundingRect().width(), // around 50~200
       windowWidth = view_->width();       // around 800~1920
-  int ret = (windowWidth + itemWidth) * MovingFactor * (itemWidth + 800) / 1000;
-  //DOUT("time =" << ret << windowWidth << itemWidth);
-  if (ret > MaxTime)
-    ret = MaxTime;
+  int ret = (MovingFactor *(windowWidth + itemWidth)) / (itemWidth + 200);
+  if (hub_->isSignalTokenMode())
+    ret *= 2;
   if (style_ == FlyStyle)
     ret /= 5;
-  if (ret < MinTime)
-    ret = MinTime;
-  return ret * ANNOTATION_SPEED_FACTOR / AnnotationSettings::globalSettings()->speedFactor();
+  //qDebug() << "time =" << ret << windowWidth << boundingRect().size();
+  return qBound<int>(MinTime, ret, MaxTime) / AnnotationSettings::globalSettings()->speedup();
 }
 
 void
-AnnotationGraphicsItem::stay(Style style)
+AnnotationGraphicsItem::stay()
 {
   int msecs = stayTime();
-
-  Style posStyle = style;
-  if (isSubtitle())
-    switch (view_->subtitlePosition()) {
-    case AnnotationGraphicsView::AP_Top:    posStyle = TopStyle; break;
-    case AnnotationGraphicsView::AP_Bottom: posStyle = BottomStyle; break;
-    default: ;
-    }
-
-  int x = (view_->width() - boundingRect().width()) / 2,
-      y = nextY(msecs, posStyle);
+  int x = (view_->width() - boundingRect().width() * scale()) / 2,
+      y = nextY(msecs);
+  //qDebug() << "y =" << y << ", msecs =" << msecs;
 
   if (hub_->isSignalTokenMode() &&
       isSubtitle() &&
@@ -1168,10 +1174,9 @@ AnnotationGraphicsItem::appear(const QPointF &pos, int msecs)
 {
   setOpacity(0.0);
   setPos(pos);
-  if (msecs <= 0) {
-    enum { FadeDuration = 800 };
-    fadeIn(FadeDuration);
-  } else {
+  if (msecs <= 0)
+    fadeIn(FadeInDuration);
+  else {
     if (!appearOpacityAni_) {
       appearOpacityAni_ = new QPropertyAnimation(this, "opacity", this);
       QEasingCurve curve;
@@ -1223,7 +1228,7 @@ AnnotationGraphicsItem::fly()
 {
   Q_ASSERT(view_);
   int msecs = flyTime();
-  int y = nextY(msecs, style_);
+  int y = nextY(msecs);
 
   qreal fromX = view_->width(),
         toX = - boundingRect().width();
@@ -1352,7 +1357,8 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
 void
 AnnotationGraphicsItem::mouseDoubleClickEvent(QMouseEvent *event)
 {
-  Q_UNUSED(event);
+  Q_UNUSED(event)
+  pressTime_ = 0;
   if (!isPaused())
     pause();
 
@@ -1376,13 +1382,17 @@ AnnotationGraphicsItem::mousePressEvent(QMouseEvent *event)
     if (detail::isBadPosF(dragPos_))
       dragPos_ = QPointF(event->globalPos()) -  scenePos();
   case Qt::RightButton:
-    if (!isPaused()) {
+    if (isPaused())
+      pressTime_ = QDateTime::currentMSecsSinceEpoch();
+    else {
+      pressTime_ = 0;
       pause();
       selectMe();
     }
     break;
   case Qt::MiddleButton:
   default:
+    pressTime_ = 0;
     if (isPaused())
       resume();
     break;
@@ -1406,10 +1416,15 @@ AnnotationGraphicsItem::mousePressEvent(QMouseEvent *event)
 void
 AnnotationGraphicsItem::mouseReleaseEvent(QMouseEvent *event)
 {
-  Q_UNUSED(event);
+  Q_UNUSED(event)
   //if (dragPaused_ && isPaused() &&
   //    dragPos_ == event->globalPos() -  scenePos().toPoint())
   //  resume();
+
+ if (pressTime_ && pressTime_ + HoldTimeOut > QDateTime::currentMSecsSinceEpoch() &&
+     isPaused())
+    resume();
+  pressTime_ = 0;
   dragPos_ = BAD_POSF;
 }
 

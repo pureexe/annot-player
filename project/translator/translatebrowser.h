@@ -18,6 +18,9 @@ class TranslateBrowser : public QTextBrowser
   QString selectedText_;
   QtExt::TextHighlighter *highlighter_;
 
+  QAction *translateAct_,
+          *clearAct_;
+
 public:
   explicit TranslateBrowser(QWidget *parent = nullptr);
 
@@ -27,8 +30,15 @@ public slots:
 signals:
   void selectedTextChanged(const QString &text);
 
+public:
+  QVariant loadResource(int type, const QUrl &name) override;
+
 protected slots:
   void updateSelectedText();
+
+  void invalidateSelectedText() { emit selectedTextChanged(selectedText_); }
+
+  void contextMenuEvent(QContextMenuEvent *e) override;
 };
 
 #endif // TRANSLATEBROWSER_H

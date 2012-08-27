@@ -22,7 +22,7 @@ class AcfunCodec : public AnnotationCodec
   typedef AnnotCloud::Annotation Annotation;
   typedef AnnotCloud::AnnotationList AnnotationList;
 
-  QNetworkAccessManager *qnam_;
+  QNetworkAccessManager *nam_;
   QHash<QString, int> retries_;
 
 public:

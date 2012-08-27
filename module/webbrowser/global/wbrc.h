@@ -9,7 +9,7 @@
 #define WBRC_NULL       ""
 
 #define WBRC_PREFIX_IMAGE ":/images/"
-#define WBRC_IMAGE_NULL   WBRC_NULL
+//#define WBRC_IMAGE_NULL   WBRC_NULL
 
 //#define WBRC_PREFIX_TR    ":/tr/"
 //#define WBRC_TR_NULL      WBRC_NULL

@@ -101,8 +101,8 @@ public:
   int annotationPositionResolution() const;
   void setAnnotationPositionResolution(int value);
 
-  int annotationSpeedFactor() const;
-  void setAnnotationSpeedFactor(int value);
+  qreal annotationSpeedup() const;
+  void setAnnotationSpeedup(qreal value);
 
   QString annotationFontFamily() const;
   void setAnnotationFontFamily(const QString &family);
@@ -193,7 +193,9 @@ public:
   qreal brightness() const; void setBrightness(qreal value);
 
   // - Annotation transforms -
+  int annotationOpacityFactor() const; void setAnnotationOpacityFactor(int value);
   qreal annotationScale() const; void setAnnotationScale(qreal value);
+  qreal annotationFullscreenScale() const; void setAnnotationFullscreenScale(qreal value);
   //qreal annotationRotation() const; void setAnnotationRotation(qreal value);
 };
 

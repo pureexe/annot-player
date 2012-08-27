@@ -57,7 +57,7 @@ void
 PositionCalibration::paintEvent(QPaintEvent *event)
 {
   DOUT("enter");
-  Q_UNUSED(event);
+  Q_UNUSED(event)
   if (needsDisplay()) {
     QRect view(MarginLeft, MarginTop,
                width() - MarginLeft, height() - MarginTop);

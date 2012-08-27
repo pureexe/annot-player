@@ -20,14 +20,47 @@ bool
 GameLibrary::exists() const
 { return QFile::exists(libraryLocation_); }
 
+bool
+GameLibrary::containsDigest(const QString &digest) const
+{
+  //DOUT("locking");
+  //QMutexLocker lock(&mutex_);
+  //DOUT("locked");
+  return library_.contains(digest);
+}
+
+bool
+GameLibrary::containsLocation(const QString &location) const
+{
+  //DOUT("locking");
+  //QMutexLocker lock(&mutex_);
+  //DOUT("locked");
+  return digestByLocation_.contains(location);
+}
+
 Game
-GameLibrary::findGame(const QString &digest) const
+GameLibrary::findGameByDigest(const QString &digest) const
 {
   DOUT("locking");
   QMutexLocker lock(&mutex_);
   DOUT("locked");
   auto p = library_.find(digest);
   return p == library_.end() ? Game() : p.value();
+}
+
+Game
+GameLibrary::findGameByLocation(const QString &location) const
+{
+  DOUT("locking");
+  QMutexLocker lock(&mutex_);
+  DOUT("locked");
+  auto p = digestByLocation_.find(location);
+  if (p != digestByLocation_.end()) {
+    auto q = library_.find(p.value());
+    if (q != library_.end())
+      return q.value();
+  }
+  return Game();
 }
 
 // - Actions -
@@ -38,10 +71,16 @@ GameLibrary::load()
   //DOUT("locking");
   //QMutexLocker lock(&mutex_);
   //DOUT("locked");
+  if (!digestByLocation_.isEmpty())
+    digestByLocation_.clear();
 
-  if (QFile::exists(libraryLocation_))
+  if (QFile::exists(libraryLocation_)) {
     library_ = Game::readHash(libraryLocation_);
-  else if (!library_.isEmpty())
+
+    foreach (const Game &game, library_)
+      if (game.hasLocation() && game.hasDigest())
+        digestByLocation_[game.location()] = game.digest();
+  } else if (!library_.isEmpty())
     library_.clear();
   dirty_ = false;
   DOUT("library size =" << library_.size());
@@ -72,6 +111,7 @@ GameLibrary::clear()
   if (library_.isEmpty())
     return;
   library_.clear();
+  digestByLocation_.clear();
   dirty_ = true;
 }
 

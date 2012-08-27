@@ -136,7 +136,7 @@ inline void expblur(QImage &img, qreal radius, bool improvedQuality = false, int
 
   QImage temp(img.height(), img.width(), img.format());
   // FIME: memrotate is unimplemented
-  Q_UNUSED(transposed);
+  Q_UNUSED(transposed)
   /*
   if (transposed >= 0) {
     if (img.depth() == 8) {

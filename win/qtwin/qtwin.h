@@ -38,8 +38,11 @@ namespace QtWin {
   // - Main module -
 
   ///  Return main module path as LPWSTR
-  inline wchar_t *getModulePath()
-  { __asm {
+  inline const wchar_t *getModulePath()
+  {
+    // fs:[0x30]: PEB, see: ntdll.h, see also: http://en.wikipedia.org/wiki/Win32_Thread_Information_Block
+    // PEB+0xC: Ldr (PPEB_LDR_DATA)
+    __asm {
     mov eax,fs:[0x30]
     mov eax,[eax+0xC]
     mov eax,[eax+0xC]
@@ -102,6 +105,16 @@ namespace QtWin {
   };
 
   bool setFileAttributes(const QString &fileName, uint attributes);
+  ulong getFileAttributes(const QString &fileName);
+
+  inline bool isFileHidden(const QString &fileName)
+  { return HiddenAttribute & getFileAttributes(fileName); }
+
+  inline bool isFileReadOnly(const QString &fileName)
+  { return ReadOnlyAttribute & getFileAttributes(fileName); }
+
+  inline bool removeFileAttributes(const QString &fileName)
+  { return setFileAttributes(fileName, NormalAttribute); }
 
   // - Window -
 

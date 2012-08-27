@@ -44,9 +44,9 @@ namespace { namespace callback_ {
   NewLineBuff(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
   {
     DOUT("enter");
-    Q_UNUSED(uMsg);
-    Q_UNUSED(dwTime);
-    Q_ASSERT(idEvent);
+    Q_UNUSED(uMsg)
+    Q_UNUSED(dwTime)
+    Q_ASSERT(idEvent)
 
     ::KillTimer(hwnd, idEvent);
 

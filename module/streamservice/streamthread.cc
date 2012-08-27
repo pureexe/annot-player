@@ -133,7 +133,7 @@ StreamThread::run()
   void
   onMatroskaDemuxCreation(MatroskaFileServerDemux *newDemux, void *clientData)
   {
-    Q_UNUSED(clientData);
+    Q_UNUSED(clientData)
     demux = newDemux;
     newMatroskaDemuxWatchVariable = 1;
   }

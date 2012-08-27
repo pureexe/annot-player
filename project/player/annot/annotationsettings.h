@@ -31,16 +31,17 @@
 
 #define ANNOTATION_FONT_SIZE  18
 
+#define ANNOTATION_FULLSCREEN_SCALE 1.2
+
 //#define ANNOTATION_OUTLINE_COLOR        QColor(50,100,100)
-#define ANNOTATION_OUTLINE_COLOR        QColor(40,90,90)
+#define ANNOTATION_OUTLINE_COLOR        QColor(45,95,95)
 #define ANNOTATION_OUTLINE_COLOR_HOVER  Qt::red
 #define ANNOTATION_OUTLINE_COLOR_SELF   Qt::darkYellow
 #define ANNOTATION_OUTLINE_COLOR_SUB    Qt::magenta
 
-#define ANNOTATION_EFFECT_OPACITY 0.9
+#define ANNOTATION_OPACITY_FACTOR 92
 
 #define ANNOTATION_POSITION_RESOLUTION  0
-#define ANNOTATION_SPEED_FACTOR  100
 
 class AnnotationSettings : public QObject
 {
@@ -49,9 +50,11 @@ class AnnotationSettings : public QObject
   typedef AnnotationSettings Self;
   typedef QObject Base;
 
-  qreal scale_;
+  qreal scale_,
+        fullscreenScale_;
+  int opacityFactor_;
   qreal rotation_;
-  int speedFactor_;
+  qreal speedup_;
   int offset_;
   int positionResolution_;
   QFont font_,
@@ -61,6 +64,8 @@ class AnnotationSettings : public QObject
   bool avatarVisible_;
   bool metaVisible_;
   bool motionless_;
+
+  bool subtitleOnTop_;
 
   bool traditionalChinese_;
 
@@ -72,8 +77,9 @@ public:
   static Self *globalSettings() { static Self g; return &g; }
 protected:
   explicit AnnotationSettings(QObject *parent = nullptr)
-    : Base(parent), scale_(1), rotation_(0), speedFactor_(ANNOTATION_SPEED_FACTOR), offset_(0), positionResolution_(ANNOTATION_POSITION_RESOLUTION),
-      avatarVisible_(false), motionless_(true), traditionalChinese_(false)
+    : Base(parent), scale_(1.0), fullscreenScale_(ANNOTATION_FULLSCREEN_SCALE), opacityFactor_(ANNOTATION_OPACITY_FACTOR),
+      rotation_(0), speedup_(1.0), offset_(0), positionResolution_(ANNOTATION_POSITION_RESOLUTION),
+      avatarVisible_(false), motionless_(true), subtitleOnTop_(false), traditionalChinese_(false)
   {
     resetOutlineColor();
     resetSubtitleColor();
@@ -85,8 +91,11 @@ protected:
 
 signals:
   void scaleChanged(qreal value);
-  void speedFactorChanged(int value);
+  void fullscreenScaleChanged(qreal value);
+  void opacityFactorChanged(int value);
+  void speedupChanged(qreal value);
   void positionResolutionChanged(int value);
+  void subtitleOnTopChanged(bool value);
   void rotationChanged(qreal value);
   void offsetChanged(int value);
   void avatarVisibleChanged(bool value);
@@ -99,9 +108,11 @@ signals:
   //void fontChanged(const QFont &value);
 public:
   qreal scale() const { return scale_; }
+  qreal fullscreenScale() const { return fullscreenScale_; }
+  int opacityFactor() const { return opacityFactor_; }
+  qreal opacity() const { return opacityFactor_ / 100.0; }
   qreal rotation() const { return rotation_; }
-  int speedFactor() const { return speedFactor_; } ///< supposed to be positive
-  qreal speedup() const { return speedFactor_ / qreal(ANNOTATION_SPEED_FACTOR); }
+  qreal speedup() const { return speedup_; }
   int offset() const { return offset_; }
   int positionResolution() const { return positionResolution_; }
   bool isAvatarVisible() const { return avatarVisible_; }
@@ -123,25 +134,35 @@ public:
   const QColor &subtitleColor() const { return subtitleColor_; }
   const QColor &highlightColor() const { return highlightColor_; }
 
+  bool isSubtitleOnTop() const { return subtitleOnTop_; }
+
   bool preferMotionless() const { return motionless_; }
 
   bool preferTraditionalChinese() const { return traditionalChinese_; }
 
 public slots:
   void setScale(qreal value) { if (!qFuzzyCompare(scale_, value)) emit scaleChanged(scale_ = value); }
-  void resetScale() { setScale(0); }
+  void resetScale() { setScale(1.0); }
+
+  void setFullscreenScale(qreal value) { if (!qFuzzyCompare(fullscreenScale_, value)) emit fullscreenScaleChanged(fullscreenScale_ = value); }
+  void resetFullscreenScale() { setFullscreenScale(ANNOTATION_FULLSCREEN_SCALE); }
+
+  void setOpacityFactor(int value) { if (opacityFactor_ != value) emit opacityFactorChanged(opacityFactor_ = value); }
+  void resetOpacityFactor() { setOpacityFactor(ANNOTATION_OPACITY_FACTOR); }
 
   void setRotation(qreal value) { if (!qFuzzyCompare(rotation_+1, value+1)) emit rotationChanged(rotation_ = value); }
   void resetRotation() { setRotation(0); }
 
-  void setSpeedFactor(int value) { if (speedFactor_ != value) emit speedFactorChanged(speedFactor_ = value); }
-  void resetSpeedFactor() { setSpeedFactor(ANNOTATION_SPEED_FACTOR); }
+  void setSpeedup(qreal value) { if (!qFuzzyCompare(speedup_, value)) emit speedupChanged(speedup_ = value); }
+  void resetSpeedup() { setSpeedup(1.0); }
 
   void setOffset(int value) { if (offset_ != value) emit offsetChanged(offset_ = value); }
   void resetOffset() { setOffset(0); }
 
   void setPositionResolution(int value) { if (positionResolution_ != value) emit positionResolutionChanged(positionResolution_ = value); }
   void resetPositionResolution() { setPositionResolution(ANNOTATION_POSITION_RESOLUTION); }
+
+  void setSubtitleOnTop(bool value) { if (subtitleOnTop_ != value) emit subtitleOnTopChanged(subtitleOnTop_ = value); }
 
   void setPreferTraditionalChinese(bool t = true)
   {

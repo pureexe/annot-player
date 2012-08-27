@@ -55,7 +55,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
     hub_(hub), data_(data), player_(player),
     filter_(nullptr), renderHint_(DefaultRenderHint), paused_(false), fullScreen_(false),
     subtitleVisible_(true), nonSubtitleVisible_(true), metaVisible_(false), itemCountLimited_(true),
-    currentTime_(-1), offset_(0), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true), subtitlePosition_(AP_Bottom),
+    currentTime_(-1), offset_(0), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true),
     scale_(1.0), rotation_(0),
     hoveredItemPaused_(false), hoveredItemResumed_(false), hoveredItemRemoved_(false), nearbyItemExpelled_(false), nearbyItemAttracted_(false),
     itemVisible_(true), dragging_(false), maxItemCount_(ReservedItemCount)
@@ -64,24 +64,42 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   Q_ASSERT(player_);
   Q_ASSERT(videoView_);
 
-  setMouseTracking(true);
-  setContentsMargins(0, 0, 0, 0);
-  setStyleSheet(ACSS_GRAPHICSVIEW);
-
-  //setAttribute(Qt::WA_TransparentForMouseEvents);
-  //setFocusPolicy(Qt::NoFocus);
-  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setResizeAnchor(NoAnchor);
-  setTransformationAnchor(NoAnchor);
-  setAlignment(Qt::AlignRight | Qt::AlignTop);
-
   QGraphicsScene *scene = new QGraphicsScene(this);
+  {
+    scene->setItemIndexMethod(QGraphicsScene::NoIndex); // moving items are not indexed
+  }
   setScene(scene);
+  {
+    //setMouseTracking(true);
+    setContentsMargins(0, 0, 0, 0);
+    setStyleSheet(ACSS_GRAPHICSVIEW);
+    setWindowOpacity(0); // disable background
+
+    //setAttribute(Qt::WA_TransparentForMouseEvents);
+    //setFocusPolicy(Qt::NoFocus);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setResizeAnchor(NoAnchor);
+    setTransformationAnchor(NoAnchor);
+    setAlignment(Qt::AlignRight | Qt::AlignTop);
+    //setCacheMode(QGraphicsView::CacheBackground);
+    setDragMode(QGraphicsView::NoDrag);
+    setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
+    setOptimizationFlags(
+      QGraphicsView::DontSavePainterState |
+      QGraphicsView::DontAdjustForAntialiasing
+    );
+    //setRenderHints( // Alias disabled to improve performance
+    //  //QPainter::Antialiasing |
+    //  //QPainter::TextAntialiasing |
+    //  QPainter::SmoothPixmapTransform
+    //);
+  }
 
   scheduler_ = new AnnotationGraphicsItemScheduler(hub_, this);
   connect(this, SIGNAL(scaleChanged(qreal)), scheduler_, SLOT(setScale(qreal)));
   connect(this, SIGNAL(annotationsRemoved()), scheduler_, SLOT(clear()));
+  connect(this, SIGNAL(sizeChanged(QSize)), scheduler_, SLOT(setViewSize(QSize)));
 
   pool_ = new AnnotationGraphicsItemPool(this, data_, hub_, this);
   pool_->reserve(ReservedItemCount);
@@ -94,20 +112,14 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   trackingTimer_->setInterval(G_TRACKING_INTERVAL);
   connect(trackingTimer_, SIGNAL(timeout()), SLOT(updateGeometry()));
 
-//#ifdef Q_OS_WIN
-  setRenderHints(
-    QPainter::Antialiasing |
-    QPainter::TextAntialiasing |
-    QPainter::SmoothPixmapTransform
-  );
-//#endif // Q_OS_WIN
+  connect(hub_, SIGNAL(windowModeChanged(SignalHub::WindowMode)), SLOT(updateScale()));
 
   connect(this, SIGNAL(offsetChanged(qint64)), SLOT(removeAllItems()));
 
-  AnnotationSettings *s = AnnotationSettings::globalSettings();
-  connect(s, SIGNAL(offsetChanged(int)), SLOT(setOffset(int)));
-  connect(s, SIGNAL(scaleChanged(qreal)), SLOT(setScale(qreal)));
-  connect(s, SIGNAL(rotationChanged(qreal)), SLOT(setRotation(qreal)));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(offsetChanged(int)), SLOT(setOffset(int)));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(scaleChanged(qreal)), SLOT(updateScale()));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(fullscreenScaleChanged(qreal)), SLOT(updateScale()));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(rotationChanged(qreal)), SLOT(setRotation(qreal)));
 
   connect(player_, SIGNAL(mediaClosed()), SLOT(invalidateAnnotations()));
   connect(player_, SIGNAL(timeChanged()), SLOT(updateCurrentTime()));
@@ -1142,9 +1154,17 @@ AnnotationGraphicsView::setScale(qreal value)
 {
  // qreal r = value / scale_;
   //Base::scale(r, r);
+  if (scale_ != value)
+    emit scaleChanged(scale_ = value);
+}
 
-  scale_ = value;
-  emit scaleChanged(scale_);
+void
+AnnotationGraphicsView::updateScale()
+{
+  setScale(hub_->isFullScreenWindowMode() ?
+    AnnotationSettings::globalSettings()->fullscreenScale() :
+    AnnotationSettings::globalSettings()->scale()
+  );
 }
 
 void

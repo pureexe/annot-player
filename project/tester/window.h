@@ -127,7 +127,7 @@ protected:
   {
     if (!winId_)
       return;
-    Q_UNUSED(event);
+    Q_UNUSED(event)
     //qDebug() << "paintEvent:enter";
     QPainter painter(this);
     //QImage currentImage("/Users/jichi/Dropbox/Library/Wallpapers/sample.jpg");

@@ -4,23 +4,22 @@
 // jdictranslator.h
 // 8/11/2012
 
-#include "module/translator/translator.h"
+#include "module/translator/networktranslator.h"
 
 QT_BEGIN_NAMESPACE
-class QNetworkAccessManager;
 class QNetworkReply;
 class QTextEncoder;
 class QTextDecoder;
 QT_END_NAMESPACE
 
-class JdicTranslator : public Translator
+class JdicTranslator : public NetworkTranslator
 {
   Q_OBJECT
   Q_DISABLE_COPY(JdicTranslator)
   typedef JdicTranslator Self;
-  typedef Translator Base;
+  typedef NetworkTranslator Base;
 
-  QNetworkAccessManager *qnam_;
+  QNetworkReply *reply_;
   QTextDecoder *decoder_;
   QTextEncoder *encoder_;
 
@@ -32,12 +31,12 @@ public:
 
 public slots:
   void translate(const QString &text, const QString &to, const QString &from = QString()) override
-  { Q_UNUSED(from); translate(text, dictionaryForLanguage(to)); }
+  { Q_UNUSED(from) translate(text, dictionaryForLanguage(to)); }
 
   void translate(const QString &text, const char *dict = 0);
 
 protected slots:
-  void processNetworkReply(QNetworkReply *reply);
+  void processReply(QNetworkReply *reply) override;
 
 protected:
   QByteArray postData(const QString &text, const char *dict) const;

@@ -278,6 +278,49 @@
     </message>
 </context>
 <context>
+    <name>AcLocalizer</name>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="21"/>
+        <source>Play</source>
+        <translation>再生</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="29"/>
+        <source>Browse</source>
+        <translation>瀏覽</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="37"/>
+        <source>Download</source>
+        <translation>下載</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="45"/>
+        <source>Translate</source>
+        <translation>翻譯</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="53"/>
+        <source>Update</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="61"/>
+        <source>Readme</source>
+        <translation>說明書</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="69"/>
+        <source>Changes</source>
+        <translation>更新履歷</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="77"/>
+        <source>License</source>
+        <translation>著作權</translation>
+    </message>
+</context>
+<context>
     <name>AcLocationManager</name>
     <message>
         <location filename="../../common/acpaths.cc" line="59"/>
@@ -688,7 +731,7 @@
         <translation>使用嗶哩嗶哩賬戶解析地址失敗</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="326"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="331"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>請輸入nico賬戶</translation>
     </message>
@@ -1376,22 +1419,22 @@
         <translation>載入完成</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="641"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="639"/>
         <source>opening</source>
         <translation>正在打開</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="671"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="669"/>
         <source>no recent closed tabs</source>
         <translation>沒有關閉的標簽</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="753"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="751"/>
         <source>Start Page</source>
         <translation>世界の果て</translation>
     </message>
     <message>
-        <location filename="../../../module/webbrowser/webbrowser.cc" line="855"/>
+        <location filename="../../../module/webbrowser/webbrowser.cc" line="853"/>
         <source>Annot Browser</source>
         <translation>とある瀏覽使</translation>
     </message>

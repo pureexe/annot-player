@@ -4,6 +4,8 @@
 // annotdbdefs.h
 // 9/13/2011
 
+#define ANNOTDB_VERSION "0.1.9"
+
 // - SQLite helpers -
 
 #ifdef ANNOTDB_WITH_DATETIME

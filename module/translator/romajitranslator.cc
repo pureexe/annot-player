@@ -3,6 +3,7 @@
 
 #include "module/translator/romajitranslator.h"
 #include "module/translator/romajitranslator_p.h"
+#include "module/translator/translatorsettings.h"
 #include "module/qtext/bytearray.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QTextCodec>
@@ -18,11 +19,8 @@
 // - Construction -
 
 RomajiTranslator::RomajiTranslator(QObject *parent)
-  : Base(parent)
+  : Base(parent), reply_(0)
 {
-  qnam_ = new QNetworkAccessManager(this);
-  connect(qnam_, SIGNAL(finished(QNetworkReply*)), SLOT(processNetworkReply(QNetworkReply*)));
-
   QTextCodec *codec = QTextCodec::codecForName(ROMAJI_ENCODING);
   Q_ASSERT(codec);
   decoder_ = codec->makeDecoder();
@@ -60,9 +58,12 @@ RomajiTranslator::translate(const QString &text)
   if (!isEnabled())
     return;
   DOUT("enter: text =" << text);
-  QString query = translateUrl(text);
-  DOUT("query =" << query);
-  qnam_->get(QNetworkRequest(query));
+  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+    //reply_->abort();
+    reply_->deleteLater();
+    DOUT("abort previous reply");
+  }
+  reply_ = networkAccessManager()->get(QNetworkRequest(translateUrl(text)));
   DOUT("exit");
 }
 
@@ -84,11 +85,18 @@ RomajiTranslator::translate(const QString &text)
 // </table>
 // <!-- ROMAJI.ORG DISPLAY RESULT AREA -->
 void
-RomajiTranslator::processNetworkReply(QNetworkReply *reply)
+RomajiTranslator::processReply(QNetworkReply *reply)
 {
   DOUT("enter");
   Q_ASSERT(reply);
   reply->deleteLater();
+
+  if (TranslatorSettings::globalSettings()->isSynchronized() &&
+      reply_ != reply) {
+    DOUT("exit: reply changed");
+    return;
+  }
+  reply_ = 0;
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit errorMessage(tr("network error from Romaji Translator") + ": " + reply->errorString());
@@ -136,6 +144,7 @@ RomajiTranslator::processNetworkReply(QNetworkReply *reply)
         DOUT("text =" << text);
         if (!text.isEmpty()) {
           emit translated(text);
+          DOUT("exit: ok");
           return;
         }
       }

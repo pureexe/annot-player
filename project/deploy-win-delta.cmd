@@ -91,14 +91,14 @@ cp -v "%BUILD%/[ Play ].exe" . || exit /b 1
 cp -v "%BUILD%/[ Translate ].exe" . || exit /b 1
 cp -v "%BUILD%/[ Update ].exe" . || exit /b 1
 
-cp -v "%SOURCE%/README" "Read Me.txt" || exit /b 1
-unix2dos "Read Me.txt"
+cp -v "%SOURCE%/README" Readme.txt || exit /b 1
+unix2dos Readme.txt
 
-::cp -v "%SOURCE%/UPDATE" "Update.txt" || exit /b 1
-::unix2dos "Update.txt"
+::cp -v %SOURCE%/UPDATE Update.txt || exit /b 1
+::unix2dos Update.txt
 
-cp -v "%SOURCE%/ChangeLog" "ChangeLog.txt" || exit /b 1
-unix2dos "ChangeLog.txt"
+cp -v "%SOURCE%/ChangeLog" Changes.txt || exit /b 1
+unix2dos Changes.txt
 
 ::rm -Rf licenses
 ::cp -R "%SOURCE%/licenses" Licenses
@@ -224,6 +224,10 @@ chmod -R 755 .
 attrib +h Data
 attrib +h Licenses
 attrib +h Update
+
+::attrib +r License.txt
+attrib +r Readme.txt || exit /b 1
+attrib +r Changes.txt || exit /b 1
 
 :: See: http://msdn.microsoft.com/en-us/library/windows/desktop/cc144102(v=vs.85).aspx
 attrib +h icon.ico

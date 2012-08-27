@@ -1,4 +1,4 @@
-// qtext/spinbox.cc
+// spinbox.cc
 // 5/1/2012
 
 #include "module/qtext/spinbox.h"

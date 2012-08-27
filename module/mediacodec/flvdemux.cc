@@ -89,7 +89,7 @@ FlvDemux::demux()
   }
 
   quint32 flags = in_->readUInt8(&ok);
-  Q_UNUSED(flags);
+  Q_UNUSED(flags)
   if (!ok) {
     DOUT("exit: read error");
     return false;
@@ -203,10 +203,10 @@ FlvDemux::makeAudioWriter(quint32 mediaInfo)
   }
   quint32 format = mediaInfo >> 4;
   quint32 rate = (mediaInfo >> 2) & 0x3;
-  quint32 bits = (mediaInfo >> 1) & 0x1; Q_UNUSED(bits);
-  quint32 chans = mediaInfo & 0x1; Q_UNUSED(chans);
+  quint32 bits = (mediaInfo >> 1) & 0x1; Q_UNUSED(bits)
+  quint32 chans = mediaInfo & 0x1; Q_UNUSED(chans)
 
-  Q_UNUSED(rate);
+  Q_UNUSED(rate)
 
   if ((format == 2) || (format == 14)) { // MP3
     DOUT("MP3");

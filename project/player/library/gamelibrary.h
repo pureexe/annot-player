@@ -10,6 +10,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
+#define GAME_LIBRARY_VERSION    "0.1.8"
+
 class GameLibrary : public QObject
 {
   Q_OBJECT
@@ -18,9 +20,11 @@ class GameLibrary : public QObject
   typedef QObject Base;
 
   mutable QMutex mutex_;
-  QHash<QString, Game> library_;
   QString libraryLocation_;
   bool dirty_;
+
+  QHash<QString, Game> library_; // indexed by digest
+  QHash<QString, QString> digestByLocation_; // index on location
 
 public:
   explicit GameLibrary(const QString &xmlLocation, QObject *parent = nullptr);
@@ -29,7 +33,11 @@ public:
   bool isEmpty() const { return library_.isEmpty(); }
   bool exists() const;
 
-  Game findGame(const QString &digest) const;
+  Game findGameByDigest(const QString &digest) const;
+  bool containsDigest(const QString &digest) const;
+
+  Game findGameByLocation(const QString &location) const;
+  bool containsLocation(const QString &location) const;
 
 public slots:
   void save();

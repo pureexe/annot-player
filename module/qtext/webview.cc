@@ -342,7 +342,7 @@ WebView::download(const QNetworkRequest &req)
     emit warning(tr("failed to download %1").arg(url.toString()));
   DOUT("exit: ok =" << ok);
 #else
-  Q_UNUSED(req);
+  Q_UNUSED(req)
   emit warning(tr("download is not allowed"));
 #endif // WITH_MODULE_DOWNLOAD
 }
@@ -392,9 +392,8 @@ WebView::createHistoryMenu()
     return 0;
   }
   //m->addActions(QtExt::revertList(actions));
-  auto p = actions.constEnd();
-  while (p != actions.constBegin())
-    m->addAction(*--p);
+  for (auto p = actions.constEnd(); p != actions.constBegin();
+       m->addAction(*--p));
   DOUT("exit");
   return m;
 }
@@ -486,7 +485,7 @@ QtExt::
 WebView::panGesture(QPanGesture *g)
 {
   DOUT("enter");
-  Q_UNUSED(g);
+  Q_UNUSED(g)
   //switch (gesture->state()) {
   //case Qt::GestureStarted:
   //case Qt::GestureUpdated:

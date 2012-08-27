@@ -2,7 +2,7 @@
 // 10/14/2011
 
 #include "texthook.h"
-#include "ith.h"
+#include "ihf_p.h"
 #include "qtwin/qtwin.h"
 #include <QtCore>
 
@@ -20,36 +20,36 @@ TextHook::setEnabled(bool t)
 
 bool
 TextHook::isActive() const
-{ return Ith::isLoaded(); }
+{ return Ihf::isLoaded(); }
 
 void
 TextHook::start()
-{ Ith::load(); }
+{ Ihf::load(); }
 
 void
 TextHook::stop()
 {
   clear();
-  Ith::unload();
+  Ihf::unload();
 }
 
 // - Properties -
 
 WId
 TextHook::parentWinId() const
-{ return Ith::parentWindow(); }
+{ return Ihf::parentWindow(); }
 
 void
 TextHook::setParentWinId(WId hwnd)
-{ Ith::setParentWindow(hwnd); }
+{ Ihf::setParentWindow(hwnd); }
 
 int
 TextHook::interval() const
-{ return Ith::messageInterval(); }
+{ return Ihf::messageInterval(); }
 
 void
 TextHook::setInterval(int msecs)
-{ Ith::setMessageInterval(msecs); }
+{ Ihf::setMessageInterval(msecs); }
 
 // - Injection -
 
@@ -80,7 +80,7 @@ TextHook::attachOneProcess(ulong pid, bool checkActive)
 
   detachAllProcesses();
 
-  bool ret = Ith::attachProcess(pid);
+  bool ret = Ihf::attachProcess(pid);
   if (ret && !isProcessAttached(pid)) {
     pids_.removeAll(pid);
     pids_.append(pid);
@@ -104,7 +104,7 @@ TextHook::attachProcess(ulong pid, bool checkActive)
     return false;
   }
 
-  bool ret = Ith::attachProcess(pid);
+  bool ret = Ihf::attachProcess(pid);
   if (ret && !isProcessAttached(pid)) {
     pids_.removeAll(pid);
     pids_.append(pid);
@@ -134,7 +134,7 @@ TextHook::detachProcess(ulong pid, bool checkActive)
     return false;
   }
 
-  bool ret = Ith::detachProcess(pid);
+  bool ret = Ihf::detachProcess(pid);
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -150,7 +150,7 @@ TextHook::detachAllProcesses()
 
 bool
 TextHook::isProcessAttached(ulong pid) const
-{ return pids_.indexOf(pid) >= 0; }
+{ return pids_.contains(pid); }
 
 // - Helpers -
 
@@ -202,9 +202,9 @@ TextHook::isProcessAttached(ulong pid) const
 //QString
 //TextHook::hookNameById(ulong hookId) const
 //{
-//  //return Ith::getHookNameById(hookId);
+//  //return Ihf::getHookNameById(hookId);
 //  // FIXME: supposed to be the engine name, unimplemented
-//  Q_UNUSED(hookId);
+//  Q_UNUSED(hookId)
 //  return QString();
 //}
 

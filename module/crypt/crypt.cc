@@ -6,6 +6,15 @@
 #include <QtCore/QCryptographicHash>
 
 QByteArray
+Crypt::sha256(const QByteArray &input)
+{
+  // TODO: need openssl and -lcrypto
+  // http://stackoverflow.com/questions/2262386/generate-sha256-with-openssl-and-c
+  Q_UNUSED(input)
+  return QByteArray();
+}
+
+QByteArray
 Crypt::sha1(const QByteArray &input)
 {
   QCryptographicHash digest(QCryptographicHash::Sha1);

@@ -34,7 +34,7 @@ AcIpcController::isProcessRunning(const QString &processName)
     exe.append(".exe");
   return QtWin::getProcessIdByName(exe);
 #else
-  Q_UNUSED(processName); // TODO
+  Q_UNUSED(processName) // TODO
   return false;
 #endif // Q_OS_MAC
 }

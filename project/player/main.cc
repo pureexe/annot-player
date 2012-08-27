@@ -6,7 +6,7 @@
 #include "annotationsettings.h"
 #include "global.h"
 #include "tr.h"
-#include "translationmanager.h"
+#include "localizer.h"
 #include "annotationgraphicsitem.h"
 #include "module/translator/translatorsettings.h"
 #ifdef Q_OS_WIN
@@ -25,14 +25,18 @@
 #ifdef Q_OS_MAC
 # include "mac/qtmac/qtmac.h"
 #endif // Q_OS_MAC
+#include "project/common/acversion.h"
 #include "project/common/acui.h"
 #include "project/common/acglobal.h"
 #include "project/common/acsettings.h"
 #include "project/common/acplayer.h"
+#include "project/common/aclocalizer.h"
 #include "module/qtext/filesystem.h"
+#include "module/annotdb/annotdbdefs.h"
 #include "module/annotcloud/user.h"
 #include "module/annotcache/annotationcachemanager.h"
 #include "module/qt/qtsettings.h"
+#include "module/translator/translatormanager.h"
 //#include "module/download/downloader.h"
 #include <QtGui>
 #include <QtNetwork/QNetworkProxy>
@@ -197,10 +201,14 @@ main(int argc, char *argv[])
       //}
       ac->setLanguage(lang, script);
     }
-    TranslationManager::globalInstance()->setLocale(lang, script, false); // auto-update translator = false
-    TranslationManager::globalInstance()->installCurrentTranslator(&a);
+    Localizer::globalInstance()->setLocale(lang, script, false); // auto-update translator = false
+    Localizer::globalInstance()->installCurrentTranslator(&a);
     DOUT("app language =" << lang);
   }
+
+  // TO BE REMOVED
+  if (settings->annotationSpeedup() > 1)
+    settings->setAnnotationSpeedup(1.0);
 
   // Check update.
   QString previousVersion = settings->version();
@@ -208,19 +216,20 @@ main(int argc, char *argv[])
     DOUT("update from old version");
     bool majorUpdate = !previousVersion.startsWith(G_VERSION_MAJOR);
 
-
     settings->setAnnotationLanguages(QSet<int>());
     settings->setAnnotationFilterEnabled(false);
+    settings->setTranslationServices(TranslatorManager::RomajiBit | TranslatorManager::OcnBit);
+
+    settings->setAnnotationSpeedup(1.0);
 
     //bool initial = previousVersion.isEmpty();
 
-
-    QtExt::trashOrRemoveFile(G_PATH_CACHES "/" "cache.db");
-    QtExt::trashOrRemoveFile(G_PATH_CACHES "/" "queue.db");
-
-    QtExt::trashOrRemoveFile(G_PATH_CACHEDB);
-    QtExt::trashOrRemoveFile(G_PATH_QUEUEDB);
     QtExt::trashOrRemoveFile(G_PATH_DEBUG);
+
+    if (AcVersion::currentVersionNumber() < AcVersion::toNumber(ANNOTDB_VERSION)) {
+      QtExt::trashOrRemoveFile(G_PATH_CACHEDB);
+      QtExt::trashOrRemoveFile(G_PATH_QUEUEDB);
+    }
 
 #ifdef Q_OS_WIN
     if (majorUpdate) {
@@ -394,7 +403,7 @@ main(int argc, char *argv[])
   // DEFAULT_TIMING_INTERVAL defined in qabstractanimation.cpp is 16
   // As 1 sec / 24 frames = 41.6 msec, timing interval should be at lease 41 msec
   enum { AnimationTimingInterval = 32 };
-  QtSettings::globalInstance()->setAnimationTimingInterval(AnimationTimingInterval);
+  //QtSettings::globalInstance()->setAnimationTimingInterval(AnimationTimingInterval);
 
 //#ifdef AC_ENABLE_GAME
 //  // Root window
@@ -424,41 +433,20 @@ main(int argc, char *argv[])
 //#endif // WITH_WIN_TEXTHOOK
 
     a.setMainWindow(&w);
-
-    // Show main window
-    DOUT("show mainwindow");
-
-    QStringList args = a.arguments();
-
-    bool showLibrary = args.size() <= 1 && QFile::exists(G_PATH_MEDIADB) && settings->showLibrary();
-    w.resize(showLibrary ? LIBRARY_WINDOW_SIZE : INIT_WINDOW_SIZE);
-    if (showLibrary)
-      w.showMainLibrary();
-    w.show();
-    //QTimer::singleShot(0, &w, SLOT(show()));
-
-    // Automatic login
-    DOUT("automatic login");
-    QString userName = ac->userName(),
-            password = ac->password();
-    if (userName.isEmpty() || password.isEmpty()) {
-      userName = AnnotCloud::User::guest().name();
-      password = AnnotCloud::User::guest().password();
-    }
-    //else
-    //  w.checkInternetConnection();
-    w.login(userName, password);
-
-    if (args.size() > 1) {
-      args.removeFirst();
-      w.openSources(args);
-    }
   }
+  DOUT("launch mainwindow");
+  w.launch(a.arguments());
+
 
   // Do this after args are parsed by mainwindow so that annot-player works well from command line
 #ifdef Q_OS_WIN
   QDir::setCurrent(QCoreApplication::applicationDirPath());
 #endif // Q_OS_WIN
+
+#ifdef AC_ENABLE_LAUNCHER
+  // Rename lauchers
+  AcLocalizer::updateLocations();
+#endif // AC_ENABLE_LAUNCHER
 
   //QWidget t;
   //t.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint);
@@ -529,6 +517,8 @@ main(int argc, char *argv[])
 //    //FcConfigAppFontAddDir( NULL, "/System/Library/Fonts" );
 //    // By default, scan only the directory /System/Library/Fonts.
 //#endif // Q_OS_MAC
+
+  //::dlpost("http://www.excite.co.jp/world/english", QUrl("http://honyaku.yahoo.co.jp/transtext"), data.toLocal8Bit());
 
   DOUT("exit: exec");
   return a.exec();

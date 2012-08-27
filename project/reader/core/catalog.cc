@@ -28,7 +28,7 @@ namespace Core {
 
   int
   CatalogModel::columnCount(const QModelIndex &parent) const
-  { Q_UNUSED(parent); return 3; }
+  { Q_UNUSED(parent) return 3; }
 
   int
   CatalogModel::rowCount(const QModelIndex &parent) const

@@ -19,7 +19,7 @@ public:
     : Base(parent) { }
 
   qint64 write(const char *data, qint64 maxSize) override
-  { Q_UNUSED(data); return maxSize; }
+  { Q_UNUSED(data) return maxSize; }
 };
 
 #endif // FILEOUTPUTSTREAM_H

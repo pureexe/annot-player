@@ -74,11 +74,11 @@ HttpStreamSession::~HttpStreamSession()
 {
   if (progressTask_)
     progressTask_->stop();
-  if (!ins_.isEmpty()) {
-    auto p = ins_.constEnd(); // revert list so that nam will be deleted later
-    while (p != ins_.constBegin()) // foreach (InputStream *in, QtExt::revertList(ins_))
-      delete *--p;
-  }
+  if (!ins_.isEmpty())
+     // revert list so that nam will be deleted later
+    for (auto p = ins_.constEnd(); p != ins_.constBegin();
+         delete *--p);
+
   if (fifo_)
     delete fifo_;
   if (merger_)
@@ -299,9 +299,9 @@ HttpStreamSession::run()
   }
   if (!ins_.isEmpty()) {
     DOUT("delete last ins");
-    auto p = ins_.constEnd(); // revert list so that nam will be deleted later
-    while (p != ins_.constBegin()) // foreach (InputStream *in, QtExt::revertList(ins_))
-      delete *--p;
+    // revert list so that nam will be deleted later
+    for (auto p = ins_.constEnd(); p != ins_.constBegin();
+         delete *--p);
     ins_.clear();
   }
 
@@ -459,8 +459,8 @@ HttpStreamSession::run()
   //}
 
   if (!ok || isStopped()) {
-    auto p = ins_.constEnd(); // revert list so that nam will be deleted later
-    while (p != ins_.constBegin()) { // foreach (InputStream *in, QtExt::revertList(ins_))
+    // revert list so that nam will be deleted later
+    for (auto p = ins_.constEnd(); p != ins_.constBegin();) {
       auto in = static_cast<RemoteStream *>(*--p);
       in->stop();
       delete in;

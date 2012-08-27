@@ -163,7 +163,7 @@ Ith::setMessageInterval(int msecs)
 void
 Ith::init()
 {
-  //Q_UNUSED(runAsAdmin); DOUT("init:enter");
+  //Q_UNUSED(runAsAdmin) DOUT("init:enter")
 
   ::hMainWnd = 0;
 

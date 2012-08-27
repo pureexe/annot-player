@@ -3,12 +3,13 @@
 @echo off
 setlocal
 
-set VERSION=0.1.2.1
-set TIMESTAMP=20120816
+set VERSION=0.1.2.3
+set TIMESTAMP=20120824
 set CYGWIN_VERSION=cygwin1
+set ME=Software Update
 
 color 8f
-title Software Update (%VERSION%, %TIMESTAMP%)
+title %ME% (%VERSION%, %TIMESTAMP%)
 
 cd /d %~dp0
 cd /d ..\..
@@ -50,17 +51,25 @@ echo.
 pause
 echo.
 
+title %ME%: Preparing ...
+
 tskill annot-player 2>nul
 tskill annot-browser 2>nul
 tskill annot-down 2>nul
 tskill annot-dict 2>nul
 
+title %ME%: Synchronizing ...
+
 :: see: http://lftp.yar.ru/lftp-man.html
 lftp "%HOST%" -e "%MIRROR%; exit"
+
+title %ME%: Deploying ...
 
 pushd update
 for /r %%i in (deploy.cmd) do if exist "%%~i" call "%%~i"
 popd
+
+title %ME%: Done^!
 
 echo.
 echo ----------------------------------------------------------------------
@@ -79,6 +88,6 @@ echo.
 pause
 echo.
 
-if exist "ChangeLog.txt" explorer "ChangeLog.txt"
+if exist Changes.txt explorer Changes.txt
 
 :: EOF

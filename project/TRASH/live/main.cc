@@ -32,7 +32,7 @@ static char newMatroskaDemuxWatchVariable;
 static MatroskaFileServerDemux* demux;
 
 static void onMatroskaDemuxCreation(MatroskaFileServerDemux* newDemux, void* clientData) {
-  Q_UNUSED(clientData);
+  Q_UNUSED(clientData)
   demux = newDemux;
   newMatroskaDemuxWatchVariable = 1;
 }
@@ -40,8 +40,8 @@ static void onMatroskaDemuxCreation(MatroskaFileServerDemux* newDemux, void* cli
 int
 main(int argc, char* argv[])
 {
-  Q_UNUSED(argc);
-  Q_UNUSED(argv);
+  Q_UNUSED(argc)
+  Q_UNUSED(argv)
   // Begin by setting up our usage environment:
   TaskScheduler* scheduler = BasicTaskScheduler::createNew();
   env = BasicUsageEnvironment::createNew(*scheduler);

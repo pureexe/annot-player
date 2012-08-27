@@ -14,6 +14,9 @@
 using namespace AnnotCloud;
 using namespace CLOUD_SERVICE_NAMESPACE;
 
+enum { SoapConnectionError = 28 };
+enum { MaxConnectionRetries = 3 };
+
 // - Construction -
 
 AnnotationServerProxy::AnnotationServerProxy(QObject *parent)
@@ -24,6 +27,13 @@ AnnotationServerProxy::AnnotationServerProxy(QObject *parent)
 #ifdef WITH_GZIP
   proxy_->z_level = 6; // compression level, default is 1 (fastest), max is 9
 #endif // WIZH_GZIP
+#ifdef WITH_COOKIES
+  // To avoid "cookie storms" caused by malicious servers that return an unreasonable amount of cookies,
+  // gSOAP clients/servers are restricted to a database size that the user can limit (32 cookies by default),
+  // See: http://www.cs.fsu.edu/~engelen/soapdoc2.html#tth_sEc19.28
+  //
+  //proxy_->cookie_max = 10;
+#endif //ifdef WITH_COOKIES
   DOUT("exit");
 }
 
@@ -43,6 +53,9 @@ AnnotationServerProxy::setUserAnonymous(bool t)
   tns__setUserAnonymousResponse response;
   mutex_.lock();
   int err = proxy_->setUserAnonymous(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->setUserAnonymous(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -67,6 +80,9 @@ AnnotationServerProxy::setUserLanguage(qint32 language)
   tns__setUserLanguageResponse response;
   mutex_.lock();
   int err = proxy_->setUserLanguage(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->setUserLanguage(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -92,6 +108,9 @@ AnnotationServerProxy::isLatestApp(const QString &version)
   tns__isLatestAppResponse response;
   mutex_.lock();
   int err = proxy_->isLatestApp(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->isLatestApp(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -164,6 +183,9 @@ AnnotationServerProxy::getConnected()
   tns__isConnectedResponse response;
   mutex_.lock();
   int err = proxy_->isConnected(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->isConnected(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -213,6 +235,9 @@ AnnotationServerProxy::chat(const QString &message)
   tns__chatResponse response;
   mutex_.lock();
   int err = proxy_->chat(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->chat(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -244,6 +269,9 @@ AnnotationServerProxy::login(const QString &userName, const QString &password)
 
   mutex_.lock();
   int err = proxy_->login(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->login(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -268,6 +296,9 @@ AnnotationServerProxy::getUser()
 
   mutex_.lock();
   int err = proxy_->getUser(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->getUser(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -408,6 +439,9 @@ AnnotationServerProxy::submitToken(const Token &token)
   tns__submitMediaTokenResponse response;
   mutex_.lock();
   int err = proxy_->submitMediaToken(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->submitMediaToken(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -438,6 +472,9 @@ AnnotationServerProxy::selectTokenIdWithDigest(const QString &digest, qint32 sec
   tns__selectMediaTokenIdWithDigestResponse response;
   mutex_.lock();
   int err = proxy_->selectMediaTokenIdWithDigest(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->selectMediaTokenIdWithDigest(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -468,6 +505,9 @@ AnnotationServerProxy::selectTokenIdWithUrl(const QString &url, qint32 section)
   tns__selectMediaTokenIdWithUrlResponse response;
   mutex_.lock();
   int err = proxy_->selectMediaTokenIdWithUrl(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->selectMediaTokenIdWithUrl(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -503,6 +543,9 @@ AnnotationServerProxy::submitTokenDigest(const QString &digest, qint32 section, 
   tns__submitMediaTokenDigestResponse response;
   mutex_.lock();
   int err = proxy_->submitMediaTokenDigest(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->submitMediaTokenDigest(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -538,6 +581,9 @@ AnnotationServerProxy::submitTokenUrl(const QString &url, qint32 section, qint32
   tns__submitMediaTokenUrlResponse response;
   mutex_.lock();
   int err = proxy_->submitMediaTokenUrl(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->submitMediaTokenUrl(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -587,6 +633,9 @@ AnnotationServerProxy::submitAlias(const Alias &alias)
   tns__submitMediaAliasResponse response;
   mutex_.lock();
   int err = proxy_->submitMediaAlias(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->submitMediaAlias(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -623,6 +672,9 @@ AnnotationServerProxy::submitAliasTextWithTokenId(const QString &text, qint32 ty
   tns__submitMediaAliasTextWithTokenIdResponse response;
   mutex_.lock();
   int err = proxy_->submitMediaAliasTextWithTokenId(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->submitMediaAliasTextWithTokenId(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -666,6 +718,9 @@ AnnotationServerProxy::submitAliasTextAndTokenDigest(const QString &text, qint32
   tns__submitMediaAliasTextAndTokenDigestResponse response;
   mutex_.lock();
   int err = proxy_->submitMediaAliasTextAndTokenDigest(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->submitMediaAliasTextAndTokenDigest(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -720,6 +775,9 @@ AnnotationServerProxy::submitAnnotation(const Annotation &annot)
   tns__submitMediaAnnotationResponse response;
   mutex_.lock();
   int err = proxy_->submitMediaAnnotation(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->submitMediaAnnotation(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -757,6 +815,9 @@ AnnotationServerProxy::submitAnnotationTextWithTokenId(const QString &text, qint
   tns__submitMediaAnnotationTextWithTokenIdResponse response;
   mutex_.lock();
   int err = proxy_->submitMediaAnnotationTextWithTokenId(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->submitMediaAnnotationTextWithTokenId(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT(" soap error, err =" << err);
@@ -800,6 +861,9 @@ AnnotationServerProxy::submitAnnotationTextAndTokenDigest(const QString &text, q
   tns__submitMediaAnnotationTextAndTokenDigestResponse response;
   mutex_.lock();
   int err = proxy_->submitMediaAnnotationTextAndTokenDigest(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->submitMediaAnnotationTextAndTokenDigest(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -827,6 +891,9 @@ AnnotationServerProxy::selectTokenWithId(qint64 id)
   tns__selectMediaTokenWithIdResponse response;
   mutex_.lock();
   int err = proxy_->selectMediaTokenWithId(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->selectMediaTokenWithId(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -873,6 +940,9 @@ AnnotationServerProxy::selectTokenWithDigest(const QString &digest, int section)
   tns__selectMediaTokenWithDigestResponse response;
   mutex_.lock();
   int err = proxy_->selectMediaTokenWithDigest(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->selectMediaTokenWithDigest(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -917,6 +987,9 @@ AnnotationServerProxy::selectAliasesWithTokenId(qint64 tid)
   tns__selectMediaAliasesWithTokenIdResponse response;
   mutex_.lock();
   int err = proxy_->selectMediaAliasesWithTokenId(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->selectMediaAliasesWithTokenId(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -964,6 +1037,9 @@ AnnotationServerProxy::selectRelatedAliasesWithTokenId(qint64 tid)
   tns__selectRelatedMediaAliasesWithTokenIdResponse response;
   mutex_.lock();
   int err = proxy_->selectRelatedMediaAliasesWithTokenId(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->selectRelatedMediaAliasesWithTokenId(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -1011,6 +1087,9 @@ AnnotationServerProxy::selectAnnotationsWithTokenId(qint64 tid)
   tns__selectMediaAnnotationsWithTokenIdResponse response;
   mutex_.lock();
   int err = proxy_->selectMediaAnnotationsWithTokenId(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->selectMediaAnnotationsWithTokenId(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -1063,6 +1142,9 @@ AnnotationServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
   tns__selectRelatedMediaAnnotationsWithTokenIdResponse response;
   mutex_.lock();
   int err = proxy_->selectRelatedMediaAnnotationsWithTokenId(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->selectRelatedMediaAnnotationsWithTokenId(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -1117,6 +1199,9 @@ AnnotationServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
     tns__##_cast##Media##_entity##WithIdResponse response; \
     mutex_.lock(); \
     int err = proxy_->_cast##Media##_entity##WithId(&request, &response); \
+    if (err) \
+      for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++) \
+        err = proxy_->_cast##Media##_entity##WithId(&request, &response); \
     mutex_.unlock(); \
     if (err) { \
       DOUT("soap error, err =" << err); \
@@ -1157,6 +1242,9 @@ AnnotationServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
     tns__##_cast##_entity##WithIdResponse response; \
     mutex_.lock(); \
     int err = proxy_->_cast##_entity##WithId(&request, &response); \
+    if (err) \
+      for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++) \
+        err = proxy_->_cast##_entity##WithId(&request, &response); \
     mutex_.unlock(); \
     if (err) { \
       DOUT("soap error, err =" << err); \
@@ -1190,6 +1278,9 @@ AnnotationServerProxy::updateAnnotationTextWithId(const QString &text, qint64 id
   tns__updateMediaAnnotationTextWithIdResponse response;
   mutex_.lock();
   int err = proxy_->updateMediaAnnotationTextWithId(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->updateMediaAnnotationTextWithId(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);
@@ -1215,6 +1306,9 @@ AnnotationServerProxy::updateAnnotationUserIdWithId(qint64 userId, qint64 id)
   tns__updateMediaAnnotationUserIdWithIdResponse response;
   mutex_.lock();
   int err = proxy_->updateMediaAnnotationUserIdWithId(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->updateMediaAnnotationUserIdWithId(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);

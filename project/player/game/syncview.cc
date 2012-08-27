@@ -50,12 +50,12 @@ SyncView::createLayout()
 
   // Buttons
 
-  QToolButton *processButton = ui->makeToolButton(
+  processButton_ = ui->makeToolButton(
       AcUi::TabHint, tr("process"), processView_->windowTitle(), processView_, SLOT(setVisible(bool)));
-  QToolButton *messageButton = ui->makeToolButton(
+  messageButton_ = ui->makeToolButton(
       AcUi::TabHint, tr("message"), messageView_->windowTitle(), messageView_, SLOT(setVisible(bool)));
-  processButton->setChecked(true);
-  messageButton->setChecked(true);
+  processButton_->setChecked(true);
+  messageButton_->setChecked(true);
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -65,8 +65,8 @@ SyncView::createLayout()
     rows->addLayout(center);
 
     //header->addWidget(tokenButton);
-    header->addWidget(processButton);
-    header->addWidget(messageButton);
+    header->addWidget(processButton_);
+    header->addWidget(messageButton_);
 
     //center->addWidget(tokenView_);
     center->addWidget(processView_);
@@ -134,6 +134,20 @@ SyncView::setVisible(bool visible)
   if (visible != messageView_->isActive())
     messageView_->setActive(visible);
   Base::setVisible(visible);
+}
+
+void
+SyncView::setProcessViewVisible(bool t)
+{
+  processButton_->setChecked(t);
+  processView_->setVisible(t);
+}
+
+void
+SyncView::setMessageViewVisible(bool t)
+{
+  messageButton_->setChecked(t);
+  messageView_->setVisible(t);
 }
 
 //void SyncView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }

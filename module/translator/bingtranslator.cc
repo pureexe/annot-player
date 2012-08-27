@@ -3,6 +3,7 @@
 
 #include "module/translator/bingtranslator.h"
 #include "module/translator/bingtranslator_p.h"
+#include "module/translator/translatorsettings.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
@@ -11,15 +12,6 @@
 
 //#define DEBUG "bingtranslator"
 #include "module/debug/debug.h"
-
-// - Construction -
-
-BingTranslator::BingTranslator(QObject *parent)
-  : Base(parent)
-{
-  qnam_ = new QNetworkAccessManager(this);
-  connect(qnam_, SIGNAL(finished(QNetworkReply*)), SLOT(processNetworkReply(QNetworkReply*)));
-}
 
 // - Translate -
 
@@ -41,20 +33,32 @@ BingTranslator::translate(const QString &text, const QString &to, const QString 
   if (!isEnabled())
     return;
   DOUT("enter");
+  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+    //reply_->abort();
+    reply_->deleteLater();
+    DOUT("abort previous reply");
+  }
   QUrl query = translateUrl(text, to, from);
   DOUT("query =" << query);
-  qnam_->get(QNetworkRequest(query));
+  reply_ = networkAccessManager()->get(QNetworkRequest(query));
   DOUT("exit");
 }
 
 // Sample request: http://api.microsofttranslator.com/v2/Http.svc/Translate?appId=FCB48AFBE3CB7B0E7AA146C950762FC87EA13FBB&text=hello&from=en&to=ja
 // Sample reply: <string xmlns="http://schemas.microsoft.com/2003/10/Serialization/">こんにちは</string>
 void
-BingTranslator::processNetworkReply(QNetworkReply *reply)
+BingTranslator::processReply(QNetworkReply *reply)
 {
   DOUT("enter");
   Q_ASSERT(reply);
   reply->deleteLater();
+
+  if (TranslatorSettings::globalSettings()->isSynchronized() &&
+      reply_ != reply) {
+    DOUT("exit: reply changed");
+    return;
+  }
+  reply_ = 0;
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit errorMessage(tr("network error from Bing Translator") + ": " + reply->errorString());

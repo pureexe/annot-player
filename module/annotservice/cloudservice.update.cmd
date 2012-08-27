@@ -31,6 +31,7 @@ copy "%TYPEMAP_URL%"
 :: wsdl2h
 :: -n%BASE%: default is 'ns'
 :: -q%NAMESPACE%
+:: -g enable globals, do not define WITH_NOGLOBAL
 ::
 :: soapcpp2
 :: -C: generate client-side code only

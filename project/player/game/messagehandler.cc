@@ -123,7 +123,7 @@ MessageHandler::processMessage(const QByteArray &data, ulong anchor)
 
   qint64 h = lastMessageHash_.hash = Annotation::hash(range);
   int count = lastMessageHash_.count = range.size();
-  Q_UNUSED(count);
+  Q_UNUSED(count)
 
   emit messageReceivedWithId(h);
   DOUT("exit: hashCount =" << count << ", h =" << h);

@@ -8,6 +8,7 @@
 #include <QtCore/QHash>
 #include <QtCore/QObject>
 #include <QtCore/QPoint>
+#include <QtCore/QSize>
 #include <utility>
 
 QT_FORWARD_DECLARE_CLASS(QWidget)
@@ -50,19 +51,22 @@ public slots:
   void clearSubtitles();
 
   void setScale(qreal value) { scale_ = value; }
+  void setViewSize(const QSize &value) { viewSize_ = value; }
 
   // - Float scheduling, lane by lane -
 public:
-  int nextY(const QSize &windowSize, const QSizeF &itemSize, int visibleMsecs, AnnotationGraphicsItem::Style style, bool sub);
+  int nextMovingY(const QSizeF &itemSize, int visibleMsecs);
+  int nextStationaryY(int itemHeight, int visibleMsecs, AnnotationGraphicsItem::Style style);
 
   // - Motionless scheduling, cell by cell -
 public:
-  QPointF nextPos(const QSize &windowSize, const QSizeF &itemSize, int visibleMsecs);
+  QPointF nextStationaryPos(const QSizeF &itemSize, int visibleMsecs);
 
 private:
   SignalHub *hub_;
 
   qreal scale_;
+  QSize viewSize_;
 
   qint64 pauseTime_,
          resumeTime_;
@@ -73,9 +77,10 @@ private:
 
   // Schedule by lane
   enum { LaneCount = 200 }; // number of vertical lanes, large enough
-  Item flyLane_[LaneCount],
-       topLane_[LaneCount],
-       bottomLane_[LaneCount];
+  Item floatLane_[LaneCount];
+
+  qint64 topLaneTime_[LaneCount],
+         bottomLaneTime_[LaneCount];
   qint8 subLaneStyle_[LaneCount]; // qint8 must be able to hold AnnotationGraphicsItem::Style
 };
 

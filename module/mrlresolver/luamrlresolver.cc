@@ -269,8 +269,11 @@ LuaMrlResolver::decodeText(const QString &text, const char *encoding)
 QString
 LuaMrlResolver::formatTitle(const QString &title)
 {
-  return title.isEmpty() ? title : ::html_unescape(title)
+  return title.isEmpty() ? title :
+         title == "ニコニコ動画:Zero" ? QString() :
+    ::html_unescape(title)
     .remove(QRegExp("..ニコニコ動画\\(原宿\\)$"))
+    .remove(QRegExp("..ニコニコ動画:Zero$"))
     .remove(QRegExp(" - 嗶哩嗶哩 - .*"))
     .remove(QRegExp(" - Acfun - .*"))
     .remove(QRegExp(" - AcFun.tv$"))

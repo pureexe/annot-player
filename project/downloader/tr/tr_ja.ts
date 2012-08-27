@@ -243,6 +243,49 @@
     </message>
 </context>
 <context>
+    <name>AcLocalizer</name>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="21"/>
+        <source>Play</source>
+        <translation>再生</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="29"/>
+        <source>Browse</source>
+        <translation>ブラウズ</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="37"/>
+        <source>Download</source>
+        <translation>ダウンロード</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="45"/>
+        <source>Translate</source>
+        <translation>翻訳</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="53"/>
+        <source>Update</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="61"/>
+        <source>Readme</source>
+        <translation>説明書</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="69"/>
+        <source>Changes</source>
+        <translation>更新履歴</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="77"/>
+        <source>License</source>
+        <translation>著作権</translation>
+    </message>
+</context>
+<context>
     <name>AcLocationManager</name>
     <message>
         <location filename="../../common/acpaths.cc" line="59"/>
@@ -679,7 +722,7 @@
         <translation>URLの解析に失敗した</translation>
     </message>
     <message>
-        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="328"/>
+        <location filename="../../../module/mrlresolver/luamrlresolver.cc" line="331"/>
         <source>nicovideo.jp account is required to resolve URL</source>
         <translation>ニコアカウントを入力してください</translation>
     </message>

@@ -126,7 +126,7 @@ namespace { // anonymous, vlc event callbacks
     _signal(const struct libvlc_event_t *event, void *media_player_instance) \
     { \
       DOUT("enter"); \
-      Q_UNUSED(event); \
+      Q_UNUSED(event) \
       Player *p = static_cast<Player *>(media_player_instance); \
       Q_ASSERT(p); \
       p->emit_##_signal(); \
@@ -150,7 +150,7 @@ namespace { // anonymous, vlc event callbacks
     lengthChanged(const struct libvlc_event_t *event, void *media_player_instance)
     {
       DOUT("enter");
-      Q_UNUSED(event);
+      Q_UNUSED(event)
       Player *p = static_cast<Player *>(media_player_instance);
       Q_ASSERT(p);
       p->emit_lengthChanged();
@@ -165,7 +165,7 @@ namespace { // anonymous, vlc event callbacks
     errorEncountered(const struct libvlc_event_t *event, void *media_player_instance)
     {
       DOUT("enter");
-      Q_UNUSED(event);
+      Q_UNUSED(event)
       Player *p = static_cast<Player *>(media_player_instance);
       Q_ASSERT(p);
       //p->emit_errorEncountered();
@@ -206,8 +206,8 @@ namespace { // anonymous, vlccore callbacks
                 vlc_value_t oldval, vlc_value_t newval, void *p_data )
     {
       //qDebug() << "mouse-moved";
-      Q_UNUSED(psz_var); // Q_ASSERT(psz_var == "mouse-moved");
-      Q_UNUSED(oldval);
+      Q_UNUSED(psz_var) // Q_ASSERT(psz_var == "mouse-moved");
+      Q_UNUSED(oldval)
 
       if (ignoreNextMove_) {
         ignoreNextMove_ = false;
@@ -266,7 +266,7 @@ namespace { // anonymous, vlccore callbacks
                       vlc_value_t oldval, vlc_value_t newval, void *p_data)
     {
       //qDebug() << "mouse-button-down" << newval.i_int;
-      Q_UNUSED(psz_var); // Q_ASSERT(psz_var == "mouse-button-down");
+      Q_UNUSED(psz_var) // Q_ASSERT(psz_var == "mouse-button-down");
 
       qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
 
@@ -1363,7 +1363,7 @@ Player::setSubtitleFromFile(const QString &fileName)
 #endif // Q_OS_WIN
 
   DOUT("opening subtitle:" << path);
-  if (d_->externalSubtitles().indexOf(path) >= 0) {
+  if (d_->externalSubtitles().contains(path)) {
     DOUT("subtitle already loaded");
     DOUT("exit");
     return true;

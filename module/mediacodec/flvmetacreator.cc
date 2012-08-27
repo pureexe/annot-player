@@ -81,7 +81,7 @@ FlvMetaCreator::parse()
   }
 
   quint32 flags = in_->readUInt8(&ok); CHECK_OK;
-  Q_UNUSED(flags); // supposed to be 0x5 for FLV with both a/v tracks
+  Q_UNUSED(flags) // supposed to be 0x5 for FLV with both a/v tracks
   DOUT("FLV flags =" << flags);
 
   qint64 dataOffset = in_->readUInt32(&ok); CHECK_OK;

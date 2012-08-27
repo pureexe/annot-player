@@ -201,7 +201,7 @@ void
 VlcHttpPlugin::close(vlc_object_t *p_this)
 {
   DOUT("enter");
-  Q_UNUSED(p_this);
+  Q_UNUSED(p_this)
   //closeSession();
   enum { timeout = 2000 };
   QEventLoop loop;
@@ -346,7 +346,7 @@ int
 VlcHttpPlugin::control(access_t *p_access, int i_query, va_list args)
 {
   //DOUT("enter: i_query =" << i_query);
-  Q_UNUSED(p_access);
+  Q_UNUSED(p_access)
   Q_ASSERT(session_);
   //access_sys_t *p_sys = p_access->p_sys;
   bool     *pb_bool;

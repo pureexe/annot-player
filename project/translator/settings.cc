@@ -22,6 +22,9 @@
 #define SK_SIZE         "Size"
 
 #define SK_LANG         "LanguageIndex"
+#define SK_DICT         "Dictionary"
+#define SK_TOP          "Top"
+#define SK_TRANSLATOR   "Translator"
 
 // - Constructions -
 
@@ -59,5 +62,29 @@ Settings::languageIndex() const
 void
 Settings::setLanguageIndex(int value)
 { setValue(SK_LANG, value); }
+int
+
+Settings::dictionary() const
+{ return value(SK_DICT).toInt(); }
+
+void
+Settings::setDictionary(int value)
+{ setValue(SK_DICT, value); }
+
+bool
+Settings::windowOnTop() const
+{ return value(SK_TOP, true).toBool(); }
+
+void
+Settings::setWindowOnTop(bool value)
+{ setValue(SK_TOP, value); }
+
+void
+Settings::setTranslationServices(ulong value)
+{ setValue(SK_TRANSLATOR, uint(value)); }
+
+ulong
+Settings::translationServices() const
+{ return value(SK_TRANSLATOR).toUInt(); }
 
 // EOF

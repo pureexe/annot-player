@@ -75,7 +75,7 @@ AnnotationServerAgent::login(const QString &userName, const QString &passwordDig
 
   bool updated = isSoftwareUpdated();
 #ifndef DEBUG
-  Q_UNUSED(updated);
+  Q_UNUSED(updated)
 #endif // DEBUG
   DOUT("isSoftwareUpdated =" << updated);
 
@@ -489,7 +489,7 @@ AnnotationServerAgent::submitLiveAnnotation(const Annotation &annot)
   DOUT("exit: ret =" << ret);
   return ret;
   */
-  Q_UNUSED(annot);
+  Q_UNUSED(annot)
   return 0;
 }
 
@@ -510,7 +510,7 @@ AnnotationServerAgent::submitLiveAnnotationText(const QString &text)
   DOUT("exit: ret =" << ret);
   return ret;
   */
-  Q_UNUSED(text);
+  Q_UNUSED(text)
   return 0;
 }
 

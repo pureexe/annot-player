@@ -65,7 +65,7 @@ GoogleTranslator::releaseWebPage(QWebPage *page)
 
 // - Translate -
 
-QUrl
+QString
 GoogleTranslator::translateUrl(const QString &text, const QString &to, const QString &from)
 {
   return QString("http://translate.google.com/#%1|%2|%3")
@@ -80,13 +80,13 @@ GoogleTranslator::translate(const QString &text, const QString &to, const QStrin
   if (!isEnabled())
     return;
   DOUT("enter");
-  QUrl query = translateUrl(text, to, from);
-  DOUT("query =" << query);
+  QString url = translateUrl(text, to, from);
+  DOUT("url =" << url);
 
   QWebPage *page = createWebPage();
   connect(page, SIGNAL(loadFinished(bool)),
           new detail::ProcessWebPage(page, this), SLOT(trigger(bool)));
-  page->mainFrame()->load(query);
+  page->mainFrame()->load(url);
   DOUT("exit");
 }
 
@@ -103,6 +103,7 @@ GoogleTranslator::processWebPage(QWebPage *page, bool success)
       QString t = e.toPlainText();
       if (!t.isEmpty()) {
         emit translated(t);
+        DOUT("exit: ok");
         return;
       }
     }

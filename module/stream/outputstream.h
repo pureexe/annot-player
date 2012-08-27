@@ -13,7 +13,7 @@ class OutputStream
 public:
   virtual ~OutputStream() { }
 
-  virtual void setBufferSize(qint64 size) { Q_UNUSED(size); }
+  virtual void setBufferSize(qint64 size) { Q_UNUSED(size) }
 
   virtual qint64 availableSize() const { return 0; }
 

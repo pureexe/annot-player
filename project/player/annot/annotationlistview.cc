@@ -699,7 +699,7 @@ void TextEdit::filePrintPreview()
 void TextEdit::printPreview(QPrinter *printer)
 {
 #ifdef QT_NO_PRINTER
-  Q_UNUSED(printer);
+  Q_UNUSED(printer)
 #else
   textEdit_->print(printer);
 #endif

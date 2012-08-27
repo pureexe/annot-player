@@ -582,7 +582,7 @@ MainWindow::newWindow()
   bool ok = false;
   QString app = QCoreApplication::applicationFilePath();
 #ifdef Q_OS_MAC
-  Q_UNUSED(app);
+  Q_UNUSED(app)
   //ok = QtMac::open(app);
 #elif defined(Q_OS_WIN)
   ok = QProcess::startDetached('"' + app + '"');
@@ -660,7 +660,7 @@ void
 MainWindow::loadCookieJar()
 {
   bool ok = QtExt::readCookiesfromFile(cookieJar(), G_PATH_COOKIE);
-  Q_UNUSED(ok);
+  Q_UNUSED(ok)
   DOUT("ok =" << ok);
 }
 
@@ -668,7 +668,7 @@ void
 MainWindow::saveCookieJar()
 {
   bool ok = QtExt::writeCookiesToFile(cookieJar(), G_PATH_COOKIE);
-  Q_UNUSED(ok);
+  Q_UNUSED(ok)
   DOUT("ok =" << ok);
 }
 

@@ -22,8 +22,8 @@
 GameView::GameView(GameLibrary *lib, QWidget *parent)
   : Base(parent, WINDOW_FLAGS), library_(lib)
 {
-  setWindowTitle(tr("Game Preferences"));
   createLayout();
+  updateTitle();
 }
 
 void
@@ -70,13 +70,19 @@ GameView::setDigest(const QString &digest)
 
 void
 GameView::updateGame()
-{ game_ = library_->findGame(digest_); }
+{ game_ = library_->findGameByDigest(digest_); }
 
 void
 GameView::updateLabels()
 {
   encodingLabel_->setText(game_.hasEncoding() ? game_.encoding() : QString("-"));
   functionLabel_->setText(game_.hasFunction() ? game_.function() : QString("-"));
+}
+
+void
+GameView::updateTitle()
+{
+  setWindowTitle(game_.hasTitle() ? game_.title() : tr("Game Preferences"));
 }
 
 // - Actions -
@@ -86,6 +92,7 @@ GameView::refresh()
 {
   updateGame();
   updateLabels();
+  updateTitle();
   if (game_.hasDigest())
     showMessage(tr("found 1 game"));
   else

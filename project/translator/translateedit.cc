@@ -4,6 +4,9 @@
 #include "translateedit.h"
 #include "project/common/acss.h"
 #include "module/qtext/texthighlighter.h"
+#include <QtGui/QAction>
+#include <QtGui/QContextMenuEvent>
+#include <QtGui/QMenu>
 
 //#define DEBUG "translateedit"
 #include "module/debug/debug.h"
@@ -19,6 +22,12 @@ TranslateEdit::TranslateEdit(QWidget *parent)
   setStyleSheet(ACSS_TEXTEDIT);
 
   highlighter_ = new QtExt::TextHighlighter(this);
+
+  translateAct_ = new QAction(tr("Translate"), this);
+  connect(translateAct_, SIGNAL(triggered()), SLOT(invalidateSelectedText()));
+
+  clearAct_ = new QAction(tr("Clear All"), this);
+  connect(clearAct_, SIGNAL(triggered()), SLOT(clear()));
 
   connect(this, SIGNAL(selectionChanged()), SLOT(updateSelectedText()));
 }
@@ -39,9 +48,16 @@ TranslateEdit::updateSelectedText()
 
 // - Events -
 
-//void
-//TranslateEdit::contextMenuEvent(QContextMenuEvent *e)
-//{
-//}
+void
+TranslateEdit::contextMenuEvent(QContextMenuEvent *e)
+{
+  QMenu *m = createStandardContextMenu();
+  m->addSeparator();
+  m->addAction(clearAct_);
+  m->addAction(translateAct_);
+  m->exec(e->globalPos());
+  e->accept();
+}
+
 
 // EOF

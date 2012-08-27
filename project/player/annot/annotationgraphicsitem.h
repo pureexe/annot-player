@@ -149,7 +149,7 @@ protected slots:
   void translateToRussian();
 
   void fly();
-  void stay(Style location = TopStyle);
+  void stay();
   void removeLater(int msecs);
 
   void edit();
@@ -203,7 +203,7 @@ protected:
 private:
   void setDefaultStyle();
 
-  int nextY(int visibleTime, Style style) const;
+  int nextY(int visibleTime) const;
 
 private:
   bool metaVisible_;
@@ -228,6 +228,7 @@ private:
                      *appearOpacityAni_, *fadeAni_;
 
   QPointF dragPos_;
+  qint64 pressTime_;
 };
 
 #endif // ANNOTATIONGRAPHICSITEM_H

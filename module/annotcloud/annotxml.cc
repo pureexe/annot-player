@@ -8,7 +8,7 @@ QDomDocument
 AnnotCloud::
 AnnotationXmlParser::toDomDocument(const AnnotationList &annots) const
 {
-  Q_UNUSED(annots);
+  Q_UNUSED(annots)
   // CHECKPOINT
   QDomDocument doc;
   return doc;

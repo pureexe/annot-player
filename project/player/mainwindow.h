@@ -71,7 +71,6 @@ class MouseClickEventListener;
 // Views
 class AnnotationGraphicsView;
 class AnnotationAnalyticsView;
-class AnnotationEditor;
 class AnnotationListView;
 //class CommentView;
 class MainPlayerUi;
@@ -86,28 +85,16 @@ class EmbeddedPlayerUi;
 class EmbeddedCanvas;
 class PlayerUi;
 class Preferences;
-class MessageView;
+class ProcessFilter;
 class SyncView;
 class BacklogDialog;
 class ConsoleDialog;
-class TokenView;
 class UserAnalyticsView;
 class VideoView;
 
 // Dialogs
-class AnnotationCountDialog;
-class BlacklistView;
-class DeviceDialog;
-class HelpDialog;
-class LiveDialog;
-class LoginDialog;
 //class NetworkProxyDialog;
-class PickDialog;
 //class SiteAccountView;
-class MediaInfoView;
-class SyncDialog;
-class TimeInputDialog;
-class UserView;
 class UrlDialog;
 
 // MainWindow
@@ -135,9 +122,7 @@ public:
   explicit MainWindow(bool unique = true, QWidget *parent = nullptr, Qt::WindowFlags f = 0);
   //bool isValid() const;
 
-public:
-  void move(const QPoint &pos) { Base::move(pos); emit posChanged(); }
-  void move(int x, int y) { Base::move(x, y); emit posChanged(); }
+  void launch(const QStringList &args);
 
   // - Signals -
 signals:
@@ -195,7 +180,6 @@ public:
   bool prefixLineHasFocus() const;
 
   bool isTranslateEnabled() const;
-  bool isSubtitleOnTop() const;
 
   bool isAutoPlayNext() const;
   bool repeatCurrent() const;
@@ -222,7 +206,6 @@ public slots:
 
   //void ensureWindowOnTop();
 
-  void setSubtitleOnTop(bool t);
   void setSubtitleColorToDefault();
   void setSubtitleColorToWhite();
   void setSubtitleColorToCyan();
@@ -408,6 +391,7 @@ protected slots:
 
   // - Annotation transformations -
 protected slots:
+  void resetAnnotationScale();
   void annotationScaleUp();
   void annotationScaleDown();
   void annotationRotateUp();
@@ -425,9 +409,7 @@ protected:
 protected slots:
   void showUserAnalytics(qint64 userId);
 
-  void showLoginDialog();
-  void hideLoginDialog();
-  void setLoginDialogVisible(bool visible);
+  void showLogin();
 
   void setMagnifierVisible(bool visible);
   void showMagnifier() { setMagnifierVisible(true); }
@@ -439,61 +421,40 @@ protected slots:
 
   //void setNetworkProxyDialogVisible(bool visible);
 
-  void setUserViewVisible(bool visible);
+  void showUser();
 
-  void setAnnotationEditorVisible(bool visible);
-  void toggleAnnotationEditorVisible();
+  void showAnnotationEditor();
 
-  void setBlacklistViewVisible(bool visible);
-  void showBlacklistView() { setBlacklistViewVisible(true); }
+  void showBlacklist();
 
-  void setTokenViewVisible(bool t);
-  void toggleTokenViewVisible();
+  void showAnnotationSource();
 
-  void setAnnotationBrowserVisible(bool t);
-  void toggleAnnotationBrowserVisible();
+  void showAnnotationBrowser();
 
-  void setAnnotationAnalyticsViewVisible(bool visible);
-  void toggleAnnotationAnalyticsViewVisible();
-  void showAnnotationAnalyticsView() { setAnnotationAnalyticsViewVisible(true); }
+  void showAnnotationAnalytics();
 
   void openHomePage();
 
-  void showSeekDialog();
-  void hideSeekDialog();
-  void setSeekDialogVisible(bool visible);
+  void showSeek();
 
   void showAudioDelayDialog();
 
-  void setAnnotationCountDialogVisible(bool visible);
-
-  void showLiveDialog();
-  void hideLiveDialog();
-  void setLiveDialogVisible(bool visible);
-
-  void showSyncDialog();
-  void hideSyncDialog();
-  void setSyncDialogVisible(bool visible);
+  void showAnnotationCount();
 
   //void showCommentView();
   //void hideCommentView();
   //void setCommentViewVisible(bool visible);
 
-  void showWindowPickDialog() { setWindowPickDialogVisible(true); }
-  void setWindowPickDialogVisible(bool visible);
+  void showWindowPicker();
+  void showProcess();
 
-  void showProcessPickDialog() { setProcessPickDialogVisible(true); }
-  void setProcessPickDialogVisible(bool visible);
+  void showBacklog();
 
-  void setBacklogDialogVisible(bool visible);
-  void showBacklogDialog() { setBacklogDialogVisible(true); }
-
-  void setConsoleDialogVisible(bool visible);
+  void showConsole();
 
   void showDownloader();
 
-  void setMediaInfoViewVisible(bool visible);
-  void showMediaInfoView() { setMediaInfoViewVisible(true); }
+  void showMediaInfo();
 
   //void setSiteAccountViewVisible(bool visible);
 protected slots:
@@ -585,9 +546,16 @@ public slots:
   // - Translation -
 protected slots:
   void showTranslation(const QString &text, int service);
-  void showGoogleTranslation(const QString &text) { showTranslation(text, TranslatorManager::Google); }
-  void showMicrosoftTranslation(const QString &text) { showTranslation(text, TranslatorManager::Microsoft); }
   void showRomajiTranslation(const QString &text) { showTranslation(text, TranslatorManager::Romaji); }
+  void showMicrosoftTranslation(const QString &text) { showTranslation(text, TranslatorManager::Microsoft); }
+  void showGoogleTranslation(const QString &text) { showTranslation(text, TranslatorManager::Google); }
+  void showYahooTranslation(const QString &text) { showTranslation(text, TranslatorManager::Yahoo); }
+  void showFresheyeTranslation(const QString &text);
+  void showOcnTranslation(const QString &text);
+  void showExciteTranslation(const QString &text) { showTranslation(text, TranslatorManager::Excite); }
+  void showSdlTranslation(const QString &text) { showTranslation(text, TranslatorManager::Sdl); }
+  void showNiftyTranslation(const QString &text) { showTranslation(text, TranslatorManager::Nifty); }
+  void showInfoseekTranslation(const QString &text) { showTranslation(text, TranslatorManager::Infoseek); }
 
   // - Remote annotations -
 public slots:
@@ -625,6 +593,10 @@ protected slots:
   void updatePlaylistMenu();
 
   // - Events -
+public:
+  void move(const QPoint &pos) { Base::move(pos); emit posChanged(); }
+  void move(int x, int y) { Base::move(x, y); emit posChanged(); }
+
 public slots:
   void setVisible(bool visible) override;
   void dispose();
@@ -817,21 +789,21 @@ public slots:
 
 #ifdef AC_ENABLE_GAME
 public slots:
-  void showSyncView();
-  void hideSyncView();
-  void setSyncViewVisible(bool visible);
+  void showSyncGame(bool showProcess = true);
 
-  void showRecentMessageView();
-  void hideRecentMessageView();
-  void setRecentMessageViewVisible(bool visible);
+  void showGamePreferences();
+
+  void openCurrentGame();
 
 private:
   SyncView *syncView_;
-  MessageView *recentMessageView_;
   MessageHandler *messageHandler_;
+  ProcessFilter *processFilter_;
 
-  QAction *toggleSyncViewVisibleAct_,
-          *toggleRecentMessageViewVisibleAct_;
+  QAction *showSyncGameAct_,
+          *showGamePreferencesAct_,
+          //*toggleAutoOpenCurrentGameAct_,
+          *openCurrentGameAct_;
 #endif // AC_ENABLE_GAME
 
   // - Helpers -
@@ -889,9 +861,16 @@ protected:
 
   // - Translation -
 protected slots:
-  void toggleGoogleTranslator(bool t);
-  void toggleMicrosoftTranslator(bool t);
   void toggleRomajiTranslator(bool t);
+  void toggleMicrosoftTranslator(bool t);
+  void toggleGoogleTranslator(bool t);
+  void toggleYahooTranslator(bool t);
+  void toggleFresheyeTranslator(bool t);
+  void toggleOcnTranslator(bool t);
+  void toggleExciteTranslator(bool t);
+  void toggleSdlTranslator(bool t);
+  void toggleNiftyTranslator(bool t);
+  void toggleInfoseekTranslator(bool t);
 
   // - Rubber band -
 protected slots:
@@ -933,6 +912,8 @@ private:
   void createDockWindows();
   void createConnections();
   void installEventFilters();
+  void installLogger();
+  void installPlayerLogger();
 
   // - Attributes -
 private:
@@ -1007,7 +988,6 @@ private:
 
   //OsdDock *osdDock_;
   OsdWindow *osdWindow_;
-  TokenView *tokenView_;
   VideoView *videoView_;
 
   MediaLibraryView *libraryWindow_;
@@ -1021,8 +1001,6 @@ private:
   AnnotationGraphicsView *annotationView_;
   AnnotationAnalyticsView *annotationAnalyticsView_;
   UserAnalyticsView *userAnalyticsView_;
-  AnnotationListView *annotationBrowser_;
-  AnnotationEditor *annotationEditor_;
   AnnotationFilter *annotationFilter_;
 
   QtExt::MouseRubberBand *pauseRubberBand_,
@@ -1031,24 +1009,10 @@ private:
   QtExt::CircularRubberBand *attractRubberBand_,
                             *expelRubberBand_;
 
-  BlacklistView *blacklistView_;
-  //CommentView *commentView_;
-  BacklogDialog *backlogDialog_;
-  ConsoleDialog *consoleDialog_;
-
-  AnnotationCountDialog *annotationCountDialog_;
-  DeviceDialog *deviceDialog_;
-  HelpDialog *helpDialog_;
-  LoginDialog *loginDialog_;
-  LiveDialog *liveDialog_;
   //NetworkProxyDialog *networkProxyDialog_;
-  PickDialog *processPickDialog_;
-  TimeInputDialog *seekDialog_;
-  SyncDialog *syncDialog_;
-  PickDialog *windowPickDialog_;
   //SiteAccountView *siteAccountView_;
-  MediaInfoView *mediaInfoView_;
-  UserView *userView_;
+  ConsoleDialog *consoleDialog_;
+  AnnotationListView *annotationBrowser_;
 
   QPoint dragPos_,
          pressedPos_,
@@ -1126,9 +1090,16 @@ private:
   QList<QAction*> contextMenuActions_;
 
   QMenu *translatorMenu_;
-  QAction *toggleGoogleTranslatorAct_,
+  QAction *toggleExciteTranslatorAct_,
+          *toggleGoogleTranslatorAct_,
           *toggleMicrosoftTranslatorAct_,
-          *toggleRomajiTranslatorAct_;
+          *toggleYahooTranslatorAct_,
+          *toggleFresheyeTranslatorAct_,
+          *toggleOcnTranslatorAct_,
+          *toggleRomajiTranslatorAct_,
+          *toggleSdlTranslatorAct_,
+          *toggleNiftyTranslatorAct_,
+          *toggleInfoseekTranslatorAct_;
 
   QAction *showLibraryAct_;
 
@@ -1203,31 +1174,32 @@ private:
           *snapshotAct_,
           *snapshotAllAct_,
           *actualSizeAct_,
-          *togglePreferMotionlessAnnotationAct_,
-          *toggleSaveAnnotationFileAct_,
-          *toggleAnnotationAnalyticsViewVisibleAct_,
-          *toggleAnnotationBandwidthLimitedAct_,
+          *toggleMenuBarVisibleAct_,
           *toggleAnnotationVisibleAct_,
           *toggleAnnotationAvatarVisibleAct_,
           *toggleAnnotationMetaVisibleAct_,
-          *toggleAnnotationCountDialogVisibleAct_,
-          *toggleMagnifierVisibleAct_,
-          *toggleMenuBarVisibleAct_,
+          //*toggleAnnotationCountDialogVisibleAct_,
+          *toggleSubtitleVisibleAct_,
+          *toggleSubtitleAnnotationVisibleAct_,
+          *toggleNonSubtitleAnnotationVisibleAct_,
+          *togglePreferMotionlessAnnotationAct_,
+          *toggleSaveAnnotationFileAct_,
+          *toggleAnnotationBandwidthLimitedAct_,
           *toggleClipboardMonitorEnabledAct_,
-          //*toggleSiteAccountViewVisibleAct_,
           *toggleFullScreenModeAct_,
           *toggleEmbeddedModeAct_,
           *toggleMiniModeAct_,
           *toggleLiveModeAct_,
           *toggleSyncModeAct_,
-          *toggleSubtitleVisibleAct_,
-          *toggleSubtitleAnnotationVisibleAct_,
-          *toggleNonSubtitleAnnotationVisibleAct_,
           *toggleTranslateAct_,
           *toggleSubtitleOnTopAct_,
           *toggleEmbeddedPlayerOnTopAct_,
           *toggleAutoPlayNextAct_,
           *toggleRepeatCurrentAct_,
+          *toggleAnnotationTraditionalChineseAct_,
+          *toggleMagnifierVisibleAct_,
+          //*toggleSiteAccountViewVisibleAct_,
+          *toggleAnnotationFilterEnabledAct_,
           *toggleNoRepeatAct_;
 
   QAction *nothingAfterFinishedAct_,
@@ -1252,24 +1224,20 @@ private:
   QAction *clearCacheAct_;
 
   QMenu   *gameMenu_;
-  QAction *toggleAnnotationBrowserVisibleAct_,
-          *toggleAnnotationEditorVisibleAct_,
-          *toggleTokenViewVisibleAct_,
-          *toggleLiveDialogVisibleAct_,
-          *toggleLoginDialogVisibleAct_,
-          //*toggleNetworkProxyDialogVisibleAct_,
-          *showWindowPickDialogAct_,
-          *showProcessDialogAct_,
-          *toggleSeekDialogVisibleAct_,
-          *toggleSyncDialogVisibleAct_,
-          *toggleMediaInfoViewVisibleAct_,
-          *toggleUserViewVisibleAct_,
-          *toggleBlacklistViewVisibleAct_,
-          *toggleBacklogDialogVisibleAct_,
-          *toggleDownloaderVisibleAct_,
-          *toggleConsoleDialogVisibleAct_,
-          *toggleAnnotationFilterEnabledAct_,
-          *toggleAnnotationTraditionalChineseAct_;
+  QAction *showAnnotationBrowserAct_,
+          *showAnnotationEditorAct_,
+          *showAnnotationSourceAct_,
+          *showAnnotationAnalyticsAct_,
+          *showLoginAct_,
+          *showWindowPickerAct_,
+          *showProcessAct_,
+          *showSeekAct_,
+          *showBlacklistAct_,
+          *showMediaInfoAct_,
+          *showUserAct_,
+          *showBacklogAct_,
+          *showDownloaderAct_,
+          *showConsoleAct_;
           //*toggleCommentViewVisibleAct_,
   QAction *toggleWindowTrackingAct_;
   WId lastTrackedWindow_;

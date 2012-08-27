@@ -423,12 +423,12 @@ typedef struct _LDR_DATA_TABLE_ENTRY
 
 typedef struct _PEB_LDR_DATA
 {
-  ULONG       Length;
-  BOOLEAN     Initialized;
-  PVOID       SsHandle;
-  LIST_ENTRY  InLoadOrderModuleList; // ref. to PLDR_DATA_TABLE_ENTRY->InLoadOrderModuleList
-  LIST_ENTRY  InMemoryOrderModuleList; // ref. to PLDR_DATA_TABLE_ENTRY->InMemoryOrderModuleList
-  LIST_ENTRY  InInitializationOrderModuleList; // ref. to PLDR_DATA_TABLE_ENTRY->InInitializationOrderModuleList
+  ULONG       Length;       // 0
+  BOOLEAN     Initialized;  // 4
+  PVOID       SsHandle;     // 8?
+  LIST_ENTRY  InLoadOrderModuleList;            // C, ref. to PLDR_DATA_TABLE_ENTRY->InLoadOrderModuleList
+  LIST_ENTRY  InMemoryOrderModuleList;          // 14, ref. to PLDR_DATA_TABLE_ENTRY->InMemoryOrderModuleList
+  LIST_ENTRY  InInitializationOrderModuleList;  // 1C, ref. to PLDR_DATA_TABLE_ENTRY->InInitializationOrderModuleList
 } PEB_LDR_DATA, *PPEB_LDR_DATA;
 
 typedef VOID NTSYSAPI (*PPEBLOCKROUTINE)(PVOID);

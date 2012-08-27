@@ -70,7 +70,7 @@ QUrl
 QtExt::
 NetworkCookieJarWithDomainAlias::toDomainUrl(const QUrl &url) const
 {
-  Q_UNUSED(url);
+  Q_UNUSED(url)
   QString ret = domain_;
   if (ret.startsWith('.'))
     ret.prepend("www");
@@ -83,7 +83,7 @@ QUrl
 QtExt::
 NetworkCookieJarWithDomainAlias::toAliasUrl(const QUrl &url) const
 {
-  Q_UNUSED(url);
+  Q_UNUSED(url)
   QString ret = alias_;
   if (ret.startsWith('.'))
     ret.prepend("www");

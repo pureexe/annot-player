@@ -15,7 +15,7 @@ namespace Bitwise { using namespace BigEndian; }
 void
 AacWriter::writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHeader)
 {
-  Q_UNUSED(writeHeader);
+  Q_UNUSED(writeHeader)
   if (chunk.size() < 1) return;
 
   if (chunk[0] == 0) { // Header

@@ -30,7 +30,7 @@ CommentView::urlForTokenId(qint64 mtid)
   //  mtid ? QString( "%1?mtid=%2").arg(G_TOKENVIEW_URL).arg(mtid)
   //       : G_STARTPAGE_URL
   //);
-  Q_UNUSED(mtid);
+  Q_UNUSED(mtid)
   return QString(G_STARTPAGE_URL);
 }
 

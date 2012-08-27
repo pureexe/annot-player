@@ -165,6 +165,49 @@
     </message>
 </context>
 <context>
+    <name>AcLocalizer</name>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="21"/>
+        <source>Play</source>
+        <translation>再生</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="29"/>
+        <source>Browse</source>
+        <translation>浏览</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="37"/>
+        <source>Download</source>
+        <translation>下载</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="45"/>
+        <source>Translate</source>
+        <translation>翻译</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="53"/>
+        <source>Update</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="61"/>
+        <source>Readme</source>
+        <translation>说明书</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="69"/>
+        <source>Changes</source>
+        <translation>更新履历</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocalizer.cc" line="77"/>
+        <source>License</source>
+        <translation>著作权</translation>
+    </message>
+</context>
+<context>
     <name>AcLocationManager</name>
     <message>
         <location filename="../../common/acpaths.cc" line="59"/>
@@ -327,216 +370,353 @@
     </message>
 </context>
 <context>
+    <name>DynamicOcnTranslator</name>
+    <message>
+        <location filename="../../../module/translator/dynamicocntranslator.cc" line="100"/>
+        <location filename="../../../module/translator/dynamicocntranslator.cc" line="113"/>
+        <location filename="../../../module/translator/dynamicocntranslator.cc" line="153"/>
+        <source>network error from OCN Honyaku</source>
+        <translation>无法连接OCN服务器</translation>
+    </message>
+</context>
+<context>
+    <name>ExciteTranslator</name>
+    <message>
+        <location filename="../../../module/translator/excitetranslator.cc" line="48"/>
+        <location filename="../../../module/translator/excitetranslator.cc" line="79"/>
+        <source>network error from Excite Honyaku</source>
+        <translation>无法连接Excite服务器</translation>
+    </message>
+</context>
+<context>
+    <name>FresheyeTranslator</name>
+    <message>
+        <location filename="../../../module/translator/fresheyetranslator.cc" line="64"/>
+        <location filename="../../../module/translator/fresheyetranslator.cc" line="91"/>
+        <source>network error from freshEYE Honyaku</source>
+        <translation>无法连接freshEYE服务器</translation>
+    </message>
+</context>
+<context>
     <name>GoogleTranslator</name>
     <message>
-        <location filename="../../../module/translator/googletranslator.cc" line="110"/>
+        <location filename="../../../module/translator/googletranslator.cc" line="111"/>
         <source>network error from Google Translator</source>
         <translation>无法连接Google服务器</translation>
     </message>
 </context>
 <context>
+    <name>InfoseekTranslator</name>
+    <message>
+        <location filename="../../../module/translator/infoseektranslator.cc" line="92"/>
+        <location filename="../../../module/translator/infoseektranslator.cc" line="118"/>
+        <source>network error from Infoseek Honyaku</source>
+        <translation>无法连接Infoseek服务器</translation>
+    </message>
+</context>
+<context>
     <name>JdicTranslator</name>
     <message>
-        <location filename="../../../module/translator/jdictranslator.cc" line="109"/>
+        <location filename="../../../module/translator/jdictranslator.cc" line="108"/>
         <location filename="../../../module/translator/jdictranslator.cc" line="135"/>
         <source>network error from WWWJDIC Translator</source>
         <translation>无法连接WWWJDIC服务器</translation>
     </message>
 </context>
 <context>
+    <name>KotobankTranslator</name>
+    <message>
+        <location filename="../../../module/translator/kotobanktranslator.cc" line="59"/>
+        <location filename="../../../module/translator/kotobanktranslator.cc" line="74"/>
+        <source>network error from Kotobank Translator</source>
+        <translation>无法连接コトバンク服务器</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/kotobanktranslator.cc" line="101"/>
+        <location filename="../../../module/translator/kotobanktranslator.cc" line="129"/>
+        <source>network error from KOTOBANK Translator</source>
+        <translation>无法连接コトバンク服务器</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="46"/>
+        <location filename="../mainwindow.cc" line="75"/>
         <source>Annot Translator</source>
         <translation>とある翻訳使い</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="113"/>
+        <location filename="../mainwindow.cc" line="169"/>
         <source>Translate</source>
         <translation>翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="115"/>
+        <location filename="../mainwindow.cc" line="172"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="115"/>
+        <location filename="../mainwindow.cc" line="172"/>
         <source>Automatically translate selected text</source>
         <translation>自动翻译选定文本</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="116"/>
+        <location filename="../mainwindow.cc" line="173"/>
         <source>Clipboard</source>
         <translation>剪贴板</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="116"/>
+        <location filename="../mainwindow.cc" line="173"/>
         <source>Monitor and translate clipboard text</source>
         <translation>监视和翻译剪贴板</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="117"/>
+        <location filename="../mainwindow.cc" line="174"/>
         <source>Top</source>
         <translation>置顶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="117"/>
+        <location filename="../mainwindow.cc" line="174"/>
         <source>Window stays on top</source>
         <translation>窗口置顶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="119"/>
+        <location filename="../mainwindow.cc" line="176"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="120"/>
+        <location filename="../mainwindow.cc" line="177"/>
         <source>English</source>
         <translation>英文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="121"/>
+        <location filename="../mainwindow.cc" line="178"/>
         <source>Chinese</source>
         <translation>中文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="122"/>
+        <location filename="../mainwindow.cc" line="179"/>
         <source>Simplified Chinese</source>
         <translation>简体中文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="123"/>
+        <location filename="../mainwindow.cc" line="180"/>
         <source>Korean</source>
         <translation>朝鲜文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="124"/>
+        <location filename="../mainwindow.cc" line="181"/>
         <source>French</source>
         <translation>法文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="125"/>
+        <location filename="../mainwindow.cc" line="182"/>
         <source>German</source>
         <translation>德文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="126"/>
+        <location filename="../mainwindow.cc" line="183"/>
         <source>Italian</source>
         <translation>意大利文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="127"/>
+        <location filename="../mainwindow.cc" line="184"/>
         <source>Spanish</source>
         <translation>西班牙文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="128"/>
+        <location filename="../mainwindow.cc" line="185"/>
         <source>Portuguese</source>
         <translation>葡萄牙文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="129"/>
+        <location filename="../mainwindow.cc" line="186"/>
         <source>Russian</source>
         <translation>俄文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="130"/>
+        <location filename="../mainwindow.cc" line="187"/>
         <source>Japanese</source>
         <translation>日文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="138"/>
-        <source>WWWJDIC</source>
-        <translation>辞书</translation>
+        <location filename="../mainwindow.cc" line="195"/>
+        <source>Kotobank</source>
+        <translation>日文辞书</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="138"/>
+        <location filename="../mainwindow.cc" line="195"/>
+        <source>Kotobank Translator</source>
+        <translation>`コトバンク翻訳</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="196"/>
+        <source>WWWJDIC</source>
+        <translation>英文辞书</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="196"/>
         <source>WWWJDIC Translator</source>
         <translation>WWWJDIC翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="139"/>
+        <location filename="../mainwindow.cc" line="197"/>
         <source>Romaji</source>
         <translation>罗马字</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="139"/>
+        <location filename="../mainwindow.cc" line="197"/>
         <source>Romaji Translator</source>
         <translation>罗马字翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="140"/>
+        <location filename="../mainwindow.cc" line="198"/>
         <source>Microsoft</source>
         <translation>微软</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="140"/>
+        <location filename="../mainwindow.cc" line="198"/>
         <source>Microsoft Translator</source>
         <translation>微软翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="141"/>
+        <location filename="../mainwindow.cc" line="199"/>
         <source>Google</source>
         <translation>谷歌</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="141"/>
+        <location filename="../mainwindow.cc" line="199"/>
         <source>Google Translator</source>
         <translation>谷歌翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="287"/>
+        <location filename="../mainwindow.cc" line="201"/>
+        <source>Yahoo!</source>
+        <translation>Yahoo!</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="201"/>
+        <source>Yahoo! Honyaku</source>
+        <translation>Yahoo!翻译</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="202"/>
+        <source>freshEYE</source>
+        <translation>freshEYE</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="202"/>
+        <source>freshEYE Honyaku</source>
+        <translation>フレッシュアイ翻译</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="203"/>
+        <source>OCN</source>
+        <translation>OCN</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="203"/>
+        <source>OCN Honyaku</source>
+        <translation>OCN翻译</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="204"/>
+        <source>Excite</source>
+        <translation>Excite</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="204"/>
+        <source>Excite Honyaku</source>
+        <translation>エキサイト翻訳</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="205"/>
+        <source>SDL</source>
+        <translation>SDL</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="205"/>
+        <source>SDL Translator</source>
+        <translation>SDL翻译</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="206"/>
+        <source>@nifty</source>
+        <translation>@nifty</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="206"/>
+        <source>@nifty honyaku</source>
+        <translation>@nifty翻译</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="200"/>
+        <source>Infoseek</source>
+        <translation>Infoseek</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="200"/>
+        <source>Infoseek Honyaku</source>
+        <translation>Infoseek翻译</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="365"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="289"/>
+        <location filename="../mainwindow.cc" line="367"/>
         <source>Preferences</source>
         <translation>偏好</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="295"/>
+        <location filename="../mainwindow.cc" line="373"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="301"/>
+        <location filename="../mainwindow.cc" line="379"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="309"/>
+        <location filename="../mainwindow.cc" line="387"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="319"/>
+        <location filename="../mainwindow.cc" line="397"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="328"/>
+        <location filename="../mainwindow.cc" line="406"/>
         <source>&amp;Settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="329"/>
+        <location filename="../mainwindow.cc" line="407"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="331"/>
+        <location filename="../mainwindow.cc" line="409"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="333"/>
+        <location filename="../mainwindow.cc" line="411"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="604"/>
+        <location filename="../mainwindow.cc" line="587"/>
+        <source>translate</source>
+        <translation>翻译</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="783"/>
         <source>opening</source>
         <translation>正在打开</translation>
     </message>
@@ -548,6 +728,24 @@
         <location filename="../../../module/translator/microsofttranslator.cc" line="131"/>
         <source>network error from Microsoft Translator</source>
         <translation>无法连接Microsoft服务器</translation>
+    </message>
+</context>
+<context>
+    <name>NiftyTranslator</name>
+    <message>
+        <location filename="../../../module/translator/niftytranslator.cc" line="48"/>
+        <location filename="../../../module/translator/niftytranslator.cc" line="71"/>
+        <source>network error from @nifty honyaku</source>
+        <translation>无法连接nifty服务器</translation>
+    </message>
+</context>
+<context>
+    <name>OcnTranslator</name>
+    <message>
+        <location filename="../../../module/translator/ocntranslator.cc" line="83"/>
+        <location filename="../../../module/translator/ocntranslator.cc" line="110"/>
+        <source>network error from OCN Honyaku</source>
+        <translation>无法连接OCN服务器</translation>
     </message>
 </context>
 <context>
@@ -641,10 +839,19 @@
 <context>
     <name>RomajiTranslator</name>
     <message>
-        <location filename="../../../module/translator/romajitranslator.cc" line="94"/>
-        <location filename="../../../module/translator/romajitranslator.cc" line="145"/>
+        <location filename="../../../module/translator/romajitranslator.cc" line="92"/>
+        <location filename="../../../module/translator/romajitranslator.cc" line="144"/>
         <source>network error from Romaji Translator</source>
         <translation>无法连接Romaji服务器</translation>
+    </message>
+</context>
+<context>
+    <name>SdlTranslator</name>
+    <message>
+        <location filename="../../../module/translator/sdltranslator.cc" line="48"/>
+        <location filename="../../../module/translator/sdltranslator.cc" line="55"/>
+        <source>network error from SDL Translator</source>
+        <translation>无法连接SDL服务器</translation>
     </message>
 </context>
 <context>
@@ -706,6 +913,32 @@
     </message>
 </context>
 <context>
+    <name>TranslateBrowser</name>
+    <message>
+        <location filename="../translatebrowser.cc" line="26"/>
+        <source>Translate</source>
+        <translation>翻译</translation>
+    </message>
+    <message>
+        <location filename="../translatebrowser.cc" line="31"/>
+        <source>Clear All</source>
+        <translation>清空全部</translation>
+    </message>
+</context>
+<context>
+    <name>TranslateEdit</name>
+    <message>
+        <location filename="../translateedit.cc" line="26"/>
+        <source>Translate</source>
+        <translation>翻译</translation>
+    </message>
+    <message>
+        <location filename="../translateedit.cc" line="29"/>
+        <source>Clear All</source>
+        <translation>清空全部</translation>
+    </message>
+</context>
+<context>
     <name>TrayIcon</name>
     <message>
         <location filename="../trayicon.cc" line="15"/>
@@ -726,6 +959,15 @@
         <location filename="../trayicon.cc" line="27"/>
         <source>Quit</source>
         <translation>退出</translation>
+    </message>
+</context>
+<context>
+    <name>YahooTranslator</name>
+    <message>
+        <location filename="../../../module/translator/yahootranslator.cc" line="87"/>
+        <location filename="../../../module/translator/yahootranslator.cc" line="114"/>
+        <source>network error from Yahoo! Honyaku</source>
+        <translation>无法连接Yahoo服务器</translation>
     </message>
 </context>
 </TS>

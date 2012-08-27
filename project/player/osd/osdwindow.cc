@@ -120,7 +120,7 @@ OsdWindow::showInOsdMode()
 void
 OsdWindow::paintEvent(QPaintEvent *event)
 {
-  Q_UNUSED(event);
+  Q_UNUSED(event)
 
   static QPoint pos(100, 100);
   QString text = tr("Love U, Jank!");

@@ -47,7 +47,7 @@ QtExt::trashFile(const QString &fileName)
 #elif defined(WITH_MAC_QTCOCOA)
   return QtCocoa::trashFile(fileName);
 #else
-  Q_UNUSED(fileName);
+  Q_UNUSED(fileName)
   return false;
 #endif // Q_OS_WIN
 }

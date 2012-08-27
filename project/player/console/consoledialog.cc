@@ -68,7 +68,7 @@ ConsoleDialog::createLayout()
     if (!AcUi::isAeroAvailable())
       patch = 9;
     footer->setContentsMargins(0, 0, 0, 0);
-    rows->setContentsMargins(9, patch, 9, 9);
+    rows->setContentsMargins(patch, patch, patch, patch);
     setContentsMargins(0, 0, 0, 0);
   } setLayout(rows);
 }

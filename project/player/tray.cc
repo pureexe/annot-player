@@ -38,7 +38,7 @@ Tray::createActions()
     menu->addAction(TR(T_MENUTEXT_PROCESSPICKDIALOG), w_, SLOT(openWindow()));
 #endif // AC_ENABLE_GAME
 #ifdef WITH_WIN_PICKER
-    menu->addAction(TR(T_MENUTEXT_WINDOWPICKDIALOG), w_, SLOT(showWindowPickDialog()));
+    menu->addAction(TR(T_MENUTEXT_WINDOWPICKDIALOG), w_, SLOT(showWindowPicker()));
 #endif // WITH_WIN_PICKER
     menu->addSeparator();
 #ifndef Q_OS_MAC
