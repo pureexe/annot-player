@@ -213,6 +213,34 @@ AnnotationServerAgent::selectTokenId(const Token &token)
 }
 
 qint64
+AnnotationServerAgent::submitGameThread(const GameThread &thread)
+{
+  DOUT("enter: type =" << thread.type());
+  if (!isAuthorized()) {
+    DOUT("exit: not authorized");
+    return 0;
+  }
+
+  if (!thread.hasTokenId() || !thread.hasEncoding() || !thread.hasSignature() || !thread.hasProvider()) {
+    DOUT("exit: incomplete game thread");
+    return 0;
+  }
+
+  qint64 ret = proxy_->submitGameThread(thread);
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+bool
+AnnotationServerAgent::submitGameThreads(const GameThreadList &threads)
+{
+  bool ret = true;
+  foreach (const GameThread &t, threads)
+    ret = ret && submitGameThread(t);
+  return ret;
+}
+
+qint64
 AnnotationServerAgent::submitToken(const Token &token)
 {
   DOUT("enter: tt =" << token.type());
@@ -315,6 +343,19 @@ AnnotationServerAgent::submitAnnotations(const AnnotationList &tokens)
     ret = ret && submitAnnotation(a);
   return ret;
 }
+
+GameThread
+AnnotationServerAgent::selectGameThreadWithTokenId(qint64 tid)
+{
+  GameThread ret;
+  if (tid)
+    ret = proxy_->selectGameThreadWithTokenId(tid);
+  return ret;
+}
+
+GameThread
+AnnotationServerAgent::selectGameThreadWithTokenDigest(const QString &digest)
+{ return proxy_->selectGameThreadWithTokenDigest(digest); }
 
 Token
 AnnotationServerAgent::selectTokenWithId(qint64 id)
@@ -446,10 +487,20 @@ AnnotationServerAgent::deleteAliasWithId(qint64 id)
 // - Edit -
 
 bool
+AnnotationServerAgent::updateGameThread(const GameThread &thread)
+{
+  if (!isAuthorized())
+    return false;
+  if (!thread.hasId() || !thread.hasTokenId() || !thread.hasEncoding() || !thread.hasSignature() || !thread.hasProvider())
+    return false;
+  return proxy_->updateGameThread(thread);
+}
+
+bool
 AnnotationServerAgent::updateAnnotationTextWithId(const QString &text, qint64 id)
 {
   if (!isAuthorized())
-    return 0;
+    return false;
   if (!id)
     return false;
 
@@ -466,12 +517,13 @@ AnnotationServerAgent::updateAnnotationUserIdWithId(qint64 userId, qint64 id)
   return proxy_->updateAnnotationUserIdWithId(userId, id);
 }
 
-// - Live -
+// EOF
+
+/*
 
 qint64
 AnnotationServerAgent::submitLiveAnnotation(const Annotation &annot)
 {
-  /*
   if (!isAuthorized()) {
     DOUT("exit: not authorized");
     return 0;
@@ -488,7 +540,6 @@ AnnotationServerAgent::submitLiveAnnotation(const Annotation &annot)
   qint64 ret = proxy_->submitLiveAnnotationTextWithTokenId(annot.text(), Token::TI_Public);
   DOUT("exit: ret =" << ret);
   return ret;
-  */
   Q_UNUSED(annot)
   return 0;
 }
@@ -496,7 +547,6 @@ AnnotationServerAgent::submitLiveAnnotation(const Annotation &annot)
 qint64
 AnnotationServerAgent::submitLiveAnnotationText(const QString &text)
 {
-  /*
   if (!isAuthorized()) {
     DOUT("exit: not authorized");
     return 0;
@@ -509,7 +559,6 @@ AnnotationServerAgent::submitLiveAnnotationText(const QString &text)
   qint64 ret = proxy_->submitLiveAnnotationTextWithTokenId(text, Token::TI_Public);
   DOUT("exit: ret =" << ret);
   return ret;
-  */
   Q_UNUSED(text)
   return 0;
 }
@@ -518,21 +567,16 @@ AnnotationServerAgent::submitLiveAnnotationText(const QString &text)
 AnnotationList
 AnnotationServerAgent::selectLiveAnnotations()
 {
-  /*
   AnnotationList ret = proxy_->selectLiveAnnotationsWithTokenId(Token::TI_Public);
   return ret;
-  */
   return AnnotationList();
 }
 
 qint32
 AnnotationServerAgent::selectLiveTokenInterval()
 {
-  /*
   qint32 ret = proxy_->selectLiveTokenIntervalWithId(Token::TI_Public);
   return ret;
-  */
   return 0;
 }
-
-// EOF
+*/

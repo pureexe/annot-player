@@ -1,7 +1,7 @@
 #!/bin/bash -v
 # 4/1/2012
 
-VERSION=0.1.8.3
+VERSION=0.1.9.0
 APP=annot-player
 ZIPFILE=$APP-$VERSION-debian.zip
 

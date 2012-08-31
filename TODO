@@ -6,6 +6,9 @@ http://qt-project.org/wiki/Category:Add-ons
 
 # Changes
 annot-player
+annot-down
+annot-dict
+README,ChangeLog
 
 # key ideas
 - stream trial games, and sub trial games in chinese
@@ -36,41 +39,32 @@ work on streaming
   http://www.codeproject.com/Articles/43586/File-System-Filter-Driver-Tutorial
   - in the future, use acipc to bypass license issue
 
-# 0.1.9.1
-- more than one channels
-  - create checkboxngrid
+# 0.1.9.2
+- make koi choko works after inserthook
 
-  - struct TextSource
-  {
-    void function
-    qint64 digest() { a + b }
-    quint32 type() { return 0; } // reserved
-  }
-
-  able to intercept ore
-
-- create serverdb at annot.me for saving anchor and encoding
-  - everyone will overrite the old db
+- GUI for adding ITH code
+  - save on to the cloud if succeeded, no way to delete it
 
 - game
   - grant/share edit permission for token
 
-# 0.1.9.2
+- figure out a better textedit for display japanese text well
+  - word by word translation
+  - refer to:
+    http://www.rikai.com/perl/Home.pl
+
+- mac: share game term (names, sp...)
+  - able to share it online
+  - database: dict_term
+    term_id term_status term_flag user_id term_create_ip term_create_time term_update_time term_update_ip term_type term_from term_to term_source, term_target
+    term_bless_count term_curse_count term_block_count
 
 investigate atlas, etc
   check the translate.cs source code
 - atlas: http://software.fujitsu.com/jp/atlas/
-
 - LEC
 
-- word by word translation
-  - refer to:
-    http://www.rikai.com/perl/Home.pl
-
-- qtext locale class
-  - add hash code for en, etc
-  - add iso 2 digit name
-  - handle english/chinese
+# 0.1.9.3
 
 - search engine
   - redesign searchengine mechanism, using a global search engine pool
@@ -79,14 +73,18 @@ investigate atlas, etc
     - need a better way for grouping translator
   - library view and others, redesign
   - copy title / location, search title
-
-#
-
 - hack qnetworkaccessmanager source code to get a stable orignal download stream
   - make stable download session
     - maybe, sth is wrong in createRequest?
 - able to subscribe to bilibili session
 - able to grab all downloadable to bilibili session
+
+- qtext locale class
+  - add hash code for en, etc
+  - add iso 2 digit name
+  - handle english/chinese
+
+# 0.1.9.3
 
 - slogan
   annotated life
@@ -109,11 +107,6 @@ investigate atlas, etc
   - save playtime of each galgame in minitues
 
 ###
-- mac:
-  - able to share it online
-  - database: dict_term
-    term_id term_status term_flag user_id term_create_ip term_create_time term_update_time term_update_ip term_type term_from term_to term_source, term_target
-    term_bless_count term_curse_count term_block_count
 
 - context menu to show launch settings for the current game
   - open/opendir

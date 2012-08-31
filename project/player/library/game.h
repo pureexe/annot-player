@@ -4,10 +4,9 @@
 // game.h
 // 8/18/2012
 
+#include "textthread.h"
 #include <QtCore/QHash>
-#include <QtCore/QList>
 #include <QtCore/QMetaType>
-#include <QtCore/QString>
 
 class Game
 {
@@ -20,18 +19,12 @@ public:
   // - Properties -
 
 private:
-  ulong anchor_;
+  TextThreadList threads_;
 public:
-  ulong anchor() const { return anchor_; }
-  void setAnchor(ulong value) { anchor_ = value; }
-  bool hasAnchor() const { return anchor_; }
-
-private:
-  QString function_;
-public:
-  const QString &function() const { return function_; }
-  void setFunction(const QString &name) { function_ = name; }
-  bool hasFunction() const { return !function_.isEmpty(); }
+  const TextThreadList &threads() const { return threads_; }
+  TextThreadList &threads() { return threads_; }
+  void setThreads(const TextThreadList &l) { threads_ = l; }
+  bool hasThreads() const { return !threads_.isEmpty(); }
 
 private:
   ulong tokenId_;
@@ -91,7 +84,7 @@ public:
 
   // - Construction -
 public:
-  Game() : anchor_(0), enabled_(true), visitTime_(0), visitCount_(0) { }
+  Game() : enabled_(true), visitTime_(0), visitCount_(0) { }
 
   bool hasKey() const { return hasDigest(); }
   const QString &key() const { return digest(); }

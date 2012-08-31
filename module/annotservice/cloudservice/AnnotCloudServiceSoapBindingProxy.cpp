@@ -1138,6 +1138,114 @@ int CloudServiceSoapBindingProxy::login(const char *endpoint, const char *soap_a
 	return soap_closesock(soap);
 }
 
+int CloudServiceSoapBindingProxy::selectGameThreadWithTokenDigest(const char *endpoint, const char *soap_action, tns__selectGameThreadWithTokenDigest *tns__selectGameThreadWithTokenDigest_, tns__selectGameThreadWithTokenDigestResponse *tns__selectGameThreadWithTokenDigestResponse_)
+{	struct soap *soap = this;
+	struct __tns__selectGameThreadWithTokenDigest soap_tmp___tns__selectGameThreadWithTokenDigest;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://210.175.54.32/service/cloud";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__selectGameThreadWithTokenDigest.tns__selectGameThreadWithTokenDigest_ = tns__selectGameThreadWithTokenDigest_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__selectGameThreadWithTokenDigest(soap, &soap_tmp___tns__selectGameThreadWithTokenDigest);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__selectGameThreadWithTokenDigest(soap, &soap_tmp___tns__selectGameThreadWithTokenDigest, "-tns:selectGameThreadWithTokenDigest", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__selectGameThreadWithTokenDigest(soap, &soap_tmp___tns__selectGameThreadWithTokenDigest, "-tns:selectGameThreadWithTokenDigest", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__selectGameThreadWithTokenDigestResponse_)
+		return soap_closesock(soap);
+	tns__selectGameThreadWithTokenDigestResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__selectGameThreadWithTokenDigestResponse_->soap_get(soap, "tns:selectGameThreadWithTokenDigestResponse", "tns:selectGameThreadWithTokenDigestResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int CloudServiceSoapBindingProxy::selectGameThreadWithTokenId(const char *endpoint, const char *soap_action, tns__selectGameThreadWithTokenId *tns__selectGameThreadWithTokenId_, tns__selectGameThreadWithTokenIdResponse *tns__selectGameThreadWithTokenIdResponse_)
+{	struct soap *soap = this;
+	struct __tns__selectGameThreadWithTokenId soap_tmp___tns__selectGameThreadWithTokenId;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://210.175.54.32/service/cloud";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__selectGameThreadWithTokenId.tns__selectGameThreadWithTokenId_ = tns__selectGameThreadWithTokenId_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__selectGameThreadWithTokenId(soap, &soap_tmp___tns__selectGameThreadWithTokenId);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__selectGameThreadWithTokenId(soap, &soap_tmp___tns__selectGameThreadWithTokenId, "-tns:selectGameThreadWithTokenId", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__selectGameThreadWithTokenId(soap, &soap_tmp___tns__selectGameThreadWithTokenId, "-tns:selectGameThreadWithTokenId", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__selectGameThreadWithTokenIdResponse_)
+		return soap_closesock(soap);
+	tns__selectGameThreadWithTokenIdResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__selectGameThreadWithTokenIdResponse_->soap_get(soap, "tns:selectGameThreadWithTokenIdResponse", "tns:selectGameThreadWithTokenIdResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
 int CloudServiceSoapBindingProxy::selectMediaAliasesWithTokenId(const char *endpoint, const char *soap_action, tns__selectMediaAliasesWithTokenId *tns__selectMediaAliasesWithTokenId_, tns__selectMediaAliasesWithTokenIdResponse *tns__selectMediaAliasesWithTokenIdResponse_)
 {	struct soap *soap = this;
 	struct __tns__selectMediaAliasesWithTokenId soap_tmp___tns__selectMediaAliasesWithTokenId;
@@ -1678,6 +1786,60 @@ int CloudServiceSoapBindingProxy::setUserLanguage(const char *endpoint, const ch
 	return soap_closesock(soap);
 }
 
+int CloudServiceSoapBindingProxy::submitGameThread(const char *endpoint, const char *soap_action, tns__submitGameThread *tns__submitGameThread_, tns__submitGameThreadResponse *tns__submitGameThreadResponse_)
+{	struct soap *soap = this;
+	struct __tns__submitGameThread soap_tmp___tns__submitGameThread;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://210.175.54.32/service/cloud";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__submitGameThread.tns__submitGameThread_ = tns__submitGameThread_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__submitGameThread(soap, &soap_tmp___tns__submitGameThread);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__submitGameThread(soap, &soap_tmp___tns__submitGameThread, "-tns:submitGameThread", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__submitGameThread(soap, &soap_tmp___tns__submitGameThread, "-tns:submitGameThread", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__submitGameThreadResponse_)
+		return soap_closesock(soap);
+	tns__submitGameThreadResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__submitGameThreadResponse_->soap_get(soap, "tns:submitGameThreadResponse", "tns:submitGameThreadResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
 int CloudServiceSoapBindingProxy::submitMediaAlias(const char *endpoint, const char *soap_action, tns__submitMediaAlias *tns__submitMediaAlias_, tns__submitMediaAliasResponse *tns__submitMediaAliasResponse_)
 {	struct soap *soap = this;
 	struct __tns__submitMediaAlias soap_tmp___tns__submitMediaAlias;
@@ -2155,6 +2317,60 @@ int CloudServiceSoapBindingProxy::submitMediaTokenUrl(const char *endpoint, cons
 	 || soap_body_begin_in(soap))
 		return soap_closesock(soap);
 	tns__submitMediaTokenUrlResponse_->soap_get(soap, "tns:submitMediaTokenUrlResponse", "tns:submitMediaTokenUrlResponse");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int CloudServiceSoapBindingProxy::updateGameThread(const char *endpoint, const char *soap_action, tns__updateGameThread *tns__updateGameThread_, tns__updateGameThreadResponse *tns__updateGameThreadResponse_)
+{	struct soap *soap = this;
+	struct __tns__updateGameThread soap_tmp___tns__updateGameThread;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (!soap_endpoint)
+		soap_endpoint = "http://210.175.54.32/service/cloud";
+	if (!soap_action)
+		soap_action = "";
+	soap->encodingStyle = NULL;
+	soap_tmp___tns__updateGameThread.tns__updateGameThread_ = tns__updateGameThread_;
+	soap_begin(soap);
+	soap_serializeheader(soap);
+	soap_serialize___tns__updateGameThread(soap, &soap_tmp___tns__updateGameThread);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put___tns__updateGameThread(soap, &soap_tmp___tns__updateGameThread, "-tns:updateGameThread", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put___tns__updateGameThread(soap, &soap_tmp___tns__updateGameThread, "-tns:updateGameThread", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!tns__updateGameThreadResponse_)
+		return soap_closesock(soap);
+	tns__updateGameThreadResponse_->soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	tns__updateGameThreadResponse_->soap_get(soap, "tns:updateGameThreadResponse", "tns:updateGameThreadResponse");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)

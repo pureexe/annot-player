@@ -29,7 +29,8 @@ class AnnotationPreferencesTab : public AcPreferencesTab
                  *fullscreenScaleEdit_;
   QDoubleSpinBox *speedEdit_;
   QSpinBox *offsetEdit_,
-           *opacityEdit_;
+           *opacityEdit_,
+           *backgroundOpacityEdit_;
   QFontComboBox *fontEdit_,
                 *japaneseFontEdit_,
                 *chineseFontEdit_;
@@ -63,6 +64,11 @@ protected slots:
   void loadOpacity();
   void loadOpacityIfVisible() { if (isVisible()) loadOpacity(); }
   void resetOpacity();
+
+  void saveBackgroundOpacity();
+  void loadBackgroundOpacity();
+  void loadBackgroundOpacityIfVisible() { if (isVisible()) loadBackgroundOpacity(); }
+  void resetBackgroundOpacity();
 
   void saveScale();
   void loadScale();

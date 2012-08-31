@@ -3,7 +3,6 @@
 
 #include "module/translator/kotobanktranslator.h"
 #include "module/translator/kotobanktranslator_p.h"
-#include "module/translator/translatorsettings.h"
 #include <QtCore/QUrl>
 #include <QtCore/QRegExp>
 #include <QtNetwork/QNetworkRequest>
@@ -25,7 +24,7 @@ KotobankTranslator::translate(const QString &text)
   if (!isEnabled())
     return;
   DOUT("enter: text =" << text);
-  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+  if (reply_ && isSynchronized()) {
     //reply_->abort();
     reply_->deleteLater();
     DOUT("abort previous reply");
@@ -45,12 +44,11 @@ void
 KotobankTranslator::processReply(QNetworkReply *reply)
 {
   DOUT("enter");
-  if (TranslatorSettings::globalSettings()->isSynchronized() &&
-      reply_ != reply) {
+  if (isSynchronized() && reply_ != reply) {
     DOUT("exit: reply changed");
     return;
   }
-  reply_ = 0;
+  reply_ = nullptr;
 
   Q_ASSERT(reply);
   reply->deleteLater();

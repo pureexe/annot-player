@@ -80,15 +80,15 @@ SignalHub::setVolume(qreal percentage)
 void
 SignalHub::setTokenMode(TokenMode mode)
 {
-  if (!isStopped())
-    stop();
-
   if (tokenMode_ != mode) {
+    if (!isStopped())
+      stop();
+
     tokenMode_ = mode;
     switch (mode) {
-    case MediaTokenMode:  emit message(tr("switched to media mode")); break;
-    case LiveTokenMode:   emit message(tr("switched to live mode")); break;
-    case SignalTokenMode: emit message(tr("switched to signal mode")); break;
+    case MediaTokenMode:  emit message(tr("enter media mode")); break;
+    case LiveTokenMode:   Q_ASSERT(0); break;
+    case SignalTokenMode: emit message(tr("enter game mode")); break;
     }
     emit tokenModeChanged(mode);
   }

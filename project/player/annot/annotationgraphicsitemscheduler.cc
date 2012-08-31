@@ -32,6 +32,8 @@ AnnotationGraphicsItemScheduler::clear()
   //cells_.clear();
   for (auto p = cells_.begin(); p != cells_.end(); ++p)
     p.value() = 0;
+  if (!subCells_.isEmpty())
+    subCells_.clear();
   lastCell_ = std::make_pair(QPoint(), qint64(0));
   pauseTime_ = resumeTime_ = 0;
 
@@ -52,6 +54,14 @@ AnnotationGraphicsItemScheduler::clearSubtitles()
       }
       subLaneStyle_[i] = 0;
     }
+  if (!subCells_.isEmpty()) {
+    foreach (const QPoint &pt, subCells_) {
+      cells_[pt] = 0;
+      if (lastCell_.second && lastCell_.first == pt)
+        lastCell_.second = 0;
+    }
+    subCells_.clear();
+  }
 }
 
 // - Float Scheduling -
@@ -91,9 +101,9 @@ AnnotationGraphicsItemScheduler::nextMovingY(const QSizeF &itemSize, int visible
   // min scale is 1/2 (0.5), LaneHeight is around 30, 2000 is the max vertical resolution
   static_assert(LaneCount * LaneHeight / 2 > 2000, "insufficient vertical lanes");
 
-  int laneHeight = LaneHeight * scale_;
-  if (!laneHeight)
-    return 0;
+  int laneHeight = LaneHeight * scale_ +1;
+  //if (!laneHeight)
+  //  return 0;
 
   enum { WaitTime = 500 }; // in msecs, less than 1 second
   Q_ASSERT(visibleTime > 0);
@@ -110,7 +120,7 @@ AnnotationGraphicsItemScheduler::nextMovingY(const QSizeF &itemSize, int visible
   if (viewSize_.height() <= laneHeight * 2) // Do not schedule when window size is so small
     return 0;
 
-  int itemHeight = qMax<int>(0, itemSize.height() - ItemHaloHeight);
+  int itemHeight = qMax<int>(0, (itemSize.height() - ItemHaloHeight) * scale_ +1);
   int itemLaneCount = itemHeight <= laneHeight ? 1 :
                       itemHeight / laneHeight + 1;
   Q_ASSERT(itemLaneCount);
@@ -168,15 +178,13 @@ AnnotationGraphicsItemScheduler::nextMovingY(const QSizeF &itemSize, int visible
 
 // Use std time() rather than QTime::currentTime() to improve performance.
 int
-AnnotationGraphicsItemScheduler::nextStationaryY(int itemHeight, int visibleTime, AnnotationGraphicsItem::Style style)
+AnnotationGraphicsItemScheduler::nextStationaryY(int itemHeight, int visibleTime, AnnotationGraphicsItem::Style style, bool sub)
 {
   Q_ASSERT(hub_);
   // min scale is 1/2 (0.5), LaneHeight is around 30, 2000 is the max vertical resolution
   static_assert(LaneCount * LaneHeight / 2 > 2000, "insufficient vertical lanes");
 
-  int laneHeight = LaneHeight * scale_;
-  if (!laneHeight)
-    return 0;
+  int laneHeight = LaneHeight * scale_ +1;
 
   enum { MinVisibleTime = 1000 }; // 1 second
   Q_ASSERT(visibleTime);
@@ -193,14 +201,12 @@ AnnotationGraphicsItemScheduler::nextStationaryY(int itemHeight, int visibleTime
   if (viewSize_.height() <= laneHeight * 2) // Do not schedule when window size is so small
     return 0;
 
-  bool top = false;
-  if (style == AnnotationGraphicsItem::TopStyle ||
-      style == AnnotationGraphicsItem::SubtitleStyle && AnnotationSettings::globalSettings()->isSubtitleOnTop())
-    top = true;
+  bool top = style == AnnotationGraphicsItem::TopStyle;
 
   qint64 *laneTime = top ? topLaneTime_ : bottomLaneTime_;
 
-  itemHeight = qMax<int>(0, itemHeight - ItemHaloHeight);
+  //itemHeight = qMax<int>(0, itemHeight - ItemHaloHeight);
+  itemHeight = qMax<int>(0, (itemHeight - ItemHaloHeight) * scale_ +1);
   int itemLaneCount = itemHeight <= laneHeight ? 1 :
                       itemHeight / laneHeight + 1;
   Q_ASSERT(itemLaneCount);
@@ -244,7 +250,7 @@ AnnotationGraphicsItemScheduler::nextStationaryY(int itemHeight, int visibleTime
     for (int i = 0; i < itemLaneCount; i++)
       laneTime[bestLane + i] = now;
 
-  if (hub_->isSignalTokenMode() && style == AnnotationGraphicsItem::SubtitleStyle)
+  if (hub_->isSignalTokenMode() && sub)
     for (int i = 0; i < itemLaneCount; i++)
       subLaneStyle_[bestLane + i] = style;
 
@@ -257,10 +263,10 @@ AnnotationGraphicsItemScheduler::nextStationaryY(int itemHeight, int visibleTime
   }
 }
 
-// - Motionless Scheduling -
+// - Float Scheduling -
 
 QPointF
-AnnotationGraphicsItemScheduler::nextStationaryPos(const QSizeF &itemSize, int visibleMsecs)
+AnnotationGraphicsItemScheduler::nextFloatPos(const QSizeF &itemSize, int visibleMsecs, bool sub)
 {
   enum { MarginLeft = 10 };
   enum { CellWidth = 250, CellFullScreenWidth = 300, CellHeight = int(LaneHeight * 1.2) };
@@ -269,6 +275,7 @@ AnnotationGraphicsItemScheduler::nextStationaryPos(const QSizeF &itemSize, int v
       cellHeight = scale_ * CellHeight;
   if (!cellWidth || !cellHeight)
     return QPointF();
+
   int cellXCount = (viewSize_.width() - MarginLeft)  / cellWidth,
       cellYCount = viewSize_.height() / cellHeight - 1; // do not use the last row
   if (hub_->isSignalTokenMode())
@@ -288,7 +295,7 @@ AnnotationGraphicsItemScheduler::nextStationaryPos(const QSizeF &itemSize, int v
   bool ok = false;
   qint64 pausedTime = resumeTime_ - pauseTime_;
   int x, y;
-  if (pausedTime >= 0 && (
+  if (pausedTime >= 0 && lastCell_.second && (
         lastCell_.second >= now ||
         lastCell_.second < resumeTime_ && lastCell_.second > pauseTime_ && lastCell_.second + pausedTime > now
      )) {
@@ -342,11 +349,17 @@ AnnotationGraphicsItemScheduler::nextStationaryPos(const QSizeF &itemSize, int v
   enum { CooldownTime = 1010 };
   qint64 availableTime = now + visibleMsecs;
   lastCell_ = std::make_pair(QPoint(x, y), availableTime);
-  for (int i = 0; i < itemXCount; i++)
-    cells_[QPoint(x + i, y)] = i == 0 ?
+  for (int i = 0; i < itemXCount; i++) {
+    QPoint pt(x + i, y);
+    cells_[pt] = i == 0 ?
       availableTime + CooldownTime :
       availableTime;
-  return QPointF(MarginLeft + x * cellWidth, y * cellHeight);
+    if (sub)
+      subCells_.insert(pt);
+  }
+
+  int windowHeader = hub_->isSignalTokenMode() ? 50 : 0;
+  return QPointF(MarginLeft + x * cellWidth, y * cellHeight + windowHeader);
 }
 
 // EOF

@@ -17,6 +17,8 @@
 
 using namespace AnnotCloud;
 
+enum { GAME_TEXT_MAX = 256 * 2 };
+
 //
 // Message hashing rule:
 //  //- if is subtitle, hash count = 1
@@ -27,24 +29,37 @@ using namespace AnnotCloud;
 //  - if repeat, hash count = min(repeat count, 4)
 //
 
-namespace { enum { HASH_COUNT = 4}; }
+namespace { enum { MESSAGE_CAPACITY = 4}; }
 
 // - Constructions -
 
 MessageHandler::MessageHandler(QObject *parent)
-  : Base(parent), active_(false), anchor_(0),
-    messageCount_(HASH_COUNT)
+  : Base(parent), active_(false), leadingSignature_(0)
 { }
 
 void
 MessageHandler::connectTextHook()
-{ connect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,QString)), SLOT(processMessage(QByteArray,ulong))); }
+{ connect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,qint64,QString)), SLOT(processMessage(QByteArray,qint64))); }
 
 void
 MessageHandler::disconnectTextHook()
-{ disconnect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,QString)), this, SLOT(processMessage(QByteArray,ulong))); }
+{ disconnect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,qint64,QString)), this, SLOT(processMessage(QByteArray,qint64))); }
 
 // - Properties -
+
+void
+MessageHandler::updateSignatures()
+{
+  leadingSignature_ = 0;
+  if (!supportSignatures_.isEmpty())
+    supportSignatures_.clear();
+
+  foreach (const TextThread &t, threads_)
+    if (t.isLeadingRole())
+      leadingSignature_ = t.signature();
+    else
+      supportSignatures_.insert(t.signature());
+}
 
 void
 MessageHandler::setActive(bool active)
@@ -54,30 +69,37 @@ MessageHandler::setActive(bool active)
       connectTextHook();
     else {
       disconnectTextHook();
-      clearRecentMessages();
+      clearMessages();
     }
     active_ = active;
   }
 }
 
 void
-MessageHandler::clearRecentMessages()
+MessageHandler::processMessage(const QByteArray &data, qint64 signature)
 {
-  messages_.clear();
-  lastMessageHash_.clear();
-}
+  DOUT("enter: signature =" << signature << ", data size =" << data.size());
+  if (data.size() > GAME_TEXT_MAX) {
+    if (signature == leadingSignature_) {
+      DOUT("main thread text too long, reset");
+      clearMessages();
+    }
+    DOUT("exit: skip long message");
+    return;
+  }
 
-void
-MessageHandler::processMessage(const QByteArray &data, ulong anchor)
-{
-  DOUT("enter: anchor =" << anchor << ", data size =" << data.size());
-  if (anchor != anchor_) {
-    //lastMessageHash_.clear();
+  if (signature != leadingSignature_) {
+    if (!supportSignatures_.isEmpty() && supportSignatures_.contains(signature)) {
+      QString text = TextCodecManager::globalInstance()->decode(data);
+      emit textChanged(text, TextThread::SupportRole);
+    }
+
+    //lastHash_.clear();
     DOUT("exit: hook mismatch");
     return;
   }
 
-  lastMessageHash_.clear();
+  lastHash_.clear();
 
   if (data.isEmpty()) {
     DOUT("exit: skipping empty data");
@@ -86,11 +108,11 @@ MessageHandler::processMessage(const QByteArray &data, ulong anchor)
 
   {
     QString text = TextCodecManager::globalInstance()->decode(data);
-    emit messageReceivedWithText(text);
+    emit textChanged(text, TextThread::LeadingRole);
   }
 
   messages_.prepend(data);
-  if (messages_.size() > messageCount_)
+  if (messages_.size() > MESSAGE_CAPACITY)
     messages_.pop_back();
 
   QList<QByteArray> range;
@@ -121,11 +143,11 @@ MessageHandler::processMessage(const QByteArray &data, ulong anchor)
     }
   }
 
-  qint64 h = lastMessageHash_.hash = Annotation::hash(range);
-  int count = lastMessageHash_.count = range.size();
+  qint64 h = lastHash_.hash = Annotation::hash(range);
+  int count = lastHash_.count = range.size();
   Q_UNUSED(count)
 
-  emit messageReceivedWithId(h);
+  emit hashChanged(h);
   DOUT("exit: hashCount =" << count << ", h =" << h);
 }
 
@@ -174,8 +196,8 @@ MessageHandler::processMessage(const QByteArray &data, ulong anchor)
   Q_ASSERT(hashCount >=1 && hashCount <= 4);
 
   if (hashCount > messages_.size()) {
-    lastMessageHash_.clear();
-    lastMessageHash_.count = hashCount;
+    lastHash_.clear();
+    lastHash_.count = hashCount;
     DOUT("processTextMessage:exit: skipping short message: hashCount =" << hashCount << ", messageSize =" << messages_.size());
     return;
   }
@@ -200,14 +222,14 @@ MessageHandler::processMessage(const QByteArray &data, ulong anchor)
 
   if (!h) {
     qDebug() << "FIXME: Zero hash encountered! text =" << text;
-    lastMessageHash_.hash = 0;
-    lastMessageHash_.count = hashCount;
+    lastHash_.hash = 0;
+    lastHash_.count = hashCount;
     DOUT("processTextMessage:exit: skip zero hash");
   }
 
-  lastMessageHash_.hash = h;
-  lastMessageHash_.count = hashCount;
-  Q_ASSERT(lastMessageHash_.isValid());
+  lastHash_.hash = h;
+  lastHash_.count = hashCount;
+  Q_ASSERT(lastHash_.isValid());
 
   DOUT("processTextMessage: h =" << h);
   emit messageReceived(h);

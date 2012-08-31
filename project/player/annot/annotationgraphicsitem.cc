@@ -52,8 +52,9 @@ namespace { namespace detail {
   inline bool isBadPosF(const QPointF &pos) { return pos.x() < 0 || pos.y() < 0; }
 } } // anonymous detail
 
-enum { MotionlessStayTime = 7000 }; // 7 seconds
-enum { FadeInDuration = 800, FadeOutDuration = 600 };
+enum { FloatStayTime = 7000 }; // 7 seconds
+enum { FadeInDuration = 800, FadeOutDuration = 600,
+       SubFadeInDuration = 200, SubFadeOutDuration = 100 };
 
 // - RC -
 
@@ -144,13 +145,12 @@ AnnotationGraphicsItem::nextY(int msecs) const
   int ret;
   switch (style_) {
   case FlyStyle:
-  case FloatStyle:
+  case DriftStyle:
     ret = view_->scheduler()->nextMovingY(itemSize, msecs);
     break;
   case TopStyle:
   case BottomStyle:
-  case SubtitleStyle:
-    ret = view_->scheduler()->nextStationaryY(itemSize.height(), msecs, style_);
+    ret = view_->scheduler()->nextStationaryY(itemSize.height(), msecs, style_, isSubtitle());
     break;
   default: Q_ASSERT(0); ret = 0;
   }
@@ -197,7 +197,7 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   SignalHub *hub,
   AnnotationGraphicsView *view)
   : metaVisible_(false), avatarVisible_(false),
-    view_(view), data_(data), hub_(hub), style_(FloatStyle), positionResolution_(0),
+    view_(view), data_(data), hub_(hub), style_(NoStyle), positionResolution_(0),
     removeLaterTimer_(nullptr),
     flyAni_(nullptr), flyOpacityAni_(nullptr), escapeAni_(nullptr), rushAni_(nullptr), appearOpacityAni_(nullptr), fadeAni_(nullptr),
     dragPos_(BAD_POSF), pressTime_(0)
@@ -254,6 +254,7 @@ AnnotationGraphicsItem::setAnnotation(const Annotation &annot)
     suffix_.clear();
   annot_ = annot;
   setToolTip(QString());
+
   updateText();
   //updateToolTip();
 }
@@ -279,7 +280,7 @@ AnnotationGraphicsItem::reset()
   setScale(view_->scale());
 
   //effect_->setOpacity(0);
-  resetOutlineColor();
+  //resetOutlineColor();
   setOpacity(0);
 }
 
@@ -287,9 +288,9 @@ void
 AnnotationGraphicsItem::setOutlineColor(const QColor &color)
 { effect_->setColor(color); }
 
-void
-AnnotationGraphicsItem::resetOutlineColor()
-{ setOutlineColor(AnnotationSettings::globalSettings()->outlineColor()); }
+//void
+//AnnotationGraphicsItem::resetOutlineColor()
+//{ setOutlineColor(AnnotationSettings::globalSettings()->outlineColor()); }
 
 void
 AnnotationGraphicsItem::updateOutlineColor()
@@ -368,6 +369,7 @@ void
 AnnotationGraphicsItem::updateText()
 {
   setDefaultStyle();
+  updateOutlineColor();
   //updateEffect();
 
   // TODO: condition "isMediaTokenMode" is to be removed
@@ -390,36 +392,51 @@ AnnotationGraphicsItem::updateText()
     default:  font = AnnotationSettings::globalSettings()->font();
     }
 
-  if (owner) {
+  if (owner)
     font.setUnderline(true);
-    setOutlineColor(ANNOTATION_OUTLINE_COLOR_SELF);
-  }
+    //setOutlineColor(ANNOTATION_OUTLINE_COLOR_SELF);
   setFont(font);
 
   QString text = annot_.text();
+  if (hub_->isSignalTokenMode() && AnnotationSettings::globalSettings()->backgroundOpacityFactor()) {
+    QString alpha = QString::number(
+      (AnnotationSettings::globalSettings()->backgroundOpacityFactor() * 255) / 100
+    );
+    text.prepend(
+      "<span style=\"background-color:rgba(0,0,0," + alpha + ")\">"
+    ).append("</span>");
+  }
   if (annot_.language() == Traits::Chinese &&
       AnnotationSettings::globalSettings()->preferTraditionalChinese())
     text = TextCodec::zhs2zht(text);
-  if (annot_.isSubtitle()) {
+  if (isSubtitle())
     text = view_->subtitlePrefix() + text;
-    if (!owner)
-      setOutlineColor(ANNOTATION_OUTLINE_COLOR_SUB);
-  }
+    //if (!owner)
+    //  setOutlineColor(ANNOTATION_OUTLINE_COLOR_SUB);
 
   QStringList tags;
   boost::tie(text_, tags) = ANNOT_PARSE_CODE(text);
   plainText_.clear();
   setTags(tags);
 
+  if (!style_)
+    style_ = isSubtitle() ?
+      (AnnotationSettings::globalSettings()->isSubtitleOnTop() ? TopStyle : BottomStyle) :
+      AnnotationSettings::globalSettings()->preferFloat() ? FloatStyle : DriftStyle;
+
   enum { MinWrapWidth = 300, MinWrapHeight = 200 };
   int textWidth = -1;
   switch (style_) {
-  case FloatStyle: case FlyStyle: break;
+  case DriftStyle:
+  case FloatStyle:
+  case FlyStyle:
+    break;
   default:
     {
       int w = view_->width() * 4/5;
       if (w > MinWrapWidth && view_->height() > MinWrapHeight)
         textWidth = w;
+      textWidth /= view_->scale();
     }
   }
   setTextWidth(textWidth);
@@ -642,15 +659,19 @@ AnnotationGraphicsItem::setTags(const QStringList &tags)
       switch (qHash(tag)) {
       // Style:
       case AnnotCloud::H_Verbatim: continue;
-      case AnnotCloud::H_Float: setStyle(FloatStyle); break;
-      case AnnotCloud::H_Fly: setStyle(FlyStyle); break;
-      case AnnotCloud::H_Top: setStyle(TopStyle); break;
-      case AnnotCloud::H_Bottom: setStyle(BottomStyle); break;
-      case AnnotCloud::H_Sub:
-      case AnnotCloud::H_Subtitle: setStyle(SubtitleStyle); break;
+      case AnnotCloud::H_Drift: style_ = DriftStyle; break;
+      case AnnotCloud::H_Float: style_ = FloatStyle; break;
+      case AnnotCloud::H_Fly: style_ = FlyStyle; break;
+      case AnnotCloud::H_Top: style_ = TopStyle; break;
+      case AnnotCloud::H_Bottom: style_ = BottomStyle; break;
+      //case AnnotCloud::H_Sub:
+      //case AnnotCloud::H_Subtitle: style_ = SubtitleStyle; break;
 
       // Effect:
+      case AnnotCloud::H_Sub:
+      case AnnotCloud::H_Subtitle:
       case AnnotCloud::H_Transp:
+        break;
       //case AnnotCloud::H_Transparent: setEffect(TransparentEffect); break;
       //case AnnotCloud::H_Shadow: setEffect(ShadowEffect); break;
       //case AnnotCloud::H_Blur: setEffect(BlurEffect); break;
@@ -667,7 +688,7 @@ AnnotationGraphicsItem::setTags(const QStringList &tags)
 void
 AnnotationGraphicsItem::setDefaultStyle()
 {
-  setStyle(FloatStyle);
+  style_ = NoStyle;
   setFlags(QGraphicsItem::ItemIsMovable); // Doesn't work when view_ is embedded in dock window orz
 
   //setToolTip(TR(T_TOOLTIP_ANNOTATIONITEM));
@@ -878,6 +899,8 @@ AnnotationGraphicsItem::addMe()
     connect(AnnotationSettings::globalSettings(), SIGNAL(subtitleColorChanged(QColor)), SLOT(updateOutlineColor()));
     connect(AnnotationSettings::globalSettings(), SIGNAL(highlightColorChanged(QColor)), SLOT(updateOutlineColor()));
     connect(AnnotationSettings::globalSettings(), SIGNAL(positionResolutionChanged(int)), SLOT(setPositionResolution(int)));
+    if (hub_->isSignalTokenMode())
+      connect(AnnotationSettings::globalSettings(), SIGNAL(backgroundOpacityFactorChanged(int)), SLOT(updateText()));
 
     if (isSubtitle())
       connect(view_, SIGNAL(removeSubtitlesRequested()), SLOT(disappear()));
@@ -892,21 +915,13 @@ void
 AnnotationGraphicsItem::disappear()
 {
   switch (style_) {
-  case TopStyle:
-  case BottomStyle:
-  case MotionlessStyle:
-    //removeMe();
-    fadeOut(FadeOutDuration);
-    removeLater(FadeOutDuration);
-    break;
-  case SubtitleStyle:
-  case FlyStyle:
-  case FloatStyle:
+  case TopStyle: case BottomStyle: case FloatStyle:
+    fadeOut(); break;
+
+  case FlyStyle: case DriftStyle:
   default:
-    if (!removeLaterTimer_ || !removeLaterTimer_->isActive()) {
-      fadeOut(FadeOutDuration);
-      removeLater(FadeOutDuration);
-    }
+    if (!removeLaterTimer_ || !removeLaterTimer_->isActive())
+      fadeOut();
   }
 }
 
@@ -927,6 +942,8 @@ AnnotationGraphicsItem::removeMe()
     disconnect(AnnotationSettings::globalSettings(), SIGNAL(subtitleColorChanged(QColor)), this, SLOT(updateOutlineColor()));
     disconnect(AnnotationSettings::globalSettings(), SIGNAL(highlightColorChanged(QColor)), this, SLOT(updateOutlineColor()));
     disconnect(AnnotationSettings::globalSettings(), SIGNAL(positionResolutionChanged(int)), this, SLOT(setPositionResolution(int)));
+    if (hub_->isSignalTokenMode())
+      disconnect(AnnotationSettings::globalSettings(), SIGNAL(backgroundOpacityFactorChanged(int)), this, SLOT(updateText()));
 
     scene_->removeItem(this);
     view_->releaseItem(this);
@@ -958,25 +975,26 @@ AnnotationGraphicsItem::showMe()
   switch (style_) {
   case TopStyle:
   case BottomStyle:
-  case SubtitleStyle:
     stay();
     break;
-  case FloatStyle:
   case FlyStyle:
-  case MotionlessStyle:
-    if (!AnnotationSettings::globalSettings()->preferMotionless() ||
+  case DriftStyle:
+    fly();
+    break;
+  case FloatStyle:
+    if (!AnnotationSettings::globalSettings()->preferFloat() ||
         isOwner())
       fly();
     else {
-      int msecs = MotionlessStayTime; //stayTime();
-      QPointF pos = view_->scheduler()->nextStationaryPos(boundingRect().size(), msecs);
+      enum { msecs = FloatStayTime }; //stayTime();
+      QPointF pos = view_->scheduler()->nextFloatPos(boundingRect().size(), msecs, isSubtitle());
       if (pos.isNull()) {
-        style_ = FloatStyle;
+        style_ = DriftStyle;
         fly();
-      } else {
-        style_ = MotionlessStyle;
+      } else if (isSubtitle())
+        appear(pos, -1);
+      else
         appear(pos, msecs);
-      }
     } break;
 
   default:
@@ -1006,14 +1024,13 @@ AnnotationGraphicsItem::isPaused() const
     return false;
 
   switch (style_) {
-  case FloatStyle:
+  case DriftStyle:
   case FlyStyle:
     return flyOpacityAni_ && flyOpacityAni_->state() == QAbstractAnimation::Paused;
 
   case TopStyle:
   case BottomStyle:
-  case SubtitleStyle:
-  case MotionlessStyle:
+  case FloatStyle:
     return appearOpacityAni_ && appearOpacityAni_->state() == QAbstractAnimation::Paused;
   }
   return false;
@@ -1034,7 +1051,7 @@ AnnotationGraphicsItem::pause()
     fadeAni_->pause();
 
   switch (style_) {
-  case FloatStyle:
+  case DriftStyle:
   case FlyStyle:
     if (fadeAni_ && fadeAni_->state() == QAbstractAnimation::Running)
       fadeAni_->pause();
@@ -1047,15 +1064,15 @@ AnnotationGraphicsItem::pause()
 
   case TopStyle:
   case BottomStyle:
-  case MotionlessStyle:
+  case FloatStyle:
     if (appearOpacityAni_ && appearOpacityAni_->state() == QAbstractAnimation::Running)
       appearOpacityAni_->pause();
     break;
 
-  case SubtitleStyle:
-    if (removeLaterTimer_ && removeLaterTimer_->isActive())
-      removeLaterTimer_->stop();
-    break;
+  //case SubtitleStyle:
+  //  if (removeLaterTimer_ && removeLaterTimer_->isActive())
+  //    removeLaterTimer_->stop();
+  //  break;
   }
   if (!view_->isPaused())
     setOutlineColor(AnnotationSettings::globalSettings()->highlightColor());
@@ -1076,7 +1093,7 @@ AnnotationGraphicsItem::resume()
     fadeAni_->resume();
 
   switch (style_) {
-  case FloatStyle:
+  case DriftStyle:
   case FlyStyle:
     if (flyOpacityAni_ && flyOpacityAni_->state() == QAbstractAnimation::Paused)
       flyOpacityAni_->resume();
@@ -1087,8 +1104,8 @@ AnnotationGraphicsItem::resume()
 
   case TopStyle:
   case BottomStyle:
-  case SubtitleStyle:
-  case MotionlessStyle:
+  //case SubtitleStyle:
+  case FloatStyle:
     if (appearOpacityAni_ && appearOpacityAni_->state() == QAbstractAnimation::Paused)
       appearOpacityAni_->resume();
     break;
@@ -1175,7 +1192,7 @@ AnnotationGraphicsItem::appear(const QPointF &pos, int msecs)
   setOpacity(0.0);
   setPos(pos);
   if (msecs <= 0)
-    fadeIn(FadeInDuration);
+    fadeIn();
   else {
     if (!appearOpacityAni_) {
       appearOpacityAni_ = new QPropertyAnimation(this, "opacity", this);
@@ -1194,6 +1211,10 @@ AnnotationGraphicsItem::appear(const QPointF &pos, int msecs)
 }
 
 void
+AnnotationGraphicsItem::fadeIn()
+{ fadeIn(isSubtitle() ? SubFadeInDuration : FadeInDuration); }
+
+void
 AnnotationGraphicsItem::fadeIn(int msecs)
 {
   if (!fadeAni_) {
@@ -1206,6 +1227,15 @@ AnnotationGraphicsItem::fadeIn(int msecs)
   fadeAni_->setEndValue(OPACITY);
   fadeAni_->setDuration(msecs);
   fadeAni_->start();
+}
+
+
+void
+AnnotationGraphicsItem::fadeOut()
+{
+  int msecs = isSubtitle() ? SubFadeOutDuration : FadeOutDuration;
+  fadeOut(msecs);
+  removeLater(msecs);
 }
 
 void

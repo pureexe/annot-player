@@ -57,6 +57,7 @@
 //#define SK_ANNOTROTATE  "AnnotationRotation"
 #define SK_ANNOTRESOLUTION "AnnotationResolution"
 #define SK_ANNOTOPACITY "AnnotationOpacity"
+#define SK_BACKGROUNDOPACITY "BackgroundOpacity"
 #define SK_ANNOTSPEED   "AnnotationSpeed"
 #define SK_ANNOTFILTER  "AnnotationFilter"
 #define SK_ANNOTCOUNT   "AnnotationCount"
@@ -66,7 +67,7 @@
 #define SK_ANNOTJAPANFONT "AnnotationJapaneseFont"
 #define SK_ANNOTCHINAFONT "AnnotationChineseFont"
 #define SK_ANNOTZHT     "TraditionalChinese"
-#define SK_MOTIONLESS   "Motionless"
+#define SK_FLOAT        "Float"
 #define SK_AUTOPLAYNEXT "AutoPlayNext"
 #define SK_BLOCKEDUSERS "BlockedUsers"
 #define SK_BLOCKEDKEYS  "BlockedKeywords"
@@ -145,12 +146,12 @@ Settings::annotationOffset() const
 { return value(SK_ANNOTOFFSET).toLongLong(); }
 
 void
-Settings::setPreferMotionlessAnnotation(bool t)
-{ setValue(SK_MOTIONLESS, t); }
+Settings::setPreferFloatAnnotation(bool t)
+{ setValue(SK_FLOAT, t); }
 
 bool
-Settings::preferMotionlessAnnotation() const
-{ return value(SK_MOTIONLESS, true).toBool(); }
+Settings::preferFloatAnnotation() const
+{ return value(SK_FLOAT, true).toBool(); }
 
 void
 Settings::setPreferTraditionalChinese(bool t)
@@ -739,17 +740,20 @@ Settings::annotationOpacityFactor() const
 { return value(SK_ANNOTOPACITY, ANNOTATION_OPACITY_FACTOR).toInt(); }
 
 void
+Settings::setAnnotationBackgroundOpacityFactor(int v)
+{ setValue(SK_BACKGROUNDOPACITY, v); }
+
+int
+Settings::annotationBackgroundOpacityFactor() const
+{ return value(SK_BACKGROUNDOPACITY, ANNOTATION_BACKGROUND_OPACITY_FACTOR).toInt(); }
+
+void
 Settings::setAnnotationScale(qreal v)
-{
-  if (qFuzzyCompare(v, 1))
-    remove(SK_ANNOTSCALE);
-  else
-    setValue(SK_ANNOTSCALE, v);
-}
+{ setValue(SK_ANNOTSCALE, v); }
 
 qreal
 Settings::annotationScale() const
-{ return value(SK_ANNOTSCALE, 1.0).toReal(); }
+{ return value(SK_ANNOTSCALE, ANNOTATION_SCALE).toReal(); }
 
 void
 Settings::setAnnotationFullscreenScale(qreal v)

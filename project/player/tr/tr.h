@@ -239,7 +239,7 @@
 
 #define T_TITLE_COMMENTVIEW     0x1b
 #define T_TITLE_ANNOTANALYTICS  0x1c
-#define T_TITLE_SIGNALVIEW      0x1d
+//#define T_TITLE_SIGNALVIEW      0x1d
 #define T_TITLE_LIVE            0x1e
 #define T_TITLE_SYNC            0x1f
 #define T_TITLE_USERVIEW       T_USER

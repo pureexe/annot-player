@@ -4,8 +4,11 @@
 // messageview.h
 // 10/16/2011
 
+#include "textmessage.h"
 #include "processinfo.h"
+#include "textthread.h"
 #include "module/qtext/dialog.h"
+#include <QtCore/QList>
 #include <QtCore/QVector>
 
 QT_BEGIN_NAMESPACE
@@ -14,7 +17,9 @@ class QTextEdit;
 class QToolButton;
 QT_END_NAMESPACE
 
+class CheckBoxGrid;
 class RadioButtonGrid;
+class MessageHandler;
 
 class MessageView : public QtExt::Dialog
 {
@@ -29,10 +34,10 @@ class MessageView : public QtExt::Dialog
   //};
 
 public:
-  explicit MessageView(QWidget *parent = nullptr);
+  explicit MessageView(MessageHandler *h, QWidget *parent = nullptr);
 
 signals:
-  void channelSelected(ulong anchor, const QString &function);
+  void threadsSelected(const TextThreadList &threads);
 
   void message(QString msg);
   void warning(QString msg);
@@ -57,27 +62,24 @@ public slots:
    }
 
 protected:
-  ulong currentAnchor() const;
-  QString currentFunction() const;
-  int currentIndex() const;
-  bool isEmpty() const;
+  bool isEmpty() const { return signatures_.isEmpty(); }
 
   // - Actions -
 
 public slots:
   void clear();
+  void reset();
   void select();
-  //void processHookedText(const QString &text, ulong id);
-  void processMessage(const QByteArray &data, ulong anchor, const QString &function);
+  void processMessage(const QByteArray &data, qint64 signature, const QString &provider);
 
   void setActive(bool active);
 
-  void addMessages(const QList<QByteArray> &l, ulong id, const QString &function);
-  void setCurrentIndex(int index);
+  void addMessages(const QList<QByteArray> &l, qint64 signature, const QString &provider);
+  void setThreads(const TextThreadList &l);
 
 protected slots:
-  void setData(const QList<QByteArray> &l);
-  void setCurrentText(int index);
+  void updateText();
+  void updateGrid();
   //void invalidateHookCountLabel();
   void invalidateCurrentCharFormat();
   //void invalidateCurrentHook();
@@ -114,6 +116,7 @@ private:
 
 private:
   bool active_;
+  MessageHandler *messageHandler_;
   QString processName_;
   QTextEdit *textEdit_;
 
@@ -122,13 +125,14 @@ private:
 
   QComboBox *encodingEdit_;
 
-  QVector<ulong> anchors_;
-  QVector<QString> functions_;
-  QVector<QList<QByteArray> > messages_;
+  QVector<qint64> signatures_;
+
+  QList<TextMessage> messages_;
 
   QToolButton *selectButton_, *resetButton_;
 
-  RadioButtonGrid *channelGrid_;
+  RadioButtonGrid *leadingThreads_;
+  CheckBoxGrid *supportThreads_;
 };
 
 #endif // MESSAGEVIEW_H

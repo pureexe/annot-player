@@ -2,6 +2,31 @@ ChangeLog (UTF-8)
 Annot Stream
 Since 6/18/2011
 
+8/31/2012 FRI	annot-player	0.1.9.1
+        * Thread profile will be saved online at annot.me and shared with all users.
+          After sync with a game, the thread profile will be saved both offline and online.
+          Other users opening the same game will automatically import proper thread profile from annot.me,
+          and do not need to set up text threads manually anymore.
+          Thread settings could be changed at "Game Settings".
+          The changes will also be saved both offline and online.
+        * Able to subscribe to more than one text threads in a galgame.
+          When sync with a game, you could select which text threads to subscribe and translate.
+          You could also select the roles of text threads.
+          Texts with different roles will be rendered differently.
+          Only two roles are supported at the time:
+          * Leading role (the leading thread)
+            Supposed to be the scenario thread. Translations will be rendered on the top or on the bottom.
+            The leading thread is used as the timeline for annotation/subtitle synchronization.
+          * Support role (supplementary threads)
+            Could be the choice thread, or the thread of character names, etc.
+            Translations will be rendered at the top-left corner.
+        * Option to change subtitle's background opacity from "Preferences" (galgame only).
+          Set the value to zero if you prefer transparent background like in previous version.
+        * Annotations are rendered smaller than before, and in a darker color.
+          The subtitle's font size and outline color could be adjusted in "Preferences".
+          默认的弹幕比以前更小，颜色更深，速度更快。
+          如果觉得不舒服，可以在【偏好】里调整弹幕的渲染。
+
 8/26/2012 SUN	annot-player	0.1.9.0
         * Add word translation support from Kotobank (ja).
         * Add more text translation options, including:

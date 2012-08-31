@@ -13,13 +13,15 @@ class TextHook : public QObject
   typedef TextHook Self;
   typedef QObject Base;
 
-  // - Constructions -
+  // - Construction -
 public:
   TEXTHOOKAPI static Self *globalInstance() { static Self g; return &g; }
 
+  static int capacity() { return 0x20; } // see: ITH/common.h
+
 signals: // No import/export needed for Qt signals.
   void enabledChanged(bool value);
-  void messageReceived(const QByteArray &data, ulong methodId, const QString &methodName);
+  void messageReceived(const QByteArray &data, qint64 signature, const QString &provider);
 
   void processAttached(qint64 pid);
   //void processDetached(qint64 pid);
@@ -69,11 +71,8 @@ public:
   //void sendText(const QString &text, ulong tid, ulong pid) // text thread callback
   //{ emit textReceived(text, tid, pid); }
 
-  void sendMessage(const QByteArray &text, ulong methodId, const QString &methodName) // text thread callback
-  {
-    if (enabled_)
-      emit messageReceived(text, methodId, methodName);
-  }
+  void sendMessage(const QByteArray &text, qint64 signature, const QString &provider) // text thread callback
+  { if (enabled_) emit messageReceived(text, signature, provider); }
 
 private:
   bool enabled_;

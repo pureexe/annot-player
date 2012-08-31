@@ -4,8 +4,9 @@
 // annotcloud/traits.h
 // 8/17/2011
 
+#include "win/qtwin/codepage.h"
 #include <QtCore/QLocale>
-#include <QtCore/QByteArray>
+#include <QtCore/QString>
 
 #define AC_LANG(ch1, ch2)   (int(ch1) << 8 | (ch2))
 
@@ -14,6 +15,40 @@ namespace AnnotCloud {
   // TODO: Use template classes rather than a shared namespace
   namespace Traits
   {
+    enum CodePage {
+      NoCodePage = 0,
+      CP_Utf8 = CODEPAGE_UTF8,
+      CP_Utf16 = CODEPAGE_UTF16,
+      CP_ShiftJIS = CODEPAGE_SHIFT_JIS,
+      CP_GBK = CODEPAGE_GB2312,
+      CP_EUC_KR = CODEPAGE_KS_C,
+      CP_Big5 = CODEPAGE_BIG5
+    };
+
+    inline const char *codePageToEncoding(int value)
+    {
+      switch (value) {
+      case CP_Utf8:   return "UTF-8";
+      case CP_Utf16:  return "UTF-16";
+      case CP_ShiftJIS: return "SHIFT-JIS";
+      case CP_GBK:    return "GBK";
+      case CP_EUC_KR: return "EUC-KR";
+      case CP_Big5:   return "BIG5";
+      default: return 0;
+      }
+    }
+
+    inline CodePage codePageFromEncoding(const QString &value)
+    {
+      return !value.compare(value, "SHIFT-JIS", Qt::CaseInsensitive) ? CP_ShiftJIS :
+             !value.compare(value, "UTF-16", Qt::CaseInsensitive) ? CP_Utf16 :
+             !value.compare(value, "UTF-8", Qt::CaseInsensitive) ? CP_Utf8 :
+             !value.compare(value, "BIG5", Qt::CaseInsensitive) ? CP_Big5 :
+             !value.compare(value, "GBK", Qt::CaseInsensitive) ? CP_GBK :
+             !value.compare(value, "ENC-KR", Qt::CaseInsensitive) ? CP_EUC_KR :
+             NoCodePage;
+    }
+
     // - Types -
 
     //enum Language {

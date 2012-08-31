@@ -5,7 +5,7 @@
 // 6/30/2012
 
 #include "module/translator/translator.h"
-#include <QtCore/QStack>
+//#include <QtCore/QStack>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QWebPage)
@@ -17,12 +17,16 @@ class GoogleTranslator : public Translator
   typedef GoogleTranslator Self;
   typedef Translator Base;
 
-  QStack<QWebPage *> stack_; // web page pool
+  //QStack<QWebPage *> stack_; // web page pool
   QNetworkAccessManager *nam_; // shared nam
+  QWebPage *page_;
 
   // - Constructions -
 public:
-  explicit GoogleTranslator(QObject *parent = nullptr);
+  explicit GoogleTranslator::GoogleTranslator(QObject *parent = nullptr)
+    : Base(parent), nam_(nullptr), page_(nullptr)
+  { }
+
 
 public slots:
   void translate(const QString &text, const QString &to, const QString &from = QString()) override;
@@ -31,9 +35,8 @@ protected:
   static QString translateUrl(const QString &text, const QString &to, const QString &from = QString());
   QNetworkAccessManager *networkAccessManager();
   QWebPage *createWebPage();
-  QWebPage *allocateWebPage();
-public:
-  void releaseWebPage(QWebPage *page); ///< \internal
+  //QWebPage *allocateWebPage();
+  //void releaseWebPage(QWebPage *page); ///< \internal
 public slots:
   void processWebPage(QWebPage *page, bool success); ///< \internal
 };

@@ -16,10 +16,6 @@
 
 // - Construction -
 
-GoogleTranslator::GoogleTranslator(QObject *parent)
-  : Base(parent), nam_(nullptr)
-{ }
-
 QNetworkAccessManager*
 GoogleTranslator::networkAccessManager()
 {
@@ -52,16 +48,18 @@ GoogleTranslator::createWebPage()
   //settings->setAttribute(QWebSettings::LocalStorageEnabled, false);
   //settings->setAttribute(QWebSettings::SiteSpecificQuirksEnabled, false);
   ret->setNetworkAccessManager(networkAccessManager());
+  connect(ret, SIGNAL(loadFinished(bool)),
+          new detail::ProcessWebPage(ret, this), SLOT(trigger(bool)));
   return ret;
 }
 
-QWebPage*
-GoogleTranslator::allocateWebPage()
-{ return stack_.isEmpty() ? createWebPage() : stack_.pop(); }
+//QWebPage*
+//GoogleTranslator::allocateWebPage()
+//{ return stack_.isEmpty() ? createWebPage() : stack_.pop(); }
 
-void
-GoogleTranslator::releaseWebPage(QWebPage *page)
-{ stack_.push(page); }
+//void
+//GoogleTranslator::releaseWebPage(QWebPage *page)
+//{ stack_.push(page); }
 
 // - Translate -
 
@@ -80,13 +78,18 @@ GoogleTranslator::translate(const QString &text, const QString &to, const QStrin
   if (!isEnabled())
     return;
   DOUT("enter");
+
+  if (page_ && isSynchronized()) {
+    //reply_->abort();
+    page_->deleteLater();
+    DOUT("abort previous webpage");
+  }
+
   QString url = translateUrl(text, to, from);
   DOUT("url =" << url);
 
-  QWebPage *page = createWebPage();
-  connect(page, SIGNAL(loadFinished(bool)),
-          new detail::ProcessWebPage(page, this), SLOT(trigger(bool)));
-  page->mainFrame()->load(url);
+  page_ = createWebPage();
+  page_->mainFrame()->load(url);
   DOUT("exit");
 }
 
@@ -96,6 +99,14 @@ void
 GoogleTranslator::processWebPage(QWebPage *page, bool success)
 {
   DOUT("enter: ok =" << success);
+
+  page->deleteLater();
+  if (isSynchronized() && page_ != page) {
+    DOUT("exit: reply changed");
+    return;
+  }
+  page_ = nullptr;
+
   if (success) {
     QWebFrame *f = page->mainFrame();
     QWebElement e = f->findFirstElement("span#result_box");

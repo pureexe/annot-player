@@ -23,12 +23,12 @@ ulong
 TextThreadDelegate::threadSubcontext() const
 { return t_->GetThreadParameter()->spl; }
 
-ulong
-TextThreadDelegate::threadAnchor() const
+qint64
+TextThreadDelegate::signature() const
 {
-  if (!threadAnchor_)
-    threadAnchor_ = threadContext() + threadSubcontext();
-  return threadAnchor_;
+  if (!signature_)
+    signature_ = threadContext() + threadSubcontext();
+  return signature_;
 }
 
 QString
@@ -41,22 +41,22 @@ TextThreadDelegate::threadSummary() const
 }
 
 QString
-TextThreadDelegate::threadMethod() const
+TextThreadDelegate::provider() const
 {
-  if (threadMethod_.isEmpty()) {
+  if (provider_.isEmpty()) {
     enum { buf_size = 0x200 }; // 0x200 is used by ITH internally
     wchar_t buf[buf_size];
     ulong len = t_->GetThreadString(buf, buf_size);
     if (len)
-      threadMethod_ = QString::fromWCharArray(buf, len);
+      provider_ = QString::fromWCharArray(buf, len);
   }
-  return threadMethod_;
+  return provider_;
 }
 
 // - Actions -
 
 void
 TextThreadDelegate::send()
-{ TextHook::globalInstance()->sendMessage(buffer_, threadAnchor(), threadMethod()); }
+{ TextHook::globalInstance()->sendMessage(buffer_, signature(), provider()); }
 
 // EOF

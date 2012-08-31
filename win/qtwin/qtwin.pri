@@ -8,6 +8,7 @@ INCLUDEPATH     += $$PWD
 DEPENDPATH      += $$PWD
 
 HEADERS += \
+    $$PWD/codepage.h \
     $$PWD/qtwin.h \
     $$PWD/qtwinapi.h \
     $$PWD/winreg.h

@@ -1,6 +1,8 @@
 // translatormanager.cc
 // 7/1/2012
 
+#include "module/translator/translatormanager.h"
+
 #include "module/translator/excitetranslator.h"
 #include "module/translator/fresheyetranslator.h"
 #include "module/translator/googletranslator.h"
@@ -10,8 +12,8 @@
 #include "module/translator/ocntranslator.h"
 #include "module/translator/romajitranslator.h"
 #include "module/translator/sdltranslator.h"
-#include "module/translator/translatormanager.h"
 #include "module/translator/yahootranslator.h"
+#include <boost/foreach.hpp>
 
 // - Construction -
 
@@ -46,6 +48,15 @@ TranslatorManager::TranslatorManager(QObject *parent)
   connect(t_[Nifty], SIGNAL(translated(QString)), SIGNAL(translatedByNifty(QString)));
   connect(t_[Excite], SIGNAL(translated(QString)), SIGNAL(translatedByExcite(QString)));
   connect(t_[Sdl], SIGNAL(translated(QString)), SIGNAL(translatedBySdl(QString)));
+
+  connect(this, SIGNAL(synchronizedChanged(bool)), SLOT(updateSynchronized(bool)));
+}
+
+void
+TranslatorManager::updateSynchronized(bool t)
+{
+  BOOST_FOREACH (Translator *p, t_)
+    p->setSynchronized(t);
 }
 
 // EOF

@@ -4,7 +4,6 @@
 #include "module/translator/jdictranslator.h"
 #include "module/translator/jdictranslator_p.h"
 #include "module/qtext/bytearray.h"
-#include "module/translator/translatorsettings.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QRegExp>
 #include <QtCore/QTextCodec>
@@ -20,7 +19,7 @@
 // - Construction -
 
 JdicTranslator::JdicTranslator(QObject *parent)
-  : Base(parent), reply_(0)
+  : Base(parent), reply_(nullptr)
 {
   QTextCodec *codec = QTextCodec::codecForName(JDIC_ENCODING);
   Q_ASSERT(codec);
@@ -81,7 +80,7 @@ JdicTranslator::translate(const QString &text, const char *dict)
   if (!isEnabled())
     return;
   DOUT("enter: text =" << text);
-  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+  if (reply_ && isSynchronized()) {
     //reply_->abort();
     reply_->deleteLater();
     DOUT("abort previous reply");
@@ -107,12 +106,11 @@ JdicTranslator::processReply(QNetworkReply *reply)
   Q_ASSERT(reply);
   reply->deleteLater();
 
-  if (TranslatorSettings::globalSettings()->isSynchronized() &&
-      reply_ != reply) {
+  if (isSynchronized() && reply_ != reply) {
     DOUT("exit: reply changed");
     return;
   }
-  reply_ = 0;
+  reply_ = nullptr;
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit errorMessage(tr("network error from WWWJDIC Translator") + ": " + reply->errorString());

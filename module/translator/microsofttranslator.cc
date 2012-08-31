@@ -3,7 +3,6 @@
 
 #include "module/translator/microsofttranslator.h"
 #include "module/translator/microsofttranslator_p.h"
-#include "module/translator/translatorsettings.h"
 #ifdef WITH_MODULE_QTEXT
 # include "module/qtext/network.h"
 #endif // WITH_MODULE_QTEXT
@@ -19,7 +18,7 @@
 // - Construction -
 
 MicrosoftTranslator::MicrosoftTranslator(QObject *parent)
-  : Base(parent), reply_(0)
+  : Base(parent), reply_(nullptr)
 { connect(networkAccessManager(), SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), SLOT(authenticate(QNetworkReply*,QAuthenticator*))); }
 
 // See: http://www.developer.nokia.com/Community/Discussion/showthread.php?211356-QNetworkRequest-Authentication
@@ -65,7 +64,7 @@ MicrosoftTranslator::translate(const QString &text, const QString &to, const QSt
   if (!isEnabled())
     return;
   DOUT("enter: text =" << text);
-  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+  if (reply_ && isSynchronized()) {
     //reply_->abort();
     reply_->deleteLater();
     DOUT("abort previous reply");
@@ -104,19 +103,11 @@ MicrosoftTranslator::processReply(QNetworkReply *reply)
   Q_ASSERT(reply);
   reply->deleteLater();
 
-  if (TranslatorSettings::globalSettings()->isSynchronized() &&
-      reply_ != reply) {
+  if (isSynchronized() && reply_ != reply) {
     DOUT("exit: reply changed");
     return;
   }
-  reply_ = 0;
-
-  if (TranslatorSettings::globalSettings()->isSynchronized() &&
-      reply_ != reply) {
-    DOUT("exit: reply changed");
-    return;
-  }
-  reply_ = 0;
+  reply_ = nullptr;
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit errorMessage(tr("network error from Microsoft Translator") + ": " + reply->errorString());

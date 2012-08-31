@@ -20,7 +20,7 @@ class KotobankTranslator : public NetworkTranslator
   // - Constructions -
 public:
   explicit KotobankTranslator(QObject *parent = nullptr)
-    : Base(parent), reply_(0) { }
+    : Base(parent), reply_(nullptr) { }
 
   static const char *host() { return "http://kotobank.jp"; }
 

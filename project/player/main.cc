@@ -206,15 +206,14 @@ main(int argc, char *argv[])
     DOUT("app language =" << lang);
   }
 
-  // TO BE REMOVED
-  if (settings->annotationSpeedup() > 1)
-    settings->setAnnotationSpeedup(1.0);
-
   // Check update.
   QString previousVersion = settings->version();
   if (previousVersion != G_VERSION) {
     DOUT("update from old version");
     bool majorUpdate = !previousVersion.startsWith(G_VERSION_MAJOR);
+
+    if (settings->annotationSpeedup() > 5)
+      settings->setAnnotationSpeedup(1.0);
 
     settings->setAnnotationLanguages(QSet<int>());
     settings->setAnnotationFilterEnabled(false);
@@ -261,12 +260,15 @@ main(int argc, char *argv[])
     settings->setAnnotationChineseFontFamily(QString());
     settings->setAnnotationPositionResolution(0);
     settings->setAnnotationOutlineColor(ANNOTATION_OUTLINE_COLOR);
+    settings->setSubtitleOutlineColor(ANNOTATION_OUTLINE_COLOR_SUB);
 
     settings->setWindowOnTop(false);
     settings->setMultipleWindowsEnabled(false);
     settings->setAutoSubmit(true);
-    settings->setAnnotationScale(1.0);
-    settings->setPreferMotionlessAnnotation(true);
+    settings->setAnnotationScale(ANNOTATION_SCALE);
+    settings->setAnnotationFullscreenScale(ANNOTATION_FULLSCREEN_SCALE);
+    settings->setSubtitleOnTop(true);
+    //settings->setPreferFloatAnnotation(true);
     settings->setAnnotationAvatarVisible(false);
     settings->setAnnotationPositionResolution(0);
     settings->setAnnotationEffect(0);

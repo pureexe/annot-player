@@ -81,6 +81,9 @@ public slots:
     t_[service]->translate(text, to, from);
   }
 
+protected slots:
+  void updateSynchronized(bool t);
+
 private:
   Translator *t_[ServiceCount];
   ulong services_;

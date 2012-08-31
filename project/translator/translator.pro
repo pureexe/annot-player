@@ -1,7 +1,7 @@
 # translator.pro
 # 8/13/2012
 
-VERSION = 0.1.0.2
+VERSION = 0.1.0.3
 
 DEFINES += PROJECT_TRANSLATOR
 

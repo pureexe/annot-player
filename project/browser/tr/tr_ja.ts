@@ -245,42 +245,42 @@
 <context>
     <name>AcLocalizer</name>
     <message>
-        <location filename="../../common/aclocalizer.cc" line="21"/>
+        <location filename="../../common/aclocalizer.cc" line="27"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../common/aclocalizer.cc" line="29"/>
+        <location filename="../../common/aclocalizer.cc" line="35"/>
         <source>Browse</source>
         <translation>ブラウズ</translation>
     </message>
     <message>
-        <location filename="../../common/aclocalizer.cc" line="37"/>
+        <location filename="../../common/aclocalizer.cc" line="43"/>
         <source>Download</source>
         <translation>ダウンロード</translation>
     </message>
     <message>
-        <location filename="../../common/aclocalizer.cc" line="45"/>
+        <location filename="../../common/aclocalizer.cc" line="51"/>
         <source>Translate</source>
         <translation>翻訳</translation>
     </message>
     <message>
-        <location filename="../../common/aclocalizer.cc" line="53"/>
+        <location filename="../../common/aclocalizer.cc" line="59"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../../common/aclocalizer.cc" line="61"/>
+        <location filename="../../common/aclocalizer.cc" line="67"/>
         <source>Readme</source>
         <translation>説明書</translation>
     </message>
     <message>
-        <location filename="../../common/aclocalizer.cc" line="69"/>
+        <location filename="../../common/aclocalizer.cc" line="75"/>
         <source>Changes</source>
         <translation>更新履歴</translation>
     </message>
     <message>
-        <location filename="../../common/aclocalizer.cc" line="77"/>
+        <location filename="../../common/aclocalizer.cc" line="83"/>
         <source>License</source>
         <translation>著作権</translation>
     </message>

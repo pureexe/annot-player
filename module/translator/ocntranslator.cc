@@ -5,7 +5,6 @@
 
 #include "module/translator/ocntranslator.h"
 #include "module/translator/ocntranslator_p.h"
-#include "module/translator/translatorsettings.h"
 #include <QtCore/QString>
 //#include <QtCore/QTimer>
 #include <QtNetwork/QNetworkRequest>
@@ -21,7 +20,7 @@
 QByteArray
 OcnTranslator::currentAuthKey()
 {
-   auto utc = ::time(nullptr);
+   qint64 utc = ::time(nullptr);
    QByteArray hex = QByteArray::number(utc, 16);
    return OCN_AUTH_PREFIX + hex + OCN_AUTH_SUFFIX;
 }
@@ -59,7 +58,7 @@ OcnTranslator::translate(const QString &text, const QString &to, const QString &
     return;
   DOUT("enter: text =" << text);
 
-  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+  if (reply_ && isSynchronized()) {
     //reply_->abort();
     reply_->deleteLater();
     DOUT("abort previous reply");
@@ -79,12 +78,11 @@ OcnTranslator::processReply(QNetworkReply *reply)
   Q_ASSERT(reply);
   reply->deleteLater();
 
-  if (TranslatorSettings::globalSettings()->isSynchronized() &&
-      reply_ != reply) {
+  if (isSynchronized() && reply_ != reply) {
     DOUT("exit: reply changed");
     return;
   }
-  reply_ = 0;
+  reply_ = nullptr;
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit errorMessage(tr("network error from OCN Honyaku") + ": " + reply->errorString());

@@ -4,7 +4,6 @@
 
 #include "module/translator/sdltranslator.h"
 #include "module/translator/sdltranslator_p.h"
-#include "module/translator/translatorsettings.h"
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkAccessManager>
@@ -25,7 +24,7 @@ SdlTranslator::translate(const QString &text)
   if (!isEnabled())
     return;
   DOUT("enter: text =" << text);
-  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+  if (reply_ && isSynchronized()) {
     //reply_->abort();
     reply_->deleteLater();
     DOUT("abort previous reply");
@@ -41,12 +40,11 @@ SdlTranslator::processReply(QNetworkReply *reply)
   Q_ASSERT(reply);
   reply->deleteLater();
 
-  if (TranslatorSettings::globalSettings()->isSynchronized() &&
-      reply_ != reply) {
+  if (isSynchronized() && reply_ != reply) {
     DOUT("exit: reply changed");
     return;
   }
-  reply_ = 0;
+  reply_ = nullptr;
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit errorMessage(tr("network error from SDL Translator") + ": " + reply->errorString());

@@ -28,6 +28,8 @@
 #define DEBUG "mainwindow"
 #include "module/debug/debug.h"
 
+enum { DEFAULT_TRANSLATORS = TranslatorManager::RomajiBit | TranslatorManager::OcnBit | TranslatorManager::FresheyeBit };
+
 #define JDIC_CSS \
   HTML_CSS_OPEN() \
     SS_BEGIN(div) \
@@ -68,7 +70,7 @@
      Qt::WindowType(0)
 
 MainWindow::MainWindow(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), disposed_(false), translatedTextChanged_(false)
+  : Base(parent, WINDOW_FLAGS), disposed_(false), translatedTextChanged_(true)
 {
   //if (Settings::globalSettings()->windowOnTop())
   //  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
@@ -127,7 +129,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   ulong t = Settings::globalSettings()->translationServices();
   if (!t)
-    t = TranslatorManager::RomajiBit | TranslatorManager::InfoseekBit;
+    t = DEFAULT_TRANSLATORS;
   romajiButton_->setChecked(t & TranslatorManager::RomajiBit);
   microsoftButton_->setChecked(t & TranslatorManager::MicrosoftBit);
   googleButton_->setChecked(t & TranslatorManager::GoogleBit);
@@ -588,7 +590,9 @@ MainWindow::translate(const QString &input)
   showMessage(tr("translate") + ": " + input);
 
   if (translatedTextChanged_) {
-    showTextTranslation(HTML_SS_OPEN(color:gray) "--------" HTML_SS_CLOSE());
+    browsers_[TextBrowser]->clear();
+    //showTextTranslation(HTML_SS_OPEN(color:gray) "--------" HTML_SS_CLOSE());
+    showTextTranslation(HTML_SS(+input+, color:gray));
     translatedTextChanged_ = false;
   }
   //textTranslator_->translate(t, language_); // FIXME: inlining is not working under clang T_T
@@ -664,6 +668,7 @@ void
 MainWindow::showYahooTranslation(const QString &text)
 {
   showTextTranslation(
+    "Yahoo!: "
     HTML_SS_OPEN(color:maroon) + text + HTML_SS_CLOSE()
   );
 }
@@ -672,6 +677,7 @@ void
 MainWindow::showFresheyeTranslation(const QString &text)
 {
   showTextTranslation(
+    "freshEYE: "
     HTML_SS_OPEN(color:teal) + text + HTML_SS_CLOSE()
   );
 }
@@ -680,6 +686,7 @@ void
 MainWindow::showInfoseekTranslation(const QString &text)
 {
   showTextTranslation(
+    "Infoseek: "
     HTML_SS_OPEN(color:red) + text + HTML_SS_CLOSE()
   );
 }
@@ -688,6 +695,7 @@ void
 MainWindow::showSdlTranslation(const QString &text)
 {
   showTextTranslation(
+    "SDL: "
     HTML_SS_OPEN(color:brown) + text + HTML_SS_CLOSE()
   );
 }
@@ -696,6 +704,7 @@ void
 MainWindow::showNiftyTranslation(const QString &text)
 {
   showTextTranslation(
+    "@nifty: "
     HTML_SS_OPEN(color:black) + text + HTML_SS_CLOSE()
   );
 }
@@ -704,6 +713,7 @@ void
 MainWindow::showOcnTranslation(const QString &text)
 {
   showTextTranslation(
+    "OCN: "
     HTML_SS_OPEN(color:blue) + text + HTML_SS_CLOSE()
   );
 }
@@ -712,6 +722,7 @@ void
 MainWindow::showExciteTranslation(const QString &text)
 {
   showTextTranslation(
+    "Excite: "
     HTML_SS_OPEN(color:magenta) + text + HTML_SS_CLOSE()
   );
 }
@@ -720,7 +731,8 @@ void
 MainWindow::showGoogleTranslation(const QString &text)
 {
   showTextTranslation(
-    HTML_SS_OPEN(color:orange) + text + HTML_SS_CLOSE()
+    "Google: "
+    HTML_SS_OPEN(color:olive) + text + HTML_SS_CLOSE()
   );
 }
 
@@ -728,6 +740,7 @@ void
 MainWindow::showMicrosoftTranslation(const QString &text)
 {
   showTextTranslation(
+    "Microsoft: "
     HTML_SS_OPEN(color:indigo) + text + HTML_SS_CLOSE()
   );
 }
@@ -736,6 +749,7 @@ void
 MainWindow::showRomajiTranslation(const QString &text)
 {
   showTextTranslation(
+    "Romaji: "
     HTML_SS_OPEN(color:purple) + text + HTML_SS_CLOSE()
   );
 }

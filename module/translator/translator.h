@@ -14,6 +14,7 @@ class Translator : public QObject
   typedef QObject Base;
 
   bool enabled_;
+  bool synchronized_;
 
   // - Constructions -
 public:
@@ -22,20 +23,25 @@ public:
 
 public:
   explicit Translator(QObject *parent = nullptr)
-    : Base(parent), enabled_(true) { }
+    : Base(parent), enabled_(true), synchronized_(true) { }
 
   bool isEnabled() const { return enabled_; }
+  bool isSynchronized() const { return synchronized_; }
 
 signals:
   void errorMessage(const QString &msg);
   void translated(const QString &text); ///< Requested translation received
   void enabledChanged(bool t);
+  void synchronizedChanged(bool t);
 
 public slots:
   virtual void translate(const QString &text, const QString &to, const QString &from = QString()) = 0;
 
   void setEnabled(bool t)
   { if (enabled_ != t) emit enabledChanged(enabled_ = t); }
+
+  void setSynchronized(bool t)
+  { if (synchronized_ != t) emit synchronizedChanged(synchronized_ = t); }
 };
 
 #endif // TRANSLATOR_H

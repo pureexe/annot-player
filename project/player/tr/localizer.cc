@@ -287,7 +287,6 @@ Localizer::translate(int tid)
   case T_TITLE_OPENSUBTITLE:    return tr("Open Subtitle");
   case T_TITLE_COMMENTVIEW:     return tr("Comments");
   case T_TITLE_ANNOTANALYTICS:     return tr("Annotations Analytics");
-  case T_TITLE_SIGNALVIEW:      return tr("Select Process Signal");
   case T_TITLE_LIVE:            return tr("Live Channel");
   case T_TITLE_SYNC:            return tr("Sync Mode");
 
@@ -598,7 +597,7 @@ Localizer::translate(int tid)
   case T_TIP_ADDALIAS:          return tr("Add alias");
 
   case T_MENUTEXT_SIGNALVIEW:     return tr("Select Game Process");
-  case T_TIP_SIGNALVIEW:          return tr("Select process signal");
+  case T_TIP_SIGNALVIEW:          return tr("Select game process");
 
   case T_MENUTEXT_ATTACHPROCESS: return tr("Attach Process");
   case T_TIP_ATTACHPROCESS:     return tr("Attach process");
@@ -609,8 +608,8 @@ Localizer::translate(int tid)
   case T_MENUTEXT_REFRESHPROCESS: return tr("Refresh Process");
   case T_TIP_REFRESHPROCESS:    return tr("Refresh process");
 
-  case T_MENUTEXT_RECENTMESSAGES: return tr("Game Preferences");
-  case T_TIP_RECENTMESSAGES:    return tr("Game Preferences");
+  case T_MENUTEXT_RECENTMESSAGES: return tr("Game Settings");
+  case T_TIP_RECENTMESSAGES:    return tr("Game settings");
 
   case T_MENUTEXT_PLAYLIST:     return tr("Playlist");
   case T_TIP_PLAYLIST:          return tr("Playlist");

@@ -17,7 +17,7 @@ class GameView : public AcMainWindow
   typedef GameView Self;
   typedef AcMainWindow Base;
 
-  QLabel *encodingLabel_, *functionLabel_;
+  QLabel *encodingLabel_; //*functionLabel_;
 
   GameLibrary *library_;
   QString digest_;

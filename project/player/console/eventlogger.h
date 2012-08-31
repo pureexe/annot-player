@@ -83,6 +83,7 @@ public slots:
   void logAnnotationScaleChanged(qreal value);
   void logAnnotationFullscreenScaleChanged(qreal value);
   void logAnnotationOpacityFactorChanged(int value);
+  void logAnnotationBackgroundOpacityFactorChanged(int value);
   void logAnnotationSpeedupChanged(qreal value);
   void logAnnotationRotationChanged(qreal value);
   void logAnnotationOffsetChanged(int value);
@@ -100,7 +101,7 @@ public slots:
   void logSelectedUserIds(const QList<qint64> &uids);
 
   void logInternetConnectionChanged(bool t);
-  void logPreferMotionlessAnnotationChanged(bool t);
+  void logPreferFloatAnnotationChanged(bool t);
 
   void logFileSaved(const QString &fileName);
 

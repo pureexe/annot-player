@@ -11,6 +11,7 @@
 
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
+#include "module/annotcloud/gamethread.h"
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/user.h"
 #include <QtCore/QMutex>
@@ -32,6 +33,8 @@ class AnnotationServerAgent: public QObject
   typedef AnnotCloud::AliasList AliasList;
   typedef AnnotCloud::Annotation Annotation;
   typedef AnnotCloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::GameThread GameThread;
+  typedef AnnotCloud::GameThreadList GameThreadList;
 
 public:
   explicit AnnotationServerAgent(QObject *parent = nullptr);
@@ -98,10 +101,13 @@ public:
   qint64 submitAnnotation(const Annotation &annot);
   bool submitAnnotations(const AnnotationList &annots);
 
+  qint64 submitGameThread(const GameThread &thread);
+  bool submitGameThreads(const GameThreadList &threads);
   // - Update -
 public:
   bool updateAnnotationTextWithId(const QString &text, qint64 id);
   bool updateAnnotationUserIdWithId(qint64 userId, qint64 id);
+  bool updateGameThread(const GameThread &thread);
 
   // - Queries -
 public:
@@ -115,6 +121,9 @@ public:
  ///  Clustered at server based on token's aliases
   AnnotationList selectRelatedAnnotationsWithTokenId(qint64 tid);
   AliasList selectRelatedAliasesWithTokenId(qint64 tid);
+
+  GameThread selectGameThreadWithTokenId(qint64 tid);
+  GameThread selectGameThreadWithTokenDigest(const QString &digest);
 
   // - Deletion -
 public:
@@ -155,12 +164,12 @@ public:
 public:
   QString chat(const QString &message);
 
-  qint64 submitLiveAnnotation(const Annotation &annot);
-  qint64 submitLiveAnnotationText(const QString &text);
+  //qint64 submitLiveAnnotation(const Annotation &annot);
+  //qint64 submitLiveAnnotationText(const QString &text);
 
-  AnnotationList selectLiveAnnotations();
+  //AnnotationList selectLiveAnnotations();
 
-  qint32 selectLiveTokenInterval();
+  //qint32 selectLiveTokenInterval();
 
   // - Implementations -
 private:

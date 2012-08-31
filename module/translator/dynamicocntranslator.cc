@@ -5,7 +5,6 @@
 
 #include "module/translator/dynamicocntranslator.h"
 #include "module/translator/ocntranslator_p.h"
-#include "module/translator/translatorsettings.h"
 #include "module/qtext/network.h"
 #include <QtCore/QString>
 #include <QtNetwork/QNetworkRequest>
@@ -71,7 +70,7 @@ DynamicOcnTranslator::translate(const QString &text, const QString &to, const QS
   if (!isEnabled())
     return;
   DOUT("enter");
-  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+  if (reply_ && isSynchronized()) {
     //reply_->abort();
     reply_->deleteLater();
     DOUT("abort previous reply");
@@ -95,12 +94,11 @@ DynamicOcnTranslator::processReply(QNetworkReply *reply)
   Q_ASSERT(reply);
   reply->deleteLater();
 
-  if (TranslatorSettings::globalSettings()->isSynchronized() &&
-      reply_ != reply) {
+  if (isSynchronized() && reply_ != reply) {
     DOUT("exit: reply changed");
     return;
   }
-  reply_ = 0;
+  reply_ = nullptr;
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit errorMessage(tr("network error from OCN Honyaku") + ": " + reply->errorString());

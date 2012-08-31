@@ -48,6 +48,7 @@
 
 #define CORE_CMD_VIEW_FLY               CORE_CMDSTR "fly"
 #define CORE_CMD_VIEW_FLOAT             CORE_CMDSTR "float"
+#define CORE_CMD_VIEW_DRIFT             CORE_CMDSTR "drift"
 #define CORE_CMD_VIEW_TOP               CORE_CMDSTR "top"
 #define CORE_CMD_VIEW_BOTTOM            CORE_CMDSTR "bottom"
 #define CORE_CMD_SUB                    CORE_CMDSTR "sub"
@@ -147,12 +148,13 @@ namespace AnnotCloud {
     H_Tr =              25522,          // CORE_CMD_CTRL_TR
     H_Warn =            6543502,        // CORE_CMD_CTRL_WARN
 
-    H_Fly =             404793,         // CORE_CMD_ANNOT_FLY
-    H_Float =           103626116,      // CORE_CMD_ANNOT_FLOAT
-    H_Top =             408416,         // CORE_CMD_ANNOT_TOP
-    H_Bottom =          43432861,       // CORE_CMD_ANNOT_BOTTOM
-    H_Sub =             408242,         // CORE_CMD_ANNOT_SUB
-    H_Subtitle =        194759781,      // CORE_CMD_ANNOT_SUBTITLE
+    H_Fly =             404793,         // CORE_CMD_VIEW_FLY
+    H_Float =           103626116,      // CORE_CMD_VIEW_FLOAT
+    H_Drift =           103518164,      // CORE_CMD_VIEW_DRIFT
+    H_Top =             408416,         // CORE_CMD_VIEW_TOP
+    H_Bottom =          43432861,       // CORE_CMD_VIEW_BOTTOM
+    H_Sub =             408242,         // CORE_CMD_VIEW_SUB
+    H_Subtitle =        194759781,      // CORE_CMD_VIEW_SUBTITLE
 
     // - Effect -
     H_Transp =          62424416,

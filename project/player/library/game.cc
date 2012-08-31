@@ -33,6 +33,12 @@ namespace { // anonymous
 #define TAG_VISITTIME   "visitTime"
 #define TAG_VISITCOUNT  "visitCount"
 
+#define TAG_THREADS     "threads"
+#define TAG_THREAD      "thread"
+#define TAG_ROLE        "role"
+#define TAG_SIGNATURE   "signature"
+#define TAG_PROVIDER    "provider"
+
   //ulong functionId_;
   //void setEncoding(const QString &value) { encoding_ = value; }
   //bool enabled_;
@@ -47,7 +53,13 @@ enum Hash {
   H_Location = 93889086,
   H_Title = 8063781,
   H_VisitCount = 9030932,
-  H_VisitTime = 168384053
+  H_VisitTime = 168384053,
+
+  H_Threads = 184072019,
+  H_Thread = 128945012,
+  H_Role = 497189,
+  H_Signature = 239619941,
+  H_Provider = 158135330
 };
 
 // - Read-
@@ -78,10 +90,13 @@ Game::readList(const QString &fileName)
   while (!e.isNull()) {
     QDomElement c = e.firstChildElement();
     Self v;
+    TextThread oldThread; // TO BE REMOVED
     while (!c.isNull()) {
       switch (qHash(c.tagName())) {
-      case H_Anchor:     v.setAnchor(c.text().toULong()); break;
-      case H_Function:   v.setFunction(c.text()); break;
+      // TO BE REMOVED
+      case H_Anchor:     oldThread.setSignature(c.text().toLongLong()); break;
+      case H_Function:   oldThread.setProvider(c.text()); break;
+
       case H_Encoding:   v.setEncoding(c.text()); break;
       case H_Enabled:    v.setEnabled(c.text() == "true"); break;
       case H_TokenId:    v.setTokenId(c.text().toLongLong()); break;
@@ -90,11 +105,38 @@ Game::readList(const QString &fileName)
       case H_Title:      v.setTitle(c.text()); break;
       case H_VisitTime:  v.setVisitTime(c.text().toLongLong()); break;
       case H_VisitCount: v.setVisitCount(c.text().toInt()); break;
+
+      case H_Threads:
+        {
+          QDomElement te = c.firstChildElement(TAG_THREAD);
+          while (!te.isNull()) {
+            QDomElement tc = te.firstChildElement();
+            TextThread t;
+            while (!tc.isNull()) {
+              switch (qHash(tc.tagName())) {
+              case H_Provider:  t.setProvider(tc.text()); break;
+              case H_Role:      t.setRole(tc.text().toInt()); break;
+              case H_Signature: t.setSignature(tc.text().toLongLong()); break;
+              default: DOUT("warning: unknown thread tag:" << tc.tagName());
+              }
+              tc = tc.nextSiblingElement();
+            }
+            if (t.hasSignature() && t.hasRole())
+              v.threads().append(t);
+            te = te.nextSiblingElement(TAG_THREAD);
+          }
+        } break;
       default: DOUT("warning: unknown tag:" << c.tagName());
       }
       c = c.nextSiblingElement();
     }
-    ret.append(v);
+
+    if (oldThread.hasSignature()) {
+      oldThread.setRole(TextThread::LeadingRole);
+      v.threads().append(oldThread);
+    }
+    if (v.hasThreads())
+      ret.append(v);
     e = e.nextSiblingElement(TAG_VALUE);
   }
   DOUT("exit: size =" << ret.size());
@@ -127,24 +169,54 @@ Game::readHash(const QString &fileName)
   while (!e.isNull()) {
     QDomElement c = e.firstChildElement();
     Self v;
+    TextThread oldThread; // TO BE REMOVED
     while (!c.isNull()) {
       switch (qHash(c.tagName())) {
-      case H_Anchor:     v.setAnchor(c.text().toULong()); break;
-      case H_Function:   v.setFunction(c.text()); break;
+      // TO BE REMOVED
+      case H_Anchor:     oldThread.setSignature(c.text().toLongLong()); break;
+      case H_Function:   oldThread.setProvider(c.text()); break;
+
       case H_Encoding:   v.setEncoding(c.text()); break;
+      case H_Enabled:    v.setEnabled(c.text() == "true"); break;
       case H_TokenId:    v.setTokenId(c.text().toLongLong()); break;
       case H_Digest:     v.setDigest(c.text()); break;
       case H_Location:   v.setLocation(c.text()); break;
-      case H_Enabled:    v.setEnabled(c.text() == "true"); break;
       case H_Title:      v.setTitle(c.text()); break;
       case H_VisitTime:  v.setVisitTime(c.text().toLongLong()); break;
       case H_VisitCount: v.setVisitCount(c.text().toInt()); break;
+
+      case H_Threads:
+        {
+          QDomElement te = c.firstChildElement(TAG_THREAD);
+          while (!te.isNull()) {
+            QDomElement tc = te.firstChildElement();
+            TextThread t;
+            while (!tc.isNull()) {
+              switch (qHash(tc.tagName())) {
+              case H_Provider:  t.setProvider(tc.text()); break;
+              case H_Role:      t.setRole(tc.text().toInt()); break;
+              case H_Signature: t.setSignature(tc.text().toLongLong()); break;
+              default: DOUT("warning: unknown thread tag:" << tc.tagName());
+              }
+              tc = tc.nextSiblingElement();
+            }
+            if (t.hasSignature() && t.hasRole())
+              v.threads().append(t);
+            te = te.nextSiblingElement(TAG_THREAD);
+          }
+        } break;
       default: DOUT("warning: unknown tag:" << c.tagName());
       }
       c = c.nextSiblingElement();
     }
+
+    if (oldThread.hasSignature()) {
+      oldThread.setRole(TextThread::LeadingRole);
+      v.threads().append(oldThread);
+    }
+
     QString k = v.key();
-    if (!k.isEmpty())
+    if (!k.isEmpty() && v.hasThreads())
       ret[k] = v;
     e = e.nextSiblingElement(TAG_VALUE);
   }
@@ -184,14 +256,27 @@ Game::write(const L &l, const QString &fileName)
 
     writer.writeTextElement(TAG_TOKENID, QString::number(v.tokenId()));
     writer.writeTextElement(TAG_DIGEST, v.digest());
-    writer.writeTextElement(TAG_ANCHOR, QString::number(v.anchor()));
-    writer.writeTextElement(TAG_FUNCTION, v.function());
     writer.writeTextElement(TAG_ENCODING, v.encoding());
     writer.writeTextElement(TAG_LOCATION, v.location());
     writer.writeTextElement(TAG_ENABLED, v.isEnabled() ? "true" : "false");
     writer.writeTextElement(TAG_TITLE, v.title());
     writer.writeTextElement(TAG_VISITTIME, QString::number(v.visitTime()));
     writer.writeTextElement(TAG_VISITCOUNT, QString::number(v.visitCount()));
+
+
+    //writer.writeTextElement(TAG_ANCHOR, QString::number(v.anchor()));
+    //writer.writeTextElement(TAG_FUNCTION, v.function());
+    if (v.hasThreads()) {
+      writer.writeStartElement(TAG_THREADS);
+      foreach (const TextThread &t, v.threads()) {
+        writer.writeStartElement(TAG_THREAD);
+        writer.writeTextElement(TAG_PROVIDER, t.provider());
+        writer.writeTextElement(TAG_SIGNATURE, QString::number(t.signature()));
+        writer.writeTextElement(TAG_ROLE, QString::number(t.role()));
+        writer.writeEndElement();
+      }
+      writer.writeEndElement();
+    }
 
     writer.writeEndElement();
   }

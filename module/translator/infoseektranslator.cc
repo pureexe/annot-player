@@ -5,7 +5,6 @@
 
 #include "module/translator/infoseektranslator.h"
 #include "module/translator/infoseektranslator_p.h"
-#include "module/translator/translatorsettings.h"
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkAccessManager>
@@ -65,7 +64,7 @@ InfoseekTranslator::translate(const QString &text, const QString &to, const QStr
   if (!isEnabled())
     return;
   DOUT("enter: text =" << text);
-  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+  if (reply_ && isSynchronized()) {
     //reply_->abort();
     reply_->deleteLater();
     DOUT("abort previous reply");
@@ -85,12 +84,11 @@ InfoseekTranslator::processReply(QNetworkReply *reply)
   Q_ASSERT(reply);
   reply->deleteLater();
 
-  if (TranslatorSettings::globalSettings()->isSynchronized() &&
-      reply_ != reply) {
+  if (isSynchronized() && reply_ != reply) {
     DOUT("exit: reply changed");
     return;
   }
-  reply_ = 0;
+  reply_ = nullptr;
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit errorMessage(tr("network error from Infoseek Honyaku") + ": " + reply->errorString());

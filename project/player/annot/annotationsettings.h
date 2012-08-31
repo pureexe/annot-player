@@ -31,15 +31,17 @@
 
 #define ANNOTATION_FONT_SIZE  18
 
-#define ANNOTATION_FULLSCREEN_SCALE 1.2
+#define ANNOTATION_SCALE    0.8
+#define ANNOTATION_FULLSCREEN_SCALE 1.0
 
 //#define ANNOTATION_OUTLINE_COLOR        QColor(50,100,100)
 #define ANNOTATION_OUTLINE_COLOR        QColor(45,95,95)
 #define ANNOTATION_OUTLINE_COLOR_HOVER  Qt::red
 #define ANNOTATION_OUTLINE_COLOR_SELF   Qt::darkYellow
-#define ANNOTATION_OUTLINE_COLOR_SUB    Qt::magenta
+#define ANNOTATION_OUTLINE_COLOR_SUB    QColor(170,0,127)
 
-#define ANNOTATION_OPACITY_FACTOR 92
+#define ANNOTATION_OPACITY_FACTOR   92
+#define ANNOTATION_BACKGROUND_OPACITY_FACTOR    10
 
 #define ANNOTATION_POSITION_RESOLUTION  0
 
@@ -52,7 +54,8 @@ class AnnotationSettings : public QObject
 
   qreal scale_,
         fullscreenScale_;
-  int opacityFactor_;
+  int opacityFactor_,
+      backgroundOpacityFactor_;
   qreal rotation_;
   qreal speedup_;
   int offset_;
@@ -63,7 +66,7 @@ class AnnotationSettings : public QObject
 
   bool avatarVisible_;
   bool metaVisible_;
-  bool motionless_;
+  bool preferFloat_;
 
   bool subtitleOnTop_;
 
@@ -77,9 +80,10 @@ public:
   static Self *globalSettings() { static Self g; return &g; }
 protected:
   explicit AnnotationSettings(QObject *parent = nullptr)
-    : Base(parent), scale_(1.0), fullscreenScale_(ANNOTATION_FULLSCREEN_SCALE), opacityFactor_(ANNOTATION_OPACITY_FACTOR),
+    : Base(parent), scale_(ANNOTATION_SCALE), fullscreenScale_(ANNOTATION_FULLSCREEN_SCALE),
+      opacityFactor_(ANNOTATION_OPACITY_FACTOR), backgroundOpacityFactor_(ANNOTATION_BACKGROUND_OPACITY_FACTOR),
       rotation_(0), speedup_(1.0), offset_(0), positionResolution_(ANNOTATION_POSITION_RESOLUTION),
-      avatarVisible_(false), motionless_(true), subtitleOnTop_(false), traditionalChinese_(false)
+      avatarVisible_(false), preferFloat_(true), subtitleOnTop_(false), traditionalChinese_(false)
   {
     resetOutlineColor();
     resetSubtitleColor();
@@ -93,6 +97,7 @@ signals:
   void scaleChanged(qreal value);
   void fullscreenScaleChanged(qreal value);
   void opacityFactorChanged(int value);
+  void backgroundOpacityFactorChanged(int value);
   void speedupChanged(qreal value);
   void positionResolutionChanged(int value);
   void subtitleOnTopChanged(bool value);
@@ -100,7 +105,7 @@ signals:
   void offsetChanged(int value);
   void avatarVisibleChanged(bool value);
   void metaVisibleChanged(bool value);
-  void preferMotionlessChanged(bool value);
+  void preferFloatChanged(bool value);
   void outlineColorChanged(QColor color);
   void highlightColorChanged(QColor color);
   void subtitleColorChanged(QColor color);
@@ -111,6 +116,8 @@ public:
   qreal fullscreenScale() const { return fullscreenScale_; }
   int opacityFactor() const { return opacityFactor_; }
   qreal opacity() const { return opacityFactor_ / 100.0; }
+  int backgroundOpacityFactor() const { return backgroundOpacityFactor_; }
+  qreal backgroundOpacity() const { return backgroundOpacityFactor_ / 100.0; }
   qreal rotation() const { return rotation_; }
   qreal speedup() const { return speedup_; }
   int offset() const { return offset_; }
@@ -136,19 +143,22 @@ public:
 
   bool isSubtitleOnTop() const { return subtitleOnTop_; }
 
-  bool preferMotionless() const { return motionless_; }
+  bool preferFloat() const { return preferFloat_; }
 
   bool preferTraditionalChinese() const { return traditionalChinese_; }
 
 public slots:
   void setScale(qreal value) { if (!qFuzzyCompare(scale_, value)) emit scaleChanged(scale_ = value); }
-  void resetScale() { setScale(1.0); }
+  void resetScale() { setScale(ANNOTATION_SCALE); }
 
   void setFullscreenScale(qreal value) { if (!qFuzzyCompare(fullscreenScale_, value)) emit fullscreenScaleChanged(fullscreenScale_ = value); }
   void resetFullscreenScale() { setFullscreenScale(ANNOTATION_FULLSCREEN_SCALE); }
 
   void setOpacityFactor(int value) { if (opacityFactor_ != value) emit opacityFactorChanged(opacityFactor_ = value); }
   void resetOpacityFactor() { setOpacityFactor(ANNOTATION_OPACITY_FACTOR); }
+
+  void setBackgroundOpacityFactor(int value) { if (backgroundOpacityFactor_ != value) emit backgroundOpacityFactorChanged(backgroundOpacityFactor_ = value); }
+  void resetBackgroundOpacityFactor() { setBackgroundOpacityFactor(ANNOTATION_BACKGROUND_OPACITY_FACTOR); }
 
   void setRotation(qreal value) { if (!qFuzzyCompare(rotation_+1, value+1)) emit rotationChanged(rotation_ = value); }
   void resetRotation() { setRotation(0); }
@@ -213,8 +223,8 @@ public slots:
   void setMetaVisible(bool value)
   { if (metaVisible_ != value) emit metaVisibleChanged(metaVisible_ = value); }
 
-  void setPreferMotionless(bool value)
-  { if (motionless_ != value) emit preferMotionlessChanged(motionless_ = value);}
+  void setPreferFloat(bool value)
+  { if (preferFloat_ != value) emit preferFloatChanged(preferFloat_ = value);}
 
   //void resetFontFamily() { resetFont(); }
 

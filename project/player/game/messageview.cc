@@ -2,6 +2,8 @@
 // 10/16/2011
 
 #include "messageview.h"
+#include "messagehandler.h"
+#include "checkboxgrid.h"
 #include "radiobuttongrid.h"
 #include "textcodecmanager.h"
 #include "tr.h"
@@ -30,12 +32,15 @@
 
 // - Construction -
 
-MessageView::MessageView(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), active_(false)
+MessageView::MessageView(MessageHandler *h, QWidget *parent)
+  : Base(parent, WINDOW_FLAGS), active_(false), messageHandler_(h)
 {
   setWindowTitle(tr("Message view"));
 
   createLayout();
+
+  setActive(true); // always active
+  encodingEdit_->setFocus();
 }
 
 void
@@ -44,13 +49,22 @@ MessageView::createLayout()
   AcUi *ui = AcUi::globalInstance();
   ui->setWindowStyle(this);
 
+  enum { MaxThreadCount = 50, ThreadGridColumn = 4 };
+#ifdef WITH_WIN_TEXTHOOK
+  //static_assert(MaxThreadCount >= TextHook::capacity(), "thread capacity");
+  Q_ASSERT(MaxThreadCount >= TextHook::capacity());
+#endif // WITH_WIN_TEXTHOOK
 
-  enum { MaxChannelCount = 50, GridColumn = 4 };
-  channelGrid_ = new RadioButtonGrid(MaxChannelCount, GridColumn, this);
-  connect(channelGrid_, SIGNAL(valueChanged(int)), SLOT(setCurrentText(int)));
-  connect(channelGrid_, SIGNAL(valueChanged(int)), SLOT(updateButtons()));
+  leadingThreads_ = new RadioButtonGrid(MaxThreadCount, ThreadGridColumn, this);
+  supportThreads_ = new CheckBoxGrid(MaxThreadCount, ThreadGridColumn, this);
 
-  textEdit_ = ui->makeTextEdit(AcUi::ReadOnlyHint, tr("Process message")); {
+  connect(leadingThreads_, SIGNAL(currentIndexChanged(int)), SLOT(updateGrid()));
+  connect(leadingThreads_, SIGNAL(currentIndexChanged(int)), SLOT(updateButtons()));
+  connect(leadingThreads_, SIGNAL(currentIndexChanged(int)), SLOT(updateText()));
+  connect(supportThreads_, SIGNAL(selectionChanged()), SLOT(updateButtons()));
+  connect(supportThreads_, SIGNAL(selectionChanged()), SLOT(updateText()));
+
+  textEdit_ = ui->makeTextEdit(AcUi::ReadOnlyHint, tr("Game messages")); {
     //QTextCharFormat fmt;
     //fmt.setBackground(Qt::red);
     //QTextCursor tc = textEdit_->textCursor();
@@ -67,14 +81,14 @@ MessageView::createLayout()
   QStringList defaultEncodings = QStringList()
     << QString("SHIFT-JIS [%1]").arg(ja)
     << "UTF-16"
-    << "UTF-8"
-    << QString("EUC-JP [%1]").arg(ja)
-    << QString("ISO-2022-JP [%1]").arg(ja)
-    << QString("ISO-8859-1 [%1]").arg(en)
-    << QString("GBK [%1]").arg(chs)
+    //<< "UTF-8"
+    //<< QString("EUC-JP [%1]").arg(ja)
+    //<< QString("ISO-2022-JP [%1]").arg(ja)
+    //<< QString("ISO-8859-1 [%1]").arg(en)
     << QString("BIG5 [%1]").arg(cht)
+    << QString("GBK [%1]").arg(chs)
     << QString("EUC-KR [%1]").arg(ko)
-    << "UNICODE"
+    //<< "UNICODE"
     << TEXT_CODEC_DEFAULT;
 
   encodingEdit_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Text Encoding"), tr("Encoding"), defaultEncodings);
@@ -99,16 +113,23 @@ MessageView::createLayout()
         AcUi::PushHint | AcUi::HighlightHint | AcUi::InvertHint, TR(T_OK), tr("Listen to selected channel"), this, SLOT(select()));
 
   resetButton_ = ui->makeToolButton(
-        AcUi::PushHint, TR(T_RESET), tr("Reset changes and texts"), this, SLOT(clear()));
+        AcUi::PushHint, TR(T_RESET), tr("Reset changes and texts"), this, SLOT(reset()));
 
   //hookCountLabel_ = ui->makeLabel(0, "/0", tr("Current signal"), hookIndexEdit_);
 
   // Set layout
 
+  QGroupBox *leadingGroup = ui->makeGroupBox(AcUi::TabHint, tr("Leading Thread")),
+            *supportGroup = ui->makeGroupBox(AcUi::TabHint, tr("Supplementary Threads"));
+
+  leadingGroup->setLayout(leadingThreads_->layout());
+  supportGroup->setLayout(supportThreads_->layout());
+
   QVBoxLayout *rows = new QVBoxLayout; {
     QHBoxLayout *header = new QHBoxLayout;
     rows->addLayout(header);
-    rows->addLayout(channelGrid_->layout());
+    rows->addWidget(leadingGroup);
+    rows->addWidget(supportGroup);
     rows->addWidget(textEdit_);
 
     header->addWidget(encodingEdit_);
@@ -121,17 +142,8 @@ MessageView::createLayout()
 
     // left, top, right, bottom
     header->setContentsMargins(0, 0, 0, 0);
-    rows->setContentsMargins(9, 6, 9, 9);
+    rows->setContentsMargins(4, 2, 4, 4);
   } setLayout(rows);
-
-  // Start up status
-  clear();
-
-  //invalidateCurrentCharFormat();
-  updateButtons();
-
-  encodingEdit_->setFocus();
-  //hookIndexEdit_->setFocus();
 }
 
 // - Properties -
@@ -142,13 +154,13 @@ MessageView::setActive(bool active)
   active_ = active;
 #ifdef WITH_WIN_TEXTHOOK
   if (active_) {
-    connect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,QString)),
-            SLOT(processMessage(QByteArray,ulong,QString)));
+    connect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,qint64,QString)),
+            SLOT(processMessage(QByteArray,qint64,QString)));
     connect(TextCodecManager::globalInstance(), SIGNAL(encodingChanged(QString)),
             SLOT(refresh()));
   } else {
-    disconnect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,ulong,QString)),
-               this, SLOT(processMessage(QByteArray,ulong,QString)));
+    disconnect(TextHook::globalInstance(), SIGNAL(messageReceived(QByteArray,qint64,QString)),
+               this, SLOT(processMessage(QByteArray,qint64,QString)));
     disconnect(TextCodecManager::globalInstance(), SIGNAL(encodingChanged(QString)),
                this, SLOT(refresh()));
   }
@@ -158,7 +170,11 @@ MessageView::setActive(bool active)
 void
 MessageView::refresh()
 {
-  setCurrentText(currentIndex());
+  //updateLeadingGrid();
+  //updateSupportingGrid();
+  updateGrid();
+  updateButtons();
+  updateText();
   refreshEncodingEdit();
 }
 
@@ -173,77 +189,92 @@ MessageView::refreshEncodingEdit()
 void
 MessageView::setVisible(bool visible)
 {
-  if (active_ != visible)
-    setActive(visible);
+  //if (active_ != visible)
+  //  setActive(visible);
+
   if (visible)
-    refreshEncodingEdit();
+    refresh();
   Base::setVisible(visible);
-}
-
-bool
-MessageView::isEmpty() const
-{ return channelGrid_->isEmpty(); }
-
-int
-MessageView::currentIndex() const
-{ return channelGrid_->value(); }
-
-void
-MessageView::setCurrentIndex(int index)
-{
-  channelGrid_->setValue(index);
-  updateButtons();
-}
-
-ulong
-MessageView::currentAnchor() const
-{
-  int index = currentIndex();
-  return index < 0 || index >= anchors_.size() ? 0
-       : anchors_[index];
-}
-
-QString
-MessageView::currentFunction() const
-{
-  int index = currentIndex();
-  return index < 0 || index >= functions_.size() ? 0
-       : functions_[index];
 }
 
 // - Actions -
 
 void
-MessageView::addMessages(const QList<QByteArray> &l, ulong anchor, const QString &function)
+MessageView::addMessages(const QList<QByteArray> &l, qint64 signature, const QString &provider)
 {
   foreach (const QByteArray &data, l)
-    processMessage(data, anchor, function);
+    processMessage(data, signature, provider);
 }
 
 void
 MessageView::select()
 {
-  ulong anchor = currentAnchor();
-  if (anchor) {
-    QString func = currentFunction();
-    emit message(tr("channel selected") + ": " + func);
-    emit channelSelected(anchor, func);
+  if (!leadingThreads_->hasSelection())
+    return;
+
+  TextThread t;
+  QString provider = leadingThreads_->currentText();
+  t.setRole(TextThread::LeadingRole);
+  t.setProvider(provider);
+  t.setSignature(signatures_[leadingThreads_->currentIndex()]);
+
+  TextThreadList l;
+  l.append(t);
+
+  emit message(tr("subscribe to main thread") + ": " + provider);
+
+  if (supportThreads_->hasSelection()) {
+    t.setRole(TextThread::SupportRole);
+    foreach (int index,  supportThreads_->currentIndices()) {
+      provider = leadingThreads_->itemText(index);
+      t.setSignature(signatures_[index]);
+      t.setProvider(provider);
+      l.append(t);
+      emit message(tr("subscribe to thread") + ": " HTML_SS(+provider+, color:orange));
+    }
   }
+  emit threadsSelected(l);
+}
+
+void
+MessageView::setThreads(const TextThreadList &l)
+{
+  clear();
+  int index = 0;
+  foreach (const TextThread &t, l) {
+    signatures_.append(t.signature());
+    leadingThreads_->addItem(t.provider());
+
+    supportThreads_->addItem(
+          QString::number(supportThreads_->size() +1) + ":" +
+          t.provider());
+
+    switch (t.role()) {
+    case TextThread::LeadingRole: leadingThreads_->setCurrentIndex(index); break;
+    case TextThread::SupportRole: supportThreads_->setItemChecked(index, true); break;
+    default: Q_ASSERT(0);
+    }
+    index++;
+  }
+}
+
+void
+MessageView::reset()
+{
+  if (messageHandler_->hasThreads())
+    setThreads(messageHandler_->threads());
+  else
+    clear();
 }
 
 void
 MessageView::clear()
 {
-  channelGrid_->clear();
-  anchors_.clear();
-  functions_.clear();
-  messages_.clear();
+  supportThreads_->clear();
+  leadingThreads_->clear();
+  signatures_.clear();
 
-  //hookIndexEdit_->setValue(0);
-  //hookIndexEdit_->setMaximum(0);
-  //hookIndexEdit_->setEnabled(false);
-  //anchors_.append(0);
-  //messages_.append(QList<QByteArray>());
+  messages_.clear();
 
   textEdit_->clear();
 
@@ -256,26 +287,80 @@ MessageView::clear()
 //void
 //MessageView::invalidateHookCountLabel()
 //{
-//  int count = anchors_.size() - 1;
+//  int count = signatures_.size() - 1;
 //  hookCountLabel_->setText(QString("/%1 ").arg(QString::number(count)));
 //}
 
 void
-MessageView::updateButtons()
+MessageView::updateGrid()
 {
-  bool t = currentIndex() > 0;
-  selectButton_->setEnabled(t);
-  resetButton_->setEnabled(t);
+  supportThreads_->setItemsEnabled(true);
+  int index = leadingThreads_->currentIndex();
+  if (index >= 0)
+    supportThreads_->setItemEnabled(index, false);
 }
 
 void
-MessageView::setCurrentText(int index)
+MessageView::updateButtons()
 {
-  //if (index < 0 || index >= messages_.size())
-  //  return;
+  //if (supportThreads_->itemCount() > 1 && supportThreads_->contains(0))
+  //  supportThreads_->setItemChecked(0, false);
 
-  if (index >= 0 && index < messages_.size())
-    setData(messages_[index]);
+  selectButton_->setEnabled(leadingThreads_->hasSelection());
+  //resetButton_->setEnabled(!isEmpty());
+}
+
+void
+MessageView::updateText()
+{
+  if (isEmpty()) {
+    textEdit_->clear();
+    return;
+  }
+
+  QString html;
+  bool leadingThreadsSelected = leadingThreads_->hasSelection(),
+       supportThreadsSelected = supportThreads_->hasSelection();
+  if (!leadingThreadsSelected && !supportThreadsSelected) {
+    int line = 0;
+    foreach (const TextMessage &m, messages_) {
+      QString t = TextCodecManager::globalInstance()->decode(m.data());
+      html.append(line++ % 2 ?
+        HTML_BR() HTML_SS(+t+, color:purple) HTML_BR() :
+        HTML_BR() HTML_SS(+t+, color:blue) HTML_BR());
+    }
+  } else if (leadingThreadsSelected) {
+    qint64 leadingSignature = signatures_[leadingThreads_->currentIndex()];
+    if (!supportThreadsSelected) {
+      foreach (const TextMessage &m, messages_)
+        if (m.signature() == leadingSignature) {
+          QString t = TextCodecManager::globalInstance()->decode(m.data());
+          html.append(HTML_BR() HTML_SS(+t+, color:red) HTML_BR());
+        }
+    } else {
+      auto l = supportThreads_->currentIndices();
+      foreach (const TextMessage &m, messages_)
+        if (m.signature() == leadingSignature) {
+          QString t = TextCodecManager::globalInstance()->decode(m.data());
+          html.append(HTML_BR() HTML_SS(+t+, color:red) HTML_BR());
+        } else
+          foreach (int index, l)
+            if (m.signature() == signatures_[index]) {
+              QString t = TextCodecManager::globalInstance()->decode(m.data());
+              html.append(index % 2 ?
+                HTML_BR() +QString::number(index+1)+ ": " HTML_SS(+t+, color:purple) HTML_BR() :
+                HTML_BR() +QString::number(index+1)+ ": " HTML_SS(+t+, color:blue) HTML_BR());
+            }
+
+    }
+  }
+  textEdit_->setHtml(html);
+  textEdit_->moveCursor(QTextCursor::End);
+  //textEdit_->ensureCursorVisible();
+
+  //QTextCursor tc = textEdit_->textCursor();
+  //tc.movePosition(QTextCursor::End);
+  //textEdit_->setTextCursor(tc);
 }
 
 //bool
@@ -293,48 +378,34 @@ MessageView::setCurrentText(int index)
 //}
 
 void
-MessageView::processMessage(const QByteArray &data, ulong anchor, const QString &function)
+MessageView::processMessage(const QByteArray &data, qint64 signature, const QString &provider)
 {
-  DOUT("enter: anchor =" << anchor << ", data size =" << data.size());
+  DOUT("enter: signature =" << signature << ", data size =" << data.size());
 
-  if (data.isEmpty() || !anchor) {
+  if (data.isEmpty() || !signature) {
     DOUT("exit: skip empty message");
     return;
   }
 
-  if (isEmpty()) {
-    channelGrid_->addItem(tr("All"));
-    anchors_.append(0);
-    functions_.append(QString());
-    messages_.append(QList<QByteArray>());
+  messages_.append(TextMessage(data, signature));
+
+  //if (isEmpty()) {
+  //  supportThreads_->addItem(tr("All"));
+  //  //supportThreads_->setItemChecked(0, true);
+  //}
+
+  if (!signatures_.contains(signature)) {
+    signatures_.append(signature);
+    leadingThreads_->addItem(provider);
+
+    supportThreads_->addItem(
+          QString::number(supportThreads_->size() +1) + ":" +
+          provider);
+
+    emit message(tr("new text thread discovered") + ": " HTML_SS(+provider+, color:orange));
   }
 
-  int index = anchors_.indexOf(anchor);
-  if (index < 0) {
-    index = anchors_.size();
-    anchors_.append(anchor);
-    functions_.append(function);
-    messages_.append(QList<QByteArray>());
-    channelGrid_->addItem(function);
-    //invalidateHookCountLabel();
-
-    emit message(tr("new channel discovered") + ": " + function);
-
-    //if (isBetterHook(id, currentHookId()))
-    setCurrentIndex(index);
-  }
-
-  messages_[index].append(data);
-  if (index)
-    messages_[0].append(data);
-
-  int ci = currentIndex();
-  if (ci == index)
-    setData(messages_[index]);
-  else if (ci == 0)
-    setData(messages_[0]);
-
-  //invalidateCurrentHook();
+  updateText();
 
   DOUT("exit");
 }
@@ -350,29 +421,6 @@ MessageView::processMessage(const QByteArray &data, ulong anchor, const QString 
 //  if (!hookName.isEmpty() && TextHook::globalInstance()->isKnownHookForProcess(hookName, processName_))
 //    selectCurrentHook();
 //}
-
-void
-MessageView::setData(const QList<QByteArray> &l)
-{
-  QString html;
-  int i = 0;
-  foreach (const QByteArray &b, l) {
-    QString s = TextCodecManager::globalInstance()->decode(b);
-    if (i++ % 2)
-      html.append(HTML_SS(+s+, color:purple));
-    else
-      html.append(HTML_SS(+s+, color:blue));
-
-    if (i != l.size())
-      html.append(HTML_BR() HTML_BR());
-  }
-
-  textEdit_->setHtml(html);
-
-  //QTextCursor tc = textEdit_->textCursor();
-  //tc.movePosition(QTextCursor::End);
-  //textEdit_->setTextCursor(tc);
-}
 
 void
 MessageView::invalidateCurrentCharFormat()

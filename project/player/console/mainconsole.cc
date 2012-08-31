@@ -14,6 +14,9 @@
 
 enum { LineHeight = 9 };
 
+#define SS_TEXT_BEGIN   "<span style=\"background-color:rgba(0,0,0,16)\">"
+#define SS_TEXT_END     "</span>"
+
 // - Constructions -
 
 MainConsole::MainConsole(QWidget *parent)
@@ -103,7 +106,11 @@ MainConsole::updateText()
   if (messages_.isEmpty())
     clear();
   else
-    setText(messages_.join(QString()));
+    setText(
+      SS_TEXT_BEGIN
+        + messages_.join(QString()) +
+      SS_TEXT_END
+    );
 }
 
 void
@@ -119,7 +126,9 @@ MainConsole::sendMessage(const QString &t)
     messages_.removeFirst();
     emit asyncUpdateText();
   } else
-    emit asyncSetText(text().append(QString(t)));
+    emit asyncSetText(text().append(
+      SS_TEXT_BEGIN + t + SS_TEXT_END
+    ));
 }
 
 // EOF

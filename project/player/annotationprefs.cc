@@ -106,12 +106,24 @@ AnnotationPreferencesTab::createLayout()
     opacityEdit_->setSuffix(" %");
     opacityEdit_->setMaximum(Max);
     opacityEdit_->setMinimum(Min);
-    opacityEdit_->setToolTip(tr("Opacity"));
+    opacityEdit_->setToolTip(tr("Font Opacity"));
     opacityEdit_->setFixedWidth(SPINEDIT_WIDTH);
     opacityEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   } connect(opacityEdit_, SIGNAL(valueChanged(int)), SLOT(saveOpacity()));
-  QLabel *opacityLabel = ui->makeLabel(AcUi::BuddyHint, tr("Opacity"), tr("Annotation Transparency"), opacityEdit_);
+  QLabel *opacityLabel = ui->makeLabel(AcUi::BuddyHint, tr("Font Opacity"), tr("Annotation Transparency"), opacityEdit_);
   QToolButton *opacityReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetOpacity()));
+
+  backgroundOpacityEdit_ = new QtExt::SpinBox; {
+    enum { Min = 0, Max = 80 };
+    backgroundOpacityEdit_->setSuffix(" %");
+    backgroundOpacityEdit_->setMaximum(Max);
+    backgroundOpacityEdit_->setMinimum(Min);
+    backgroundOpacityEdit_->setToolTip(tr("Background Opacity") + " (" + tr("Galgame Only") + ")");
+    backgroundOpacityEdit_->setFixedWidth(SPINEDIT_WIDTH);
+    backgroundOpacityEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  } connect(backgroundOpacityEdit_, SIGNAL(valueChanged(int)), SLOT(saveBackgroundOpacity()));
+  QLabel *backgroundOpacityLabel = ui->makeLabel(AcUi::BuddyHint, tr("Background Opacity"), tr("Background Opacity") + " (" + tr("Galgame Only") + ")", backgroundOpacityEdit_);
+  QToolButton *backgroundOpacityReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetBackgroundOpacity()));
 
   speedEdit_ = new QtExt::DoubleSpinBox; {
     Q_ASSERT(MinSpeed);
@@ -209,9 +221,11 @@ AnnotationPreferencesTab::createLayout()
     grid->addWidget(opacityEdit_, r, ++c);
     grid->addWidget(opacityReset, r, ++c);
 
-    //grid->addWidget(fullscreenScaleLabel, r, ++c, Qt::AlignRight);
-    //grid->addWidget(fullscreenScaleEdit_, r, ++c);
-    //grid->addWidget(fullscreenScaleReset, r, ++c);
+#ifdef AC_ENABLE_GAME
+    grid->addWidget(backgroundOpacityLabel, r, ++c, Qt::AlignRight);
+    grid->addWidget(backgroundOpacityEdit_, r, ++c);
+    grid->addWidget(backgroundOpacityReset, r, ++c);
+#endif // AC_ENABLE_GAME
 
     //grid->addWidget(cancelButton, ++r, c=0, Qt::AlignHCenter);
     //grid->addWidget(loginButton, r, ++c, Qt::AlignHCenter);
@@ -232,6 +246,7 @@ AnnotationPreferencesTab::save()
   saveJapaneseFont();
   saveOffset();
   saveSpeed();
+  saveBackgroundOpacity();
   saveOpacity();
 
   //saveScale(); // avoid loosing precision
@@ -251,6 +266,7 @@ AnnotationPreferencesTab::load()
   loadJapaneseFont();
   loadOffset();
   loadSpeed();
+  loadBackgroundOpacity();
   loadOpacity();
   loadScale();
   loadFullscreenScale();
@@ -407,7 +423,7 @@ void
 AnnotationPreferencesTab::saveOpacity()
 {
   settings_->setOpacityFactor(opacityEdit_->value());
-  emit message(tr("annotation opacity saved"));
+  emit message(tr("font opacity saved"));
 }
 
 void
@@ -415,7 +431,26 @@ AnnotationPreferencesTab::resetOpacity()
 {
   settings_->resetOpacityFactor();
   loadOpacity();
-  emit message(tr("annotation opacity saved"));
+  emit message(tr("font opacity saved"));
+}
+
+void
+AnnotationPreferencesTab::loadBackgroundOpacity()
+{ backgroundOpacityEdit_->setValue(settings_->backgroundOpacityFactor()); }
+
+void
+AnnotationPreferencesTab::saveBackgroundOpacity()
+{
+  settings_->setBackgroundOpacityFactor(backgroundOpacityEdit_->value());
+  emit message(tr("background opacity saved"));
+}
+
+void
+AnnotationPreferencesTab::resetBackgroundOpacity()
+{
+  settings_->resetBackgroundOpacityFactor();
+  loadBackgroundOpacity();
+  emit message(tr("background opacity saved"));
 }
 
 // - Color -

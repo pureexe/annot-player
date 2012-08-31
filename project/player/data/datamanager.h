@@ -5,6 +5,7 @@
 
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
+#include "module/annotcloud/gamethread.h"
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/user.h"
 #include <QtCore/QObject>
@@ -23,11 +24,15 @@ class DataManager : public QObject
   typedef AnnotCloud::AliasList AliasList;
   typedef AnnotCloud::Annotation Annotation;
   typedef AnnotCloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::GameThread GameThread;
+  typedef AnnotCloud::GameThreadList GameThreadList;
 
   User user_;
   Token token_;
   AliasList aliases_;
   AnnotationList annots_;
+
+  GameThread thread_;
 
   mutable QStringList urls_; // annotation urls
 
@@ -67,6 +72,10 @@ public:
   const QStringList &urls() const
   { if (urls_.isEmpty()) updateUrls(); return urls_; }
 
+  const GameThread &gameThread() const { return thread_; }
+  GameThread &gameThread() { return thread_; }
+  bool hasGameThread() const { return thread_.isValid(); }
+
 public slots:
   void setUser(const User &user) { user_ = user; invalidateUser(); }
   void setToken(const Token &token) { token_ = token; invalidateToken(); }
@@ -77,6 +86,7 @@ public slots:
   void setAnnotations(const AnnotationList &l) { annots_ = l; invalidateAnnotations(); }
   void addAnnotation(const Annotation &annot);
   void updateAnnotation(const Annotation &annot);
+  void setGameThread(const GameThread &thread) { thread_ = thread; }
 
   void updateAnnotationTextWithId(const QString &text, qint64 id);
   void updateAnnotationUserIdWithId(qint64 userId, qint64 id);
@@ -88,7 +98,8 @@ public slots:
   void removeToken() { setToken(Token()); }
   void removeAliases() { setAliases(AliasList()); }
   void removeAnnotations() { setAnnotations(AnnotationList()); }
-  void clear() { removeToken(); removeAliases(); removeAnnotations(); }
+  void removeGameThread() { setGameThread(GameThread()); }
+  //void clear() { removeToken(); removeAliases(); removeAnnotations(); removeGameThread(); }
 
   void invalidateUser() { emit userChanged(user_); }
   void invalidateToken() { invalidateUrls(); emit tokenChanged(token_); }

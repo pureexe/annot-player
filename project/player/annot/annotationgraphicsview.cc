@@ -56,7 +56,8 @@ AnnotationGraphicsView::AnnotationGraphicsView(
     filter_(nullptr), renderHint_(DefaultRenderHint), paused_(false), fullScreen_(false),
     subtitleVisible_(true), nonSubtitleVisible_(true), metaVisible_(false), itemCountLimited_(true),
     currentTime_(-1), offset_(0), interval_(TIMER_INTERVAL), userId_(0), playbackEnabled_(true),
-    scale_(1.0), rotation_(0),
+    scale_(-1), // invalid
+    rotation_(0),
     hoveredItemPaused_(false), hoveredItemResumed_(false), hoveredItemRemoved_(false), nearbyItemExpelled_(false), nearbyItemAttracted_(false),
     itemVisible_(true), dragging_(false), maxItemCount_(ReservedItemCount)
 {
@@ -134,6 +135,8 @@ AnnotationGraphicsView::AnnotationGraphicsView(
   connect(hub_, SIGNAL(played()), SLOT(resume()));
   connect(hub_, SIGNAL(stopped()), SLOT(resume()));
   connect(hub_, SIGNAL(stopped()), SLOT(removeAllItems()));
+
+  updateScale();
 
   //centerOn(0, 0);
 }

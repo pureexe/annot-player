@@ -123,6 +123,7 @@ MiniConsole::showText(const QString &text)
   restartAutoClearTimer();
   if (fadeAni_)
     fadeAni_->stop();
+
   setText(text);
   setOpacity(WINDOW_OPACITY);
 }

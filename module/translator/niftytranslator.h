@@ -20,7 +20,7 @@ class NiftyTranslator : public NetworkTranslator
   // - Constructions -
 public:
   explicit NiftyTranslator(QObject *parent = nullptr)
-    : Base(parent), reply_(0) { }
+    : Base(parent), reply_(nullptr) { }
 
 public slots:
   void translate(const QString &text, const QString &to, const QString &from = QString()) override

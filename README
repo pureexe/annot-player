@@ -1,8 +1,8 @@
 README (UTF-8)
 
 Product:	Annot Stream
-Version:	0.1.9.0
-Release:	2012/8/26 SUN
+Version:	0.1.9.1
+Release:	2012/8/31 FRI
 Homepage:	http://annot.me
 Download:	http://code.google.com/p/annot-player/downloads
 Source (Git):	https://code.google.com/p/annot-player
@@ -20,12 +20,16 @@ Distribution (Windows):
 - [ Play ].exe          Shortcut of Data/annot-player.exe
 - [ Translate ].exe     Shortcut of Data/annot-dict.exe
 - [ Update ].exe        Shortcut of Update/update.exe
-- ChangeLog.txt         Log of changes (UTF-8)
-- COPYING.txt           GPLv3 license
-- Read Me.txt           Readme (UTF-8)
-- Reset Preferences.reg Remove all registry settings (HKCU/Software/Annot)
-- Data/      (hidden)   Apps' data files
-- Update/    (hidden)   Self updater
+-
+- Changes.txt           ChangeLog (UTF-8)
+- License.txt           GPLv3 license
+- Readme.txt            Readme (UTF-8)
+- Reset Preferences.reg Remove registry settings (HKCU/Software/Annot)
+--
+- desktop.ini (hidden)  Localizer of the enclosing folder
+- icon.ini    (hidden)  Icon of the enclosing folder
+- Data/       (hidden)  Core apps' data files
+- Update/     (hidden)  Updater's data files
 
 Contributions:
 - 0.1.7 (2012.7): Thanks for the ideas and feature requests from M M, Aaeru, Niokun and spoxxy!

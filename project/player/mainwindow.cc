@@ -108,6 +108,7 @@
 #include "module/mediacodec/flvcodec.h"
 #include "module/imagefilter/rippleimagefilter.h"
 #include "module/textcodec/textcodec.h"
+#include "module/annotcloud/gamethread.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/annothtml.h"
 #include "module/annotcache/annotationcachemanager.h"
@@ -477,10 +478,11 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   AnnotationSettings::globalSettings()->setScale(settings->annotationScale());
   AnnotationSettings::globalSettings()->setFullscreenScale(settings->annotationFullscreenScale());
   AnnotationSettings::globalSettings()->setOpacityFactor(settings->annotationOpacityFactor());
+  AnnotationSettings::globalSettings()->setBackgroundOpacityFactor(settings->annotationBackgroundOpacityFactor());
   AnnotationSettings::globalSettings()->setOffset(settings->annotationOffset());
   AnnotationSettings::globalSettings()->setAvatarVisible(settings->isAnnotationAvatarVisible());
   AnnotationSettings::globalSettings()->setMetaVisible(settings->isAnnotationMetaVisible());
-  AnnotationSettings::globalSettings()->setPreferMotionless(settings->preferMotionlessAnnotation());
+  AnnotationSettings::globalSettings()->setPreferFloat(settings->preferFloatAnnotation());
   AnnotationSettings::globalSettings()->setPreferTraditionalChinese(settings->preferTraditionalChinese());
   AnnotationSettings::globalSettings()->setOutlineColor(settings->annotationOutlineColor());
   AnnotationSettings::globalSettings()->setHighlightColor(settings->annotationHighlightColor());
@@ -768,6 +770,11 @@ MainWindow::createComponents(bool unique)
 
   // Translator
   translator_ = new TranslatorManager(this);
+
+  extraTranslator_ = new TranslatorManager(this);
+  connect(translator_, SIGNAL(servicesChanged(ulong)), extraTranslator_, SLOT(setServices(ulong)));
+  extraTranslator_->setSynchronized(false);
+
   translator_->setServices(Settings::globalSettings()->translationServices());
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
@@ -778,8 +785,10 @@ MainWindow::createComponents(bool unique)
 
 #ifdef AC_ENABLE_GAME
   messageHandler_ = new MessageHandler(this);
-  syncView_ = new SyncView(this);
+  syncView_ = new SyncView(messageHandler_, this);
   windows_.append(syncView_);
+
+  syncView_->setMessageViewVisible(false);
 
   //recentMessageView_ = new MessageView(this);
   //windows_.append(recentMessageView_);
@@ -900,10 +909,11 @@ MainWindow::installLogger()
   connect(AnnotationSettings::globalSettings(), SIGNAL(scaleChanged(qreal)), logger_, SLOT(logAnnotationScaleChanged(qreal)));
   connect(AnnotationSettings::globalSettings(), SIGNAL(fullscreenScaleChanged(qreal)), logger_, SLOT(logAnnotationFullscreenScaleChanged(qreal)));
   connect(AnnotationSettings::globalSettings(), SIGNAL(opacityFactorChanged(int)), logger_, SLOT(logAnnotationOpacityFactorChanged(int)));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(backgroundOpacityFactorChanged(int)), logger_, SLOT(logAnnotationBackgroundOpacityFactorChanged(int)));
   connect(AnnotationSettings::globalSettings(), SIGNAL(speedupChanged(qreal)), logger_, SLOT(logAnnotationSpeedupChanged(qreal)));
   connect(AnnotationSettings::globalSettings(), SIGNAL(rotationChanged(qreal)), logger_, SLOT(logAnnotationRotationChanged(qreal)));
   connect(AnnotationSettings::globalSettings(), SIGNAL(offsetChanged(int)), logger_, SLOT(logAnnotationOffsetChanged(int)));
-  connect(AnnotationSettings::globalSettings(), SIGNAL(preferMotionlessChanged(bool)), logger_, SLOT(logPreferMotionlessAnnotationChanged(bool)));
+  connect(AnnotationSettings::globalSettings(), SIGNAL(preferFloatChanged(bool)), logger_, SLOT(logPreferFloatAnnotationChanged(bool)));
   connect(AnnotationSettings::globalSettings(), SIGNAL(subtitleOnTopChanged(bool)), logger_, SLOT(logSubtitleOnTopChanged(bool)));
 
   connect(annotationDownloader_, SIGNAL(fileSaved(QString)), logger_, SLOT(logFileSaved(QString)), Qt::QueuedConnection);
@@ -1031,6 +1041,8 @@ MainWindow::createConnections()
   connect(embeddedPlayer_->progressButton(), SIGNAL(clicked()), SLOT(clickProgressButton()));
   connect(this, SIGNAL(progressMessageChanged(QString)), embeddedPlayer_, SLOT(setProgressMessage(QString)), Qt::QueuedConnection);
 
+  connect(this, SIGNAL(openProcessRequested()), SLOT(openProcess()), Qt::QueuedConnection);
+
   // invalidateMediaAndPlay
   connect(this, SIGNAL(playMediaRequested()), SLOT(playMedia()), Qt::QueuedConnection);
   connect(this, SIGNAL(removeAnnotationsFromAnnotationViewRequested()), annotationView_, SLOT(removeAnnotations()), Qt::QueuedConnection);
@@ -1073,6 +1085,7 @@ MainWindow::createConnections()
   AC_CONNECT_ERROR(annotationDownloader_, this, Qt::QueuedConnection);
 
   connect(translator_, SIGNAL(errorMessage(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+  connect(extraTranslator_, SIGNAL(errorMessage(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
 
   // Annotation graphics view
   connect(this, SIGNAL(addAnnotationsRequested(AnnotationList)),
@@ -1259,6 +1272,17 @@ MainWindow::createConnections()
   connect(translator_, SIGNAL(translatedByNifty(QString)), SLOT(showNiftyTranslation(QString)));
   connect(translator_, SIGNAL(translatedByInfoseek(QString)), SLOT(showInfoseekTranslation(QString)));
 
+  connect(extraTranslator_, SIGNAL(translatedByRomaji(QString)), SLOT(showRomajiAdditionalTranslation(QString)));
+  connect(extraTranslator_, SIGNAL(translatedByMicrosoft(QString)), SLOT(showMicrosoftAdditionalTranslation(QString)));
+  connect(extraTranslator_, SIGNAL(translatedByGoogle(QString)), SLOT(showGoogleAdditionalTranslation(QString)));
+  connect(extraTranslator_, SIGNAL(translatedByYahoo(QString)), SLOT(showYahooAdditionalTranslation(QString)));
+  connect(extraTranslator_, SIGNAL(translatedByFresheye(QString)), SLOT(showFresheyeAdditionalTranslation(QString)));
+  connect(extraTranslator_, SIGNAL(translatedByOcn(QString)), SLOT(showOcnAdditionalTranslation(QString)));
+  connect(extraTranslator_, SIGNAL(translatedByExcite(QString)), SLOT(showExciteAdditionalTranslation(QString)));
+  connect(extraTranslator_, SIGNAL(translatedBySdl(QString)), SLOT(showSdlAdditionalTranslation(QString)));
+  connect(extraTranslator_, SIGNAL(translatedByNifty(QString)), SLOT(showNiftyAdditionalTranslation(QString)));
+  connect(extraTranslator_, SIGNAL(translatedByInfoseek(QString)), SLOT(showInfoseekAdditionalTranslation(QString)));
+
 #ifdef AC_ENABLE_GAME
   connect(this, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
   connect(this, SIGNAL(windowPicked(WId)), SLOT(setWindowOnTop()));
@@ -1275,13 +1299,17 @@ MainWindow::createConnections()
   AC_CONNECT_MESSAGE(syncView_, this, Qt::AutoConnection);
   AC_CONNECT_WARNING(syncView_, this, Qt::AutoConnection);
 
-  connect(syncView_, SIGNAL(channelSelected(ulong,QString,ProcessInfo)), SLOT(backlogDialog()));
-  connect(syncView_, SIGNAL(channelSelected(ulong,QString,ProcessInfo)), SLOT(openChannel(ulong,QString,ProcessInfo)));
+  //connect(syncView_, SIGNAL(threadsSelected(TextThreadList,ProcessInfo)), SLOT(backlogDialog()));
+  connect(syncView_, SIGNAL(threadsSelected(TextThreadList,ProcessInfo)), SLOT(subscribeThreads(TextThreadList,ProcessInfo)));
+
+  connect(this, SIGNAL(subscribeThreadsRequested(TextThreadList,ProcessInfo)), SLOT(subscribeThreads(TextThreadList,ProcessInfo)), Qt::QueuedConnection);
+  connect(this, SIGNAL(subscribeThreadsRequested(TextThreadList,ProcessInfo)), syncView_->messageView(), SLOT(setThreads(TextThreadList)), Qt::QueuedConnection);
+  connect(this, SIGNAL(hideSyncViewRequested()), syncView_, SLOT(hide()), Qt::QueuedConnection);
 
   //connect(recentMessageView_, SIGNAL(channelSelected(ulong,QString)), SLOT(updateChannel(ulong,QString)));
   //connect(recentMessageView_, SIGNAL(channelSelected(ulong,QString)), recentMessageView_, SLOT(hide()));
-  connect(messageHandler_, SIGNAL(messageReceivedWithId(qint64)), annotationView_, SLOT(showAnnotationsAtPos(qint64)));
-  connect(messageHandler_, SIGNAL(messageReceivedWithText(QString)), SLOT(translate(QString)));
+  connect(messageHandler_, SIGNAL(hashChanged(qint64)), annotationView_, SLOT(showAnnotationsAtPos(qint64)));
+  connect(messageHandler_, SIGNAL(textChanged(QString,int)), SLOT(translateGameText(QString,int)));
 #endif // AC_ENABLE_GAME
   //connect(player_, SIGNAL(opening()), SLOT(backlogDialog()));
   // MRL resolver
@@ -1344,6 +1372,8 @@ MainWindow::createActions()
           pauseAct_->setShortcut(QKeySequence("SPACE"));
   connect(stopAct_ = new QAction(QIcon(RC_IMAGE_STOP), tr("Stop"), this),
           SIGNAL(triggered()), hub_, SLOT(stop()));
+  connect(promptStopAct_ = new QAction(QIcon(RC_IMAGE_STOP), tr("Stop"), this),
+          SIGNAL(triggered()), SLOT(promptStop()));
   connect(replayAct_ = new QAction(QIcon(RC_IMAGE_REPLAY), tr("Replay"), this),
           SIGNAL(triggered()), SLOT(replay()));
   connect(previousAct_ = new QAction(QIcon(RC_IMAGE_PREVIOUS), tr("Previous"), this),
@@ -1370,7 +1400,7 @@ MainWindow::createActions()
   connect(clearRecentAct_ = new QAction(tr("Remove All"), this),
           SIGNAL(triggered()), SLOT(clearRecent()));
   connect(validateRecentAct_ = new QAction(tr("Remove Non-existed"), this),
-          SIGNAL(triggered()), SLOT(validateRecent()));
+          SIGNAL(triggered()), SLOT(updateRecent()));
 
   connect(downloadCurrentUrlAct_ = new QAction(QIcon(ACRC_IMAGE_DOWNLOADER), TR(T_MENUTEXT_DOWNLOADCURRENT), this),
           SIGNAL(triggered()), SLOT(downloadCurrentUrl()));
@@ -1433,9 +1463,9 @@ MainWindow::createActions()
           SIGNAL(triggered(bool)), AnnotationSettings::globalSettings(), SLOT(setMetaVisible(bool)));
           toggleAnnotationMetaVisibleAct_->setCheckable(true);
 
-  connect(togglePreferMotionlessAnnotationAct_ = new QAction(tr("No Floating Annotations"), this),
-          SIGNAL(triggered(bool)), AnnotationSettings::globalSettings(), SLOT(setPreferMotionless(bool)));
-          togglePreferMotionlessAnnotationAct_->setCheckable(true);
+  connect(togglePreferFloatAnnotationAct_ = new QAction(tr("No Drifting Annotations"), this),
+          SIGNAL(triggered(bool)), AnnotationSettings::globalSettings(), SLOT(setPreferFloat(bool)));
+          togglePreferFloatAnnotationAct_->setCheckable(true);
 
   connect(toggleWindowTrackingAct_ = new QAction(QIcon(RC_IMAGE_TRACE), tr("Trace Window"), this),
           SIGNAL(triggered(bool)), SLOT(setWindowTrackingEnabled(bool)));
@@ -1486,31 +1516,31 @@ MainWindow::createActions()
   connect(toggleRomajiTranslatorAct_ = new QAction(tr("Romaji Translator"), this),
           SIGNAL(triggered(bool)), SLOT(toggleRomajiTranslator(bool)));
           toggleRomajiTranslatorAct_->setCheckable(true);
-  connect(toggleYahooTranslatorAct_ = new QAction(tr("Yahoo! Honyaku") + " - " + TR(T_BLACK), this),
+  connect(toggleYahooTranslatorAct_ = new QAction(tr("Yahoo! Honyaku"), this),
           SIGNAL(triggered(bool)), SLOT(toggleYahooTranslator(bool)));
           toggleYahooTranslatorAct_->setCheckable(true);
-  connect(toggleFresheyeTranslatorAct_ = new QAction(tr("freshEYE Honyaku") + " (en,zh) - " + TR(T_BLUE), this),
+  connect(toggleFresheyeTranslatorAct_ = new QAction(tr("freshEYE Honyaku") + " (en,zh)", this),
           SIGNAL(triggered(bool)), SLOT(toggleFresheyeTranslator(bool)));
           toggleFresheyeTranslatorAct_->setCheckable(true);
-  connect(toggleOcnTranslatorAct_ = new QAction(tr("OCN Honyaku") + " (en,zh,ko) - " + TR(T_YELLOW), this),
+  connect(toggleOcnTranslatorAct_ = new QAction(tr("OCN Honyaku") + " (en,zh,ko) - " + TR(T_DEFAULT), this),
           SIGNAL(triggered(bool)), SLOT(toggleOcnTranslator(bool)));
           toggleOcnTranslatorAct_->setCheckable(true);
-  connect(toggleInfoseekTranslatorAct_ = new QAction(tr("Infoseek Honyaku") + " - " + TR(T_RED), this),
+  connect(toggleInfoseekTranslatorAct_ = new QAction(tr("Infoseek Honyaku"), this),
           SIGNAL(triggered(bool)), SLOT(toggleInfoseekTranslator(bool)));
           toggleInfoseekTranslatorAct_->setCheckable(true);
-  connect(toggleGoogleTranslatorAct_ = new QAction(tr("Google Translator") + " - " + TR(T_PINK), this),
+  connect(toggleGoogleTranslatorAct_ = new QAction(tr("Google Translator"), this),
           SIGNAL(triggered(bool)), SLOT(toggleGoogleTranslator(bool)));
           toggleGoogleTranslatorAct_->setCheckable(true);
-  connect(toggleMicrosoftTranslatorAct_ = new QAction(tr("Microsoft Translator") + " - " + TR(T_MAGENTA), this),
+  connect(toggleMicrosoftTranslatorAct_ = new QAction(tr("Microsoft Translator"), this),
           SIGNAL(triggered(bool)), SLOT(toggleMicrosoftTranslator(bool)));
           toggleMicrosoftTranslatorAct_->setCheckable(true);
-  connect(toggleNiftyTranslatorAct_ = new QAction(tr("@nifty honyaku") + " (en) - " + TR(T_ORANGE), this),
+  connect(toggleNiftyTranslatorAct_ = new QAction(tr("@nifty honyaku") + " (en)", this),
           SIGNAL(triggered(bool)), SLOT(toggleNiftyTranslator(bool)));
           toggleNiftyTranslatorAct_->setCheckable(true);
-  connect(toggleExciteTranslatorAct_ = new QAction(tr("Excite Honyaku") + " (en) - " + TR(T_BROWN), this),
+  connect(toggleExciteTranslatorAct_ = new QAction(tr("Excite Honyaku") + " (en)", this),
           SIGNAL(triggered(bool)), SLOT(toggleExciteTranslator(bool)));
           toggleExciteTranslatorAct_->setCheckable(true);
-  connect(toggleSdlTranslatorAct_ = new QAction(tr("SDL Translator") + " (en) - " + TR(T_CYAN), this),
+  connect(toggleSdlTranslatorAct_ = new QAction(tr("SDL Translator") + " (en)", this),
           SIGNAL(triggered(bool)), SLOT(toggleSdlTranslator(bool)));
           toggleSdlTranslatorAct_->setCheckable(true);
 
@@ -2147,16 +2177,6 @@ MainWindow::createMenus()
     gameMenu_->addAction(showProcessAct_);
 #endif // WITH_WIN_PICKER
     gameMenu_->addAction(showSyncGameAct_);
-    gameMenu_->addSeparator();
-    gameMenu_->addAction(showGamePreferencesAct_);
-    gameMenu_->addAction(showBacklogAct_);
-    gameMenu_->addSeparator();
-    //gameMenu_->addAction(toggleSubtitleAnnotationVisibleAct_);
-    //gameMenu_->addAction(toggleSubtitleOnTopAct_);
-    //gameMenu_->addSeparator();
-    gameMenu_->addAction(toggleTranslateAct_);
-    gameMenu_->addMenu(translatorMenu_);
-    gameMenu_->addMenu(userLanguageMenu_);
 #endif // AC_ENABLE_GAME
   }
 
@@ -2476,7 +2496,7 @@ MainWindow::createMenus()
     annotationSettingsMenu_->setToolTip(tr("Annotation Settings"));
 
     //annotationSettingsMenu_->addMenu(annotationEffectMenu_);
-    annotationSettingsMenu_->addAction(togglePreferMotionlessAnnotationAct_);
+    annotationSettingsMenu_->addAction(togglePreferFloatAnnotationAct_);
     annotationSettingsMenu_->addAction(toggleAnnotationAvatarVisibleAct_);
     annotationSettingsMenu_->addAction(toggleAnnotationMetaVisibleAct_);
     annotationSettingsMenu_->addAction(toggleAnnotationBandwidthLimitedAct_);
@@ -3883,6 +3903,22 @@ MainWindow::pause()
 }
 
 void
+MainWindow::promptStop()
+{
+  if (hub_->isStopped())
+    return;
+
+  if (QMessageBox::Ok != QMessageBox::question(this,
+        tr("Confirm"),  // title
+        tr("Stop playing?"),  // emssage
+        QMessageBox::Ok | QMessageBox::Cancel,  // choices
+        QMessageBox::Cancel // default choice
+      ))
+    return;
+  QTimer::singleShot(0, hub_, SLOT(stop()));
+}
+
+void
 MainWindow::stop()
 {
   switch (hub_->tokenMode()) {
@@ -4587,7 +4623,7 @@ MainWindow::showAnnotationBrowser()
     connect(annotationView_, SIGNAL(annotationPosChanged(qint64)), annotationBrowser_, SLOT(setAnnotationPos(qint64)));
     connect(this, SIGNAL(userIdChanged(qint64)), annotationBrowser_, SLOT(setUserId(qint64)));
 #ifdef AC_ENABLE_GAME
-    connect(messageHandler_, SIGNAL(messageReceivedWithId(qint64)), annotationBrowser_, SLOT(setAnnotationPos(qint64)));
+    connect(messageHandler_, SIGNAL(hashChanged(qint64)), annotationBrowser_, SLOT(setAnnotationPos(qint64)));
 #endif // AC_ENABLE_GAME
 
     annotationBrowser_->setUserId(server_->user().id());
@@ -4624,8 +4660,8 @@ MainWindow::backlogDialog()
     connect(annotationView_, SIGNAL(subtitleAdded(QString)), w, SLOT(appendSubtitle(QString)));
     connect(annotationView_, SIGNAL(annotationAdded(QString)), w, SLOT(appendAnnotation(QString)));
 #ifdef AC_ENABLE_GAME
-    connect(syncView_, SIGNAL(channelSelected(ulong,ProcessInfo)), w, SLOT(clear()));
-    connect(messageHandler_, SIGNAL(messageReceivedWithText(QString)), w, SLOT(appendText(QString)));
+    connect(syncView_, SIGNAL(threadsSelected(TextThreadList,ProcessInfo)), w, SLOT(clear()));
+    connect(messageHandler_, SIGNAL(textChanged(QString,int)), w, SLOT(appendText(QString)));
 #endif // AC_ENABLE_GAME
   }
   return w;
@@ -4867,7 +4903,7 @@ MainWindow::submitAliasText(const QString &text, qint32 type, bool async, bool l
   else
     a.setLanguage(server_->user().language());
 
-  a.setUpdateTime(::time(0));
+  a.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
   //if (tokenView_) // FIXME: use signals here
   //  tokenView_->addAlias(a);
   submitAlias(a, async, lock);
@@ -5511,11 +5547,55 @@ MainWindow::setToken(const QString &input, bool async)
     g.setTokenId(media.tokenId());
     g.setLocation(media.location());
 
-    g.setAnchor(messageHandler_->anchor());
-    g.setFunction(messageHandler_->function());
     g.setEncoding(TextCodecManager::globalInstance()->encoding());
+    g.setThreads(messageHandler_->threads());
 
     gameLibrary_->visit(g);
+
+    if (!server_->isConnected() && dataManager_->hasGameThread())
+      dataManager_->removeGameThread();
+
+    if (server_->isConnected() && server_->isAuthorized()) {
+      GameThread t;
+      if (g.tokenId() == dataManager_->gameThread().tokenId())
+        t = dataManager_->gameThread();
+      else
+        t = server_->selectGameThreadWithTokenDigest(g.digest());
+
+      TextThread tt;
+      foreach (const TextThread &i, g.threads())
+        if (i.isLeadingRole())  {
+          tt = i;
+          break;
+        }
+      if (!t.isValid()) {
+        if (tt.hasRole()) {
+          t.setUpdateTime(now / 1000);
+          t.setUserId(server_->user().id());
+          t.setTokenId(g.tokenId());
+          t.setEncoding(Traits::codePageFromEncoding(g.encoding()));
+          t.setSignature(tt.signature());
+          t.setProvider(tt.provider());
+          t.setType(tt.role());
+          server_->submitGameThread(t);
+        }
+      } else if (tt.hasRole() && (
+                 tt.hasSignature() && tt.signature() != t.signature() ||
+                 g.hasEncoding() && t.encoding() != Traits::codePageFromEncoding(g.encoding()) ||
+                 tt.hasProvider() && tt.provider() != t.provider())
+        ) {
+        t.setUpdateTime(now / 1000);
+        t.setUserId(server_->user().id());
+        t.setTokenId(g.tokenId());
+        t.setEncoding(Traits::codePageFromEncoding(g.encoding()));
+        t.setSignature(tt.signature());
+        t.setProvider(tt.provider());
+        t.setType(tt.role());
+        server_->updateGameThread(t);
+      }
+
+      dataManager_->setGameThread(t);
+    }
   }
 #endif // AC_ENABLE_GAME
 
@@ -5619,24 +5699,44 @@ MainWindow::showText(const QString &text, bool isSigned)
 }
 
 void
-MainWindow::showFresheyeTranslation(const QString &text)
+MainWindow::showFresheyeTranslation(const QString &text, bool extra)
 {
   //enum { U_3000 = 12288 }; // \u3000
   int lang = server_->user().language();
-  showTranslation(
-    Traits::isAsianLanguage(lang) ? QString(text).remove(QChar(ushort(0x3000))) : text,
-    TranslatorManager::Fresheye
-  );
+  if (extra)
+    showAdditionalTranslation(
+      Traits::isAsianLanguage(lang) ? QString(text).remove(QChar(ushort(0x3000))) : text,
+      TranslatorManager::Fresheye
+    );
+  else
+    showTranslation(
+      Traits::isAsianLanguage(lang) ? QString(text).remove(QChar(ushort(0x3000))) : text,
+      TranslatorManager::Fresheye
+    );
 }
 
 void
-MainWindow::showOcnTranslation(const QString &text)
+MainWindow::showOcnTranslation(const QString &text, bool extra)
 {
   int lang = server_->user().language();
-  showTranslation(
-    Traits::isAsianLanguage(lang) ? QString(text).remove("\r\n") : text,
-    TranslatorManager::Ocn
-  );
+  if (extra)
+    showAdditionalTranslation(
+      Traits::isAsianLanguage(lang) ? QString(text).remove("\r\n") : text,
+      TranslatorManager::Ocn
+    );
+  else
+    showTranslation(
+      Traits::isAsianLanguage(lang) ? QString(text).remove("\r\n") : text,
+      TranslatorManager::Ocn
+    );
+}
+
+void
+MainWindow::showAdditionalTranslation(const QString &text, int service)
+{
+  if (text.isEmpty())
+    return;
+  showTranslation(CORE_CMD_VIEW_FLOAT " " + text, service);
 }
 
 void
@@ -5649,58 +5749,55 @@ MainWindow::showTranslation(const QString &text, int service)
   switch (service) {
   case TranslatorManager::Romaji:
     prefix = CORE_CMD_LATEX_SMALL CORE_CMD_HTML_EM " ";
+    if (translator_->serviceCount() > 2)
+      prefix.append("Romaji: ");
     break;
   case TranslatorManager::Ocn:
-    if (translator_->serviceCount() > 1)
-      prefix = CORE_CMD_COLOR_YELLOW " ";
+    //if (translator_->serviceCount() > 1)
+    //  prefix = CORE_CMD_COLOR_YELLOW " ";
+    prefix = translator_->serviceCount() > 1 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_YELLOW " OCN: " :
+      "";
     break;
   case TranslatorManager::Fresheye:
-    if (translator_->serviceCount() > 1)
-      prefix = translator_->hasService(TranslatorManager::Ocn) ?
-        CORE_CMD_COLOR_BLUE " " :
-        CORE_CMD_COLOR_YELLOW " ";
+    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      prefix = CORE_CMD_COLOR_BLUE " freshEYE: " :
+      CORE_CMD_COLOR_YELLOW " ";
     break;
   case TranslatorManager::Infoseek:
-    if (translator_->serviceCount() > 1)
-      prefix = translator_->hasService(TranslatorManager::Ocn) ?
-        CORE_CMD_COLOR_RED " " :
-        CORE_CMD_COLOR_YELLOW " ";
+    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_RED " Infoseek: "  :
+      CORE_CMD_COLOR_YELLOW " ";
     break;
   case TranslatorManager::Yahoo:
-    if (translator_->serviceCount() > 1)
-      prefix = translator_->hasService(TranslatorManager::Ocn) ?
-        CORE_CMD_COLOR_BLACK " " :
-        CORE_CMD_COLOR_YELLOW " ";
+    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_BLACK " Yahoo!: "  :
+      CORE_CMD_COLOR_YELLOW " ";
     break;
   case TranslatorManager::Microsoft:
-    if (translator_->serviceCount() > 1)
-      prefix = translator_->hasService(TranslatorManager::Ocn) ?
-        CORE_CMD_COLOR_MAGENTA " " :
-        CORE_CMD_COLOR_YELLOW " ";
+    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_MAGENTA " Microsoft: "  :
+      CORE_CMD_COLOR_YELLOW " ";
     break;
   case TranslatorManager::Google:
-    if (translator_->serviceCount() > 1)
-      prefix = translator_->hasService(TranslatorManager::Ocn) ?
-        CORE_CMD_COLOR_PINK " " :
-        CORE_CMD_COLOR_YELLOW " ";
+    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_PINK " Google: "  :
+      CORE_CMD_COLOR_YELLOW " ";
     break;
   case TranslatorManager::Nifty:
-    if (translator_->serviceCount() > 1)
-      prefix = translator_->hasService(TranslatorManager::Ocn) ?
-        CORE_CMD_COLOR_ORANGE " " :
-        CORE_CMD_COLOR_YELLOW " ";
+    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_ORANGE " @nifty: "  :
+      CORE_CMD_COLOR_YELLOW " ";
     break;
   case TranslatorManager::Excite:
-    if (translator_->serviceCount() > 1)
-      prefix = translator_->hasService(TranslatorManager::Ocn) ?
-        CORE_CMD_COLOR_BROWN " " :
-        CORE_CMD_COLOR_YELLOW " ";
+    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_BROWN " Excite: "  :
+      CORE_CMD_COLOR_YELLOW " ";
     break;
   case TranslatorManager::Sdl:
-    if (translator_->serviceCount() > 1)
-      prefix = translator_->hasService(TranslatorManager::Ocn) ?
-        CORE_CMD_COLOR_CYAN " " :
-        CORE_CMD_COLOR_YELLOW " ";
+    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_CYAN " SDL: "  :
+      CORE_CMD_COLOR_YELLOW " ";
     break;
   }
   showSubtitle(text, userLang, prefix);
@@ -5758,6 +5855,7 @@ MainWindow::showSubtitle(const QString &input, int userLang, const QString &pref
   annotationView_->showAnnotation(annot, false); // showMeta = false
 }
 
+/*
 void
 MainWindow::submitLiveText(const QString &text, bool async)
 {
@@ -5820,6 +5918,7 @@ MainWindow::submitLiveText(const QString &text, bool async)
   DOUT("inetMutex unlocked");
   DOUT("exit");
 }
+*/
 
 void
 MainWindow::submitText(const QString &text, bool async)
@@ -5833,7 +5932,7 @@ MainWindow::submitText(const QString &text, bool async)
       !dataManager_->token().hasDigest() && !dataManager_->token().hasUrl() ||
       hub_->isMediaTokenMode() && !player_->hasMedia()
 #ifdef AC_ENABLE_GAME
-      || hub_->isSignalTokenMode() && !messageHandler_->lastMessageHash().isValid()
+      || hub_->isSignalTokenMode() && !messageHandler_->lastHash().isValid()
 #endif // AC_ENABLE_GAME
      ) {
 
@@ -5876,8 +5975,8 @@ MainWindow::submitText(const QString &text, bool async)
       break;
     case SignalHub::SignalTokenMode:
   #ifdef AC_ENABLE_GAME
-      annot.setPos(messageHandler_->lastMessageHash().hash);
-      annot.setPosType(messageHandler_->lastMessageHash().count);
+      annot.setPos(messageHandler_->lastHash().hash);
+      annot.setPosType(messageHandler_->lastHash().count);
   #endif // AC_ENABLE_GAME
       break;
     }
@@ -5934,8 +6033,8 @@ MainWindow::eval(const QString &input)
   if (hub_->isSignalTokenMode() && !hub_->isStopped() ||
       player_->hasMedia() && !player_->isStopped())
     submitText(text);
-  else if (hub_->isLiveTokenMode() && server_->isConnected() && server_->isAuthorized())
-    submitLiveText(text);
+  //else if (hub_->isLiveTokenMode() && server_->isConnected() && server_->isAuthorized())
+  //  submitLiveText(text);
   else
     chat(text);
 }
@@ -6780,7 +6879,7 @@ MainWindow::updateAnnotationSettingsMenu()
 {
   updateAnnotationSubtitleMenu();
   updateAnnotationEffectMenu();
-  togglePreferMotionlessAnnotationAct_->setChecked(AnnotationSettings::globalSettings()->preferMotionless());
+  togglePreferFloatAnnotationAct_->setChecked(AnnotationSettings::globalSettings()->preferFloat());
   toggleAnnotationAvatarVisibleAct_->setChecked(AnnotationSettings::globalSettings()->isAvatarVisible());
   toggleAnnotationMetaVisibleAct_->setChecked(AnnotationSettings::globalSettings()->isMetaVisible());
   toggleAnnotationBandwidthLimitedAct_->setChecked(annotationView_->isItemCountLimited());
@@ -6813,7 +6912,7 @@ MainWindow::updateGameMenu()
   //toggleSubtitleAnnotationVisibleAct_->setChecked(annotationView_->isSubtitleVisible());
   //toggleSubtitleOnTopAct_->setChecked(isSubtitleOnTop());
 
-  updateTranslatorMenu();
+  //updateTranslatorMenu();
 }
 
 void
@@ -6860,7 +6959,7 @@ MainWindow::updateContextMenu()
   }
 
   // Open
-  {
+  if (!hub_->isSignalTokenMode() || hub_->isStopped()) {
     //contextMenu_->addSeparator();
 
     //contextMenu_->addAction(openAct_);
@@ -7019,7 +7118,12 @@ MainWindow::updateContextMenu()
 
   // Basic control
   contextMenu_->addSeparator();
-  if (!hub_->isMediaTokenMode() || player_->hasMedia()) {
+  if (hub_->isSignalTokenMode()) {
+    contextMenu_->addAction(snapshotAct_);
+    if (!hub_->isStopped())
+      contextMenu_->addAction(promptStopAct_);
+
+  } else if (player_->hasMedia()) {
     contextMenu_->addAction(isPlaying() ? pauseAct_ : playAct_);
 
     playMenu_->clear();
@@ -7157,14 +7261,26 @@ MainWindow::updateContextMenu()
   }
 
 #ifdef AC_ENABLE_GAME
+  if (hub_->isSignalTokenMode()) {
+    contextMenu_->addSeparator();
+    contextMenu_->addMenu(translatorMenu_);
+    contextMenu_->addAction(toggleTranslateAct_);
+    contextMenu_->addAction(toggleSubtitleOnTopAct_);
+    contextMenu_->addAction(showBacklogAct_);
+  }
+
   contextMenu_->addSeparator();
   contextMenu_->addMenu(gameMenu_);
+  updateGameMenu();
+
   if (hub_->isStopped() &&
       (hub_->isSignalTokenMode() || !player_->hasMedia())) {
     openCurrentGameAct_->setEnabled(!gameLibrary_->isEmpty());
     contextMenu_->addAction(openCurrentGameAct_);
   }
-  updateGameMenu();
+  if (hub_->isSignalTokenMode())
+    contextMenu_->addAction(showGamePreferencesAct_);
+
 #endif // AC_ENABLE_GAME
 
   // Network
@@ -7281,7 +7397,7 @@ MainWindow::updateAudioChannelMenu()
 void
 MainWindow::updateSettingsMenu()
 {
-  updateTranslatorMenu();
+  //updateTranslatorMenu();
 
   toggleSubmitAct_->setVisible(server_->user().isDeveloper());
   toggleMenuThemeEnabledAct_->setVisible(server_->user().isDeveloper());
@@ -7363,8 +7479,6 @@ MainWindow::updateUserMenu()
 #ifdef AC_ENABLE_GAME
     userMenu_->addAction(toggleTranslateAct_);
     userMenu_->addAction(toggleSubtitleOnTopAct_);
-    userMenu_->addAction(showBacklogAct_);
-    userMenu_->addAction(showGamePreferencesAct_);
 #endif // AC_ENABLE_GAME
 
     userMenu_->addSeparator();
@@ -8494,26 +8608,76 @@ MainWindow::openProcessPath(const QString &path)
 }
 
 void
-MainWindow::synchronizeProcess(const ProcessInfo &pi)
+MainWindow::synchronizeProcess(const ProcessInfo &pi, bool async)
 {
-  DOUT("enter");
-  if (gameLibrary_->isEmpty() || !pi.isValid() || pi.executablePath.isEmpty()) {
-    openProcess();
-    DOUT("exit: empty library or empty process info");
+  DOUT("enter: async =" << async << ", pid =" << pi.processId << ", exe =" << pi.executablePath);
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
+    return;
+  }
+
+  if (!pi.isValid() || pi.executablePath.isEmpty()) {
+    emit openProcessRequested();
+    DOUT("exit: empty process info");
+    return;
+  }
+
+  if (gameLibrary_->isEmpty() && !server_->isConnected()) {
+    emit openProcessRequested();
+    DOUT("exit: offline with empty library");
+    return;
+  }
+
+  if (async) {
+    emit messageOnce(tr("Analyzing ..."));
+    QtConcurrent::run(this, &Self::synchronizeProcess, pi, false);
+    DOUT("exit: returned from async branch");
     return;
   }
 
   QString digest = Token::digestFromFile(pi.executablePath);
   if (digest.isEmpty()) {
-    openProcess();
+    emit openProcessRequested();
     DOUT("exit: cannot compute digest for file:" << pi.executablePath);
     return;
   }
 
-  Game g = gameLibrary_->findGameByDigest(digest);
+  Game g;
+  if (!gameLibrary_->isEmpty())
+    g = gameLibrary_->findGameByDigest(digest);
+
+  if (!g.hasDigest() && server_->isConnected()) {
+    DOUT("inetMutex locking");
+    inetMutex_.lock();
+    DOUT("inetMutex locked");
+
+    dataManager_->gameThread() = server_->selectGameThreadWithTokenDigest(digest);
+    DOUT("thread id =" << dataManager_->gameThread().id());
+
+    DOUT("inetMutex unlocking");
+    inetMutex_.unlock();
+    DOUT("inetMutex unlocked");
+
+    if (dataManager_->hasGameThread()) {
+      const GameThread &t = dataManager_->gameThread();
+      g.setTokenId(t.tokenId());
+      g.setDigest(digest);
+      g.setLocation(QDir::fromNativeSeparators(pi.executablePath));
+      g.setEncoding(Traits::codePageToEncoding(t.encoding()));
+      g.setVisitTime(QDateTime::currentMSecsSinceEpoch());
+      g.setVisitCount(1);
+
+      TextThread tt;
+      tt.setProvider(t.provider());
+      tt.setRole(t.type());
+      tt.setSignature(t.signature());
+      g.threads().append(tt);
+    }
+  }
+
   if (!g.hasDigest()) {
-    openProcess();
-    DOUT("exit: game not found in the library");
+    emit openProcessRequested();
+    DOUT("exit: unknown name");
     return;
   }
 
@@ -8536,90 +8700,175 @@ MainWindow::synchronizeProcess(const ProcessInfo &pi)
         HTML_SS_CLOSE()
       );
   }
-  if (encoding.isEmpty())
+
+  if (!encoding.isEmpty())
     TextCodecManager::globalInstance()->setEncoding(encoding);
 
   // Detect encoding
-  if (!g.hasAnchor()) {
-    openProcess();
-    DOUT("exit: not anchor in the game library");
+  if (!g.hasThreads()) {
+    emit openProcessRequested();
+    DOUT("exit: no threads found in the game library");
   }
 
-  syncView_->hide();
-  openChannel(g.anchor(), g.function(), pi);
+  emit hideSyncViewRequested();
+  emit subscribeThreadsRequested(g.threads(), pi);
   DOUT("exit");
 }
 
 void
-MainWindow::updateChannel(ulong anchor, const QString &function)
+MainWindow::updateSubscription(const TextThreadList &threads, bool async)
 {
-  if (!hub_->isSignalTokenMode()) {
-    emit warning(tr("please synchronize with a game first"));
+  DOUT("enter: async =" << async << ", thread size =" << threads.size());
+  if (disposed_) {
+    DOUT("exit: returned from disposed branch");
     return;
   }
-  if (!anchor)
+  if (!hub_->isSignalTokenMode()) {
+    emit warning(tr("please synchronize with a game first"));
+    DOUT("exit: not in game mode");
     return;
+  }
+  if (threads.isEmpty()) {
+    DOUT("exit: empty threads");
+    return;
+  }
 
-  messageHandler_->setAnchor(anchor);
-  messageHandler_->setFunction(function);
-  emit message(tr("channel selected") + ": " + function);
+  if (!dataManager_->token().hasDigest()) {
+    DOUT("exit: empty digest");
+    return;
+  }
+
+  if (!server_->isConnected() || !server_->isAuthorized())
+    async = false;
+  if (async) {
+    emit messageOnce(tr("Saving ..."));
+    QtConcurrent::run(this, &Self::updateSubscription, threads, false);
+    DOUT("exit: returned from async branch");
+    return;
+  }
 
   QString digest = dataManager_->token().digest();
-  if (digest.isEmpty())
+  if (digest.isEmpty()) {
+    DOUT("exit: empty digest");
     return;
+  }
 
   Game g = gameLibrary_->findGameByDigest(digest);
-  if (!g.hasDigest())
+  if (!g.hasDigest()) {
+    DOUT("exit: no game found in the library");
     return;
+  }
 
-  g.setAnchor(anchor);
-  g.setFunction(function);
+  g.setThreads(threads);
   g.setEncoding(TextCodecManager::globalInstance()->encoding());
+
   gameLibrary_->update(g);
+
+  if (server_->isConnected() && server_->isAuthorized()
+      && g.hasTokenId()) {
+    DOUT("inetMutex locking");
+    inetMutex_.lock();
+    DOUT("inetMutex locked");
+
+    GameThread t;
+    if (g.tokenId() == dataManager_->gameThread().tokenId())
+      t = dataManager_->gameThread();
+    else
+      t = server_->selectGameThreadWithTokenId(g.tokenId());
+
+    TextThread tt;
+    foreach (const TextThread &i, g.threads())
+      if (i.isLeadingRole())  {
+        tt = i;
+        break;
+      }
+
+    if (!t.isValid()) {
+      if (tt.hasRole()) {
+          t.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+          t.setUserId(server_->user().id());
+          t.setTokenId(g.tokenId());
+          t.setEncoding(Traits::codePageFromEncoding(g.encoding()));
+          t.setSignature(tt.signature());
+          t.setProvider(tt.provider());
+          t.setType(tt.role());
+          server_->submitGameThread(t);
+        }
+    } else if (tt.hasRole() && (
+               tt.hasSignature() && tt.signature() != t.signature() ||
+               g.hasEncoding() && t.encoding() != Traits::codePageFromEncoding(g.encoding()) ||
+               tt.hasProvider() && tt.provider() != t.provider())
+      ) {
+      t.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+      t.setUserId(server_->user().id());
+      t.setTokenId(g.tokenId());
+      t.setEncoding(Traits::codePageFromEncoding(g.encoding()));
+      t.setSignature(tt.signature());
+      t.setProvider(tt.provider());
+      t.setType(tt.role());
+      server_->updateGameThread(t);
+    }
+
+    dataManager_->setGameThread(t);
+
+    DOUT("inetMutex unlocking");
+    inetMutex_.unlock();
+    DOUT("inetMutex unlocked");
+  }
+  DOUT("exit");
 }
 
 void
-MainWindow::openChannel(ulong anchor, const QString &function, const ProcessInfo &pi)
+MainWindow::subscribeThreads(const TextThreadList &threads, const ProcessInfo &pi)
 {
-  DOUT("enter: anchor =" << anchor << ", function =" << function << ", pid =" << pi.processId << ", proc =" << pi.processName);
+  DOUT("enter: threads count =" << threads.size() << ", pid =" << pi.processId << ", proc =" << pi.processName);
   if (player_->hasMedia() && !player_->isStopped())
     stop();
 
+  bool updateProcess = TextHook::globalInstance()->isEmpty() ||
+      pi.processId != messageHandler_->processInfo().processId;
 
   if (pi.isValid()) {
-    emit message(tr("opening process") + ": " + pi.processName);
+    backlogDialog();
 
-    //rememberGameEncoding(pi);
+    if (updateProcess) {
+      showMessage(tr("opening process") + ": " + pi.processName);
 
-    if (grabber_)
-      grabber_->setBaseName(pi.processName);
+      //rememberGameEncoding(pi);
 
-    QString title = pi.processName;
-    setWindowTitle(title);
-    miniPlayer_->setWindowTitle(title); // TODO: move to invalidateTitle!!! or hub_();
+      if (grabber_)
+        grabber_->setBaseName(pi.processName);
 
-    addRecent(pi.executablePath);
-    setRecentOpenedFile(pi.executablePath);
+      QString title = pi.processName;
+      setWindowTitle(title);
+      miniPlayer_->setWindowTitle(title); // TODO: move to invalidateTitle!!! or hub_();
 
-    if (anchor != messageHandler_->anchor())
-      messageHandler_->clearRecentMessages();
+      addRecent(pi.executablePath);
+      setRecentOpenedFile(pi.executablePath);
+    }
+
+    messageHandler_->clearMessages();
 
     messageHandler_->setProcessInfo(pi);
-    messageHandler_->setAnchor(anchor);
-    messageHandler_->setFunction(function);
+    messageHandler_->setThreads(threads);
 
     if (!annotationView_->trackedWindow() ||
         pi.processId != QtWin::getWindowProcessId(annotationView_->trackedWindow())) {
       WId hwnd = QtWin::getGoodWindowWithProcessId(pi.processId);
-      if (hwnd && hwnd != annotationView_->trackedWindow())
+      if (hwnd && hwnd != annotationView_->trackedWindow()) {
+        DOUT("track new window:" << hwnd);
         emit windowPicked(hwnd);
+      }
     }
   }
 
   hub_->setSignalTokenMode();
 
   QString mrl;
-  if (pi.isValid()) {
+
+  if (!updateProcess)
+    updateSubscription(threads);
+  else if (pi.isValid()) {
     mrl = pi.executablePath;
 
     WId hwnd = annotationView_->trackedWindow();
@@ -8744,7 +8993,7 @@ MainWindow::showGamePreferences()
   //  foreach (const QByteArray &a, messageHandler_->recentMessages())
   //    l.prepend(a);
   //  if (!l.isEmpty()) {
-  //    recentMessageView_->addMessages(l, messageHandler_->anchor(), messageHandler_->function());
+  //    recentMessageView_->addMessages(l, messageHandler_->signature(), messageHandler_->function());
   //    recentMessageView_->setCurrentIndex(1);
   //  }
   //}
@@ -9093,24 +9342,6 @@ MainWindow::updatePlaylistMenu()
 // - Recent -
 
 void
-MainWindow::validateRecent()
-{
-  if (recentFiles_.isEmpty())
-    return;
-
-  int size = recentFiles_.size();
-  QMutableListIterator<QString> i(recentFiles_);
-  while (i.hasNext()) {
-    QString path = i.next();
-    if (!isRemoteMrl(path) &&
-        !QFile::exists(removeUrlPrefix(path)))
-      i.remove();
-  }
-  if (size != recentFiles_.size())
-    updateRecent();
-}
-
-void
 MainWindow::updateRecent()
 {
   if (recentFiles_.isEmpty())
@@ -9324,34 +9555,43 @@ MainWindow::addRecent(const QString &input)
 
 bool
 MainWindow::isTranslateEnabled() const
-{ return hub_->isSignalTokenMode() && toggleTranslateAct_->isChecked(); }
+{ return toggleTranslateAct_->isChecked(); }
 
 void
 MainWindow::setTranslateEnabled(bool enabled)
 { toggleTranslateAct_->setChecked(enabled); }
 
 void
-MainWindow::translate(const QString &text)
+MainWindow::translateGameText(const QString &text, int role)
 {
-  if (!isTranslateEnabled() || text.isEmpty() || !server_->isConnected())
+  if (text.isEmpty() || !isTranslateEnabled() || !server_->isConnected())
     return;
-
-  int l = server_->user().language();
-  translate(text, l);
+  bool extra = role == TextThread::SupportRole;
+  translate(text, extra);
 }
 
 void
-MainWindow::translate(const QString &text, int lang)
+MainWindow::translate(const QString &text, bool extra)
 {
-  if (!server_->isConnected())
-    return;
+  //if (!server_->isConnected())
+  //  return;
+
+  int l = server_->user().language();
+  translate(text, l, extra);
+}
+
+void
+MainWindow::translate(const QString &text, int lang, bool extra)
+{
+  //if (!server_->isConnected())
+  //  return;
   static const int script = AcSettings::globalSettings()->languageScript();
   QString lcode = Translator::languageCode(Traits::localeLanguage(lang), script);
   if (lcode.isEmpty()) {
     lcode = Translator::languageCode(QLocale::English);
     Q_ASSERT(!lcode.isEmpty());
   }
-  translator_->translate(text, lcode);
+  (extra ? extraTranslator_ : translator_)->translate(text, lcode);
 }
 
 void
@@ -11395,9 +11635,9 @@ MainWindow::toggleMagnifierVisible()
 void
 MainWindow::updateAnnotationMetaVisible()
 {
-  bool v = hub_->isMediaTokenMode() && hub_->isFullScreenWindowMode() && AnnotationSettings::globalSettings()->preferMotionless() && player_->isPaused() ||
+  bool v = hub_->isMediaTokenMode() && hub_->isFullScreenWindowMode() && AnnotationSettings::globalSettings()->preferFloat() && player_->isPaused() ||
            hub_->isSignalTokenMode() && hub_->isPaused() ||
-           embeddedPlayer_->isVisible() && !embeddedCanvas_->isVisible() && AnnotationSettings::globalSettings()->preferMotionless() &&
+           embeddedPlayer_->isVisible() && !embeddedCanvas_->isVisible() && AnnotationSettings::globalSettings()->preferFloat() &&
              !(hub_->isMediaTokenMode() && !hub_->isFullScreenWindowMode());
   annotationView_->setItemMetaVisible(v);
 }
@@ -11461,8 +11701,9 @@ MainWindow::showAudioDelayDialog()
 void
 MainWindow::saveSettings()
 {
-  DOUT("enter: inet mutex locked");
-  QMutexLocker locker(&inetMutex_);
+  DOUT("enter");
+  //DOUT("enter: inet mutex locked");
+  //QMutexLocker locker(&inetMutex_);
 
   Settings *settings = Settings::globalSettings();
   AcSettings *ac = AcSettings::globalSettings();
@@ -11507,13 +11748,14 @@ MainWindow::saveSettings()
   settings->setAnnotationScale(annotationSettings->scale());
   settings->setAnnotationFullscreenScale(annotationSettings->fullscreenScale());
   settings->setAnnotationOpacityFactor(annotationSettings->opacityFactor());
+  settings->setAnnotationBackgroundOpacityFactor(annotationSettings->backgroundOpacityFactor());
   settings->setAnnotationOffset(annotationSettings->offset());
   settings->setAnnotationFontFamily(annotationSettings->fontFamily());
   settings->setAnnotationJapaneseFontFamily(annotationSettings->japaneseFontFamily());
   settings->setAnnotationChineseFontFamily(annotationSettings->chineseFontFamily());
   settings->setAnnotationAvatarVisible(annotationSettings->isAvatarVisible());
   settings->setAnnotationMetaVisible(annotationSettings->isMetaVisible());
-  settings->setPreferMotionlessAnnotation(annotationSettings->preferMotionless());
+  settings->setPreferFloatAnnotation(annotationSettings->preferFloat());
   settings->setAnnotationOutlineColor(annotationSettings->outlineColor());
   settings->setAnnotationHighlightColor(annotationSettings->highlightColor());
   settings->setSubtitleOutlineColor(annotationSettings->subtitleColor());
@@ -11562,7 +11804,8 @@ MainWindow::saveSettings()
 
   mediaLibrary_->save();
   gameLibrary_->save();
-  DOUT("exit: inet mutex unlocked");
+  //DOUT("exit: inet mutex unlocked");
+  DOUT("exit");
 }
 
 void

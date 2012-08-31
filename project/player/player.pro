@@ -4,7 +4,7 @@
 DEFINES += PROJECT_PLAYER
 
 VERSION_MAJOR = 0.1.9.
-VERSION_MINOR = 0
+VERSION_MINOR = 1
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -178,6 +178,8 @@ HEADERS += \
     library/medialibrary.h \
     library/medialibraryview.h \
     library/mediamodel.h \
+    library/textmessage.h \
+    library/textthread.h \
     osd/osdwindow.h \
     osd/videoview.h \
     player/mainplayer.h \
@@ -199,6 +201,7 @@ HEADERS += \
     util/closewidgetthread.h \
     util/grabber.h \
     util/icons.h \
+    util/checkboxgrid.h \
     util/radiobuttongrid.h \
     util/textedittabview.h \
     util/textview.h
@@ -266,6 +269,8 @@ SOURCES += \
     library/medialibrary.cc \
     library/medialibraryview.cc \
     library/mediamodel.cc \
+    library/textmessage.cc \
+    library/textthread.cc \
     osd/osdwindow.cc \
     osd/videoview.cc \
     player/mainplayer.cc \
@@ -287,6 +292,7 @@ SOURCES += \
     util/clipboardmonitor.cc \
     util/grabber.cc \
     util/icons.cc \
+    util/checkboxgrid.cc \
     util/radiobuttongrid.cc \
     util/textedittabview.cc \
     util/textview.cc

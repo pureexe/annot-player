@@ -15,6 +15,8 @@ struct ProcessInfo
 
   ProcessInfo() : processId(0) { }
   bool isValid() const { return processId; }
+
+  void clear() { processId = 0; processName.clear(); executablePath.clear(); }
 };
 Q_DECLARE_METATYPE(ProcessInfo)
 

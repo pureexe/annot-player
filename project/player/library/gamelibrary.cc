@@ -25,7 +25,7 @@ GameLibrary::containsDigest(const QString &digest) const
 {
   //DOUT("locking");
   //QMutexLocker lock(&mutex_);
-  //DOUT("locked");
+  //DOUT("locked, autorelease");
   return library_.contains(digest);
 }
 
@@ -34,7 +34,7 @@ GameLibrary::containsLocation(const QString &location) const
 {
   //DOUT("locking");
   //QMutexLocker lock(&mutex_);
-  //DOUT("locked");
+  //DOUT("locked, autorelease");
   return digestByLocation_.contains(location);
 }
 
@@ -43,7 +43,7 @@ GameLibrary::findGameByDigest(const QString &digest) const
 {
   DOUT("locking");
   QMutexLocker lock(&mutex_);
-  DOUT("locked");
+  DOUT("locked, autorelease");
   auto p = library_.find(digest);
   return p == library_.end() ? Game() : p.value();
 }
@@ -53,7 +53,7 @@ GameLibrary::findGameByLocation(const QString &location) const
 {
   DOUT("locking");
   QMutexLocker lock(&mutex_);
-  DOUT("locked");
+  DOUT("locked, autorelease");
   auto p = digestByLocation_.find(location);
   if (p != digestByLocation_.end()) {
     auto q = library_.find(p.value());
@@ -70,7 +70,7 @@ GameLibrary::load()
 {
   //DOUT("locking");
   //QMutexLocker lock(&mutex_);
-  //DOUT("locked");
+  //DOUT("locked, autorelease");
   if (!digestByLocation_.isEmpty())
     digestByLocation_.clear();
 
@@ -96,7 +96,7 @@ GameLibrary::save()
 
   DOUT("locking");
   QMutexLocker lock(&mutex_);
-  DOUT("locked");
+  DOUT("locked, autorelease");
 
   if (library_.isEmpty())
     QFile::remove(libraryLocation_);
@@ -129,7 +129,7 @@ GameLibrary::visit(const Game &game)
 
   DOUT("locking");
   QMutexLocker lock(&mutex_);
-  DOUT("locked");
+  DOUT("locked, autorelease");
 
   dirty_ = true;
 
@@ -144,12 +144,10 @@ GameLibrary::visit(const Game &game)
       p->setLocation(game.location());
     if (game.hasTitle())
       p->setTitle(game.title());
-    if (game.hasAnchor())
-      p->setAnchor(game.anchor());
     if (game.hasEncoding())
       p->setEncoding(game.encoding());
-    if (game.hasFunction())
-      p->setFunction(game.function());
+    if (game.hasThreads())
+      p->setThreads(game.threads());
   }
 
   DOUT("exit");
@@ -167,7 +165,7 @@ GameLibrary::update(const Game &game)
 
   DOUT("locking");
   QMutexLocker lock(&mutex_);
-  DOUT("locked");
+  DOUT("locked, autorelease");
 
   dirty_ = true;
 

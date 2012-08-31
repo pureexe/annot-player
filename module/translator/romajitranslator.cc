@@ -3,7 +3,6 @@
 
 #include "module/translator/romajitranslator.h"
 #include "module/translator/romajitranslator_p.h"
-#include "module/translator/translatorsettings.h"
 #include "module/qtext/bytearray.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QTextCodec>
@@ -58,7 +57,7 @@ RomajiTranslator::translate(const QString &text)
   if (!isEnabled())
     return;
   DOUT("enter: text =" << text);
-  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+  if (reply_ && isSynchronized()) {
     //reply_->abort();
     reply_->deleteLater();
     DOUT("abort previous reply");
@@ -91,12 +90,11 @@ RomajiTranslator::processReply(QNetworkReply *reply)
   Q_ASSERT(reply);
   reply->deleteLater();
 
-  if (TranslatorSettings::globalSettings()->isSynchronized() &&
-      reply_ != reply) {
+  if (isSynchronized() && reply_ != reply) {
     DOUT("exit: reply changed");
     return;
   }
-  reply_ = 0;
+  reply_ = nullptr;
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit errorMessage(tr("network error from Romaji Translator") + ": " + reply->errorString());

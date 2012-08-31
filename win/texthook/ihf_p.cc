@@ -2,13 +2,14 @@
 // 10/15/2011
 
 //#define XXX "/HW4@6E8F0!B5346E41" // tukumonotuki
-//#include <QDebug>
+#define XXX "/HSN-4@B14B4!F20AE0D2" // koichoko
+#include <QDebug>
 
 #include "ihf_p.h"
 #include "ith_p.h"
 #include "textthread_p.h"
 #include <ITH/IHF.h>
-//#include "win/qtwinnt/ntdll.h"
+//#include <ntdll.h>
 
 //#define ITH_RUNNING_EVENT L"ITH_PIPE_EXIST"
 //#define ITH_RUNNING_MUTEX L"ITH_RUNNING"

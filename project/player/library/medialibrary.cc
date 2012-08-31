@@ -4,8 +4,9 @@
 #include "medialibrary.h"
 #include "mediamodel.h"
 #include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+//#include <QtCore/QFileInfo>
 #include <QtCore/QMutexLocker>
+#include <QtCore/QRegExp>
 
 #define DEBUG "medialibrary"
 #include "module/debug/debug.h"
@@ -42,8 +43,13 @@ void
 MediaLibrary::loadFolders()
 {
   foreach (const Media &media, library_)
-    if (!media.isGame() && !media.isUrl())
-      folders_.insert(QFileInfo(media.location()).absolutePath());
+    if (!media.isGame() && !media.isUrl()) {
+      // Do not use QFileInfo to improve performance
+      //QString path = QFileInfo(media.location()).absolutePath();
+      QString path = media.location();
+      path.remove(QRegExp("/[^/]*$"));
+      folders_.insert(path);
+    }
 }
 
 const QSet<Media>&

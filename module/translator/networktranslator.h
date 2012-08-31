@@ -20,7 +20,7 @@ class NetworkTranslator : public Translator
 
 public:
   explicit NetworkTranslator(QObject *parent = nullptr)
-    : Base(parent), nam_(0) { }
+    : Base(parent), nam_(nullptr) { }
 
 protected:
   QNetworkAccessManager *networkAccessManager() const;

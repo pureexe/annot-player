@@ -8,6 +8,7 @@
 #include <QtCore/QHash>
 #include <QtCore/QObject>
 #include <QtCore/QPoint>
+#include <QtCore/QSet>
 #include <QtCore/QSize>
 #include <utility>
 
@@ -56,11 +57,11 @@ public slots:
   // - Float scheduling, lane by lane -
 public:
   int nextMovingY(const QSizeF &itemSize, int visibleMsecs);
-  int nextStationaryY(int itemHeight, int visibleMsecs, AnnotationGraphicsItem::Style style);
+  int nextStationaryY(int itemHeight, int visibleMsecs, AnnotationGraphicsItem::Style style, bool sub);
 
-  // - Motionless scheduling, cell by cell -
+  // - Float scheduling, cell by cell -
 public:
-  QPointF nextStationaryPos(const QSizeF &itemSize, int visibleMsecs);
+  QPointF nextFloatPos(const QSizeF &itemSize, int visibleMsecs, bool sub);
 
 private:
   SignalHub *hub_;
@@ -74,6 +75,7 @@ private:
   // Schedule by cell
   QHash<QPoint, qint64> cells_; // timestamps for each cell
   std::pair<QPoint, qint64> lastCell_;
+  QSet<QPoint> subCells_;
 
   // Schedule by lane
   enum { LaneCount = 200 }; // number of vertical lanes, large enough

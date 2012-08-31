@@ -21,10 +21,11 @@
   Qt::WindowMinMaxButtonsHint | \
   Qt::WindowCloseButtonHint )
 
-SyncView::SyncView(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS)
+SyncView::SyncView(MessageHandler *h, QWidget *parent)
+  : Base(parent, WINDOW_FLAGS), messageHandler_(h)
 {
-  setWindowTitle(TR(T_TITLE_SIGNALVIEW));
+  Q_ASSERT(messageHandler_);
+  setWindowTitle(tr("Sync with Galgame"));
   setContentsMargins(0, 0, 0, 0);
   //setAcceptDrops(true);
 
@@ -38,7 +39,7 @@ SyncView::createLayout()
 
   // Views
   processView_ = new ProcessView(this);
-  messageView_ = new MessageView(this);
+  messageView_ = new MessageView(messageHandler_, this);
   //tokenView_ = new TokenView(this);
 
   processView_->setWindowFlags(Qt::Widget);
@@ -53,7 +54,7 @@ SyncView::createLayout()
   processButton_ = ui->makeToolButton(
       AcUi::TabHint, tr("process"), processView_->windowTitle(), processView_, SLOT(setVisible(bool)));
   messageButton_ = ui->makeToolButton(
-      AcUi::TabHint, tr("message"), messageView_->windowTitle(), messageView_, SLOT(setVisible(bool)));
+      AcUi::TabHint, tr("thread"), messageView_->windowTitle(), messageView_, SLOT(setVisible(bool)));
   processButton_->setChecked(true);
   messageButton_->setChecked(true);
 
@@ -78,13 +79,16 @@ SyncView::createLayout()
     messageView_->layout()->setContentsMargins(4, 6, 4, 9);
     header->setContentsMargins(0, 0, 0, 0);
     center->setContentsMargins(0, 0, 0, 0);
-    rows->setContentsMargins(4, 0, 4, 4);
+    rows->setContentsMargins(0, 0, 0, 0);
   } setCentralWidget(new LayoutWidget(rows, this));
 
-  connect(messageView_, SIGNAL(channelSelected(ulong,QString)), SLOT(select(ulong,QString)));
+  connect(messageView_, SIGNAL(threadsSelected(TextThreadList)), SLOT(select(TextThreadList)));
 
   connect(processView_, SIGNAL(attached(ProcessInfo)), messageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
-  connect(processView_, SIGNAL(detached(ProcessInfo)), messageView_, SLOT(clearProcessName()));
+  connect(processView_, SIGNAL(detached(ProcessInfo)), messageView_, SLOT(clear()));
+
+  connect(processView_, SIGNAL(attached(ProcessInfo)), SLOT(showMessageView()));
+  connect(processView_, SIGNAL(detached(ProcessInfo)), SLOT(disableMessageView()));
 
   AC_FORWARD_MESSAGES(messageView_, this, Qt::AutoConnection);
   AC_FORWARD_MESSAGES(processView_, this, Qt::AutoConnection);
@@ -118,23 +122,26 @@ SyncView::createLayout()
 // - Events -
 
 void
-SyncView::select(ulong anchor, const QString &function)
+SyncView::select(const TextThreadList &threads)
 {
-  fadeOut();
+  if (threads.isEmpty())
+    return;
   ProcessInfo pi = processView_->attachedProcessInfo();
-  if (pi.isValid() && anchor)
-    emit channelSelected(anchor, function, pi);
-  else
+  if (!pi.isValid()) {
     emit warning(tr("process is not attached properly. try retart the app first."));
+    return;
+  }
+  emit threadsSelected(threads, pi);
+  fadeOut();
 }
 
-void
-SyncView::setVisible(bool visible)
-{
-  if (visible != messageView_->isActive())
-    messageView_->setActive(visible);
-  Base::setVisible(visible);
-}
+//void
+//SyncView::setVisible(bool visible)
+//{
+//  //if (visible != messageView_->isActive())
+//  //  messageView_->setActive(visible);
+//  Base::setVisible(visible);
+//}
 
 void
 SyncView::setProcessViewVisible(bool t)
@@ -149,6 +156,17 @@ SyncView::setMessageViewVisible(bool t)
   messageButton_->setChecked(t);
   messageView_->setVisible(t);
 }
+
+void
+SyncView::showMessageView()
+{
+  messageView_->setEnabled(true);
+  setMessageViewVisible(true);
+}
+
+void
+SyncView::disableMessageView()
+{ messageView_->setEnabled(false); }
 
 //void SyncView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
 //void SyncView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }

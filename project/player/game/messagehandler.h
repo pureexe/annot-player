@@ -4,9 +4,12 @@
 // messagehandler.h
 // 10/19/2011
 
+#include "textmessage.h"
+#include "textthread.h"
 #include "processinfo.h"
 #include <QtCore/QObject>
 #include <QtCore/QVector>
+#include <QtCore/QSet>
 
 class MessageHandler : public QObject
 {
@@ -16,11 +19,11 @@ class MessageHandler : public QObject
   typedef QObject Base;
 
 public:
-  struct MessageHash {
+  struct Hash {
     qint64 hash;
     int count;
 
-    explicit MessageHash(qint64 h = 0, int c = 0)
+    explicit Hash(qint64 h = 0, int c = 0)
       : hash(h), count(c) { }
 
     void clear() { hash = 0; count = 0; }
@@ -31,8 +34,8 @@ public:
   explicit MessageHandler(QObject *parent = nullptr);
 
 signals:
-  void messageReceivedWithText(const QString &text);
-  void messageReceivedWithId(qint64 pos);
+  void textChanged(const QString &text, int role);
+  void hashChanged(qint64 pos);
 
   void message(QString msg);
   void warning(QString msg);
@@ -42,28 +45,32 @@ signals:
   // - Properties -
 public:
   bool isActive() const { return active_; }
-  ulong anchor() const { return anchor_; }
-  const QString &function() const { return function_; }
-  const ProcessInfo &processInfo() const { return pi_; }
+  const ProcessInfo &processInfo() const { return processInfo_; }
+  const TextThreadList &threads() const { return threads_;}
+  bool hasThreads() const { return !threads_.isEmpty(); }
 
-  ///  Most recent on the top.
-  const QVector<QByteArray> &recentMessages() const { return messages_; }
-  //int recentMessageCapacity() const { return messageCount_; }
+  //qint64 signature() const { return signature_; }
+  //const QString &provider() const { return provider_; }
+  //const QVector<QByteArray> &recentMessages() const { return messages_; }
 
-  const MessageHash &lastMessageHash() const { return lastMessageHash_; }
+  //int messageCapacity() const { return messageCount_; }
+
+  const Hash &lastHash() const { return lastHash_; }
 
 public slots:
   void setActive(bool active);
-  void setAnchor(ulong hid) { anchor_ = hid; }
-  void setFunction(const QString &value) { function_ = value; }
-  void setProcessInfo(const ProcessInfo &pi) { pi_ = pi; }
+  void setThreads(const TextThreadList &l) { threads_ = l; updateSignatures(); }
+  void setProcessInfo(const ProcessInfo &pi) { processInfo_ = pi; }
 
-  void clearRecentMessages();
+  void clearMessages() { messages_.clear(); lastHash_.clear(); }
+  void clear() { clearMessages(); threads_.clear(); processInfo_.clear(); }
 
   // - Actions
 protected slots:
-  void processMessage(const QByteArray &data, ulong anchor);
+  void processMessage(const QByteArray &data, qint64 signature);
 
+protected:
+  void updateSignatures();
   void connectTextHook();
   void disconnectTextHook();
 
@@ -73,14 +80,17 @@ protected slots:
 
 private:
   bool active_;
-  ulong anchor_;
-  QString function_;
-  ProcessInfo pi_;
+  ProcessInfo processInfo_;
 
+  TextThreadList threads_;
+  qint64 leadingSignature_;
+  QSet<qint64> supportSignatures_;
+
+  //QList<TextThread> threads_;
+  //QList<TextMessage> messages_; // recent messages queue
   QVector<QByteArray> messages_; // recent messages queue
-  int messageCount_;     // recent message capacity
 
-  MessageHash lastMessageHash_;
+  Hash lastHash_;
 };
 
 #endif // MESSAGEHANDLER_H

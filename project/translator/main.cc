@@ -10,6 +10,7 @@
 #include "project/common/acpaths.h"
 #include "project/common/acui.h"
 #include "module/translator/translatorsettings.h"
+#include "module/translator/translatormanager.h"
 #ifdef WITH_MODULE_QT
 # include "module/qt/qtrc.h"
 #endif // WITH_MODULE_QT
@@ -25,6 +26,8 @@
 #endif // __GNUC__
 
 #define DEFAULT_SIZE    QSize(500, 400)
+
+enum { DEFAULT_TRANSLATORS = TranslatorManager::RomajiBit | TranslatorManager::OcnBit | TranslatorManager::FresheyeBit };
 
 // - Startup stages -
 
@@ -121,6 +124,13 @@ main(int argc, char *argv[])
   // Register meta types.
   detail::registerMetaTypes();
 
+  // Check update
+  if (Settings::globalSettings()->version() != G_VERSION) {
+    Settings::globalSettings()->setTranslationServices(DEFAULT_TRANSLATORS);
+    Settings::globalSettings()->setVersion(G_VERSION);
+    Settings::globalSettings()->sync();
+  }
+
   AcSettings *settings = AcSettings::globalSettings();
   {
     int lang = settings->language(),
@@ -142,10 +152,6 @@ main(int argc, char *argv[])
       a.installTranslator(t);
 #endif // WITH_MODULE_QT
   }
-
-  // Check update
-  if (Settings::globalSettings()->version() != G_VERSION)
-    Settings::globalSettings()->setVersion(G_VERSION);
 
   // Set theme.
   {

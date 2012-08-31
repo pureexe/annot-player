@@ -45,7 +45,7 @@ signals:
 
 public:
   enum { AnnotationGraphicsItemType = UserType + 1 };
-  enum Style { FloatStyle = 0, FlyStyle, SubtitleStyle, TopStyle, BottomStyle, MotionlessStyle };  // Appear style
+  enum Style { NoStyle = 0, DriftStyle, FloatStyle, FlyStyle, TopStyle, BottomStyle };
 
   static void warmUp(); ///< optional, caching fonts on first load
 
@@ -58,7 +58,6 @@ public:
   Annotation &annotation() { return annot_; }
 
   void setAnnotation(const Annotation &annot);
-  void updateText();
   void updateComponents();
   void updateToolTip();
 
@@ -74,7 +73,7 @@ public:
   ///  Override
   virtual int type() const { return AnnotationGraphicsItemType; }
   Style style() const { return style_; }
-  void setStyle(Style style) { style_ = style; }
+  //void setStyle(Style style) { style_ = style; }
 
   bool isPaused() const;
 
@@ -82,7 +81,7 @@ public:
   //bool contains(const QPointF &point) const override
   //{ return Base::boundingRect().contains(point); }
 
-  bool isSubtitle() const { return style_ == SubtitleStyle; }
+  bool isSubtitle() const { return annot_.isSubtitle(); }
 
   QString summary() const;
 
@@ -100,8 +99,9 @@ protected:
   //static bool isSubtitle(const QString &text);
 
 public slots:
+  void updateText();
   void setOutlineColor(const QColor &color);
-  void resetOutlineColor();
+  //void resetOutlineColor();
   void updateOutlineColor();
   void setMetaVisible(bool t) { metaVisible_ = t; }
   void setMetaVisibleAndUpdate(bool t);
@@ -177,7 +177,9 @@ protected:
   int stayTime() const; ///< in msecs
 
   void fadeIn(int msecs);
+  void fadeIn();
   void fadeOut(int msecs);
+  void fadeOut();
 
   QPointF boundedToScene(const QPointF &pos) const;
   QPointF reflected(const QPointF &pos) const;

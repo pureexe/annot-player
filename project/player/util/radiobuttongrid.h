@@ -29,7 +29,7 @@ public:
 
 signals:
   void error(const QString &text);
-  void valueChanged(int value);
+  void currentIndexChanged(int index);
 
   // - Properties -
 public:
@@ -40,17 +40,26 @@ public:
   bool isEmpty() const { return !size_; }
   bool isFull() const { return size_ == capacity_; }
 
-  int value() const; ///< [-1, capacity-1]
+  bool isItemEnabled(int index) const;
+  QString itemText(int index) const;
+
+  QString currentText() const { return itemText(currentIndex()); }
+  int currentIndex() const;
+  bool hasSelection() const { return currentIndex() >= 0; }
 public slots:
-  void setValue(int value);
+  void setCurrentIndex(int index);
 
   // - Actions -
 public slots:
-  void addItem(const QString &title = QString(), const QString &tip = QString());
+  void setItemText(int index, const QString &text);
+  void setItemEnabled(int index, bool enabled);
+  void setItemsEnabled(bool t);
+  void addItem(const QString &text = QString());
   void clear();
 
 protected slots:
-  void updateValue();
+  void invalidateCurrentIndex()
+  { emit currentIndexChanged(currentIndex()); }
 
 private:
   void createLayout();

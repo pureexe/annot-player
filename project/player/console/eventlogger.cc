@@ -382,9 +382,9 @@ void
 EventLogger::logSubtitleOnTopChanged(bool value)
 {
   if (value)
-    logger_->showMessageOnce(tr("show subtitles on the top"));
+    logger_->showMessageOnce(tr("Subtitle on the Top"));
   else
-    logger_->showMessageOnce(tr("show subtitles on the bottom"));
+    logger_->showMessageOnce(tr("Subtitle on the Bottom"));
 }
 
 void
@@ -402,6 +402,14 @@ EventLogger::logAnnotationFullscreenScaleChanged(qreal value)
 {
   logger_->showMessageOnce(tr("Fullscreen Scale") + ": "
       HTML_SS_OPEN(color:orange) + QString::number(value) + HTML_SS_CLOSE());
+}
+
+void
+EventLogger::logAnnotationBackgroundOpacityFactorChanged(int value)
+{
+  QString t = QString::number(value) + '%';
+  logger_->showMessageOnce(tr("Background Opacity") + ": "
+      HTML_SS_OPEN(color:orange) + t + HTML_SS_CLOSE());
 }
 
 void
@@ -532,12 +540,12 @@ EventLogger::logSelectedUserIds(const QList<qint64> &uids)
 }
 
 void
-EventLogger::logPreferMotionlessAnnotationChanged(bool t)
+EventLogger::logPreferFloatAnnotationChanged(bool t)
 {
   if (t)
-    logger_->showMessage(tr("prefer motionless annotations"));
-  else
     logger_->showMessage(tr("prefer floating annotations"));
+  else
+    logger_->showMessage(tr("prefer drifting annotations"));
 }
 
 void

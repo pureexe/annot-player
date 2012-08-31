@@ -23,8 +23,8 @@ namespace detail {
     ProcessWebPage(QWebPage *page, GoogleTranslator *t)
       : Base(t), t_(t), page_(page) { }
 
-    ~ProcessWebPage()
-    { t_->releaseWebPage(page_); }
+    //~ProcessWebPage()
+    //{ t_->releaseWebPage(page_); }
 
   public slots:
     void trigger(bool ok)

@@ -4,14 +4,15 @@
 // mainwindow.h
 // 6/30/2011
 
+#ifdef AC_ENABLE_GAME
+# include "textthread.h"
+# include "processinfo.h"
+#endif // AC_ENABLE_GAME
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
 #include "module/mrlresolver/mrlinfo.h"
 #include "module/searchengine/searchenginefactory.h"
 #include "module/translator/translatormanager.h"
-#ifdef AC_ENABLE_GAME
-# include "processinfo.h"
-#endif // AC_ENABLE_GAME
 #include <QtCore/QMutex>
 #include <QtCore/QHash>
 #include <QtCore/QStringList>
@@ -128,6 +129,7 @@ public:
 signals:
   void windowPicked(WId);
   void userIdChanged(qint64 uid);
+  void openProcessRequested();
   void posChanged();
   void openAnnotationUrlRequested(const QString &url);
   void removeAnnotationsFromAnnotationViewRequested();
@@ -195,8 +197,9 @@ public slots:
   void maximizedToFullScreen();
 
   void setTranslateEnabled(bool enabled);
-  void translate(const QString &text);
-  void translate(const QString &text, int lang);
+  void translate(const QString &text, bool extra = false);
+  void translate(const QString &text, int lang, bool extra = false);
+  void translateGameText(const QString &text, int role);
 
   void showTraditionalChinese(const QString &gbk);
 
@@ -278,6 +281,7 @@ public slots:
   void replay(); /// Restart from the beginning.
   void pause();
   void stop();
+  void promptStop();
   void nextFrame();
   void snapshot(bool mediaOnly = true);
   void snapshotAll() { snapshot(false); }
@@ -513,7 +517,7 @@ public slots:
   void submitText(const QString &text, bool async = true);
   void showText(const QString &text, bool isSigned = false);
 
-  void submitLiveText(const QString &text, bool async = true);
+  //void submitLiveText(const QString &text, bool async = true);
 
   void showSubtitle(const QString &text, int userLang = 0, const QString &prefix = QString());
 
@@ -546,16 +550,30 @@ public slots:
   // - Translation -
 protected slots:
   void showTranslation(const QString &text, int service);
+  void showAdditionalTranslation(const QString &text, int service);
+
   void showRomajiTranslation(const QString &text) { showTranslation(text, TranslatorManager::Romaji); }
   void showMicrosoftTranslation(const QString &text) { showTranslation(text, TranslatorManager::Microsoft); }
   void showGoogleTranslation(const QString &text) { showTranslation(text, TranslatorManager::Google); }
   void showYahooTranslation(const QString &text) { showTranslation(text, TranslatorManager::Yahoo); }
-  void showFresheyeTranslation(const QString &text);
-  void showOcnTranslation(const QString &text);
+  void showFresheyeTranslation(const QString &text, bool extra = false);
+  void showOcnTranslation(const QString &text, bool extra = false);
   void showExciteTranslation(const QString &text) { showTranslation(text, TranslatorManager::Excite); }
   void showSdlTranslation(const QString &text) { showTranslation(text, TranslatorManager::Sdl); }
   void showNiftyTranslation(const QString &text) { showTranslation(text, TranslatorManager::Nifty); }
   void showInfoseekTranslation(const QString &text) { showTranslation(text, TranslatorManager::Infoseek); }
+
+  void showRomajiAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Romaji); }
+  void showMicrosoftAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Microsoft); }
+  void showGoogleAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Google); }
+  void showYahooAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Yahoo); }
+  void showFresheyeAdditionalTranslation(const QString &text) { showFresheyeTranslation(text, true); }
+  void showOcnAdditionalTranslation(const QString &text) { showOcnTranslation(text, true); }
+  void showExciteAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Excite); }
+  void showSdlAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Sdl); }
+  void showNiftyAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Nifty); }
+  void showInfoseekAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Infoseek); }
+
 
   // - Remote annotations -
 public slots:
@@ -577,7 +595,6 @@ protected slots:
   void openRecent(int i);
   void clearRecent();
   void updateRecent();
-  void validateRecent();
   void updateRecentMenu();
 
   // - Playlist -
@@ -769,15 +786,18 @@ protected slots:
 signals:
   void attached(ProcessInfo pi);
   void detached(ProcessInfo pi);
+  void subscribeThreadsRequested(TextThreadList,ProcessInfo);
+  void hideSyncViewRequested();
 public slots:
   void openProcessPath(const QString &path);
-  void openChannel(ulong anchor, const QString &function, const ProcessInfo &pi);
-  void updateChannel(ulong anchor, const QString &function);
+  void subscribeThreads(const TextThreadList &threads, const ProcessInfo &pi);
+  //void updateThread(const TextThread &thread);
+  void updateSubscription(const TextThreadList &threads, bool async = true);
   void openProcessWindow(WId hwnd);
   void openProcessId(ulong pid);
 
 protected slots:
-  void synchronizeProcess(const ProcessInfo &pi);
+  void synchronizeProcess(const ProcessInfo &pi, bool async = true);
 
 //protected slots:
 //  void rememberGameEncoding(const ProcessInfo &pi);
@@ -961,7 +981,7 @@ private:
 
   QString windowTitleSuffix_;
 
-  TranslatorManager *translator_;
+  TranslatorManager *translator_, *extraTranslator_;
 
   AcPlayerServer *appServer_;
   AcBrowser *browserDelegate_;
@@ -1167,6 +1187,7 @@ private:
           *playAct_,
           *pauseAct_,
           *stopAct_,
+          *promptStopAct_,
           *replayAct_,
           *nextFrameAct_,
           *previousAct_,
@@ -1182,7 +1203,7 @@ private:
           *toggleSubtitleVisibleAct_,
           *toggleSubtitleAnnotationVisibleAct_,
           *toggleNonSubtitleAnnotationVisibleAct_,
-          *togglePreferMotionlessAnnotationAct_,
+          *togglePreferFloatAnnotationAct_,
           *toggleSaveAnnotationFileAct_,
           *toggleAnnotationBandwidthLimitedAct_,
           *toggleClipboardMonitorEnabledAct_,

@@ -3,7 +3,6 @@
 
 #include "module/translator/bingtranslator.h"
 #include "module/translator/bingtranslator_p.h"
-#include "module/translator/translatorsettings.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
@@ -33,7 +32,7 @@ BingTranslator::translate(const QString &text, const QString &to, const QString 
   if (!isEnabled())
     return;
   DOUT("enter");
-  if (reply_ && TranslatorSettings::globalSettings()->isSynchronized()) {
+  if (reply_ && isSynchronized()) {
     //reply_->abort();
     reply_->deleteLater();
     DOUT("abort previous reply");
@@ -53,12 +52,11 @@ BingTranslator::processReply(QNetworkReply *reply)
   Q_ASSERT(reply);
   reply->deleteLater();
 
-  if (TranslatorSettings::globalSettings()->isSynchronized() &&
-      reply_ != reply) {
+  if (isSynchronized() && reply_ != reply) {
     DOUT("exit: reply changed");
     return;
   }
-  reply_ = 0;
+  reply_ = nullptr;
 
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
     emit errorMessage(tr("network error from Bing Translator") + ": " + reply->errorString());

@@ -116,8 +116,8 @@ public:
   qint64 annotationOffset() const;
   void setAnnotationOffset(qint64 offset);
 
-  bool preferMotionlessAnnotation() const;
-  void setPreferMotionlessAnnotation(bool t);
+  bool preferFloatAnnotation() const;
+  void setPreferFloatAnnotation(bool t);
 
   bool preferTraditionalChinese() const;
   void setPreferTraditionalChinese(bool t);
@@ -194,6 +194,7 @@ public:
 
   // - Annotation transforms -
   int annotationOpacityFactor() const; void setAnnotationOpacityFactor(int value);
+  int annotationBackgroundOpacityFactor() const; void setAnnotationBackgroundOpacityFactor(int value);
   qreal annotationScale() const; void setAnnotationScale(qreal value);
   qreal annotationFullscreenScale() const; void setAnnotationFullscreenScale(qreal value);
   //qreal annotationRotation() const; void setAnnotationRotation(qreal value);

@@ -18,8 +18,8 @@
     <text></text>
     <tokenId>0</tokenId>
     <type>0</type>
-    <updateTime>0</updateTime>
     <updateIp>0</updateIp>
+    <updateTime>0</updateTime>
     <userId>0</userId>
    </return>
    <return>
@@ -33,8 +33,8 @@
     <text></text>
     <tokenId>0</tokenId>
     <type>0</type>
-    <updateTime>0</updateTime>
     <updateIp>0</updateIp>
+    <updateTime>0</updateTime>
     <userId>0</userId>
    </return>
   </tns:selectRelatedMediaAliasesWithTokenIdResponse>

@@ -22,10 +22,10 @@ InputComboBox::InputComboBox(QWidget *parent)
   ADD(CORE_CMD_COLOR_BACKGROUND "[yellow]" "{背景色}");
   ADD(CORE_CMD_HTML_FONT "[face:gothic;color:red;size:20]" "{HTMLフォント}");
   ADD(CORE_CMD_STYLE "[font-family:gothic;text-decoration:underline]" " HTML CSS3");
-  ADD("\\fly 飛~~~~~~~~~~~~~~~~");
-  ADD("\\repeat[5] クンカ\\cyan{クンカ}");
+  //ADD("\\fly 飛~~~~~~~~~~~~~~~~");
+  //ADD("\\repeat[5] クンカ\\cyan{クンカ}");
   ADD("line1\\n\\orange{line2}\\n\\pink{line3}");
-  ADD("\\verbatim \\(>_<)/");
+  //ADD("\\verbatim \\(>_<)/");
 #undef ADD
   setMaxVisibleItems(15);
   reset();

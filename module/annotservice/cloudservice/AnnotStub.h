@@ -53,8 +53,38 @@ namespace Annot {
 
 #endif
 
+#ifndef SOAP_TYPE_Annot_tns__gameThread
+#define SOAP_TYPE_Annot_tns__gameThread (8)
+/* tns:gameThread */
+class SOAP_CMAC tns__gameThread
+{
+public:
+	int encoding;	/* required element of type xsd:int */
+	LONG64 flags;	/* required element of type xsd:long */
+	LONG64 id;	/* required element of type xsd:long */
+	std::string *provider;	/* optional element of type xsd:string */
+	LONG64 signature;	/* required element of type xsd:long */
+	LONG64 tokenId;	/* required element of type xsd:long */
+	int type;	/* required element of type xsd:int */
+	LONG64 updateIp;	/* required element of type xsd:long */
+	LONG64 updateTime;	/* required element of type xsd:long */
+	LONG64 userId;	/* required element of type xsd:long */
+	struct soap *soap;	/* transient */
+public:
+	virtual int soap_type() const { return 8; } /* = unique id SOAP_TYPE_Annot_tns__gameThread */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         tns__gameThread() { tns__gameThread::soap_default(NULL); }
+	virtual ~tns__gameThread() { }
+};
+#endif
+
 #ifndef SOAP_TYPE_Annot_tns__mediaAnnotation
-#define SOAP_TYPE_Annot_tns__mediaAnnotation (8)
+#define SOAP_TYPE_Annot_tns__mediaAnnotation (9)
 /* tns:mediaAnnotation */
 class SOAP_CMAC tns__mediaAnnotation
 {
@@ -73,13 +103,13 @@ public:
 	int status;	/* required element of type xsd:int */
 	std::string *text;	/* optional element of type xsd:string */
 	LONG64 tokenId;	/* required element of type xsd:long */
-	LONG64 updateTime;	/* required element of type xsd:long */
 	LONG64 updateIp;	/* required element of type xsd:long */
+	LONG64 updateTime;	/* required element of type xsd:long */
 	std::string *userAlias;	/* optional element of type xsd:string */
 	LONG64 userId;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 8; } /* = unique id SOAP_TYPE_Annot_tns__mediaAnnotation */
+	virtual int soap_type() const { return 9; } /* = unique id SOAP_TYPE_Annot_tns__mediaAnnotation */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -92,7 +122,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__mediaToken
-#define SOAP_TYPE_Annot_tns__mediaToken (9)
+#define SOAP_TYPE_Annot_tns__mediaToken (10)
 /* tns:mediaToken */
 class SOAP_CMAC tns__mediaToken
 {
@@ -100,8 +130,8 @@ public:
 	int annotCount;	/* required element of type xsd:int */
 	int blessCount;	/* required element of type xsd:int */
 	int blockCount;	/* required element of type xsd:int */
-	LONG64 createTime;	/* required element of type xsd:long */
 	LONG64 createIp;	/* required element of type xsd:long */
+	LONG64 createTime;	/* required element of type xsd:long */
 	int curseCount;	/* required element of type xsd:int */
 	std::string *digest;	/* optional element of type xsd:string */
 	LONG64 flags;	/* required element of type xsd:long */
@@ -114,7 +144,7 @@ public:
 	int visitCount;	/* required element of type xsd:int */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 9; } /* = unique id SOAP_TYPE_Annot_tns__mediaToken */
+	virtual int soap_type() const { return 10; } /* = unique id SOAP_TYPE_Annot_tns__mediaToken */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -127,7 +157,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__mediaAlias
-#define SOAP_TYPE_Annot_tns__mediaAlias (10)
+#define SOAP_TYPE_Annot_tns__mediaAlias (11)
 /* tns:mediaAlias */
 class SOAP_CMAC tns__mediaAlias
 {
@@ -142,12 +172,12 @@ public:
 	std::string *text;	/* optional element of type xsd:string */
 	LONG64 tokenId;	/* required element of type xsd:long */
 	int type;	/* required element of type xsd:int */
-	LONG64 updateTime;	/* required element of type xsd:long */
 	LONG64 updateIp;	/* required element of type xsd:long */
+	LONG64 updateTime;	/* required element of type xsd:long */
 	LONG64 userId;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 10; } /* = unique id SOAP_TYPE_Annot_tns__mediaAlias */
+	virtual int soap_type() const { return 11; } /* = unique id SOAP_TYPE_Annot_tns__mediaAlias */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -160,7 +190,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__user
-#define SOAP_TYPE_Annot_tns__user (11)
+#define SOAP_TYPE_Annot_tns__user (12)
 /* tns:user */
 class SOAP_CMAC tns__user
 {
@@ -168,8 +198,8 @@ public:
 	int annotCount;	/* required element of type xsd:int */
 	int blessCount;	/* required element of type xsd:int */
 	int blockCount;	/* required element of type xsd:int */
-	LONG64 createTime;	/* required element of type xsd:long */
 	LONG64 createIp;	/* required element of type xsd:long */
+	LONG64 createTime;	/* required element of type xsd:long */
 	int curseCount;	/* required element of type xsd:int */
 	std::string *email;	/* optional element of type xsd:string */
 	LONG64 flags;	/* required element of type xsd:long */
@@ -184,7 +214,7 @@ public:
 	int status;	/* required element of type xsd:int */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 11; } /* = unique id SOAP_TYPE_Annot_tns__user */
+	virtual int soap_type() const { return 12; } /* = unique id SOAP_TYPE_Annot_tns__user */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -197,7 +227,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blessMediaAliasWithId
-#define SOAP_TYPE_Annot_tns__blessMediaAliasWithId (12)
+#define SOAP_TYPE_Annot_tns__blessMediaAliasWithId (13)
 /* tns:blessMediaAliasWithId */
 class SOAP_CMAC tns__blessMediaAliasWithId
 {
@@ -205,7 +235,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 12; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaAliasWithId */
+	virtual int soap_type() const { return 13; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaAliasWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -218,7 +248,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blessMediaAliasWithIdResponse
-#define SOAP_TYPE_Annot_tns__blessMediaAliasWithIdResponse (13)
+#define SOAP_TYPE_Annot_tns__blessMediaAliasWithIdResponse (14)
 /* tns:blessMediaAliasWithIdResponse */
 class SOAP_CMAC tns__blessMediaAliasWithIdResponse
 {
@@ -226,7 +256,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 13; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaAliasWithIdResponse */
+	virtual int soap_type() const { return 14; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaAliasWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -239,7 +269,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blessMediaAnnotationWithId
-#define SOAP_TYPE_Annot_tns__blessMediaAnnotationWithId (14)
+#define SOAP_TYPE_Annot_tns__blessMediaAnnotationWithId (15)
 /* tns:blessMediaAnnotationWithId */
 class SOAP_CMAC tns__blessMediaAnnotationWithId
 {
@@ -247,7 +277,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 14; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaAnnotationWithId */
+	virtual int soap_type() const { return 15; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaAnnotationWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -260,7 +290,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blessMediaAnnotationWithIdResponse
-#define SOAP_TYPE_Annot_tns__blessMediaAnnotationWithIdResponse (15)
+#define SOAP_TYPE_Annot_tns__blessMediaAnnotationWithIdResponse (16)
 /* tns:blessMediaAnnotationWithIdResponse */
 class SOAP_CMAC tns__blessMediaAnnotationWithIdResponse
 {
@@ -268,7 +298,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 15; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaAnnotationWithIdResponse */
+	virtual int soap_type() const { return 16; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaAnnotationWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -281,7 +311,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blessMediaTokenWithId
-#define SOAP_TYPE_Annot_tns__blessMediaTokenWithId (16)
+#define SOAP_TYPE_Annot_tns__blessMediaTokenWithId (17)
 /* tns:blessMediaTokenWithId */
 class SOAP_CMAC tns__blessMediaTokenWithId
 {
@@ -289,7 +319,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 16; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaTokenWithId */
+	virtual int soap_type() const { return 17; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaTokenWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -302,7 +332,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blessMediaTokenWithIdResponse
-#define SOAP_TYPE_Annot_tns__blessMediaTokenWithIdResponse (17)
+#define SOAP_TYPE_Annot_tns__blessMediaTokenWithIdResponse (18)
 /* tns:blessMediaTokenWithIdResponse */
 class SOAP_CMAC tns__blessMediaTokenWithIdResponse
 {
@@ -310,7 +340,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 17; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaTokenWithIdResponse */
+	virtual int soap_type() const { return 18; } /* = unique id SOAP_TYPE_Annot_tns__blessMediaTokenWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -323,7 +353,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blessUserWithId
-#define SOAP_TYPE_Annot_tns__blessUserWithId (18)
+#define SOAP_TYPE_Annot_tns__blessUserWithId (19)
 /* tns:blessUserWithId */
 class SOAP_CMAC tns__blessUserWithId
 {
@@ -331,7 +361,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 18; } /* = unique id SOAP_TYPE_Annot_tns__blessUserWithId */
+	virtual int soap_type() const { return 19; } /* = unique id SOAP_TYPE_Annot_tns__blessUserWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -344,7 +374,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blessUserWithIdResponse
-#define SOAP_TYPE_Annot_tns__blessUserWithIdResponse (19)
+#define SOAP_TYPE_Annot_tns__blessUserWithIdResponse (20)
 /* tns:blessUserWithIdResponse */
 class SOAP_CMAC tns__blessUserWithIdResponse
 {
@@ -352,7 +382,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 19; } /* = unique id SOAP_TYPE_Annot_tns__blessUserWithIdResponse */
+	virtual int soap_type() const { return 20; } /* = unique id SOAP_TYPE_Annot_tns__blessUserWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -365,7 +395,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blockMediaAliasWithId
-#define SOAP_TYPE_Annot_tns__blockMediaAliasWithId (20)
+#define SOAP_TYPE_Annot_tns__blockMediaAliasWithId (21)
 /* tns:blockMediaAliasWithId */
 class SOAP_CMAC tns__blockMediaAliasWithId
 {
@@ -373,7 +403,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 20; } /* = unique id SOAP_TYPE_Annot_tns__blockMediaAliasWithId */
+	virtual int soap_type() const { return 21; } /* = unique id SOAP_TYPE_Annot_tns__blockMediaAliasWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -386,7 +416,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blockMediaAliasWithIdResponse
-#define SOAP_TYPE_Annot_tns__blockMediaAliasWithIdResponse (21)
+#define SOAP_TYPE_Annot_tns__blockMediaAliasWithIdResponse (22)
 /* tns:blockMediaAliasWithIdResponse */
 class SOAP_CMAC tns__blockMediaAliasWithIdResponse
 {
@@ -394,7 +424,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 21; } /* = unique id SOAP_TYPE_Annot_tns__blockMediaAliasWithIdResponse */
+	virtual int soap_type() const { return 22; } /* = unique id SOAP_TYPE_Annot_tns__blockMediaAliasWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -407,7 +437,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blockMediaAnnotationWithId
-#define SOAP_TYPE_Annot_tns__blockMediaAnnotationWithId (22)
+#define SOAP_TYPE_Annot_tns__blockMediaAnnotationWithId (23)
 /* tns:blockMediaAnnotationWithId */
 class SOAP_CMAC tns__blockMediaAnnotationWithId
 {
@@ -415,7 +445,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 22; } /* = unique id SOAP_TYPE_Annot_tns__blockMediaAnnotationWithId */
+	virtual int soap_type() const { return 23; } /* = unique id SOAP_TYPE_Annot_tns__blockMediaAnnotationWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -428,7 +458,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blockMediaAnnotationWithIdResponse
-#define SOAP_TYPE_Annot_tns__blockMediaAnnotationWithIdResponse (23)
+#define SOAP_TYPE_Annot_tns__blockMediaAnnotationWithIdResponse (24)
 /* tns:blockMediaAnnotationWithIdResponse */
 class SOAP_CMAC tns__blockMediaAnnotationWithIdResponse
 {
@@ -436,7 +466,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 23; } /* = unique id SOAP_TYPE_Annot_tns__blockMediaAnnotationWithIdResponse */
+	virtual int soap_type() const { return 24; } /* = unique id SOAP_TYPE_Annot_tns__blockMediaAnnotationWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -449,7 +479,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blockUserWithId
-#define SOAP_TYPE_Annot_tns__blockUserWithId (24)
+#define SOAP_TYPE_Annot_tns__blockUserWithId (25)
 /* tns:blockUserWithId */
 class SOAP_CMAC tns__blockUserWithId
 {
@@ -457,7 +487,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 24; } /* = unique id SOAP_TYPE_Annot_tns__blockUserWithId */
+	virtual int soap_type() const { return 25; } /* = unique id SOAP_TYPE_Annot_tns__blockUserWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -470,7 +500,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__blockUserWithIdResponse
-#define SOAP_TYPE_Annot_tns__blockUserWithIdResponse (25)
+#define SOAP_TYPE_Annot_tns__blockUserWithIdResponse (26)
 /* tns:blockUserWithIdResponse */
 class SOAP_CMAC tns__blockUserWithIdResponse
 {
@@ -478,7 +508,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 25; } /* = unique id SOAP_TYPE_Annot_tns__blockUserWithIdResponse */
+	virtual int soap_type() const { return 26; } /* = unique id SOAP_TYPE_Annot_tns__blockUserWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -491,7 +521,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__chat
-#define SOAP_TYPE_Annot_tns__chat (26)
+#define SOAP_TYPE_Annot_tns__chat (27)
 /* tns:chat */
 class SOAP_CMAC tns__chat
 {
@@ -499,7 +529,7 @@ public:
 	std::string *text;	/* optional element of type xsd:string */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 26; } /* = unique id SOAP_TYPE_Annot_tns__chat */
+	virtual int soap_type() const { return 27; } /* = unique id SOAP_TYPE_Annot_tns__chat */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -512,7 +542,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__chatResponse
-#define SOAP_TYPE_Annot_tns__chatResponse (27)
+#define SOAP_TYPE_Annot_tns__chatResponse (28)
 /* tns:chatResponse */
 class SOAP_CMAC tns__chatResponse
 {
@@ -520,7 +550,7 @@ public:
 	std::string *return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type xsd:string */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 27; } /* = unique id SOAP_TYPE_Annot_tns__chatResponse */
+	virtual int soap_type() const { return 28; } /* = unique id SOAP_TYPE_Annot_tns__chatResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -533,7 +563,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__curseMediaAliasWithId
-#define SOAP_TYPE_Annot_tns__curseMediaAliasWithId (28)
+#define SOAP_TYPE_Annot_tns__curseMediaAliasWithId (29)
 /* tns:curseMediaAliasWithId */
 class SOAP_CMAC tns__curseMediaAliasWithId
 {
@@ -541,7 +571,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 28; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaAliasWithId */
+	virtual int soap_type() const { return 29; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaAliasWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -554,7 +584,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__curseMediaAliasWithIdResponse
-#define SOAP_TYPE_Annot_tns__curseMediaAliasWithIdResponse (29)
+#define SOAP_TYPE_Annot_tns__curseMediaAliasWithIdResponse (30)
 /* tns:curseMediaAliasWithIdResponse */
 class SOAP_CMAC tns__curseMediaAliasWithIdResponse
 {
@@ -562,7 +592,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 29; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaAliasWithIdResponse */
+	virtual int soap_type() const { return 30; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaAliasWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -575,7 +605,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__curseMediaAnnotationWithId
-#define SOAP_TYPE_Annot_tns__curseMediaAnnotationWithId (30)
+#define SOAP_TYPE_Annot_tns__curseMediaAnnotationWithId (31)
 /* tns:curseMediaAnnotationWithId */
 class SOAP_CMAC tns__curseMediaAnnotationWithId
 {
@@ -583,7 +613,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 30; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaAnnotationWithId */
+	virtual int soap_type() const { return 31; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaAnnotationWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -596,7 +626,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__curseMediaAnnotationWithIdResponse
-#define SOAP_TYPE_Annot_tns__curseMediaAnnotationWithIdResponse (31)
+#define SOAP_TYPE_Annot_tns__curseMediaAnnotationWithIdResponse (32)
 /* tns:curseMediaAnnotationWithIdResponse */
 class SOAP_CMAC tns__curseMediaAnnotationWithIdResponse
 {
@@ -604,7 +634,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 31; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaAnnotationWithIdResponse */
+	virtual int soap_type() const { return 32; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaAnnotationWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -617,7 +647,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__curseMediaTokenWithId
-#define SOAP_TYPE_Annot_tns__curseMediaTokenWithId (32)
+#define SOAP_TYPE_Annot_tns__curseMediaTokenWithId (33)
 /* tns:curseMediaTokenWithId */
 class SOAP_CMAC tns__curseMediaTokenWithId
 {
@@ -625,7 +655,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 32; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaTokenWithId */
+	virtual int soap_type() const { return 33; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaTokenWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -638,7 +668,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__curseMediaTokenWithIdResponse
-#define SOAP_TYPE_Annot_tns__curseMediaTokenWithIdResponse (33)
+#define SOAP_TYPE_Annot_tns__curseMediaTokenWithIdResponse (34)
 /* tns:curseMediaTokenWithIdResponse */
 class SOAP_CMAC tns__curseMediaTokenWithIdResponse
 {
@@ -646,7 +676,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 33; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaTokenWithIdResponse */
+	virtual int soap_type() const { return 34; } /* = unique id SOAP_TYPE_Annot_tns__curseMediaTokenWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -659,7 +689,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__curseUserWithId
-#define SOAP_TYPE_Annot_tns__curseUserWithId (34)
+#define SOAP_TYPE_Annot_tns__curseUserWithId (35)
 /* tns:curseUserWithId */
 class SOAP_CMAC tns__curseUserWithId
 {
@@ -667,7 +697,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 34; } /* = unique id SOAP_TYPE_Annot_tns__curseUserWithId */
+	virtual int soap_type() const { return 35; } /* = unique id SOAP_TYPE_Annot_tns__curseUserWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -680,7 +710,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__curseUserWithIdResponse
-#define SOAP_TYPE_Annot_tns__curseUserWithIdResponse (35)
+#define SOAP_TYPE_Annot_tns__curseUserWithIdResponse (36)
 /* tns:curseUserWithIdResponse */
 class SOAP_CMAC tns__curseUserWithIdResponse
 {
@@ -688,7 +718,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 35; } /* = unique id SOAP_TYPE_Annot_tns__curseUserWithIdResponse */
+	virtual int soap_type() const { return 36; } /* = unique id SOAP_TYPE_Annot_tns__curseUserWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -701,7 +731,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__deleteMediaAliasWithId
-#define SOAP_TYPE_Annot_tns__deleteMediaAliasWithId (36)
+#define SOAP_TYPE_Annot_tns__deleteMediaAliasWithId (37)
 /* tns:deleteMediaAliasWithId */
 class SOAP_CMAC tns__deleteMediaAliasWithId
 {
@@ -709,7 +739,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 36; } /* = unique id SOAP_TYPE_Annot_tns__deleteMediaAliasWithId */
+	virtual int soap_type() const { return 37; } /* = unique id SOAP_TYPE_Annot_tns__deleteMediaAliasWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -722,7 +752,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__deleteMediaAliasWithIdResponse
-#define SOAP_TYPE_Annot_tns__deleteMediaAliasWithIdResponse (37)
+#define SOAP_TYPE_Annot_tns__deleteMediaAliasWithIdResponse (38)
 /* tns:deleteMediaAliasWithIdResponse */
 class SOAP_CMAC tns__deleteMediaAliasWithIdResponse
 {
@@ -730,7 +760,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 37; } /* = unique id SOAP_TYPE_Annot_tns__deleteMediaAliasWithIdResponse */
+	virtual int soap_type() const { return 38; } /* = unique id SOAP_TYPE_Annot_tns__deleteMediaAliasWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -743,7 +773,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__deleteMediaAnnotationWithId
-#define SOAP_TYPE_Annot_tns__deleteMediaAnnotationWithId (38)
+#define SOAP_TYPE_Annot_tns__deleteMediaAnnotationWithId (39)
 /* tns:deleteMediaAnnotationWithId */
 class SOAP_CMAC tns__deleteMediaAnnotationWithId
 {
@@ -751,7 +781,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 38; } /* = unique id SOAP_TYPE_Annot_tns__deleteMediaAnnotationWithId */
+	virtual int soap_type() const { return 39; } /* = unique id SOAP_TYPE_Annot_tns__deleteMediaAnnotationWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -764,7 +794,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__deleteMediaAnnotationWithIdResponse
-#define SOAP_TYPE_Annot_tns__deleteMediaAnnotationWithIdResponse (39)
+#define SOAP_TYPE_Annot_tns__deleteMediaAnnotationWithIdResponse (40)
 /* tns:deleteMediaAnnotationWithIdResponse */
 class SOAP_CMAC tns__deleteMediaAnnotationWithIdResponse
 {
@@ -772,7 +802,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 39; } /* = unique id SOAP_TYPE_Annot_tns__deleteMediaAnnotationWithIdResponse */
+	virtual int soap_type() const { return 40; } /* = unique id SOAP_TYPE_Annot_tns__deleteMediaAnnotationWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -785,14 +815,14 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__getUser
-#define SOAP_TYPE_Annot_tns__getUser (40)
+#define SOAP_TYPE_Annot_tns__getUser (41)
 /* tns:getUser */
 class SOAP_CMAC tns__getUser
 {
 public:
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 40; } /* = unique id SOAP_TYPE_Annot_tns__getUser */
+	virtual int soap_type() const { return 41; } /* = unique id SOAP_TYPE_Annot_tns__getUser */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -805,7 +835,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__getUserResponse
-#define SOAP_TYPE_Annot_tns__getUserResponse (41)
+#define SOAP_TYPE_Annot_tns__getUserResponse (42)
 /* tns:getUserResponse */
 class SOAP_CMAC tns__getUserResponse
 {
@@ -813,7 +843,7 @@ public:
 	tns__user *return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type tns:user */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 41; } /* = unique id SOAP_TYPE_Annot_tns__getUserResponse */
+	virtual int soap_type() const { return 42; } /* = unique id SOAP_TYPE_Annot_tns__getUserResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -826,14 +856,14 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__isAuthorized
-#define SOAP_TYPE_Annot_tns__isAuthorized (42)
+#define SOAP_TYPE_Annot_tns__isAuthorized (43)
 /* tns:isAuthorized */
 class SOAP_CMAC tns__isAuthorized
 {
 public:
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 42; } /* = unique id SOAP_TYPE_Annot_tns__isAuthorized */
+	virtual int soap_type() const { return 43; } /* = unique id SOAP_TYPE_Annot_tns__isAuthorized */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -846,7 +876,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__isAuthorizedResponse
-#define SOAP_TYPE_Annot_tns__isAuthorizedResponse (43)
+#define SOAP_TYPE_Annot_tns__isAuthorizedResponse (44)
 /* tns:isAuthorizedResponse */
 class SOAP_CMAC tns__isAuthorizedResponse
 {
@@ -854,7 +884,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 43; } /* = unique id SOAP_TYPE_Annot_tns__isAuthorizedResponse */
+	virtual int soap_type() const { return 44; } /* = unique id SOAP_TYPE_Annot_tns__isAuthorizedResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -867,14 +897,14 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__isConnected
-#define SOAP_TYPE_Annot_tns__isConnected (44)
+#define SOAP_TYPE_Annot_tns__isConnected (45)
 /* tns:isConnected */
 class SOAP_CMAC tns__isConnected
 {
 public:
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 44; } /* = unique id SOAP_TYPE_Annot_tns__isConnected */
+	virtual int soap_type() const { return 45; } /* = unique id SOAP_TYPE_Annot_tns__isConnected */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -887,7 +917,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__isConnectedResponse
-#define SOAP_TYPE_Annot_tns__isConnectedResponse (45)
+#define SOAP_TYPE_Annot_tns__isConnectedResponse (46)
 /* tns:isConnectedResponse */
 class SOAP_CMAC tns__isConnectedResponse
 {
@@ -895,7 +925,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 45; } /* = unique id SOAP_TYPE_Annot_tns__isConnectedResponse */
+	virtual int soap_type() const { return 46; } /* = unique id SOAP_TYPE_Annot_tns__isConnectedResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -908,7 +938,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__isLatestApp
-#define SOAP_TYPE_Annot_tns__isLatestApp (46)
+#define SOAP_TYPE_Annot_tns__isLatestApp (47)
 /* tns:isLatestApp */
 class SOAP_CMAC tns__isLatestApp
 {
@@ -916,7 +946,7 @@ public:
 	std::string *version;	/* optional element of type xsd:string */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 46; } /* = unique id SOAP_TYPE_Annot_tns__isLatestApp */
+	virtual int soap_type() const { return 47; } /* = unique id SOAP_TYPE_Annot_tns__isLatestApp */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -929,7 +959,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__isLatestAppResponse
-#define SOAP_TYPE_Annot_tns__isLatestAppResponse (47)
+#define SOAP_TYPE_Annot_tns__isLatestAppResponse (48)
 /* tns:isLatestAppResponse */
 class SOAP_CMAC tns__isLatestAppResponse
 {
@@ -937,7 +967,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 47; } /* = unique id SOAP_TYPE_Annot_tns__isLatestAppResponse */
+	virtual int soap_type() const { return 48; } /* = unique id SOAP_TYPE_Annot_tns__isLatestAppResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -950,7 +980,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__login
-#define SOAP_TYPE_Annot_tns__login (48)
+#define SOAP_TYPE_Annot_tns__login (49)
 /* tns:login */
 class SOAP_CMAC tns__login
 {
@@ -959,7 +989,7 @@ public:
 	std::string *password;	/* optional element of type xsd:string */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 48; } /* = unique id SOAP_TYPE_Annot_tns__login */
+	virtual int soap_type() const { return 49; } /* = unique id SOAP_TYPE_Annot_tns__login */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -972,7 +1002,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__loginResponse
-#define SOAP_TYPE_Annot_tns__loginResponse (49)
+#define SOAP_TYPE_Annot_tns__loginResponse (50)
 /* tns:loginResponse */
 class SOAP_CMAC tns__loginResponse
 {
@@ -980,7 +1010,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 49; } /* = unique id SOAP_TYPE_Annot_tns__loginResponse */
+	virtual int soap_type() const { return 50; } /* = unique id SOAP_TYPE_Annot_tns__loginResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -992,8 +1022,92 @@ public:
 };
 #endif
 
+#ifndef SOAP_TYPE_Annot_tns__selectGameThreadWithTokenDigest
+#define SOAP_TYPE_Annot_tns__selectGameThreadWithTokenDigest (51)
+/* tns:selectGameThreadWithTokenDigest */
+class SOAP_CMAC tns__selectGameThreadWithTokenDigest
+{
+public:
+	std::string *tokenDigest;	/* optional element of type xsd:string */
+	struct soap *soap;	/* transient */
+public:
+	virtual int soap_type() const { return 51; } /* = unique id SOAP_TYPE_Annot_tns__selectGameThreadWithTokenDigest */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         tns__selectGameThreadWithTokenDigest() { tns__selectGameThreadWithTokenDigest::soap_default(NULL); }
+	virtual ~tns__selectGameThreadWithTokenDigest() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_Annot_tns__selectGameThreadWithTokenDigestResponse
+#define SOAP_TYPE_Annot_tns__selectGameThreadWithTokenDigestResponse (52)
+/* tns:selectGameThreadWithTokenDigestResponse */
+class SOAP_CMAC tns__selectGameThreadWithTokenDigestResponse
+{
+public:
+	tns__gameThread *return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type tns:gameThread */
+	struct soap *soap;	/* transient */
+public:
+	virtual int soap_type() const { return 52; } /* = unique id SOAP_TYPE_Annot_tns__selectGameThreadWithTokenDigestResponse */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         tns__selectGameThreadWithTokenDigestResponse() { tns__selectGameThreadWithTokenDigestResponse::soap_default(NULL); }
+	virtual ~tns__selectGameThreadWithTokenDigestResponse() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_Annot_tns__selectGameThreadWithTokenId
+#define SOAP_TYPE_Annot_tns__selectGameThreadWithTokenId (53)
+/* tns:selectGameThreadWithTokenId */
+class SOAP_CMAC tns__selectGameThreadWithTokenId
+{
+public:
+	LONG64 tokenId;	/* required element of type xsd:long */
+	struct soap *soap;	/* transient */
+public:
+	virtual int soap_type() const { return 53; } /* = unique id SOAP_TYPE_Annot_tns__selectGameThreadWithTokenId */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         tns__selectGameThreadWithTokenId() { tns__selectGameThreadWithTokenId::soap_default(NULL); }
+	virtual ~tns__selectGameThreadWithTokenId() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_Annot_tns__selectGameThreadWithTokenIdResponse
+#define SOAP_TYPE_Annot_tns__selectGameThreadWithTokenIdResponse (54)
+/* tns:selectGameThreadWithTokenIdResponse */
+class SOAP_CMAC tns__selectGameThreadWithTokenIdResponse
+{
+public:
+	tns__gameThread *return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type tns:gameThread */
+	struct soap *soap;	/* transient */
+public:
+	virtual int soap_type() const { return 54; } /* = unique id SOAP_TYPE_Annot_tns__selectGameThreadWithTokenIdResponse */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         tns__selectGameThreadWithTokenIdResponse() { tns__selectGameThreadWithTokenIdResponse::soap_default(NULL); }
+	virtual ~tns__selectGameThreadWithTokenIdResponse() { }
+};
+#endif
+
 #ifndef SOAP_TYPE_Annot_tns__selectMediaAliasesWithTokenId
-#define SOAP_TYPE_Annot_tns__selectMediaAliasesWithTokenId (50)
+#define SOAP_TYPE_Annot_tns__selectMediaAliasesWithTokenId (55)
 /* tns:selectMediaAliasesWithTokenId */
 class SOAP_CMAC tns__selectMediaAliasesWithTokenId
 {
@@ -1001,7 +1115,7 @@ public:
 	LONG64 tokenId;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 50; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaAliasesWithTokenId */
+	virtual int soap_type() const { return 55; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaAliasesWithTokenId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1014,7 +1128,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectMediaAliasesWithTokenIdResponse
-#define SOAP_TYPE_Annot_tns__selectMediaAliasesWithTokenIdResponse (51)
+#define SOAP_TYPE_Annot_tns__selectMediaAliasesWithTokenIdResponse (56)
 /* tns:selectMediaAliasesWithTokenIdResponse */
 class SOAP_CMAC tns__selectMediaAliasesWithTokenIdResponse
 {
@@ -1022,7 +1136,7 @@ public:
 	std::vector<tns__mediaAlias * >return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type tns:mediaAlias */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 51; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaAliasesWithTokenIdResponse */
+	virtual int soap_type() const { return 56; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaAliasesWithTokenIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1035,7 +1149,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectMediaAnnotationsWithTokenId
-#define SOAP_TYPE_Annot_tns__selectMediaAnnotationsWithTokenId (52)
+#define SOAP_TYPE_Annot_tns__selectMediaAnnotationsWithTokenId (57)
 /* tns:selectMediaAnnotationsWithTokenId */
 class SOAP_CMAC tns__selectMediaAnnotationsWithTokenId
 {
@@ -1043,7 +1157,7 @@ public:
 	LONG64 tokenId;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 52; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaAnnotationsWithTokenId */
+	virtual int soap_type() const { return 57; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaAnnotationsWithTokenId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1056,7 +1170,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectMediaAnnotationsWithTokenIdResponse
-#define SOAP_TYPE_Annot_tns__selectMediaAnnotationsWithTokenIdResponse (53)
+#define SOAP_TYPE_Annot_tns__selectMediaAnnotationsWithTokenIdResponse (58)
 /* tns:selectMediaAnnotationsWithTokenIdResponse */
 class SOAP_CMAC tns__selectMediaAnnotationsWithTokenIdResponse
 {
@@ -1064,7 +1178,7 @@ public:
 	std::vector<tns__mediaAnnotation * >return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type tns:mediaAnnotation */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 53; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaAnnotationsWithTokenIdResponse */
+	virtual int soap_type() const { return 58; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaAnnotationsWithTokenIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1077,7 +1191,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectMediaTokenIdWithDigest
-#define SOAP_TYPE_Annot_tns__selectMediaTokenIdWithDigest (54)
+#define SOAP_TYPE_Annot_tns__selectMediaTokenIdWithDigest (59)
 /* tns:selectMediaTokenIdWithDigest */
 class SOAP_CMAC tns__selectMediaTokenIdWithDigest
 {
@@ -1086,7 +1200,7 @@ public:
 	int section;	/* required element of type xsd:int */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 54; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenIdWithDigest */
+	virtual int soap_type() const { return 59; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenIdWithDigest */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1099,7 +1213,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectMediaTokenIdWithDigestResponse
-#define SOAP_TYPE_Annot_tns__selectMediaTokenIdWithDigestResponse (55)
+#define SOAP_TYPE_Annot_tns__selectMediaTokenIdWithDigestResponse (60)
 /* tns:selectMediaTokenIdWithDigestResponse */
 class SOAP_CMAC tns__selectMediaTokenIdWithDigestResponse
 {
@@ -1107,7 +1221,7 @@ public:
 	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 55; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenIdWithDigestResponse */
+	virtual int soap_type() const { return 60; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenIdWithDigestResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1120,7 +1234,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectMediaTokenIdWithUrl
-#define SOAP_TYPE_Annot_tns__selectMediaTokenIdWithUrl (56)
+#define SOAP_TYPE_Annot_tns__selectMediaTokenIdWithUrl (61)
 /* tns:selectMediaTokenIdWithUrl */
 class SOAP_CMAC tns__selectMediaTokenIdWithUrl
 {
@@ -1129,7 +1243,7 @@ public:
 	int section;	/* required element of type xsd:int */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 56; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenIdWithUrl */
+	virtual int soap_type() const { return 61; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenIdWithUrl */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1142,7 +1256,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectMediaTokenIdWithUrlResponse
-#define SOAP_TYPE_Annot_tns__selectMediaTokenIdWithUrlResponse (57)
+#define SOAP_TYPE_Annot_tns__selectMediaTokenIdWithUrlResponse (62)
 /* tns:selectMediaTokenIdWithUrlResponse */
 class SOAP_CMAC tns__selectMediaTokenIdWithUrlResponse
 {
@@ -1150,7 +1264,7 @@ public:
 	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 57; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenIdWithUrlResponse */
+	virtual int soap_type() const { return 62; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenIdWithUrlResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1163,7 +1277,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectMediaTokenWithDigest
-#define SOAP_TYPE_Annot_tns__selectMediaTokenWithDigest (58)
+#define SOAP_TYPE_Annot_tns__selectMediaTokenWithDigest (63)
 /* tns:selectMediaTokenWithDigest */
 class SOAP_CMAC tns__selectMediaTokenWithDigest
 {
@@ -1172,7 +1286,7 @@ public:
 	int section;	/* required element of type xsd:int */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 58; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenWithDigest */
+	virtual int soap_type() const { return 63; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenWithDigest */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1185,7 +1299,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectMediaTokenWithDigestResponse
-#define SOAP_TYPE_Annot_tns__selectMediaTokenWithDigestResponse (59)
+#define SOAP_TYPE_Annot_tns__selectMediaTokenWithDigestResponse (64)
 /* tns:selectMediaTokenWithDigestResponse */
 class SOAP_CMAC tns__selectMediaTokenWithDigestResponse
 {
@@ -1193,7 +1307,7 @@ public:
 	tns__mediaToken *return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type tns:mediaToken */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 59; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenWithDigestResponse */
+	virtual int soap_type() const { return 64; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenWithDigestResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1206,7 +1320,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectMediaTokenWithId
-#define SOAP_TYPE_Annot_tns__selectMediaTokenWithId (60)
+#define SOAP_TYPE_Annot_tns__selectMediaTokenWithId (65)
 /* tns:selectMediaTokenWithId */
 class SOAP_CMAC tns__selectMediaTokenWithId
 {
@@ -1214,7 +1328,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 60; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenWithId */
+	virtual int soap_type() const { return 65; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1227,7 +1341,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectMediaTokenWithIdResponse
-#define SOAP_TYPE_Annot_tns__selectMediaTokenWithIdResponse (61)
+#define SOAP_TYPE_Annot_tns__selectMediaTokenWithIdResponse (66)
 /* tns:selectMediaTokenWithIdResponse */
 class SOAP_CMAC tns__selectMediaTokenWithIdResponse
 {
@@ -1235,7 +1349,7 @@ public:
 	tns__mediaToken *return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type tns:mediaToken */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 61; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenWithIdResponse */
+	virtual int soap_type() const { return 66; } /* = unique id SOAP_TYPE_Annot_tns__selectMediaTokenWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1248,7 +1362,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectRelatedMediaAliasesWithTokenId
-#define SOAP_TYPE_Annot_tns__selectRelatedMediaAliasesWithTokenId (62)
+#define SOAP_TYPE_Annot_tns__selectRelatedMediaAliasesWithTokenId (67)
 /* tns:selectRelatedMediaAliasesWithTokenId */
 class SOAP_CMAC tns__selectRelatedMediaAliasesWithTokenId
 {
@@ -1256,7 +1370,7 @@ public:
 	LONG64 tokenId;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 62; } /* = unique id SOAP_TYPE_Annot_tns__selectRelatedMediaAliasesWithTokenId */
+	virtual int soap_type() const { return 67; } /* = unique id SOAP_TYPE_Annot_tns__selectRelatedMediaAliasesWithTokenId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1269,7 +1383,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectRelatedMediaAliasesWithTokenIdResponse
-#define SOAP_TYPE_Annot_tns__selectRelatedMediaAliasesWithTokenIdResponse (63)
+#define SOAP_TYPE_Annot_tns__selectRelatedMediaAliasesWithTokenIdResponse (68)
 /* tns:selectRelatedMediaAliasesWithTokenIdResponse */
 class SOAP_CMAC tns__selectRelatedMediaAliasesWithTokenIdResponse
 {
@@ -1277,7 +1391,7 @@ public:
 	std::vector<tns__mediaAlias * >return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type tns:mediaAlias */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 63; } /* = unique id SOAP_TYPE_Annot_tns__selectRelatedMediaAliasesWithTokenIdResponse */
+	virtual int soap_type() const { return 68; } /* = unique id SOAP_TYPE_Annot_tns__selectRelatedMediaAliasesWithTokenIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1290,7 +1404,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectRelatedMediaAnnotationsWithTokenId
-#define SOAP_TYPE_Annot_tns__selectRelatedMediaAnnotationsWithTokenId (64)
+#define SOAP_TYPE_Annot_tns__selectRelatedMediaAnnotationsWithTokenId (69)
 /* tns:selectRelatedMediaAnnotationsWithTokenId */
 class SOAP_CMAC tns__selectRelatedMediaAnnotationsWithTokenId
 {
@@ -1298,7 +1412,7 @@ public:
 	LONG64 tokenId;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 64; } /* = unique id SOAP_TYPE_Annot_tns__selectRelatedMediaAnnotationsWithTokenId */
+	virtual int soap_type() const { return 69; } /* = unique id SOAP_TYPE_Annot_tns__selectRelatedMediaAnnotationsWithTokenId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1311,7 +1425,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__selectRelatedMediaAnnotationsWithTokenIdResponse
-#define SOAP_TYPE_Annot_tns__selectRelatedMediaAnnotationsWithTokenIdResponse (65)
+#define SOAP_TYPE_Annot_tns__selectRelatedMediaAnnotationsWithTokenIdResponse (70)
 /* tns:selectRelatedMediaAnnotationsWithTokenIdResponse */
 class SOAP_CMAC tns__selectRelatedMediaAnnotationsWithTokenIdResponse
 {
@@ -1319,7 +1433,7 @@ public:
 	std::vector<tns__mediaAnnotation * >return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type tns:mediaAnnotation */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 65; } /* = unique id SOAP_TYPE_Annot_tns__selectRelatedMediaAnnotationsWithTokenIdResponse */
+	virtual int soap_type() const { return 70; } /* = unique id SOAP_TYPE_Annot_tns__selectRelatedMediaAnnotationsWithTokenIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1332,7 +1446,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__setUserAnonymous
-#define SOAP_TYPE_Annot_tns__setUserAnonymous (66)
+#define SOAP_TYPE_Annot_tns__setUserAnonymous (71)
 /* tns:setUserAnonymous */
 class SOAP_CMAC tns__setUserAnonymous
 {
@@ -1340,7 +1454,7 @@ public:
 	bool value;	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 66; } /* = unique id SOAP_TYPE_Annot_tns__setUserAnonymous */
+	virtual int soap_type() const { return 71; } /* = unique id SOAP_TYPE_Annot_tns__setUserAnonymous */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1353,7 +1467,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__setUserAnonymousResponse
-#define SOAP_TYPE_Annot_tns__setUserAnonymousResponse (67)
+#define SOAP_TYPE_Annot_tns__setUserAnonymousResponse (72)
 /* tns:setUserAnonymousResponse */
 class SOAP_CMAC tns__setUserAnonymousResponse
 {
@@ -1361,7 +1475,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 67; } /* = unique id SOAP_TYPE_Annot_tns__setUserAnonymousResponse */
+	virtual int soap_type() const { return 72; } /* = unique id SOAP_TYPE_Annot_tns__setUserAnonymousResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1374,7 +1488,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__setUserLanguage
-#define SOAP_TYPE_Annot_tns__setUserLanguage (68)
+#define SOAP_TYPE_Annot_tns__setUserLanguage (73)
 /* tns:setUserLanguage */
 class SOAP_CMAC tns__setUserLanguage
 {
@@ -1382,7 +1496,7 @@ public:
 	int value;	/* required element of type xsd:int */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 68; } /* = unique id SOAP_TYPE_Annot_tns__setUserLanguage */
+	virtual int soap_type() const { return 73; } /* = unique id SOAP_TYPE_Annot_tns__setUserLanguage */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1395,7 +1509,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__setUserLanguageResponse
-#define SOAP_TYPE_Annot_tns__setUserLanguageResponse (69)
+#define SOAP_TYPE_Annot_tns__setUserLanguageResponse (74)
 /* tns:setUserLanguageResponse */
 class SOAP_CMAC tns__setUserLanguageResponse
 {
@@ -1403,7 +1517,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 69; } /* = unique id SOAP_TYPE_Annot_tns__setUserLanguageResponse */
+	virtual int soap_type() const { return 74; } /* = unique id SOAP_TYPE_Annot_tns__setUserLanguageResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1415,8 +1529,50 @@ public:
 };
 #endif
 
+#ifndef SOAP_TYPE_Annot_tns__submitGameThread
+#define SOAP_TYPE_Annot_tns__submitGameThread (75)
+/* tns:submitGameThread */
+class SOAP_CMAC tns__submitGameThread
+{
+public:
+	tns__gameThread *thread;	/* optional element of type tns:gameThread */
+	struct soap *soap;	/* transient */
+public:
+	virtual int soap_type() const { return 75; } /* = unique id SOAP_TYPE_Annot_tns__submitGameThread */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         tns__submitGameThread() { tns__submitGameThread::soap_default(NULL); }
+	virtual ~tns__submitGameThread() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_Annot_tns__submitGameThreadResponse
+#define SOAP_TYPE_Annot_tns__submitGameThreadResponse (76)
+/* tns:submitGameThreadResponse */
+class SOAP_CMAC tns__submitGameThreadResponse
+{
+public:
+	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
+	struct soap *soap;	/* transient */
+public:
+	virtual int soap_type() const { return 76; } /* = unique id SOAP_TYPE_Annot_tns__submitGameThreadResponse */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         tns__submitGameThreadResponse() { tns__submitGameThreadResponse::soap_default(NULL); }
+	virtual ~tns__submitGameThreadResponse() { }
+};
+#endif
+
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAlias
-#define SOAP_TYPE_Annot_tns__submitMediaAlias (70)
+#define SOAP_TYPE_Annot_tns__submitMediaAlias (77)
 /* tns:submitMediaAlias */
 class SOAP_CMAC tns__submitMediaAlias
 {
@@ -1424,7 +1580,7 @@ public:
 	tns__mediaAlias *alias;	/* optional element of type tns:mediaAlias */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 70; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAlias */
+	virtual int soap_type() const { return 77; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAlias */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1437,7 +1593,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAliasResponse
-#define SOAP_TYPE_Annot_tns__submitMediaAliasResponse (71)
+#define SOAP_TYPE_Annot_tns__submitMediaAliasResponse (78)
 /* tns:submitMediaAliasResponse */
 class SOAP_CMAC tns__submitMediaAliasResponse
 {
@@ -1445,7 +1601,7 @@ public:
 	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 71; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAliasResponse */
+	virtual int soap_type() const { return 78; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAliasResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1458,7 +1614,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAliasTextAndTokenDigest
-#define SOAP_TYPE_Annot_tns__submitMediaAliasTextAndTokenDigest (72)
+#define SOAP_TYPE_Annot_tns__submitMediaAliasTextAndTokenDigest (79)
 /* tns:submitMediaAliasTextAndTokenDigest */
 class SOAP_CMAC tns__submitMediaAliasTextAndTokenDigest
 {
@@ -1469,7 +1625,7 @@ public:
 	int tokenSection;	/* required element of type xsd:int */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 72; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAliasTextAndTokenDigest */
+	virtual int soap_type() const { return 79; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAliasTextAndTokenDigest */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1482,7 +1638,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAliasTextAndTokenDigestResponse
-#define SOAP_TYPE_Annot_tns__submitMediaAliasTextAndTokenDigestResponse (73)
+#define SOAP_TYPE_Annot_tns__submitMediaAliasTextAndTokenDigestResponse (80)
 /* tns:submitMediaAliasTextAndTokenDigestResponse */
 class SOAP_CMAC tns__submitMediaAliasTextAndTokenDigestResponse
 {
@@ -1490,7 +1646,7 @@ public:
 	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 73; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAliasTextAndTokenDigestResponse */
+	virtual int soap_type() const { return 80; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAliasTextAndTokenDigestResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1503,7 +1659,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAliasTextWithTokenId
-#define SOAP_TYPE_Annot_tns__submitMediaAliasTextWithTokenId (74)
+#define SOAP_TYPE_Annot_tns__submitMediaAliasTextWithTokenId (81)
 /* tns:submitMediaAliasTextWithTokenId */
 class SOAP_CMAC tns__submitMediaAliasTextWithTokenId
 {
@@ -1513,7 +1669,7 @@ public:
 	LONG64 tokenId;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 74; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAliasTextWithTokenId */
+	virtual int soap_type() const { return 81; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAliasTextWithTokenId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1526,7 +1682,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAliasTextWithTokenIdResponse
-#define SOAP_TYPE_Annot_tns__submitMediaAliasTextWithTokenIdResponse (75)
+#define SOAP_TYPE_Annot_tns__submitMediaAliasTextWithTokenIdResponse (82)
 /* tns:submitMediaAliasTextWithTokenIdResponse */
 class SOAP_CMAC tns__submitMediaAliasTextWithTokenIdResponse
 {
@@ -1534,7 +1690,7 @@ public:
 	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 75; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAliasTextWithTokenIdResponse */
+	virtual int soap_type() const { return 82; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAliasTextWithTokenIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1547,7 +1703,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAnnotation
-#define SOAP_TYPE_Annot_tns__submitMediaAnnotation (76)
+#define SOAP_TYPE_Annot_tns__submitMediaAnnotation (83)
 /* tns:submitMediaAnnotation */
 class SOAP_CMAC tns__submitMediaAnnotation
 {
@@ -1555,7 +1711,7 @@ public:
 	tns__mediaAnnotation *annot;	/* optional element of type tns:mediaAnnotation */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 76; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotation */
+	virtual int soap_type() const { return 83; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotation */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1568,7 +1724,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAnnotationResponse
-#define SOAP_TYPE_Annot_tns__submitMediaAnnotationResponse (77)
+#define SOAP_TYPE_Annot_tns__submitMediaAnnotationResponse (84)
 /* tns:submitMediaAnnotationResponse */
 class SOAP_CMAC tns__submitMediaAnnotationResponse
 {
@@ -1576,7 +1732,7 @@ public:
 	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 77; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotationResponse */
+	virtual int soap_type() const { return 84; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotationResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1589,7 +1745,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAnnotationTextAndTokenDigest
-#define SOAP_TYPE_Annot_tns__submitMediaAnnotationTextAndTokenDigest (78)
+#define SOAP_TYPE_Annot_tns__submitMediaAnnotationTextAndTokenDigest (85)
 /* tns:submitMediaAnnotationTextAndTokenDigest */
 class SOAP_CMAC tns__submitMediaAnnotationTextAndTokenDigest
 {
@@ -1601,7 +1757,7 @@ public:
 	int tokenSection;	/* required element of type xsd:int */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 78; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotationTextAndTokenDigest */
+	virtual int soap_type() const { return 85; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotationTextAndTokenDigest */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1614,7 +1770,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAnnotationTextAndTokenDigestResponse
-#define SOAP_TYPE_Annot_tns__submitMediaAnnotationTextAndTokenDigestResponse (79)
+#define SOAP_TYPE_Annot_tns__submitMediaAnnotationTextAndTokenDigestResponse (86)
 /* tns:submitMediaAnnotationTextAndTokenDigestResponse */
 class SOAP_CMAC tns__submitMediaAnnotationTextAndTokenDigestResponse
 {
@@ -1622,7 +1778,7 @@ public:
 	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 79; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotationTextAndTokenDigestResponse */
+	virtual int soap_type() const { return 86; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotationTextAndTokenDigestResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1635,7 +1791,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAnnotationTextWithTokenId
-#define SOAP_TYPE_Annot_tns__submitMediaAnnotationTextWithTokenId (80)
+#define SOAP_TYPE_Annot_tns__submitMediaAnnotationTextWithTokenId (87)
 /* tns:submitMediaAnnotationTextWithTokenId */
 class SOAP_CMAC tns__submitMediaAnnotationTextWithTokenId
 {
@@ -1646,7 +1802,7 @@ public:
 	LONG64 tokenId;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 80; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotationTextWithTokenId */
+	virtual int soap_type() const { return 87; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotationTextWithTokenId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1659,7 +1815,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaAnnotationTextWithTokenIdResponse
-#define SOAP_TYPE_Annot_tns__submitMediaAnnotationTextWithTokenIdResponse (81)
+#define SOAP_TYPE_Annot_tns__submitMediaAnnotationTextWithTokenIdResponse (88)
 /* tns:submitMediaAnnotationTextWithTokenIdResponse */
 class SOAP_CMAC tns__submitMediaAnnotationTextWithTokenIdResponse
 {
@@ -1667,7 +1823,7 @@ public:
 	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 81; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotationTextWithTokenIdResponse */
+	virtual int soap_type() const { return 88; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaAnnotationTextWithTokenIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1680,7 +1836,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaToken
-#define SOAP_TYPE_Annot_tns__submitMediaToken (82)
+#define SOAP_TYPE_Annot_tns__submitMediaToken (89)
 /* tns:submitMediaToken */
 class SOAP_CMAC tns__submitMediaToken
 {
@@ -1688,7 +1844,7 @@ public:
 	tns__mediaToken *token;	/* optional element of type tns:mediaToken */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 82; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaToken */
+	virtual int soap_type() const { return 89; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaToken */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1701,7 +1857,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaTokenResponse
-#define SOAP_TYPE_Annot_tns__submitMediaTokenResponse (83)
+#define SOAP_TYPE_Annot_tns__submitMediaTokenResponse (90)
 /* tns:submitMediaTokenResponse */
 class SOAP_CMAC tns__submitMediaTokenResponse
 {
@@ -1709,7 +1865,7 @@ public:
 	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 83; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaTokenResponse */
+	virtual int soap_type() const { return 90; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaTokenResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1722,7 +1878,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaTokenDigest
-#define SOAP_TYPE_Annot_tns__submitMediaTokenDigest (84)
+#define SOAP_TYPE_Annot_tns__submitMediaTokenDigest (91)
 /* tns:submitMediaTokenDigest */
 class SOAP_CMAC tns__submitMediaTokenDigest
 {
@@ -1732,7 +1888,7 @@ public:
 	int type;	/* required element of type xsd:int */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 84; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaTokenDigest */
+	virtual int soap_type() const { return 91; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaTokenDigest */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1745,7 +1901,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaTokenDigestResponse
-#define SOAP_TYPE_Annot_tns__submitMediaTokenDigestResponse (85)
+#define SOAP_TYPE_Annot_tns__submitMediaTokenDigestResponse (92)
 /* tns:submitMediaTokenDigestResponse */
 class SOAP_CMAC tns__submitMediaTokenDigestResponse
 {
@@ -1753,7 +1909,7 @@ public:
 	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 85; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaTokenDigestResponse */
+	virtual int soap_type() const { return 92; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaTokenDigestResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1766,7 +1922,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaTokenUrl
-#define SOAP_TYPE_Annot_tns__submitMediaTokenUrl (86)
+#define SOAP_TYPE_Annot_tns__submitMediaTokenUrl (93)
 /* tns:submitMediaTokenUrl */
 class SOAP_CMAC tns__submitMediaTokenUrl
 {
@@ -1776,7 +1932,7 @@ public:
 	int type;	/* required element of type xsd:int */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 86; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaTokenUrl */
+	virtual int soap_type() const { return 93; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaTokenUrl */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1789,7 +1945,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__submitMediaTokenUrlResponse
-#define SOAP_TYPE_Annot_tns__submitMediaTokenUrlResponse (87)
+#define SOAP_TYPE_Annot_tns__submitMediaTokenUrlResponse (94)
 /* tns:submitMediaTokenUrlResponse */
 class SOAP_CMAC tns__submitMediaTokenUrlResponse
 {
@@ -1797,7 +1953,7 @@ public:
 	LONG64 return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 87; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaTokenUrlResponse */
+	virtual int soap_type() const { return 94; } /* = unique id SOAP_TYPE_Annot_tns__submitMediaTokenUrlResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1809,8 +1965,50 @@ public:
 };
 #endif
 
+#ifndef SOAP_TYPE_Annot_tns__updateGameThread
+#define SOAP_TYPE_Annot_tns__updateGameThread (95)
+/* tns:updateGameThread */
+class SOAP_CMAC tns__updateGameThread
+{
+public:
+	tns__gameThread *thread;	/* optional element of type tns:gameThread */
+	struct soap *soap;	/* transient */
+public:
+	virtual int soap_type() const { return 95; } /* = unique id SOAP_TYPE_Annot_tns__updateGameThread */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         tns__updateGameThread() { tns__updateGameThread::soap_default(NULL); }
+	virtual ~tns__updateGameThread() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_Annot_tns__updateGameThreadResponse
+#define SOAP_TYPE_Annot_tns__updateGameThreadResponse (96)
+/* tns:updateGameThreadResponse */
+class SOAP_CMAC tns__updateGameThreadResponse
+{
+public:
+	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
+	struct soap *soap;	/* transient */
+public:
+	virtual int soap_type() const { return 96; } /* = unique id SOAP_TYPE_Annot_tns__updateGameThreadResponse */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         tns__updateGameThreadResponse() { tns__updateGameThreadResponse::soap_default(NULL); }
+	virtual ~tns__updateGameThreadResponse() { }
+};
+#endif
+
 #ifndef SOAP_TYPE_Annot_tns__updateMediaAnnotationLanguageWithId
-#define SOAP_TYPE_Annot_tns__updateMediaAnnotationLanguageWithId (88)
+#define SOAP_TYPE_Annot_tns__updateMediaAnnotationLanguageWithId (97)
 /* tns:updateMediaAnnotationLanguageWithId */
 class SOAP_CMAC tns__updateMediaAnnotationLanguageWithId
 {
@@ -1819,7 +2017,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 88; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationLanguageWithId */
+	virtual int soap_type() const { return 97; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationLanguageWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1832,7 +2030,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__updateMediaAnnotationLanguageWithIdResponse
-#define SOAP_TYPE_Annot_tns__updateMediaAnnotationLanguageWithIdResponse (89)
+#define SOAP_TYPE_Annot_tns__updateMediaAnnotationLanguageWithIdResponse (98)
 /* tns:updateMediaAnnotationLanguageWithIdResponse */
 class SOAP_CMAC tns__updateMediaAnnotationLanguageWithIdResponse
 {
@@ -1840,7 +2038,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 89; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationLanguageWithIdResponse */
+	virtual int soap_type() const { return 98; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationLanguageWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1853,7 +2051,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__updateMediaAnnotationTextWithId
-#define SOAP_TYPE_Annot_tns__updateMediaAnnotationTextWithId (90)
+#define SOAP_TYPE_Annot_tns__updateMediaAnnotationTextWithId (99)
 /* tns:updateMediaAnnotationTextWithId */
 class SOAP_CMAC tns__updateMediaAnnotationTextWithId
 {
@@ -1862,7 +2060,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 90; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationTextWithId */
+	virtual int soap_type() const { return 99; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationTextWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1875,7 +2073,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__updateMediaAnnotationTextWithIdResponse
-#define SOAP_TYPE_Annot_tns__updateMediaAnnotationTextWithIdResponse (91)
+#define SOAP_TYPE_Annot_tns__updateMediaAnnotationTextWithIdResponse (100)
 /* tns:updateMediaAnnotationTextWithIdResponse */
 class SOAP_CMAC tns__updateMediaAnnotationTextWithIdResponse
 {
@@ -1883,7 +2081,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 91; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationTextWithIdResponse */
+	virtual int soap_type() const { return 100; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationTextWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1896,7 +2094,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__updateMediaAnnotationUserIdWithId
-#define SOAP_TYPE_Annot_tns__updateMediaAnnotationUserIdWithId (92)
+#define SOAP_TYPE_Annot_tns__updateMediaAnnotationUserIdWithId (101)
 /* tns:updateMediaAnnotationUserIdWithId */
 class SOAP_CMAC tns__updateMediaAnnotationUserIdWithId
 {
@@ -1905,7 +2103,7 @@ public:
 	LONG64 id;	/* required element of type xsd:long */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 92; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationUserIdWithId */
+	virtual int soap_type() const { return 101; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationUserIdWithId */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1918,7 +2116,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot_tns__updateMediaAnnotationUserIdWithIdResponse
-#define SOAP_TYPE_Annot_tns__updateMediaAnnotationUserIdWithIdResponse (93)
+#define SOAP_TYPE_Annot_tns__updateMediaAnnotationUserIdWithIdResponse (102)
 /* tns:updateMediaAnnotationUserIdWithIdResponse */
 class SOAP_CMAC tns__updateMediaAnnotationUserIdWithIdResponse
 {
@@ -1926,7 +2124,7 @@ public:
 	bool return_;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:boolean */
 	struct soap *soap;	/* transient */
 public:
-	virtual int soap_type() const { return 93; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationUserIdWithIdResponse */
+	virtual int soap_type() const { return 102; } /* = unique id SOAP_TYPE_Annot_tns__updateMediaAnnotationUserIdWithIdResponse */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -1939,7 +2137,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__blessMediaAliasWithId
-#define SOAP_TYPE_Annot___tns__blessMediaAliasWithId (108)
+#define SOAP_TYPE_Annot___tns__blessMediaAliasWithId (118)
 /* Operation wrapper: */
 struct __tns__blessMediaAliasWithId
 {
@@ -1949,7 +2147,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__blessMediaAnnotationWithId
-#define SOAP_TYPE_Annot___tns__blessMediaAnnotationWithId (112)
+#define SOAP_TYPE_Annot___tns__blessMediaAnnotationWithId (122)
 /* Operation wrapper: */
 struct __tns__blessMediaAnnotationWithId
 {
@@ -1959,7 +2157,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__blessMediaTokenWithId
-#define SOAP_TYPE_Annot___tns__blessMediaTokenWithId (116)
+#define SOAP_TYPE_Annot___tns__blessMediaTokenWithId (126)
 /* Operation wrapper: */
 struct __tns__blessMediaTokenWithId
 {
@@ -1969,7 +2167,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__blessUserWithId
-#define SOAP_TYPE_Annot___tns__blessUserWithId (120)
+#define SOAP_TYPE_Annot___tns__blessUserWithId (130)
 /* Operation wrapper: */
 struct __tns__blessUserWithId
 {
@@ -1979,7 +2177,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__blockMediaAliasWithId
-#define SOAP_TYPE_Annot___tns__blockMediaAliasWithId (124)
+#define SOAP_TYPE_Annot___tns__blockMediaAliasWithId (134)
 /* Operation wrapper: */
 struct __tns__blockMediaAliasWithId
 {
@@ -1989,7 +2187,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__blockMediaAnnotationWithId
-#define SOAP_TYPE_Annot___tns__blockMediaAnnotationWithId (128)
+#define SOAP_TYPE_Annot___tns__blockMediaAnnotationWithId (138)
 /* Operation wrapper: */
 struct __tns__blockMediaAnnotationWithId
 {
@@ -1999,7 +2197,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__blockUserWithId
-#define SOAP_TYPE_Annot___tns__blockUserWithId (132)
+#define SOAP_TYPE_Annot___tns__blockUserWithId (142)
 /* Operation wrapper: */
 struct __tns__blockUserWithId
 {
@@ -2009,7 +2207,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__chat
-#define SOAP_TYPE_Annot___tns__chat (136)
+#define SOAP_TYPE_Annot___tns__chat (146)
 /* Operation wrapper: */
 struct __tns__chat
 {
@@ -2019,7 +2217,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__curseMediaAliasWithId
-#define SOAP_TYPE_Annot___tns__curseMediaAliasWithId (140)
+#define SOAP_TYPE_Annot___tns__curseMediaAliasWithId (150)
 /* Operation wrapper: */
 struct __tns__curseMediaAliasWithId
 {
@@ -2029,7 +2227,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__curseMediaAnnotationWithId
-#define SOAP_TYPE_Annot___tns__curseMediaAnnotationWithId (144)
+#define SOAP_TYPE_Annot___tns__curseMediaAnnotationWithId (154)
 /* Operation wrapper: */
 struct __tns__curseMediaAnnotationWithId
 {
@@ -2039,7 +2237,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__curseMediaTokenWithId
-#define SOAP_TYPE_Annot___tns__curseMediaTokenWithId (148)
+#define SOAP_TYPE_Annot___tns__curseMediaTokenWithId (158)
 /* Operation wrapper: */
 struct __tns__curseMediaTokenWithId
 {
@@ -2049,7 +2247,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__curseUserWithId
-#define SOAP_TYPE_Annot___tns__curseUserWithId (152)
+#define SOAP_TYPE_Annot___tns__curseUserWithId (162)
 /* Operation wrapper: */
 struct __tns__curseUserWithId
 {
@@ -2059,7 +2257,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__deleteMediaAliasWithId
-#define SOAP_TYPE_Annot___tns__deleteMediaAliasWithId (156)
+#define SOAP_TYPE_Annot___tns__deleteMediaAliasWithId (166)
 /* Operation wrapper: */
 struct __tns__deleteMediaAliasWithId
 {
@@ -2069,7 +2267,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__deleteMediaAnnotationWithId
-#define SOAP_TYPE_Annot___tns__deleteMediaAnnotationWithId (160)
+#define SOAP_TYPE_Annot___tns__deleteMediaAnnotationWithId (170)
 /* Operation wrapper: */
 struct __tns__deleteMediaAnnotationWithId
 {
@@ -2079,7 +2277,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__getUser
-#define SOAP_TYPE_Annot___tns__getUser (164)
+#define SOAP_TYPE_Annot___tns__getUser (174)
 /* Operation wrapper: */
 struct __tns__getUser
 {
@@ -2089,7 +2287,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__isAuthorized
-#define SOAP_TYPE_Annot___tns__isAuthorized (168)
+#define SOAP_TYPE_Annot___tns__isAuthorized (178)
 /* Operation wrapper: */
 struct __tns__isAuthorized
 {
@@ -2099,7 +2297,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__isConnected
-#define SOAP_TYPE_Annot___tns__isConnected (172)
+#define SOAP_TYPE_Annot___tns__isConnected (182)
 /* Operation wrapper: */
 struct __tns__isConnected
 {
@@ -2109,7 +2307,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__isLatestApp
-#define SOAP_TYPE_Annot___tns__isLatestApp (176)
+#define SOAP_TYPE_Annot___tns__isLatestApp (186)
 /* Operation wrapper: */
 struct __tns__isLatestApp
 {
@@ -2119,7 +2317,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__login
-#define SOAP_TYPE_Annot___tns__login (180)
+#define SOAP_TYPE_Annot___tns__login (190)
 /* Operation wrapper: */
 struct __tns__login
 {
@@ -2128,8 +2326,28 @@ public:
 };
 #endif
 
+#ifndef SOAP_TYPE_Annot___tns__selectGameThreadWithTokenDigest
+#define SOAP_TYPE_Annot___tns__selectGameThreadWithTokenDigest (194)
+/* Operation wrapper: */
+struct __tns__selectGameThreadWithTokenDigest
+{
+public:
+	tns__selectGameThreadWithTokenDigest *tns__selectGameThreadWithTokenDigest_;	/* optional element of type tns:selectGameThreadWithTokenDigest */
+};
+#endif
+
+#ifndef SOAP_TYPE_Annot___tns__selectGameThreadWithTokenId
+#define SOAP_TYPE_Annot___tns__selectGameThreadWithTokenId (198)
+/* Operation wrapper: */
+struct __tns__selectGameThreadWithTokenId
+{
+public:
+	tns__selectGameThreadWithTokenId *tns__selectGameThreadWithTokenId_;	/* optional element of type tns:selectGameThreadWithTokenId */
+};
+#endif
+
 #ifndef SOAP_TYPE_Annot___tns__selectMediaAliasesWithTokenId
-#define SOAP_TYPE_Annot___tns__selectMediaAliasesWithTokenId (184)
+#define SOAP_TYPE_Annot___tns__selectMediaAliasesWithTokenId (202)
 /* Operation wrapper: */
 struct __tns__selectMediaAliasesWithTokenId
 {
@@ -2139,7 +2357,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__selectMediaAnnotationsWithTokenId
-#define SOAP_TYPE_Annot___tns__selectMediaAnnotationsWithTokenId (188)
+#define SOAP_TYPE_Annot___tns__selectMediaAnnotationsWithTokenId (206)
 /* Operation wrapper: */
 struct __tns__selectMediaAnnotationsWithTokenId
 {
@@ -2149,7 +2367,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__selectMediaTokenIdWithDigest
-#define SOAP_TYPE_Annot___tns__selectMediaTokenIdWithDigest (192)
+#define SOAP_TYPE_Annot___tns__selectMediaTokenIdWithDigest (210)
 /* Operation wrapper: */
 struct __tns__selectMediaTokenIdWithDigest
 {
@@ -2159,7 +2377,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__selectMediaTokenIdWithUrl
-#define SOAP_TYPE_Annot___tns__selectMediaTokenIdWithUrl (196)
+#define SOAP_TYPE_Annot___tns__selectMediaTokenIdWithUrl (214)
 /* Operation wrapper: */
 struct __tns__selectMediaTokenIdWithUrl
 {
@@ -2169,7 +2387,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__selectMediaTokenWithDigest
-#define SOAP_TYPE_Annot___tns__selectMediaTokenWithDigest (200)
+#define SOAP_TYPE_Annot___tns__selectMediaTokenWithDigest (218)
 /* Operation wrapper: */
 struct __tns__selectMediaTokenWithDigest
 {
@@ -2179,7 +2397,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__selectMediaTokenWithId
-#define SOAP_TYPE_Annot___tns__selectMediaTokenWithId (204)
+#define SOAP_TYPE_Annot___tns__selectMediaTokenWithId (222)
 /* Operation wrapper: */
 struct __tns__selectMediaTokenWithId
 {
@@ -2189,7 +2407,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__selectRelatedMediaAliasesWithTokenId
-#define SOAP_TYPE_Annot___tns__selectRelatedMediaAliasesWithTokenId (208)
+#define SOAP_TYPE_Annot___tns__selectRelatedMediaAliasesWithTokenId (226)
 /* Operation wrapper: */
 struct __tns__selectRelatedMediaAliasesWithTokenId
 {
@@ -2199,7 +2417,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__selectRelatedMediaAnnotationsWithTokenId
-#define SOAP_TYPE_Annot___tns__selectRelatedMediaAnnotationsWithTokenId (212)
+#define SOAP_TYPE_Annot___tns__selectRelatedMediaAnnotationsWithTokenId (230)
 /* Operation wrapper: */
 struct __tns__selectRelatedMediaAnnotationsWithTokenId
 {
@@ -2209,7 +2427,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__setUserAnonymous
-#define SOAP_TYPE_Annot___tns__setUserAnonymous (216)
+#define SOAP_TYPE_Annot___tns__setUserAnonymous (234)
 /* Operation wrapper: */
 struct __tns__setUserAnonymous
 {
@@ -2219,7 +2437,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__setUserLanguage
-#define SOAP_TYPE_Annot___tns__setUserLanguage (220)
+#define SOAP_TYPE_Annot___tns__setUserLanguage (238)
 /* Operation wrapper: */
 struct __tns__setUserLanguage
 {
@@ -2228,8 +2446,18 @@ public:
 };
 #endif
 
+#ifndef SOAP_TYPE_Annot___tns__submitGameThread
+#define SOAP_TYPE_Annot___tns__submitGameThread (242)
+/* Operation wrapper: */
+struct __tns__submitGameThread
+{
+public:
+	tns__submitGameThread *tns__submitGameThread_;	/* optional element of type tns:submitGameThread */
+};
+#endif
+
 #ifndef SOAP_TYPE_Annot___tns__submitMediaAlias
-#define SOAP_TYPE_Annot___tns__submitMediaAlias (224)
+#define SOAP_TYPE_Annot___tns__submitMediaAlias (246)
 /* Operation wrapper: */
 struct __tns__submitMediaAlias
 {
@@ -2239,7 +2467,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__submitMediaAliasTextAndTokenDigest
-#define SOAP_TYPE_Annot___tns__submitMediaAliasTextAndTokenDigest (228)
+#define SOAP_TYPE_Annot___tns__submitMediaAliasTextAndTokenDigest (250)
 /* Operation wrapper: */
 struct __tns__submitMediaAliasTextAndTokenDigest
 {
@@ -2249,7 +2477,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__submitMediaAliasTextWithTokenId
-#define SOAP_TYPE_Annot___tns__submitMediaAliasTextWithTokenId (232)
+#define SOAP_TYPE_Annot___tns__submitMediaAliasTextWithTokenId (254)
 /* Operation wrapper: */
 struct __tns__submitMediaAliasTextWithTokenId
 {
@@ -2259,7 +2487,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__submitMediaAnnotation
-#define SOAP_TYPE_Annot___tns__submitMediaAnnotation (236)
+#define SOAP_TYPE_Annot___tns__submitMediaAnnotation (258)
 /* Operation wrapper: */
 struct __tns__submitMediaAnnotation
 {
@@ -2269,7 +2497,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__submitMediaAnnotationTextAndTokenDigest
-#define SOAP_TYPE_Annot___tns__submitMediaAnnotationTextAndTokenDigest (240)
+#define SOAP_TYPE_Annot___tns__submitMediaAnnotationTextAndTokenDigest (262)
 /* Operation wrapper: */
 struct __tns__submitMediaAnnotationTextAndTokenDigest
 {
@@ -2279,7 +2507,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__submitMediaAnnotationTextWithTokenId
-#define SOAP_TYPE_Annot___tns__submitMediaAnnotationTextWithTokenId (244)
+#define SOAP_TYPE_Annot___tns__submitMediaAnnotationTextWithTokenId (266)
 /* Operation wrapper: */
 struct __tns__submitMediaAnnotationTextWithTokenId
 {
@@ -2289,7 +2517,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__submitMediaToken
-#define SOAP_TYPE_Annot___tns__submitMediaToken (248)
+#define SOAP_TYPE_Annot___tns__submitMediaToken (270)
 /* Operation wrapper: */
 struct __tns__submitMediaToken
 {
@@ -2299,7 +2527,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__submitMediaTokenDigest
-#define SOAP_TYPE_Annot___tns__submitMediaTokenDigest (252)
+#define SOAP_TYPE_Annot___tns__submitMediaTokenDigest (274)
 /* Operation wrapper: */
 struct __tns__submitMediaTokenDigest
 {
@@ -2309,7 +2537,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__submitMediaTokenUrl
-#define SOAP_TYPE_Annot___tns__submitMediaTokenUrl (256)
+#define SOAP_TYPE_Annot___tns__submitMediaTokenUrl (278)
 /* Operation wrapper: */
 struct __tns__submitMediaTokenUrl
 {
@@ -2318,8 +2546,18 @@ public:
 };
 #endif
 
+#ifndef SOAP_TYPE_Annot___tns__updateGameThread
+#define SOAP_TYPE_Annot___tns__updateGameThread (282)
+/* Operation wrapper: */
+struct __tns__updateGameThread
+{
+public:
+	tns__updateGameThread *tns__updateGameThread_;	/* optional element of type tns:updateGameThread */
+};
+#endif
+
 #ifndef SOAP_TYPE_Annot___tns__updateMediaAnnotationLanguageWithId
-#define SOAP_TYPE_Annot___tns__updateMediaAnnotationLanguageWithId (260)
+#define SOAP_TYPE_Annot___tns__updateMediaAnnotationLanguageWithId (286)
 /* Operation wrapper: */
 struct __tns__updateMediaAnnotationLanguageWithId
 {
@@ -2329,7 +2567,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__updateMediaAnnotationTextWithId
-#define SOAP_TYPE_Annot___tns__updateMediaAnnotationTextWithId (264)
+#define SOAP_TYPE_Annot___tns__updateMediaAnnotationTextWithId (290)
 /* Operation wrapper: */
 struct __tns__updateMediaAnnotationTextWithId
 {
@@ -2339,7 +2577,7 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_Annot___tns__updateMediaAnnotationUserIdWithId
-#define SOAP_TYPE_Annot___tns__updateMediaAnnotationUserIdWithId (268)
+#define SOAP_TYPE_Annot___tns__updateMediaAnnotationUserIdWithId (294)
 /* Operation wrapper: */
 struct __tns__updateMediaAnnotationUserIdWithId
 {
@@ -2351,7 +2589,7 @@ public:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_Annot_SOAP_ENV__Header
-#define SOAP_TYPE_Annot_SOAP_ENV__Header (269)
+#define SOAP_TYPE_Annot_SOAP_ENV__Header (295)
 /* SOAP Header: */
 struct SOAP_ENV__Header
 {
@@ -2367,7 +2605,7 @@ private:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_Annot_SOAP_ENV__Code
-#define SOAP_TYPE_Annot_SOAP_ENV__Code (270)
+#define SOAP_TYPE_Annot_SOAP_ENV__Code (296)
 /* SOAP Fault Code: */
 struct SOAP_ENV__Code
 {
@@ -2382,7 +2620,7 @@ public:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_Annot_SOAP_ENV__Detail
-#define SOAP_TYPE_Annot_SOAP_ENV__Detail (272)
+#define SOAP_TYPE_Annot_SOAP_ENV__Detail (298)
 /* SOAP-ENV:Detail */
 struct SOAP_ENV__Detail
 {
@@ -2398,7 +2636,7 @@ public:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_Annot_SOAP_ENV__Reason
-#define SOAP_TYPE_Annot_SOAP_ENV__Reason (275)
+#define SOAP_TYPE_Annot_SOAP_ENV__Reason (301)
 /* SOAP-ENV:Reason */
 struct SOAP_ENV__Reason
 {
@@ -2412,7 +2650,7 @@ public:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_Annot_SOAP_ENV__Fault
-#define SOAP_TYPE_Annot_SOAP_ENV__Fault (276)
+#define SOAP_TYPE_Annot_SOAP_ENV__Fault (302)
 /* SOAP Fault: */
 struct SOAP_ENV__Fault
 {

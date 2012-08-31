@@ -15,13 +15,13 @@ class TextThreadDelegate
   QByteArray buffer_;
   WmTimer flushTimer_; // as QTimer does not work with windows remote thread, use native WM_TIMER instead
 
-  mutable QString threadMethod_; // buffered
-  mutable ulong threadAnchor_; // buffered
+  mutable QString provider_; // buffered
+  mutable ulong signature_; // buffered
 
   // - Construction -
 public:
   TextThreadDelegate(TextThread *t, qint64 flushInterval, WId parentWindow = 0)
-    : t_(t), flushTimer_(parentWindow), threadAnchor_(0)
+    : t_(t), flushTimer_(parentWindow), signature_(0)
   {
     Q_ASSERT(t);
     Q_ASSERT(flushInterval);
@@ -56,13 +56,12 @@ protected: // not used by outside
 
   ulong processId() const;
 
-  QString threadSummary() const; ///< entry string, example: "0006:2908:0x0041A620:0x0041F4F9:0x00000017:MAJIRO"
+  QString provider() const; ///< thread string
+  qint64 signature() const;
 
-  QString threadMethod() const; ///< thread string
+  QString threadSummary() const; ///< entry string, example: "0006:2908:0x0041A620:0x0041F4F9:0x00000017:MAJIRO"
   ulong threadContext() const;
   ulong threadSubcontext() const;
-
-  ulong threadAnchor() const;
 
   // - Actions -
 public:

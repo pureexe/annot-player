@@ -35,9 +35,9 @@ GameView::createLayout()
         AcUi::PushHint | AcUi::HighlightHint, TR(T_REFRESH), this, SLOT(refresh()));
 
   encodingLabel_ = ui->makeLabel(AcUi::DefaultHint, QString());
-  functionLabel_ = ui->makeLabel(AcUi::DefaultHint, QString());
-  QLabel *encodingBuddy = ui->makeLabel(AcUi::BuddyHint, tr("Encoding"), encodingLabel_),
-         *functionBuddy = ui->makeLabel(AcUi::BuddyHint, tr("Function"), functionLabel_);
+  //functionLabel_ = ui->makeLabel(AcUi::DefaultHint, QString());
+  QLabel *encodingBuddy = ui->makeLabel(AcUi::BuddyHint, tr("Encoding"), encodingLabel_);
+         //*functionBuddy = ui->makeLabel(AcUi::BuddyHint, tr("Function"), functionLabel_);
 
   // Layouts
   QGridLayout *grid = new QGridLayout; {
@@ -46,8 +46,8 @@ GameView::createLayout()
     grid->addWidget(encodingBuddy, r=0, c=0);
     grid->addWidget(encodingLabel_, r, ++c);
 
-    grid->addWidget(functionBuddy, ++r, c=0);
-    grid->addWidget(functionLabel_, r, ++c);
+    //grid->addWidget(functionBuddy, ++r, c=0);
+    //grid->addWidget(functionLabel_, r, ++c);
 
     ++r, c=0;
     grid->addWidget(refreshButton, r, ++c);
@@ -76,7 +76,7 @@ void
 GameView::updateLabels()
 {
   encodingLabel_->setText(game_.hasEncoding() ? game_.encoding() : QString("-"));
-  functionLabel_->setText(game_.hasFunction() ? game_.function() : QString("-"));
+  //functionLabel_->setText(game_.hasFunction() ? game_.function() : QString("-"));
 }
 
 void
