@@ -6,8 +6,6 @@
 
 #include "module/translator/networktranslator.h"
 
-QT_FORWARD_DECLARE_CLASS(QNetworkReply)
-
 class KotobankTranslator : public NetworkTranslator
 {
   Q_OBJECT
@@ -15,20 +13,23 @@ class KotobankTranslator : public NetworkTranslator
   typedef KotobankTranslator Self;
   typedef NetworkTranslator Base;
 
-  QNetworkReply *reply_;
+  QString parseReply(const QByteArray &data) override
+  { Q_UNUSED(data) return QString(); }
 
   // - Constructions -
 public:
   explicit KotobankTranslator(QObject *parent = nullptr)
-    : Base(parent), reply_(nullptr) { }
+    : Base(parent) { }
+
+  QString name() const override;
 
   static const char *host() { return "http://kotobank.jp"; }
 
-public slots:
-  void translate(const QString &text, const QString &to, const QString &from = QString()) override
-  { Q_UNUSED(from) Q_UNUSED(to) translate(text); }
+protected:
+  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from) override
+  { Q_UNUSED(from) Q_UNUSED(to) return createReply(text); }
 
-  void translate(const QString &text);
+  QNetworkReply *createReply(const QString &text);
 
 protected slots:
   void processReply(QNetworkReply *reply) override;

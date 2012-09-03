@@ -140,6 +140,14 @@ class SOAP_CMAC CloudServiceSoapBindingProxy : public soap
 	virtual	int login(tns__login *tns__login_, tns__loginResponse *tns__loginResponse_) { return login(NULL, NULL, tns__login_, tns__loginResponse_); }
 	virtual	int login(const char *endpoint, const char *soap_action, tns__login *tns__login_, tns__loginResponse *tns__loginResponse_);
 
+	/// Web service operation 'selectGameHookWithTokenDigest' (returns error code or SOAP_OK)
+	virtual	int selectGameHookWithTokenDigest(tns__selectGameHookWithTokenDigest *tns__selectGameHookWithTokenDigest_, tns__selectGameHookWithTokenDigestResponse *tns__selectGameHookWithTokenDigestResponse_) { return selectGameHookWithTokenDigest(NULL, NULL, tns__selectGameHookWithTokenDigest_, tns__selectGameHookWithTokenDigestResponse_); }
+	virtual	int selectGameHookWithTokenDigest(const char *endpoint, const char *soap_action, tns__selectGameHookWithTokenDigest *tns__selectGameHookWithTokenDigest_, tns__selectGameHookWithTokenDigestResponse *tns__selectGameHookWithTokenDigestResponse_);
+
+	/// Web service operation 'selectGameHookWithTokenId' (returns error code or SOAP_OK)
+	virtual	int selectGameHookWithTokenId(tns__selectGameHookWithTokenId *tns__selectGameHookWithTokenId_, tns__selectGameHookWithTokenIdResponse *tns__selectGameHookWithTokenIdResponse_) { return selectGameHookWithTokenId(NULL, NULL, tns__selectGameHookWithTokenId_, tns__selectGameHookWithTokenIdResponse_); }
+	virtual	int selectGameHookWithTokenId(const char *endpoint, const char *soap_action, tns__selectGameHookWithTokenId *tns__selectGameHookWithTokenId_, tns__selectGameHookWithTokenIdResponse *tns__selectGameHookWithTokenIdResponse_);
+
 	/// Web service operation 'selectGameThreadWithTokenDigest' (returns error code or SOAP_OK)
 	virtual	int selectGameThreadWithTokenDigest(tns__selectGameThreadWithTokenDigest *tns__selectGameThreadWithTokenDigest_, tns__selectGameThreadWithTokenDigestResponse *tns__selectGameThreadWithTokenDigestResponse_) { return selectGameThreadWithTokenDigest(NULL, NULL, tns__selectGameThreadWithTokenDigest_, tns__selectGameThreadWithTokenDigestResponse_); }
 	virtual	int selectGameThreadWithTokenDigest(const char *endpoint, const char *soap_action, tns__selectGameThreadWithTokenDigest *tns__selectGameThreadWithTokenDigest_, tns__selectGameThreadWithTokenDigestResponse *tns__selectGameThreadWithTokenDigestResponse_);
@@ -188,6 +196,10 @@ class SOAP_CMAC CloudServiceSoapBindingProxy : public soap
 	virtual	int setUserLanguage(tns__setUserLanguage *tns__setUserLanguage_, tns__setUserLanguageResponse *tns__setUserLanguageResponse_) { return setUserLanguage(NULL, NULL, tns__setUserLanguage_, tns__setUserLanguageResponse_); }
 	virtual	int setUserLanguage(const char *endpoint, const char *soap_action, tns__setUserLanguage *tns__setUserLanguage_, tns__setUserLanguageResponse *tns__setUserLanguageResponse_);
 
+	/// Web service operation 'submitGameHook' (returns error code or SOAP_OK)
+	virtual	int submitGameHook(tns__submitGameHook *tns__submitGameHook_, tns__submitGameHookResponse *tns__submitGameHookResponse_) { return submitGameHook(NULL, NULL, tns__submitGameHook_, tns__submitGameHookResponse_); }
+	virtual	int submitGameHook(const char *endpoint, const char *soap_action, tns__submitGameHook *tns__submitGameHook_, tns__submitGameHookResponse *tns__submitGameHookResponse_);
+
 	/// Web service operation 'submitGameThread' (returns error code or SOAP_OK)
 	virtual	int submitGameThread(tns__submitGameThread *tns__submitGameThread_, tns__submitGameThreadResponse *tns__submitGameThreadResponse_) { return submitGameThread(NULL, NULL, tns__submitGameThread_, tns__submitGameThreadResponse_); }
 	virtual	int submitGameThread(const char *endpoint, const char *soap_action, tns__submitGameThread *tns__submitGameThread_, tns__submitGameThreadResponse *tns__submitGameThreadResponse_);
@@ -227,6 +239,10 @@ class SOAP_CMAC CloudServiceSoapBindingProxy : public soap
 	/// Web service operation 'submitMediaTokenUrl' (returns error code or SOAP_OK)
 	virtual	int submitMediaTokenUrl(tns__submitMediaTokenUrl *tns__submitMediaTokenUrl_, tns__submitMediaTokenUrlResponse *tns__submitMediaTokenUrlResponse_) { return submitMediaTokenUrl(NULL, NULL, tns__submitMediaTokenUrl_, tns__submitMediaTokenUrlResponse_); }
 	virtual	int submitMediaTokenUrl(const char *endpoint, const char *soap_action, tns__submitMediaTokenUrl *tns__submitMediaTokenUrl_, tns__submitMediaTokenUrlResponse *tns__submitMediaTokenUrlResponse_);
+
+	/// Web service operation 'updateGameHookTextWithId' (returns error code or SOAP_OK)
+	virtual	int updateGameHookTextWithId(tns__updateGameHookTextWithId *tns__updateGameHookTextWithId_, tns__updateGameHookTextWithIdResponse *tns__updateGameHookTextWithIdResponse_) { return updateGameHookTextWithId(NULL, NULL, tns__updateGameHookTextWithId_, tns__updateGameHookTextWithIdResponse_); }
+	virtual	int updateGameHookTextWithId(const char *endpoint, const char *soap_action, tns__updateGameHookTextWithId *tns__updateGameHookTextWithId_, tns__updateGameHookTextWithIdResponse *tns__updateGameHookTextWithIdResponse_);
 
 	/// Web service operation 'updateGameThread' (returns error code or SOAP_OK)
 	virtual	int updateGameThread(tns__updateGameThread *tns__updateGameThread_, tns__updateGameThreadResponse *tns__updateGameThreadResponse_) { return updateGameThread(NULL, NULL, tns__updateGameThread_, tns__updateGameThreadResponse_); }

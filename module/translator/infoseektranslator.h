@@ -6,8 +6,6 @@
 
 #include "module/translator/networktranslator.h"
 
-QT_FORWARD_DECLARE_CLASS(QNetworkReply)
-
 class InfoseekTranslator : public NetworkTranslator
 {
   Q_OBJECT
@@ -15,18 +13,16 @@ class InfoseekTranslator : public NetworkTranslator
   typedef InfoseekTranslator Self;
   typedef NetworkTranslator Base;
 
-  QNetworkReply *reply_;
-
   // - Constructions -
 public:
   explicit InfoseekTranslator(QObject *parent = nullptr)
-    : Base(parent), reply_(nullptr) { }
+    : Base(parent) { }
 
-public slots:
-  void translate(const QString &text, const QString &to, const QString &from = QString()) override;
+  QString name() const override;
 
-protected slots:
-  void processReply(QNetworkReply *reply) override;
+protected:
+  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from) override;
+  QString parseReply(const QByteArray &data) override;
 
 protected:
   static QString translateUrl(const QString &text, const char *to, const char *from);

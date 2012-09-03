@@ -16,6 +16,10 @@
 
 // - Construction -
 
+QString
+GoogleTranslator::name() const
+{ return tr("Google Translator"); }
+
 QNetworkAccessManager*
 GoogleTranslator::networkAccessManager()
 {
@@ -73,7 +77,7 @@ GoogleTranslator::translateUrl(const QString &text, const QString &to, const QSt
 }
 
 void
-GoogleTranslator::translate(const QString &text, const QString &to, const QString &from)
+GoogleTranslator::doTranslate(const QString &text, const QString &to, const QString &from)
 {
   if (!isEnabled())
     return;

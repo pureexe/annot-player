@@ -13,6 +13,7 @@
 
 //#define DEBUG "processfilter"
 #include "module/debug/debug.h"
+#include <QtCore/QDebug>
 
 // - Query -
 
@@ -56,6 +57,7 @@ ProcessFilter::currentGamePid() const
     return 0;
   }
   static const QString windir = QtWin::getWinDirPath();
+  static const QString appdata = QtWin::getLocalAppDataPath();
 
   // Revert search order, as the game usually comes at last
   //foreach (const QtWin::ProcessInfo &pi, QtWin::getProcessesInfo())
@@ -68,7 +70,7 @@ ProcessFilter::currentGamePid() const
       continue;
 
 //#ifdef WITH_WIN_TEXTHOOK
-//    if (TextHook::globalInstance()->isProcessAttached(pid))
+//    if (TextHook::globalInstance()->containsProcess(pid))
 //      return pid;
 //#endif // WITH_WIN_TEXTHOOK
 
@@ -76,12 +78,18 @@ ProcessFilter::currentGamePid() const
       continue;
 
     QString location = QtWin::getProcessPathById(pid);
-    if (location.isEmpty() || location.startsWith(windir, Qt::CaseInsensitive))
+    if (location.isEmpty() ||
+        !windir.isEmpty() && location.startsWith(windir, Qt::CaseInsensitive) ||
+        !appdata.isEmpty() && location.startsWith(appdata, Qt::CaseInsensitive))
       continue;
 
     DOUT("location =" << location);
+    int i = location.lastIndexOf('\\');
+    QString fileName = i < 0 ? location : location.right(location.size() - i -1);
+    DOUT("executable =" << fileName);
 
-    if (library_->containsLocation(QDir::fromNativeSeparators(location))) {
+    if (library_->containsExecutable(fileName)) {
+      qDebug() << "processfilter:currentGamePid: location =" << location;
       DOUT("exit: pid =" << pid);
       return pid;
     }

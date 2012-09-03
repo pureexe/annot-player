@@ -7,10 +7,15 @@
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
 
 //#define DEBUG "fresheyetranslator"
 #include "module/debug/debug.h"
+
+// - Properties -
+
+QString
+FresheyeTranslator::name() const
+{ return tr("freshEYE Honyaku"); }
 
 // - Translate -
 
@@ -29,46 +34,21 @@ FresheyeTranslator::postData(const QString &text, const QString &to, const QStri
   ) + QUrl::toPercentEncoding(text);
 }
 
-void
-FresheyeTranslator::translate(const QString &text, const QString &to, const QString &from)
+QNetworkReply*
+FresheyeTranslator::createReply(const QString &text, const QString &to, const QString &from)
 {
-  if (!isEnabled())
-    return;
   DOUT("enter: text =" << text);
-  if (reply_ && isSynchronized()) {
-    //reply_->abort();
-    reply_->deleteLater();
-    DOUT("abort previous reply");
-  }
-
   QString url = to.startsWith("zh-") ? FRESHEYE_API_ZH : FRESHEYE_API_EN;
   QNetworkRequest req(url);
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-  reply_ = networkAccessManager()->post(req, postData(text, to, from));
-
   DOUT("exit");
+  return networkAccessManager()->post(req, postData(text, to, from));
 }
 
-void
-FresheyeTranslator::processReply(QNetworkReply *reply)
+QString
+FresheyeTranslator::parseReply(const QByteArray &data)
 {
-  DOUT("enter");
-  Q_ASSERT(reply);
-  reply->deleteLater();
-
-  if (isSynchronized() && reply_ != reply) {
-    DOUT("exit: reply changed");
-    return;
-  }
-  reply_ = nullptr;
-
-  if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit errorMessage(tr("network error from freshEYE Honyaku") + ": " + reply->errorString());
-    DOUT("exit: error =" << reply->error() << ", reason =" << reply->errorString());
-    return;
-  }
-
-  QByteArray data = reply->readAll();
+  QByteArray ret;
   if (!data.isEmpty()) {
     int begin = data.indexOf(FRESHEYE_AREA_BEGIN);
     if (begin >= 0) {
@@ -77,21 +57,12 @@ FresheyeTranslator::processReply(QNetworkReply *reply)
       if (begin >= 0) {
         begin += sizeof(FRESHEYE_AREA_BEGIN2) -1;
         int end = data.indexOf(FRESHEYE_AREA_END, begin);
-        if (end > 0) {
-          QString text = data.mid(begin, end - begin);
-          DOUT("text =" << text);
-          if (!text.isEmpty()) {
-            emit translated(text);
-            DOUT("exit: ok");
-            return;
-          }
-        }
+        if (end > 0)
+          ret = data.mid(begin, end - begin);
       }
     }
   }
-
-  emit errorMessage(tr("network error from freshEYE Honyaku"));
-  DOUT("exit: error");
+  return ret;
 }
 
 // EOF

@@ -15,14 +15,20 @@
 //#define DEBUG "ocntranslator"
 #include "module/debug/debug.h"
 
+// - Properties -
+
+QString
+OcnTranslator::name() const
+{ return tr("OCN Honyaku"); }
+
 // - Authentification -
 
 QByteArray
 OcnTranslator::currentAuthKey()
 {
-   qint64 utc = ::time(nullptr);
-   QByteArray hex = QByteArray::number(utc, 16);
-   return OCN_AUTH_PREFIX + hex + OCN_AUTH_SUFFIX;
+  qint64 utc = ::time(nullptr);
+  QByteArray hex = QByteArray::number(utc, 16);
+  return OCN_AUTH_PREFIX + hex + OCN_AUTH_SUFFIX;
 }
 
 // - Translate -
@@ -51,46 +57,19 @@ OcnTranslator::postData(const QString &text, const QString &to, const QString &f
      .prepend(lang_to).prepend(lang_from).prepend(OCN_KEY_LANG "=");
 }
 
-void
-OcnTranslator::translate(const QString &text, const QString &to, const QString &from)
+QNetworkReply*
+OcnTranslator::createReply(const QString &text, const QString &to, const QString &from)
 {
-  if (!isEnabled())
-    return;
-  DOUT("enter: text =" << text);
-
-  if (reply_ && isSynchronized()) {
-    //reply_->abort();
-    reply_->deleteLater();
-    DOUT("abort previous reply");
-  }
-
   QNetworkRequest req(QUrl(OCN_API));
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
   QByteArray data = postData(text, to, from, currentAuthKey());
-  reply_ = networkAccessManager()->post(req, data);
-  DOUT("exit: repost request");
+  return networkAccessManager()->post(req, data);
 }
 
-void
-OcnTranslator::processReply(QNetworkReply *reply)
+QString
+OcnTranslator::parseReply(const QByteArray &data)
 {
-  DOUT("enter");
-  Q_ASSERT(reply);
-  reply->deleteLater();
-
-  if (isSynchronized() && reply_ != reply) {
-    DOUT("exit: reply changed");
-    return;
-  }
-  reply_ = nullptr;
-
-  if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit errorMessage(tr("network error from OCN Honyaku") + ": " + reply->errorString());
-    DOUT("exit: error =" << reply->error() << ", reason =" << reply->errorString());
-    return;
-  }
-
-  QByteArray data = reply->readAll();
+  QByteArray ret;
   if (!data.isEmpty()) {
     int begin = data.indexOf(OCN_AREA_BEGIN);
     if (begin >= 0) {
@@ -100,20 +79,14 @@ OcnTranslator::processReply(QNetworkReply *reply)
         begin += sizeof(OCN_AREA_BEGIN2) -1;
         int end = data.indexOf(OCN_AREA_END, begin);
         if (end > 0) {
-          QString text = data.mid(begin, end - begin);
-          DOUT("text =" << text);
-          if (!text.isEmpty()) {
-            emit translated(text);
-            DOUT("exit: ok");
-            return;
-          }
+          ret = data.mid(begin, end - begin);
+          if (ret == OCN_FORBIDDEN_TEXT)
+            ret.clear();
         }
       }
     }
   }
-
-  emit errorMessage(tr("network error from OCN Honyaku"));
-  DOUT("exit: error");
+  return ret;
 }
 
 // EOF

@@ -64,7 +64,7 @@ void
 MediaLibrary::loadGames()
 {
   foreach (const Media &media, library_)
-    if (media.isGame())
+    if (media.isGame() && QFile::exists(media.location()))
       games_.insert(media);
 }
 

@@ -10,9 +10,10 @@ MainPlayerDock::MainPlayerDock(QWidget *parent)
 {
   setContentsMargins(0, 0, 0, 0);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+  //setContextMenuPolicy(Qt::PreventContextMenu);
+  setFeatures(QDockWidget::NoDockWidgetFeatures);
 
   setTitleBarWidget(new QWidget(this));
-  setFeatures(QDockWidget::NoDockWidgetFeatures);
 }
 
 void

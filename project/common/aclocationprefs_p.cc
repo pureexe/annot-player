@@ -14,7 +14,7 @@ AcLocationPrefs::AcLocationPrefs(AcSettings *settings, QWidget *parent)
   : Base(settings, parent)
 {
   locationManager_ = AcLocationManager::globalInstance();
-  setWindowTitle(tr("Locations"));
+  setWindowTitle(tr("Location"));
   createLayout();
 }
 

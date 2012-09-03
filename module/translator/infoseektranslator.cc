@@ -8,10 +8,15 @@
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
 
 //#define DEBUG "infoseektranslator"
 #include "module/debug/debug.h"
+
+// - Properties -
+
+QString
+InfoseekTranslator::name() const
+{ return tr("Infoseek Honyaku"); }
 
 // - Translate -
 
@@ -58,67 +63,32 @@ InfoseekTranslator::translateUrl(const QString &text, const char *to, const char
      "&" INFOSEEK_KEY_TEXT "=" + text;
 }
 
-void
-InfoseekTranslator::translate(const QString &text, const QString &to, const QString &from)
+QNetworkReply*
+InfoseekTranslator::createReply(const QString &text, const QString &to, const QString &from)
 {
-  if (!isEnabled())
-    return;
-  DOUT("enter: text =" << text);
-  if (reply_ && isSynchronized()) {
-    //reply_->abort();
-    reply_->deleteLater();
-    DOUT("abort previous reply");
-  }
   const char *f = translateLanguage(from),
              *t = translateLanguage(to);
   QString url = translateUrl(text, t ? t : "E", f ? f : "J");
-  DOUT("url =" << url);
-  reply_ = networkAccessManager()->get(QNetworkRequest(url));
-  DOUT("exit");
+  return networkAccessManager()->get(QNetworkRequest(url));
 }
 
-void
-InfoseekTranslator::processReply(QNetworkReply *reply)
+QString
+InfoseekTranslator::parseReply(const QByteArray &data)
 {
-  DOUT("enter");
-  Q_ASSERT(reply);
-  reply->deleteLater();
-
-  if (isSynchronized() && reply_ != reply) {
-    DOUT("exit: reply changed");
-    return;
-  }
-  reply_ = nullptr;
-
-  if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit errorMessage(tr("network error from Infoseek Honyaku") + ": " + reply->errorString());
-    DOUT("exit: error =" << reply->error() << ", reason =" << reply->errorString());
-    return;
-  }
-
-  QByteArray data = reply->readAll();
-  DOUT("data =" << data);
+  QByteArray ret;
   if (!data.isEmpty()) {
     int begin = data.indexOf(INFOSEEK_AREA_BEGIN);
     if (begin >= 0) {
       begin += sizeof(INFOSEEK_AREA_BEGIN) -1;
       int end = data.indexOf(INFOSEEK_AREA_END, begin);
       if (end > 0) {
-        QString text = data.mid(begin, end - begin);
-        if (text.contains("\\u"))
-          text.replace("\\u0022", "\"");
-        DOUT("text =" << text);
-        if (!text.isEmpty()) {
-          emit translated(text);
-          DOUT("exit: ok");
-          return;
-        }
+        ret = data.mid(begin, end - begin);
+        if (ret.contains("\\u"))
+          ret.replace("\\u0022", "\"");
       }
     }
   }
-
-  emit errorMessage(tr("network error from Infoseek Honyaku"));
-  DOUT("exit: error");
+  return ret;
 }
 
 // EOF

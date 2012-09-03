@@ -33,7 +33,7 @@
 ProcessView::ProcessView(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), contextMenu_(nullptr)
 {
-  setWindowTitle(tr("Process view"));
+  setWindowTitle(tr("Process View"));
 
   createModel();
   createLayout();
@@ -72,6 +72,13 @@ ProcessView::createLayout()
         AcUi::PushHint, TR(T_DETACH), TR(T_TOOLTIP_DETACHPROCESS), this, SLOT(detachProcess()));
   QToolButton *refreshButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_REFRESH), TR(T_TOOLTIP_REFRESHPROCESS), this, SLOT(refresh()));
+
+  //detachButton_->setStyleSheet(
+  //  "QToolButton {"
+  //     "background-color:rgba(0,255,255,30);"
+  //  "}"
+  //  + detachButton_->styleSheet()
+  //);
 
   // Set layout
 
@@ -163,6 +170,7 @@ ProcessView::invalidateSourceModel(bool showAll)
 {
   //using QtWin::ProcessInfo;
   static const QString windir = QtWin::getWinDirPath();
+  static const QString appdata = QtWin::getLocalAppDataPath();
 
   clear();
 
@@ -189,7 +197,8 @@ ProcessView::invalidateSourceModel(bool showAll)
       filePath = QtWin::getProcessPathById(pid);
       if (filePath.isEmpty())
         continue;
-      if (filePath.startsWith(windir, Qt::CaseInsensitive))
+      if (!windir.isEmpty() && filePath.startsWith(windir, Qt::CaseInsensitive) ||
+          !appdata.isEmpty() && filePath.startsWith(appdata, Qt::CaseInsensitive))
         continue;
 
       QFileInfo fi(filePath);
@@ -204,7 +213,7 @@ ProcessView::invalidateSourceModel(bool showAll)
     }
 
     QString status;
-    if (TextHook::globalInstance()->isProcessAttached(pid))
+    if (TextHook::globalInstance()->containsProcess(pid))
       status = TR(T_ATTACHED);
 
     // TODO: hidden PID: pi.pid save as row attribute but hidden

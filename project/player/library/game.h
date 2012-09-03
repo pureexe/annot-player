@@ -48,6 +48,13 @@ public:
   bool hasDigest() const { return !digest_.isEmpty(); }
 
 private:
+  QString hook_;
+public:
+  const QString &hook() const { return hook_; }
+  void setHook(const QString &value) { hook_ = value; }
+  bool hasHook() const { return !hook_.isEmpty(); }
+
+private:
   bool enabled_;
 public:
   bool isEnabled() const { return enabled_; }
@@ -88,6 +95,8 @@ public:
 
   bool hasKey() const { return hasDigest(); }
   const QString &key() const { return digest(); }
+
+  static bool isValidHook(const QString &code);
 
   // - I/O -
 public:

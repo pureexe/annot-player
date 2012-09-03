@@ -16,18 +16,24 @@ class TranslatorSettings : public QObject
   QString cacheDirectory_;
   //bool synchronized_;
 
-  // - Constructions -
+  int cacheSize_;
+
+  // - Construction -
 public:
   static Self *globalSettings() { static Self g; return &g; }
 protected:
   explicit TranslatorSettings(QObject *parent = nullptr)
-    : Base(parent) { }
+    : Base(parent), cacheSize_(0) { }
 
   // - Properties -
 public:
   const QString &cacheDirectory() const { return cacheDirectory_; }
   bool hasCacheDirectory() const { return !cacheDirectory_.isEmpty(); }
   void setCacheDirectory(const QString &path) { cacheDirectory_ = path; }
+
+  bool isCacheEnabled() const { return cacheSize_; }
+  int cacheSize() const { return cacheSize_; }
+  void setCacheSize(int value) { cacheSize_ = value; }
 
   //bool isSynchronized() const { return synchronized_; }
   //void setSynchronized(bool t) { synchronized_ = t; }

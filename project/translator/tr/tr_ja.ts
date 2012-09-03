@@ -218,8 +218,12 @@
 <context>
     <name>AcLocationPrefs</name>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="17"/>
         <source>Locations</source>
+        <translation type="obsolete">位置</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocationprefs_p.cc" line="17"/>
+        <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
@@ -334,10 +338,8 @@
 <context>
     <name>BingTranslator</name>
     <message>
-        <location filename="../../../module/translator/bingtranslator.cc" line="62"/>
-        <location filename="../../../module/translator/bingtranslator.cc" line="81"/>
         <source>network error from Bing Translator</source>
-        <translation>Bingと通信不能</translation>
+        <translation type="obsolete">Bingと通信不能</translation>
     </message>
 </context>
 <context>
@@ -372,35 +374,43 @@
 <context>
     <name>DynamicOcnTranslator</name>
     <message>
-        <location filename="../../../module/translator/dynamicocntranslator.cc" line="104"/>
-        <location filename="../../../module/translator/dynamicocntranslator.cc" line="117"/>
-        <location filename="../../../module/translator/dynamicocntranslator.cc" line="157"/>
         <source>network error from OCN Honyaku</source>
-        <translation>OCNと通信不能</translation>
+        <translation type="obsolete">OCNと通信不能</translation>
     </message>
 </context>
 <context>
     <name>ExciteTranslator</name>
     <message>
-        <location filename="../../../module/translator/excitetranslator.cc" line="50"/>
-        <location filename="../../../module/translator/excitetranslator.cc" line="81"/>
         <source>network error from Excite Honyaku</source>
-        <translation>エキサイトと通信不能</translation>
+        <translation type="obsolete">エキサイトと通信不能</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/excitetranslator.cc" line="18"/>
+        <source>Excite Honyaku</source>
+        <translation>エキサイト翻訳</translation>
     </message>
 </context>
 <context>
     <name>FresheyeTranslator</name>
     <message>
-        <location filename="../../../module/translator/fresheyetranslator.cc" line="66"/>
-        <location filename="../../../module/translator/fresheyetranslator.cc" line="93"/>
         <source>network error from freshEYE Honyaku</source>
-        <translation>freshEYEと通信不能</translation>
+        <translation type="obsolete">freshEYEと通信不能</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/fresheyetranslator.cc" line="18"/>
+        <source>freshEYE Honyaku</source>
+        <translation>フレッシュアイ翻訳</translation>
     </message>
 </context>
 <context>
     <name>GoogleTranslator</name>
     <message>
-        <location filename="../../../module/translator/googletranslator.cc" line="122"/>
+        <location filename="../../../module/translator/googletranslator.cc" line="21"/>
+        <source>Google Translator</source>
+        <translation>Google翻訳</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/googletranslator.cc" line="126"/>
         <source>network error from Google Translator</source>
         <translation>Googleと通信不能</translation>
     </message>
@@ -408,34 +418,44 @@
 <context>
     <name>InfoseekTranslator</name>
     <message>
-        <location filename="../../../module/translator/infoseektranslator.cc" line="94"/>
-        <location filename="../../../module/translator/infoseektranslator.cc" line="120"/>
         <source>network error from Infoseek Honyaku</source>
-        <translation>Infoseekと通信不能</translation>
+        <translation type="obsolete">Infoseekと通信不能</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/infoseektranslator.cc" line="19"/>
+        <source>Infoseek Honyaku</source>
+        <translation>Infoseek翻訳</translation>
     </message>
 </context>
 <context>
     <name>JdicTranslator</name>
     <message>
-        <location filename="../../../module/translator/jdictranslator.cc" line="116"/>
-        <location filename="../../../module/translator/jdictranslator.cc" line="143"/>
         <source>network error from WWWJDIC Translator</source>
-        <translation>WWWJDICと通信不能</translation>
+        <translation type="obsolete">WWWJDICと通信不能</translation>
     </message>
 </context>
 <context>
     <name>KotobankTranslator</name>
     <message>
-        <location filename="../../../module/translator/kotobanktranslator.cc" line="61"/>
-        <location filename="../../../module/translator/kotobanktranslator.cc" line="76"/>
         <source>network error from Kotobank Translator</source>
-        <translation>コトバンクと通信不能</translation>
+        <translation type="obsolete">コトバンクと通信不能</translation>
     </message>
     <message>
-        <location filename="../../../module/translator/kotobanktranslator.cc" line="103"/>
-        <location filename="../../../module/translator/kotobanktranslator.cc" line="131"/>
         <source>network error from KOTOBANK Translator</source>
-        <translation>コトバンクと通信不能</translation>
+        <translation type="obsolete">コトバンクと通信不能</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/kotobanktranslator.cc" line="19"/>
+        <source>Kotobank</source>
+        <translation>コトバンク</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/kotobanktranslator.cc" line="56"/>
+        <location filename="../../../module/translator/kotobanktranslator.cc" line="71"/>
+        <location filename="../../../module/translator/kotobanktranslator.cc" line="98"/>
+        <location filename="../../../module/translator/kotobanktranslator.cc" line="126"/>
+        <source>network error from %1</source>
+        <translation>%1と通信不能</translation>
     </message>
 </context>
 <context>
@@ -724,28 +744,46 @@
 <context>
     <name>MicrosoftTranslator</name>
     <message>
-        <location filename="../../../module/translator/microsofttranslator.cc" line="113"/>
-        <location filename="../../../module/translator/microsofttranslator.cc" line="138"/>
         <source>network error from Microsoft Translator</source>
-        <translation>Microsoftと通信不能</translation>
+        <translation type="obsolete">Microsoftと通信不能</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/microsofttranslator.cc" line="25"/>
+        <source>Microsoft Translator</source>
+        <translation>Microsoft翻訳</translation>
+    </message>
+</context>
+<context>
+    <name>NetworkTranslator</name>
+    <message>
+        <location filename="../../../module/translator/networktranslator.cc" line="86"/>
+        <location filename="../../../module/translator/networktranslator.cc" line="93"/>
+        <source>network error from %1</source>
+        <translation>%1と通信不能</translation>
     </message>
 </context>
 <context>
     <name>NiftyTranslator</name>
     <message>
-        <location filename="../../../module/translator/niftytranslator.cc" line="50"/>
-        <location filename="../../../module/translator/niftytranslator.cc" line="73"/>
         <source>network error from @nifty honyaku</source>
-        <translation>@niftyと通信不能</translation>
+        <translation type="obsolete">@niftyと通信不能</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/niftytranslator.cc" line="18"/>
+        <source>@nifty Honyaku</source>
+        <translation>@nifty翻訳</translation>
     </message>
 </context>
 <context>
     <name>OcnTranslator</name>
     <message>
-        <location filename="../../../module/translator/ocntranslator.cc" line="88"/>
-        <location filename="../../../module/translator/ocntranslator.cc" line="115"/>
         <source>network error from OCN Honyaku</source>
-        <translation>OCNと通信不能</translation>
+        <translation type="obsolete">OCNと通信不能</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/ocntranslator.cc" line="22"/>
+        <source>OCN Honyaku</source>
+        <translation>OCN翻訳</translation>
     </message>
 </context>
 <context>
@@ -839,19 +877,25 @@
 <context>
     <name>RomajiTranslator</name>
     <message>
-        <location filename="../../../module/translator/romajitranslator.cc" line="100"/>
-        <location filename="../../../module/translator/romajitranslator.cc" line="152"/>
         <source>network error from Romaji Translator</source>
-        <translation>Romajiと通信不能</translation>
+        <translation type="obsolete">Romajiと通信不能</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/romajitranslator.cc" line="33"/>
+        <source>Romaji</source>
+        <translation>ローマ字</translation>
     </message>
 </context>
 <context>
     <name>SdlTranslator</name>
     <message>
-        <location filename="../../../module/translator/sdltranslator.cc" line="50"/>
-        <location filename="../../../module/translator/sdltranslator.cc" line="57"/>
         <source>network error from SDL Translator</source>
-        <translation>SDLと通信不能</translation>
+        <translation type="obsolete">SDLと通信不能</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/sdltranslator.cc" line="19"/>
+        <source>SDL Translator</source>
+        <translation>SDL翻訳</translation>
     </message>
 </context>
 <context>
@@ -939,6 +983,14 @@
     </message>
 </context>
 <context>
+    <name>TranslatorManager</name>
+    <message>
+        <location filename="../../../module/translator/translatormanager.cc" line="57"/>
+        <source>Honyaku</source>
+        <translation>翻訳</translation>
+    </message>
+</context>
+<context>
     <name>TrayIcon</name>
     <message>
         <location filename="../trayicon.cc" line="15"/>
@@ -964,10 +1016,13 @@
 <context>
     <name>YahooTranslator</name>
     <message>
-        <location filename="../../../module/translator/yahootranslator.cc" line="89"/>
-        <location filename="../../../module/translator/yahootranslator.cc" line="116"/>
         <source>network error from Yahoo! Honyaku</source>
-        <translation>Yahooと通信不能</translation>
+        <translation type="obsolete">Yahooと通信不能</translation>
+    </message>
+    <message>
+        <location filename="../../../module/translator/yahootranslator.cc" line="19"/>
+        <source>Yahoo! Honyaku</source>
+        <translation>Yahoo!翻訳</translation>
     </message>
 </context>
 </TS>

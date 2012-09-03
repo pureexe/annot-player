@@ -1695,7 +1695,7 @@ Player::parsePlaylist(const QString &fileName) const
   ::libvlc_media_list_release(ml);
 
 #else
-  Q_UNUSED(fileName);
+  Q_UNUSED(fileName)
 #endif // USE_PLAYER_PLAYLIST
   return ret;
 }
@@ -1903,7 +1903,7 @@ Player::setCookieJar(QNetworkCookieJar *jar)
 #ifdef WITH_MODULE_VLCHTTP
   VlcHttpPlugin::setNetworkCookieJar(jar);
 #else
-  Q_UNUSED(jar);
+  Q_UNUSED(jar)
 #endif // WITH_MODULE_VLCHTTP
 }
 
@@ -1943,7 +1943,7 @@ Player::setDownloadsLocation(const QString &dir)
 #ifdef WITH_MODULE_VLCHTTP
   VlcHttpPlugin::setCacheDirectory(dir);
 #else
-  Q_UNUSED(dir);
+  Q_UNUSED(dir)
 #endif // WITH_MODULE_VLCHTTP
 }
 
@@ -1953,7 +1953,7 @@ Player::setBufferSaved(bool t)
 #ifdef WITH_MODULE_VLCHTTP
   VlcHttpPlugin::setBufferSaved(t);
 #else
-  Q_UNUSED(t);
+  Q_UNUSED(t)
 #endif // WITH_MODULE_VLCHTTP
 }
 

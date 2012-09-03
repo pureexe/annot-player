@@ -6,8 +6,6 @@
 
 #include "module/translator/networktranslator.h"
 
-QT_FORWARD_DECLARE_CLASS(QNetworkReply)
-
 class OcnTranslator : public NetworkTranslator
 {
   Q_OBJECT
@@ -15,18 +13,17 @@ class OcnTranslator : public NetworkTranslator
   typedef OcnTranslator Self;
   typedef NetworkTranslator Base;
 
-  QNetworkReply *reply_;
-
   // - Constructions -
 public:
   explicit OcnTranslator(QObject *parent = nullptr)
-    : Base(parent), reply_(nullptr) { }
+    : Base(parent) { }
 
-public slots:
-  void translate(const QString &text, const QString &to, const QString &from = QString()) override;
+  QString name() const override;
 
-protected slots:
-  void processReply(QNetworkReply *reply) override;
+protected:
+  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from) override;
+
+  QString parseReply(const QByteArray &data) override;
 
 protected:
   static QByteArray postData(const QString &text, const QString &to, const QString &from, const QByteArray &key);

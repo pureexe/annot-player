@@ -166,7 +166,7 @@ main(int argc, char *argv[])
 
   // Set cache location
   TranslatorSettings::globalSettings()->setCacheDirectory(G_PATH_CACHES);
-
+  TranslatorSettings::globalSettings()->setCacheSize(20);
 
   // Set network proxy
   if (settings->isProxyEnabled()) {

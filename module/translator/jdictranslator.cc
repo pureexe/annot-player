@@ -11,7 +11,6 @@
 #include <QtCore/QTextEncoder>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
 
 //#define DEBUG "jdictranslator"
 #include "module/debug/debug.h"
@@ -19,7 +18,7 @@
 // - Construction -
 
 JdicTranslator::JdicTranslator(QObject *parent)
-  : Base(parent), reply_(nullptr)
+  : Base(parent)
 {
   QTextCodec *codec = QTextCodec::codecForName(JDIC_ENCODING);
   Q_ASSERT(codec);
@@ -28,6 +27,10 @@ JdicTranslator::JdicTranslator(QObject *parent)
   encoder_ = codec->makeEncoder();
   Q_ASSERT(encoder_);
 }
+
+QString
+JdicTranslator::name() const
+{ return "WWWJDIC"; }
 
 const char*
 JdicTranslator::dictionaryForLanguage(const QString &lang)
@@ -74,22 +77,13 @@ JdicTranslator::postData(const QString &text, const char *dict) const
   return ret;
 }
 
-void
-JdicTranslator::translate(const QString &text, const char *dict)
+QNetworkReply*
+JdicTranslator::createReply(const QString &text, const char *dict)
 {
-  if (!isEnabled())
-    return;
-  DOUT("enter: text =" << text);
-  if (reply_ && isSynchronized()) {
-    //reply_->abort();
-    reply_->deleteLater();
-    DOUT("abort previous reply");
-  }
   QByteArray data = postData(text, dict);
   QNetworkRequest req(QUrl(JDIC_API));
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-  reply_ = networkAccessManager()->post(req, data);
-  DOUT("exit");
+  return networkAccessManager()->post(req, data);
 }
 
 // Sample:
@@ -99,26 +93,10 @@ JdicTranslator::translate(const QString &text, const char *dict)
 // </div>
 // ...
 //
-void
-JdicTranslator::processReply(QNetworkReply *reply)
+QString
+JdicTranslator::parseReply(const QByteArray &data)
 {
-  DOUT("enter");
-  Q_ASSERT(reply);
-  reply->deleteLater();
-
-  if (isSynchronized() && reply_ != reply) {
-    DOUT("exit: reply changed");
-    return;
-  }
-  reply_ = nullptr;
-
-  if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit errorMessage(tr("network error from WWWJDIC Translator") + ": " + reply->errorString());
-    DOUT("exit: error =" << reply->error() << ", reason =" << reply->errorString());
-    return;
-  }
-
-  QByteArray data = reply->readAll();
+  QString ret;
   if (!data.isEmpty()) {
     int begin = data.indexOf(JDIC_DOC_BEGIN);
     if (begin > 0) {
@@ -126,22 +104,13 @@ JdicTranslator::processReply(QNetworkReply *reply)
       if (end < 0)
         end = data.indexOf(JDIC_DOC_END2, begin);
       if (end > 0) {
-        data = data.mid(begin, end - begin);
-        QString text = decodeText(data);
-        text.remove(JDIC_REMOVE_RE);
-
-        DOUT("text =" << text);
-        if (!text.isEmpty()) {
-          emit translated(text);
-          DOUT("exit: ok");
-          return;
-        }
+        QByteArray t = data.mid(begin, end - begin);
+        ret = decodeText(t);
+        ret.remove(JDIC_REMOVE_RE);
       }
     }
   }
-
-  emit errorMessage(tr("network error from WWWJDIC Translator"));
-  DOUT("exit: error");
+  return ret;
 }
 
 // EOF

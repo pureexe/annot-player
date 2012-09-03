@@ -141,6 +141,7 @@ namespace { namespace curve_ { // anonymous curves
 int
 AnnotationGraphicsItem::nextY(int msecs) const
 {
+  DOUT("enter: msecs =" << msecs);
   QSizeF itemSize = boundingRect().size();
   int ret;
   switch (style_) {
@@ -157,6 +158,7 @@ AnnotationGraphicsItem::nextY(int msecs) const
   int max = view_->height() - itemSize.height();
   if (ret > max - 5)
     ret = max;
+  DOUT("exit: ret =" << ret);
   return ret;
 }
 
@@ -214,7 +216,8 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   setAcceptTouchEvents(false);
   setAcceptDrops(false);
   setFlags(QGraphicsItem::ItemClipsToShape | QGraphicsItem::ItemIgnoresParentOpacity);
-  setCacheMode(QGraphicsItem::DeviceCoordinateCache,  QSize(400,40));
+
+  //setCacheMode(QGraphicsItem::DeviceCoordinateCache,  QSize(400,40)); // could mess up OCN translation
 
   setGraphicsEffect(effect_ = new AnnotationGraphicsEffect);
 
@@ -253,6 +256,7 @@ AnnotationGraphicsItem::setAnnotation(const Annotation &annot)
   if (!suffix_.isEmpty())
     suffix_.clear();
   annot_ = annot;
+  DOUT("text =" << annot_.text());
   setToolTip(QString());
 
   updateText();
@@ -398,14 +402,7 @@ AnnotationGraphicsItem::updateText()
   setFont(font);
 
   QString text = annot_.text();
-  if (hub_->isSignalTokenMode() && AnnotationSettings::globalSettings()->backgroundOpacityFactor()) {
-    QString alpha = QString::number(
-      (AnnotationSettings::globalSettings()->backgroundOpacityFactor() * 255) / 100
-    );
-    text.prepend(
-      "<span style=\"background-color:rgba(0,0,0," + alpha + ")\">"
-    ).append("</span>");
-  }
+
   if (annot_.language() == Traits::Chinese &&
       AnnotationSettings::globalSettings()->preferTraditionalChinese())
     text = TextCodec::zhs2zht(text);
@@ -630,7 +627,22 @@ AnnotationGraphicsItem::updateMeta()
 void
 AnnotationGraphicsItem::setText(const QString &text)
 {
-  setHtml(text);
+  DOUT("scene =" << scene() << ", visible =" << isVisible() << ", opacity =" << effect_->opacity() <<
+       ", pos =" << pos() << ", size =" << boundingRect().size() <<
+       ", html =" << text);
+
+  if (hub_->isSignalTokenMode() && AnnotationSettings::globalSettings()->backgroundOpacityFactor()) {
+    QString alpha = QString::number(
+      (AnnotationSettings::globalSettings()->backgroundOpacityFactor() * 255) / 100
+    );
+    //t.prepend(HTML_CSS_OPEN() "background-color:rgba(0,0,0," + alpha + ");" HTML_CSS_CLOSE());
+    setHtml(
+      "<span style=\"background-color:rgba(0,0,0," + alpha + ")\">"
+        + text +
+      "</span>"
+    );
+  } else
+    setHtml(text);
 
   //Q_ASSERT(document());
   //TextFormatHandler *h = new TextFormatHandler(text, this);
@@ -888,6 +900,7 @@ void
 AnnotationGraphicsItem::addMe()
 {
   if (!scene()) {
+    DOUT("enter");
     connect(view_, SIGNAL(paused()), SLOT(pause()));
     connect(view_, SIGNAL(resumed()), SLOT(resume()));
     connect(view_, SIGNAL(scaleChanged(qreal)), SLOT(setScale(qreal)));
@@ -908,6 +921,9 @@ AnnotationGraphicsItem::addMe()
     if (isVisible() != view_->isItemVisible())
       setVisible(view_->isItemVisible());
     scene_->addItem(this);
+
+    DOUT("visible =" << isVisible() << effect_->opacity());
+    DOUT("exit");
   }
 }
 
@@ -929,6 +945,7 @@ void
 AnnotationGraphicsItem::removeMe()
 {
   if (scene()) {
+    DOUT("enter");
     // Always try to disconnect to avoid segmentation fault
     disconnect(view_, SIGNAL(removeSubtitlesRequested()), this, SLOT(disappear()));
     disconnect(view_, SIGNAL(paused()), this, SLOT(pause()));
@@ -947,6 +964,7 @@ AnnotationGraphicsItem::removeMe()
 
     scene_->removeItem(this);
     view_->releaseItem(this);
+    DOUT("exit");
   }
 }
 

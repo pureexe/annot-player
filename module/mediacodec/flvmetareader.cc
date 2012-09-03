@@ -171,7 +171,7 @@ FlvMetaReader::seekToScriptTag(InputStream *in)
   //  return false;
 
   //quint32 tagSize = readUInt32(in, &ok);
-  //Q_UNUSED(tagSize);
+  //Q_UNUSED(tagSize)
   //if (!ok)
   //  return false;
   //parseScriptTag(data, 1); // skip the first byte
@@ -253,7 +253,7 @@ FlvMetaReader::readScriptTag(InputStream *in)
   case UInt16Type:
     {
       quint16 value = in->readUInt16(&ok); CHECK_OK;
-      Q_UNUSED(value);
+      Q_UNUSED(value)
       DOUT("meta:" << var << "short" << value);
     } break;
   case DateType:
@@ -277,7 +277,7 @@ FlvMetaReader::readScriptTag(InputStream *in)
       QByteArray valueData(valueLength, 0);
       ok = in->read(valueData) == valueLength; CHECK_OK;
       QString value(valueData);
-      Q_UNUSED(value);
+      Q_UNUSED(value)
       DOUT("meta:" << var << "lstring" << value);
     } break;
   case ECMAArrayType:
@@ -347,8 +347,8 @@ FlvMetaReader::setMetaString(const QString &var, const QString &value)
 void
 FlvMetaReader::setMetaUInt8(const QString &var, quint8 value)
 {
-  Q_UNUSED(var);
-  Q_UNUSED(value);
+  Q_UNUSED(var)
+  Q_UNUSED(value)
   DOUT("var =" << var << ", value =" << value);
 }
 

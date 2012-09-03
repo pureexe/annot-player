@@ -219,7 +219,7 @@
     <name>AcLocationPrefs</name>
     <message>
         <location filename="../../common/aclocationprefs_p.cc" line="17"/>
-        <source>Locations</source>
+        <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

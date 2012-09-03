@@ -35,8 +35,8 @@ BacklogDialog::createLayout()
   AcUi *ui = AcUi::globalInstance();
 
   tabView_ = new TextEditTabView(this);
-  tabView_->addTab(tr("Comment"));
   tabView_->addTab(tr("Subtitle"));
+  tabView_->addTab(tr("Comment"));
 #ifdef BACKLOGDIALOG_HAS_TEXT_TAB
   tabView_->addTab(tr("Text"));
 #endif // BACKLOGDIALOG_HAS_TEXT_TAB
@@ -47,7 +47,7 @@ BacklogDialog::createLayout()
   QToolButton *clearButton = ui->makeToolButton(
         AcUi::PushHint, TR(T_CLEAR), this, SLOT(clear()));
 
-  translateButton->click(); // enable translation by default
+  //translateButton->click(); // enable translation by default
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {

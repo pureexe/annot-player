@@ -323,8 +323,12 @@
 <context>
     <name>AcLocationPrefs</name>
     <message>
-        <location filename="../../common/aclocationprefs_p.cc" line="17"/>
         <source>Locations</source>
+        <translation type="obsolete">路徑</translation>
+    </message>
+    <message>
+        <location filename="../../common/aclocationprefs_p.cc" line="17"/>
+        <source>Location</source>
         <translation>路徑</translation>
     </message>
     <message>

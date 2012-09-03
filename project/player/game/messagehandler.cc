@@ -22,10 +22,10 @@ enum { GAME_TEXT_MAX = 256 * 2 };
 //
 // Message hashing rule:
 //  //- if is subtitle, hash count = 1
-//  - if len >= 10, hash count = 1
-//  - if len <= 9, look into its previous sentence
-//    - if it's previous sentence.len <= 6, look into its previous sentence
-//      - if its previous sentence.len <= 3, look into its previous sentence
+//  - if len >= 20, hash count = 1
+//  - if len < 10*2, look into its previous sentence (count >= 2)
+//    - if it's previous sentence.len < 7*2, look into its previous sentence (count >= 3)
+//      - if its previous sentence.len < 4*2, look into its previous sentence (count = 4)
 //  - if repeat, hash count = min(repeat count, 4)
 //
 
@@ -106,10 +106,7 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
     return;
   }
 
-  {
-    QString text = TextCodecManager::globalInstance()->decode(data);
-    emit textChanged(text, TextThread::LeadingRole);
-  }
+  QString text = TextCodecManager::globalInstance()->decode(data);
 
   messages_.prepend(data);
   if (messages_.size() > MESSAGE_CAPACITY)
@@ -128,16 +125,25 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
     }
 
   } else if (data.length() < 10*2) {
-    if (messages_.size() < 2)
+    if (messages_.size() < 2) {
+      emit textChanged(text, TextThread::LeadingRole);
+      DOUT("exit: insufficent messages to hash");
       return;
+    }
     range.prepend(t = messages_[1]);
     if (t.length() < 7*2) {
-      if (messages_.size() < 3)
+      if (messages_.size() < 3) {
+        emit textChanged(text, TextThread::LeadingRole);
+        DOUT("exit: insufficent messages to hash");
         return;
+      }
       range.prepend(t = messages_[2]);
       if (t.length() < 4*2) {
-        if (messages_.size() < 4)
+        if (messages_.size() < 4) {
+          emit textChanged(text, TextThread::LeadingRole);
+          DOUT("exit: insufficent messages to hash");
           return;
+        }
         range.prepend(messages_[3]);
       }
     }
@@ -148,6 +154,9 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
   Q_UNUSED(count)
 
   emit hashChanged(h);
+
+  emit textChanged(text, TextThread::LeadingRole);
+
   DOUT("exit: hashCount =" << count << ", h =" << h);
 }
 

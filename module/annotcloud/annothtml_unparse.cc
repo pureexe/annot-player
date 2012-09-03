@@ -58,11 +58,11 @@ AnnotationHtmlParser::reduceHtmlElement(const QWebElement &input) const
       // if not <html> and not <head>, fix inner html
       QString innerHtml = e.toInnerXml();
       if (!innerHtml.isEmpty() && !e.firstChild().isNull()) {
-        innerHtml.replace("<", "<<")
-                 .replace(">", ">>")
+        innerHtml.replace('<', "<<")
+                 .replace('>', ">>")
                  .replace("<<", "</span><")
                  .replace(">>", "><span>");
-        innerHtml = "<span>" + innerHtml + "</span>";
+        innerHtml.prepend("<span>").append("</span>");
         e.setInnerXml(innerHtml);
       }
       DOUT("new html body follows");

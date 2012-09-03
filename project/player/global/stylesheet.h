@@ -15,14 +15,17 @@
 #define SS_TOOLBUTTON_(_id) \
   SS_BEGIN(QToolButton) \
     SS_BORDER_IMAGE_URL(RC_IMAGE_##_id##_BLANK) \
+    SS_BORDER_RADIUS(5px) \
   SS_END \
   SS_BEGIN(QToolButton::hover) \
     SS_BORDER_IMAGE_URL(RC_IMAGE_##_id##_HOVER) \
+    SS_BACKGROUND_COLOR(rgba(173,216,230,250)) \
   SS_END \
   SS_BEGIN(QToolButton::pressed) \
     SS_BORDER_IMAGE_URL(RC_IMAGE_##_id##_PRESSED) \
   SS_END \
   SS_BEGIN(QToolButton::checked) \
+    SS_BACKGROUND_COLOR(rgba(173,216,230,200)) \
     SS_BORDER_IMAGE_URL(RC_IMAGE_##_id##_CHECKED) \
   SS_END \
   SS_BEGIN(QToolButton::checked:hover) \

@@ -27,9 +27,10 @@ public:
     : Base(parent), nam_(nullptr), page_(nullptr)
   { }
 
+  QString name() const override;
 
 public slots:
-  void translate(const QString &text, const QString &to, const QString &from = QString()) override;
+  void doTranslate(const QString &text, const QString &to, const QString &from) override;
 
 protected:
   static QString translateUrl(const QString &text, const QString &to, const QString &from = QString());

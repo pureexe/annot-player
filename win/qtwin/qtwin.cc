@@ -275,7 +275,7 @@ QtWin::getModulesInfo()
 }
 
 bool
-QtWin::createProcessWithExecutablePath(const QString &filePath)
+QtWin::createProcess(const QString &filePath, const QStringList &env)
 {
   std::wstring wszExePath = QDir::toNativeSeparators(filePath).toStdWString();
 
@@ -291,8 +291,30 @@ QtWin::createProcessWithExecutablePath(const QString &filePath)
 
   LPCWSTR lpAppName = wszExePath.c_str();
   LPWSTR pwszParam = nullptr;
-  LPVOID lpEnvironment = nullptr;
   LPCWSTR lpCurrentDirectory = wszExeDir.c_str();
+
+  LPVOID lpEnvironment = nullptr;
+  if (!env.isEmpty()) {
+    // See: http://stackoverflow.com/questions/4168369/how-does-a-unicode-environment-block-look-like-to-start-a-new-process-via-create
+    // Example: WCHAR env[] = L"key=value\0key2=value2\0\0";
+    size_t sz = 0;
+    foreach (const QString &e, env)
+      sz += e.size();
+    if (sz) {
+      sz += env.size() + 1;
+      wchar_t *ws = new wchar_t[sz];
+      size_t cur = 0;
+      foreach (const QString &e, env)
+        if (!e.isEmpty()) {
+          int len = e.toWCharArray(ws + cur);
+          ws[cur += len] = 0;
+          cur++;
+        }
+      ws[cur] = 0;
+      lpEnvironment = ws;
+    }
+  }
+
   // See: http://msdn.microsoft.com/en-us/library/windows/desktop/ms682425(v=vs.85).aspx
   //
   // BOOL WINAPI CreateProcess(
@@ -320,6 +342,8 @@ QtWin::createProcessWithExecutablePath(const QString &filePath)
     &piProcessInfo
   );
 
+  if (lpEnvironment)
+    delete lpEnvironment;
   return bResult;
 }
 
@@ -756,7 +780,11 @@ QtWin::getProgramFilesPath()
 
 QString
 QtWin::getAppDataPath()
-{ return qgetenv("AppData"); }
+{ return qgetenv("APPDATA"); }
+
+QString
+QtWin::getLocalAppDataPath()
+{ return qgetenv("LOCALAPPDATA"); }
 
 QString
 QtWin::getFontsPath()

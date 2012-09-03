@@ -6,11 +6,8 @@
 
 #include "module/translator/networktranslator.h"
 
-QT_BEGIN_NAMESPACE
-class QNetworkReply;
-class QTextEncoder;
-class QTextDecoder;
-QT_END_NAMESPACE
+QT_FORWARD_DECLARE_CLASS(QTextEncoder)
+QT_FORWARD_DECLARE_CLASS(QTextDecoder)
 
 class JdicTranslator : public NetworkTranslator
 {
@@ -19,7 +16,6 @@ class JdicTranslator : public NetworkTranslator
   typedef JdicTranslator Self;
   typedef NetworkTranslator Base;
 
-  QNetworkReply *reply_;
   QTextDecoder *decoder_;
   QTextEncoder *encoder_;
 
@@ -27,16 +23,17 @@ class JdicTranslator : public NetworkTranslator
 public:
   explicit JdicTranslator(QObject *parent = nullptr);
 
+  QString name() const override;
+
   static const char *dictionaryForLanguage(const QString &lang);
 
-public slots:
-  void translate(const QString &text, const QString &to, const QString &from = QString()) override
-  { Q_UNUSED(from) translate(text, dictionaryForLanguage(to)); }
+protected:
+  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from) override
+  { Q_UNUSED(from) return createReply(text, dictionaryForLanguage(to)); }
 
-  void translate(const QString &text, const char *dict = 0);
+  QNetworkReply *createReply(const QString &text, const char *dict = 0);
 
-protected slots:
-  void processReply(QNetworkReply *reply) override;
+  QString parseReply(const QByteArray &data) override;
 
 protected:
   QByteArray postData(const QString &text, const char *dict) const;

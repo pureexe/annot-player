@@ -5,12 +5,18 @@
 #include "module/translator/kotobanktranslator_p.h"
 #include <QtCore/QUrl>
 #include <QtCore/QRegExp>
-#include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
 
 //#define DEBUG "kotobanktranslator"
 #include "module/debug/debug.h"
+
+// - Properties -
+
+QString
+KotobankTranslator::name() const
+{ return tr("Kotobank"); }
 
 // - Translate -
 
@@ -18,20 +24,9 @@ QString
 KotobankTranslator::translateUrl(const QString &text)
 { return KOTOBANK_SEARCH_API + text; }
 
-void
-KotobankTranslator::translate(const QString &text)
-{
-  if (!isEnabled())
-    return;
-  DOUT("enter: text =" << text);
-  if (reply_ && isSynchronized()) {
-    //reply_->abort();
-    reply_->deleteLater();
-    DOUT("abort previous reply");
-  }
-  reply_ = networkAccessManager()->get(QNetworkRequest(translateUrl(text)));
-  DOUT("exit");
-}
+QNetworkReply*
+KotobankTranslator::createReply(const QString &text)
+{ return networkAccessManager()->get(QNetworkRequest(translateUrl(text))); }
 
 // Sample:
 //
@@ -44,21 +39,21 @@ void
 KotobankTranslator::processReply(QNetworkReply *reply)
 {
   DOUT("enter");
-  if (isSynchronized() && reply_ != reply) {
+  if (isSynchronized() && networkReply() != reply) {
     DOUT("exit: reply changed");
     return;
   }
-  reply_ = nullptr;
+  setNetworkReply(nullptr);
 
   Q_ASSERT(reply);
   reply->deleteLater();
   QUrl redirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
   if (!redirectUrl.isEmpty()) {
-    reply_ = networkAccessManager()->get(QNetworkRequest(redirectUrl));
+    setNetworkReply(networkAccessManager()->get(QNetworkRequest(redirectUrl)));
     return;
   }
   if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit errorMessage(tr("network error from Kotobank Translator") + ": " + reply->errorString());
+    emit errorMessage(tr("network error from %1").arg(name()) + ": " + reply->errorString());
     DOUT("exit: error =" << reply->error() << ", reason =" << reply->errorString());
     return;
   }
@@ -73,7 +68,7 @@ KotobankTranslator::processReply(QNetworkReply *reply)
     processWordData(reply->readAll());
   } else {
     DOUT("error: unknown url:" << url);
-    emit errorMessage(tr("network error from Kotobank Translator"));
+    emit errorMessage(tr("network error from %1").arg(name()));
   }
   DOUT("exit");
 }
@@ -100,7 +95,7 @@ KotobankTranslator::processSearchData(const QByteArray &data)
     }
   }
 
-  emit errorMessage(tr("network error from KOTOBANK Translator"));
+  emit errorMessage(tr("network error from %1").arg(name()));
   DOUT("exit: error");
 }
 
@@ -128,7 +123,7 @@ KotobankTranslator::processWordData(const QByteArray &data)
     }
   }
 
-  emit errorMessage(tr("network error from KOTOBANK Translator"));
+  emit errorMessage(tr("network error from %1").arg(name()));
   DOUT("exit: error");
 }
 

@@ -26,6 +26,9 @@ using namespace AnnotCloud;
 
 #define MAX_WIDTH       300
 
+#define SS_TEXT_BEGIN   "<span style=\"background-color:rgba(0,0,0,16)\">"
+#define SS_TEXT_END     "</span>"
+
 // - Construction -
 
 EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, SignalHub *hub, QWidget *parent)
@@ -37,7 +40,7 @@ EmbeddedInfoView::EmbeddedInfoView(Player *player, DataManager *data, SignalHub 
 
   setStyleSheet(
     SS_BEGIN(QLabel)
-      SS_COLOR(white)
+      SS_COLOR(snow)
       SS_FONT_SIZE(9pt)
       //SS_FONT_WEIGHT(bold)
     SS_END
@@ -356,7 +359,7 @@ EmbeddedInfoView::updateText()
   //if (t.size() >= tail)
   //  t.chop(tail);
 
-  setText(t);
+  setText(SS_TEXT_BEGIN + t + SS_TEXT_END);
   DOUT("exit");
 }
 

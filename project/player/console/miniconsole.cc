@@ -23,11 +23,11 @@ MiniConsole::MiniConsole(QWidget *parent)
   { // Font color and size
     setStyleSheet(
       SS_BEGIN(QLabel)
-        SS_FONT_SIZE(30pt)
+        SS_FONT_SIZE(28pt)
 #ifdef Q_OS_MAC
         SS_COLOR(magenta)
 #else
-        SS_COLOR(white)
+        SS_COLOR(snow)
         SS_FONT_WEIGHT(bold)
 #endif // !Q_OS_MAC
       SS_END

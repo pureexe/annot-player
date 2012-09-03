@@ -240,7 +240,7 @@ inline QString html_td(const QString &content = "")
 #define HTML_STYLE(_content, _type) HTML_STYLE_OPEN(_type) _content HTML_STYLE_CLOSE()
 
 inline QString html_style_open(const QString &type = "")
-{ return "<span type=\"" + type + "\">"; }
+{ return "<style type=\"" + type + "\">"; }
 
 inline QString html_style_close() { return HTML_STYLE_CLOSE(); }
 

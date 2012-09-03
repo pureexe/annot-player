@@ -22,8 +22,11 @@
     SS_FONT_STYLE(_style) \
     SS_TEXT_DECORATION(_dec) \
     SS_COLOR(_normal) \
+    SS_BORDER_RADIUS(5px) \
+    SS_PADDING(3px) \
   SS_END \
   SS_BEGIN(QToolButton:hover) \
+    SS_BACKGROUND_COLOR(rgba(173,216,230,200)) \
     SS_COLOR(_hover) \
   SS_END \
   SS_BEGIN(QToolButton:pressed) \
@@ -39,23 +42,107 @@
     SS_COLOR(_disabled) \
   SS_END
 
+// lightblue:rgb(173,216,230)
 #ifdef Q_OS_MAC
 # define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, purple, purple, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_NORMAL     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, white, red, purple, purple, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, white, purple, purple, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, white, red, purple, purple, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(bold, italic, none, white, red, purple, purple, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, white, red, purple, purple, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, white, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_NORMAL     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, snow, red, purple, purple, red, gray)
+//# define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, snow, purple, purple, red, gray)
+//# define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, snow, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, snow, red, purple, purple, red, gray)
+//# define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, snow, red, purple, purple, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, snow, red, purple, purple, red, gray)
 #else
 # define ACSS_TOOLBUTTON_TEXT            ACSS_TOOLBUTTON_TEXT_(normal, normal, none, blue, red, orange, orange, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_NORMAL     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, white, red, orange, orange, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, white, orange, orange, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, white, red, orange, orange, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(normal, italic, none, white, red, orange, orange, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, white, red, orange, orange, red, gray)
-# define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, white, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_NORMAL     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, snow, red, orange, orange, red, gray)
+//# define ACSS_TOOLBUTTON_TEXT_INVERT     ACSS_TOOLBUTTON_TEXT_(normal, normal, none, red, snow, orange, orange, red, gray)
+//# define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT  ACSS_TOOLBUTTON_TEXT_(bold, normal, none, snow, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_CHECKABLE  ACSS_TOOLBUTTON_TEXT_(normal, normal, none, snow, red, orange, orange, red, gray)
+//# define ACSS_TOOLBUTTON_TEXT_TAB        ACSS_TOOLBUTTON_TEXT_(bold, normal, none, snow, red, orange, orange, red, gray)
+# define ACSS_TOOLBUTTON_TEXT_URL        ACSS_TOOLBUTTON_TEXT_(normal, italic, underline, snow, red, orange, orange, red, gray)
 #endif // Q_OS_MAC
+
+// lightblue:rgb(173,216,230)
+#define ACSS_TOOLBUTTON_TEXT_HIGHLIGHT \
+  SS_BEGIN(QToolButton) \
+    SS_FONT_WEIGHT(bold) \
+    SS_COLOR(snow) \
+    SS_BORDER_RADIUS(5px) \
+    SS_PADDING(3px) \
+    SS_BACKGROUND_COLOR(rgba(173,216,230,100)) \
+  SS_END \
+  SS_BEGIN(QToolButton:hover) \
+    SS_BACKGROUND_COLOR(rgba(173,216,230,200)) \
+    SS_COLOR(red) \
+  SS_END \
+  SS_BEGIN(QToolButton:pressed) \
+    SS_COLOR(orange) \
+  SS_END \
+  SS_BEGIN(QToolButton:checked) \
+    SS_COLOR(orange) \
+  SS_END \
+  SS_BEGIN(QToolButton:checked:hover) \
+    SS_COLOR(red) \
+  SS_END \
+  SS_BEGIN(QToolButton:disabled) \
+    SS_COLOR(gray) \
+    SS_BACKGROUND_COLOR(rgba(173,216,230,50)) \
+  SS_END
+
+// lightblue:rgb(173,216,230)
+#define ACSS_TOOLBUTTON_TEXT_TAB \
+  SS_BEGIN(QToolButton) \
+    SS_FONT_WEIGHT(bold) \
+    SS_COLOR(snow) \
+    SS_BORDER_RADIUS(7px) \
+    SS_PADDING(3px) \
+    SS_SEMI_TRANSPARENT \
+  SS_END \
+  SS_BEGIN(QToolButton:hover) \
+    SS_BACKGROUND_COLOR(rgba(173,216,230,200)) \
+    SS_COLOR(red) \
+  SS_END \
+  SS_BEGIN(QToolButton:pressed) \
+    SS_COLOR(orange) \
+  SS_END \
+  SS_BEGIN(QToolButton:checked) \
+    SS_BACKGROUND_COLOR(rgba(173,216,230,100)) \
+    SS_COLOR(orange) \
+  SS_END \
+  SS_BEGIN(QToolButton:checked:hover) \
+    SS_BACKGROUND_COLOR(rgba(173,216,230,200)) \
+    SS_COLOR(red) \
+  SS_END \
+  SS_BEGIN(QToolButton:disabled) \
+    SS_COLOR(gray) \
+    SS_BACKGROUND_COLOR(rgba(173,216,230,50)) \
+  SS_END
+
+// orangered:rgb(255,69,0)
+#define ACSS_TOOLBUTTON_TEXT_INVERT \
+  SS_BEGIN(QToolButton) \
+    SS_FONT_WEIGHT(bold) \
+    SS_COLOR(snow) \
+    SS_BORDER_RADIUS(5px) \
+    SS_PADDING(5px) \
+    SS_BACKGROUND_COLOR(rgba(255,69,0,100)) \
+  SS_END \
+  SS_BEGIN(QToolButton:hover) \
+    SS_BACKGROUND_COLOR(rgba(255,69,0,150)) \
+    SS_COLOR(red) \
+  SS_END \
+  SS_BEGIN(QToolButton:pressed) \
+    SS_COLOR(orange) \
+  SS_END \
+  SS_BEGIN(QToolButton:checked) \
+    SS_COLOR(orange) \
+  SS_END \
+  SS_BEGIN(QToolButton:checked:hover) \
+    SS_COLOR(red) \
+  SS_END \
+  SS_BEGIN(QToolButton:disabled) \
+    SS_COLOR(gray) \
+    SS_BACKGROUND_COLOR(rgba(255,69,0,50)) \
+  SS_END
 
 // - Labels -
 #define ACSS_LABEL_(_weight, _style, _dec, \
@@ -74,13 +161,13 @@
   SS_END
 
 #ifdef Q_OS_MAC
-# define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, blue, red, gray)
-# define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, purple, red, gray)
-# define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, purple, red, gray)
+# define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, snow, red, gray)
+# define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(bold, normal, none, snow, red, gray)
+# define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, snow, red, gray)
 #else
 # define ACSS_LABEL            ACSS_LABEL_(normal, normal, none, cyan, red, gray)
-# define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(normal, italic, none, orange, red, gray)
-# define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, orange, red, gray)
+# define ACSS_LABEL_HIGHLIGHT  ACSS_LABEL_(bold, normal, none, snow, red, gray)
+# define ACSS_LABEL_URL        ACSS_LABEL_(normal, italic, underline, snow, red, gray)
 #endif // Q_OS_MAC
 
 // - Lines -
@@ -162,7 +249,7 @@
   SS_BEGIN(QCheckBox:disabled) \
     SS_COLOR(_disabled) \
   SS_END
-#define ACSS_CHECKBOX ACSS_CHECKBOX_(white, red, cyan, orange, gray)
+#define ACSS_CHECKBOX ACSS_CHECKBOX_(snow, red, cyan, orange, gray)
 
 #define ACSS_RADIOBUTTON_(_normal, _hover, _checked, _checked_hover, _disabled) \
   SS_BEGIN(QRadioButton) \
@@ -180,7 +267,7 @@
   SS_BEGIN(QRadioButton:disabled) \
     SS_COLOR(_disabled) \
   SS_END
-#define ACSS_RADIOBUTTON  ACSS_RADIOBUTTON_(white, red, cyan, cyan, gray)
+#define ACSS_RADIOBUTTON  ACSS_RADIOBUTTON_(snow, red, cyan, cyan, gray)
 
 #define ACSS_GROUPBOX \
   SS_BEGIN(QGroupBox) \

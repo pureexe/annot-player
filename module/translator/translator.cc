@@ -2,6 +2,7 @@
 // 11/2/2011
 
 #include "module/translator/translator.h"
+#include "module/translator/translatorsettings.h"
 #include <QtCore/QLocale>
 
 // Helpers
@@ -25,6 +26,25 @@ Translator::languageCode(int lang, int script)
                                  "zh-CHT";  //"zh-TW" or "zh-HK";
   default: return QString();
   }
+}
+
+// - Actions -
+
+void
+Translator::translate(const QString &text, const QString &to, const QString &from)
+{
+  if (!isEnabled() || text.isEmpty())
+    return;
+  if (TranslatorSettings::globalSettings()->isCacheEnabled() &&
+      text.size() < TranslatorSettings::globalSettings()->cacheSize() &&
+      !cache_.isEmpty()) {
+    auto p = cache_.find(text);
+    if (p != cache_.end()) {
+      emit translated(p.value());
+      return;
+    }
+  }
+  doTranslate(text, to, from);
 }
 
 // EOF

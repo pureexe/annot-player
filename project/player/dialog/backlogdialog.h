@@ -20,8 +20,8 @@ class BacklogDialog : public AcWindow
   typedef AcWindow Base;
 
   enum TabIndex {
-    AnnotationTabIndex = 0,
-    SubtitleTabIndex,
+    SubtitleTabIndex = 0,
+    AnnotationTabIndex,
 #ifdef BACKLOGDIALOG_HAS_TEXT_TAB
     TextTabIndex,
 #endif // BACKLOGDIALOG_HAS_TEXT_TAB

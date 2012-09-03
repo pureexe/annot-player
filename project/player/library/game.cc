@@ -39,6 +39,8 @@ namespace { // anonymous
 #define TAG_SIGNATURE   "signature"
 #define TAG_PROVIDER    "provider"
 
+#define TAG_HOOK        "hook"
+
   //ulong functionId_;
   //void setEncoding(const QString &value) { encoding_ = value; }
   //bool enabled_;
@@ -59,8 +61,16 @@ enum Hash {
   H_Thread = 128945012,
   H_Role = 497189,
   H_Signature = 239619941,
-  H_Provider = 158135330
+  H_Provider = 158135330,
+
+  H_Hook = 456283
 };
+
+// - Properties -
+
+bool
+Game::isValidHook(const QString &code)
+{ return code.size() >= 8 && code.startsWith("/H"); }
 
 // - Read-
 
@@ -101,6 +111,7 @@ Game::readList(const QString &fileName)
       case H_Enabled:    v.setEnabled(c.text() == "true"); break;
       case H_TokenId:    v.setTokenId(c.text().toLongLong()); break;
       case H_Digest:     v.setDigest(c.text()); break;
+      case H_Hook:       v.setHook(c.text()); break;
       case H_Location:   v.setLocation(c.text()); break;
       case H_Title:      v.setTitle(c.text()); break;
       case H_VisitTime:  v.setVisitTime(c.text().toLongLong()); break;
@@ -180,6 +191,7 @@ Game::readHash(const QString &fileName)
       case H_Enabled:    v.setEnabled(c.text() == "true"); break;
       case H_TokenId:    v.setTokenId(c.text().toLongLong()); break;
       case H_Digest:     v.setDigest(c.text()); break;
+      case H_Hook:       v.setHook(c.text()); break;
       case H_Location:   v.setLocation(c.text()); break;
       case H_Title:      v.setTitle(c.text()); break;
       case H_VisitTime:  v.setVisitTime(c.text().toLongLong()); break;
@@ -259,7 +271,11 @@ Game::write(const L &l, const QString &fileName)
     writer.writeTextElement(TAG_ENCODING, v.encoding());
     writer.writeTextElement(TAG_LOCATION, v.location());
     writer.writeTextElement(TAG_ENABLED, v.isEnabled() ? "true" : "false");
-    writer.writeTextElement(TAG_TITLE, v.title());
+    if (v.hasTitle())
+      writer.writeTextElement(TAG_TITLE, v.title());
+    if (v.hasHook())
+    writer.writeTextElement(TAG_HOOK, v.hook());
+
     writer.writeTextElement(TAG_VISITTIME, QString::number(v.visitTime()));
     writer.writeTextElement(TAG_VISITCOUNT, QString::number(v.visitCount()));
 

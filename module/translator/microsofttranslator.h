@@ -9,7 +9,6 @@
 #include <QtNetwork/QNetworkRequest>
 
 QT_FORWARD_DECLARE_CLASS(QAuthenticator)
-QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 
 class MicrosoftTranslator : public NetworkTranslator
 {
@@ -18,17 +17,17 @@ class MicrosoftTranslator : public NetworkTranslator
   typedef MicrosoftTranslator Self;
   typedef NetworkTranslator Base;
 
-  QNetworkReply *reply_;
-
   // - Constructions -
 public:
   explicit MicrosoftTranslator(QObject *parent = nullptr);
 
-public slots:
-  void translate(const QString &text, const QString &to, const QString &from = QString()) override;
+  QString name() const override;
+
+protected:
+  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from) override;
+  QString parseReply(const QByteArray &data) override;
 
 protected slots:
-  void processReply(QNetworkReply *reply) override;
   void authenticate(QNetworkReply *, QAuthenticator *auth) const { authenticate(auth); }
 
 protected:

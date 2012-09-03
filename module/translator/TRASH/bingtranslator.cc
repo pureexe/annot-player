@@ -27,10 +27,8 @@ BingTranslator::translateUrl(const QString &text, const QString &to, const QStri
 }
 
 void
-BingTranslator::translate(const QString &text, const QString &to, const QString &from)
+BingTranslator::doTranslate(const QString &text, const QString &to, const QString &from)
 {
-  if (!isEnabled())
-    return;
   DOUT("enter");
   if (reply_ && isSynchronized()) {
     //reply_->abort();

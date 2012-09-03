@@ -4,7 +4,7 @@
 DEFINES += PROJECT_PLAYER
 
 VERSION_MAJOR = 0.1.9.
-VERSION_MINOR = 1
+VERSION_MINOR = 2
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -48,6 +48,7 @@ include($$ROOTDIR/module/translator/translator.pri)
 
 !mac: include($$ROOTDIR/module/metacall/metacall.pri)
 win32 {
+    include($$ROOTDIR/win/applocale/applocale.pri)
     include($$ROOTDIR/win/dwm/dwm.pri)
     #include($$ROOTDIR/win/hook/hook.pri)
     include($$ROOTDIR/win/mousehook/mousehook.pri)
@@ -107,6 +108,7 @@ MYPATH = \
     $$PWD/library \
     $$PWD/osd \
     $$PWD/player \
+    $$PWD/preferences \
     $$PWD/token \
     $$PWD/tr \
     $$PWD/user \
@@ -115,7 +117,6 @@ INCLUDEPATH     += $$MYPATH
 DEPENDPATH      += $$MYPATH
 
 HEADERS += \
-    annotationprefs.h \
     application.h \
     preferences.h \
     mainwindow.h \
@@ -193,6 +194,7 @@ HEADERS += \
     player/positioncalibration.h \
     player/positionslider.h \
     player/userlabel.h \
+    preferences/annotationprefs.h \
     token/addaliasdialog.h \
     token/tokenview.h \
     user/useranalyticsview.h \
@@ -207,7 +209,6 @@ HEADERS += \
     util/textview.h
 
 SOURCES += \
-    annotationprefs.cc \
     application.cc \
     main.cc \
     mainwindow.cc \
@@ -285,6 +286,7 @@ SOURCES += \
     player/positioncalibration.cc \
     player/positionslider.cc \
     player/userlabel.cc \
+    preferences/annotationprefs.cc \
     token/addaliasdialog.cc \
     token/tokenview.cc \
     user/useranalyticsview.cc \
@@ -298,28 +300,34 @@ SOURCES += \
     util/textview.cc
 
 win32 {
-  HEADERS += associationprefs.h windowsregistry.h
-  SOURCES += associationprefs.cc windowsregistry.cc
+  HEADERS += \
+    windowsregistry.h \
+    preferences/associationprefs.h
+  SOURCES += \
+    windowsregistry.cc \
+    preferences/associationprefs.cc
 
   DEFINES += AC_ENABLE_GAME
   DEFINES += AC_ENABLE_LAUNCHER
   DEFINES += AC_ENABLE_UPDATE
 
   HEADERS += \
+    game/hookdialog.h \
     game/messagehandler.h \
-    game/messageview.h \
     game/processinfo.h \
     game/processfilter.h \
     game/processview.h \
-    game/syncview.h
+    game/syncview.h \
+    game/threadview.h
 
   SOURCES += \
+    game/hookdialog.cc \
     game/messagehandler.cc \
-    game/messageview.cc \
     game/processinfo.cc \
     game/processfilter.cc \
     game/processview.cc \
-    game/syncview.cc
+    game/syncview.cc \
+    game/threadview.cc
 }
 
 RESOURCES += player.qrc

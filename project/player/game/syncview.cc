@@ -3,7 +3,7 @@
 
 #include "syncview.h"
 //#include "tokenview.h"
-#include "messageview.h"
+#include "threadview.h"
 #include "processview.h"
 #include "tr.h"
 #include "project/common/acui.h"
@@ -39,24 +39,24 @@ SyncView::createLayout()
 
   // Views
   processView_ = new ProcessView(this);
-  messageView_ = new MessageView(messageHandler_, this);
+  threadView_ = new ThreadView(messageHandler_, this);
   //tokenView_ = new TokenView(this);
 
   processView_->setWindowFlags(Qt::Widget);
-  messageView_->setWindowFlags(Qt::Widget);
+  threadView_->setWindowFlags(Qt::Widget);
   //tokenView_->setWindowFlags(Qt::Widget);
   processView_->setDraggable(false);
-  messageView_->setDraggable(false);
+  threadView_->setDraggable(false);
   //tokenView_->setDraggable(false);
 
   // Buttons
 
   processButton_ = ui->makeToolButton(
       AcUi::TabHint, tr("process"), processView_->windowTitle(), processView_, SLOT(setVisible(bool)));
-  messageButton_ = ui->makeToolButton(
-      AcUi::TabHint, tr("thread"), messageView_->windowTitle(), messageView_, SLOT(setVisible(bool)));
+  threadButton_ = ui->makeToolButton(
+      AcUi::TabHint, tr("thread"), threadView_->windowTitle(), threadView_, SLOT(setVisible(bool)));
   processButton_->setChecked(true);
-  messageButton_->setChecked(true);
+  threadButton_->setChecked(true);
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
@@ -67,36 +67,36 @@ SyncView::createLayout()
 
     //header->addWidget(tokenButton);
     header->addWidget(processButton_);
-    header->addWidget(messageButton_);
+    header->addWidget(threadButton_);
 
     //center->addWidget(tokenView_);
     center->addWidget(processView_);
-    center->addWidget(messageView_);
+    center->addWidget(threadView_);
 
     // left, top, right, bottom
     //tokenView_->layout()->setContentsMargins(4, 9, 4, 9);
     processView_->layout()->setContentsMargins(4, 9, 4, 9);
-    messageView_->layout()->setContentsMargins(4, 6, 4, 9);
+    threadView_->layout()->setContentsMargins(4, 6, 4, 9);
     header->setContentsMargins(0, 0, 0, 0);
     center->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(0, 0, 0, 0);
   } setCentralWidget(new LayoutWidget(rows, this));
 
-  connect(messageView_, SIGNAL(threadsSelected(TextThreadList)), SLOT(select(TextThreadList)));
+  connect(threadView_, SIGNAL(threadsSelected(TextThreadList)), SLOT(select(TextThreadList)));
 
-  connect(processView_, SIGNAL(attached(ProcessInfo)), messageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
-  connect(processView_, SIGNAL(detached(ProcessInfo)), messageView_, SLOT(clear()));
+  connect(processView_, SIGNAL(attached(ProcessInfo)), threadView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
+  connect(processView_, SIGNAL(detached(ProcessInfo)), threadView_, SLOT(clear()));
 
-  connect(processView_, SIGNAL(attached(ProcessInfo)), SLOT(showMessageView()));
-  connect(processView_, SIGNAL(detached(ProcessInfo)), SLOT(disableMessageView()));
+  connect(processView_, SIGNAL(attached(ProcessInfo)), SLOT(showThreadView()));
+  connect(processView_, SIGNAL(detached(ProcessInfo)), SLOT(disableThreadView()));
 
-  AC_FORWARD_MESSAGES(messageView_, this, Qt::AutoConnection);
+  AC_FORWARD_MESSAGES(threadView_, this, Qt::AutoConnection);
   AC_FORWARD_MESSAGES(processView_, this, Qt::AutoConnection);
 
-  //connect(messageView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
-  //connect(messageView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
-  //connect(messageView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
-  //connect(messageView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
+  //connect(threadView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
+  //connect(threadView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
+  //connect(threadView_, SIGNAL(dragMoveEventReceived(QDragMoveEvent*)), SLOT(dragMoveEvent(QDragMoveEvent*)));
+  //connect(threadView_, SIGNAL(dropEventReceived(QDropEvent*)), SLOT(dropEvent(QDropEvent*)));
 
   //connect(processView_, SIGNAL(dragEnterEventReceived(QDragEnterEvent*)), SLOT(dragEnterEvent(QDragEnterEvent*)));
   //connect(processView_, SIGNAL(dragLeaveEventReceived(QDragLeaveEvent*)), SLOT(dragLeaveEvent(QDragLeaveEvent*)));
@@ -138,8 +138,8 @@ SyncView::select(const TextThreadList &threads)
 //void
 //SyncView::setVisible(bool visible)
 //{
-//  //if (visible != messageView_->isActive())
-//  //  messageView_->setActive(visible);
+//  //if (visible != threadView_->isActive())
+//  //  threadView_->setActive(visible);
 //  Base::setVisible(visible);
 //}
 
@@ -151,22 +151,22 @@ SyncView::setProcessViewVisible(bool t)
 }
 
 void
-SyncView::setMessageViewVisible(bool t)
+SyncView::setThreadViewVisible(bool t)
 {
-  messageButton_->setChecked(t);
-  messageView_->setVisible(t);
+  threadButton_->setChecked(t);
+  threadView_->setVisible(t);
 }
 
 void
-SyncView::showMessageView()
+SyncView::showThreadView()
 {
-  messageView_->setEnabled(true);
-  setMessageViewVisible(true);
+  threadView_->setEnabled(true);
+  setThreadViewVisible(true);
 }
 
 void
-SyncView::disableMessageView()
-{ messageView_->setEnabled(false); }
+SyncView::disableThreadView()
+{ threadView_->setEnabled(false); }
 
 //void SyncView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
 //void SyncView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }

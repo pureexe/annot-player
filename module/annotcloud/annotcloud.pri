@@ -12,6 +12,7 @@ HEADERS += \
     $$PWD/annotpaint.h \
     $$PWD/annottag.h \
     $$PWD/annotxml.h \
+    $$PWD/gamehook.h \
     $$PWD/gamethread.h \
     $$PWD/traits.h \
     $$PWD/token.h \
@@ -26,6 +27,7 @@ SOURCES += \
     $$PWD/annothtml_unparse.cc \
     $$PWD/annotpaint.cc \
     $$PWD/annotxml.cc \
+    $$PWD/gamehook.cc \
     $$PWD/gamethread.cc \
     $$PWD/token.cc \
     $$PWD/user.cc

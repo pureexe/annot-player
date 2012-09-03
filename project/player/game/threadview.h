@@ -1,7 +1,7 @@
-#ifndef MESSAGEVIEW_H
-#define MESSAGEVIEW_H
+#ifndef THREADVIEW_H
+#define THREADVIEW_H
 
-// messageview.h
+// threadview.h
 // 10/16/2011
 
 #include "textmessage.h"
@@ -20,12 +20,13 @@ QT_END_NAMESPACE
 class CheckBoxGrid;
 class RadioButtonGrid;
 class MessageHandler;
+class HookDialog;
 
-class MessageView : public QtExt::Dialog
+class ThreadView : public QtExt::Dialog
 {
   Q_OBJECT
-  Q_DISABLE_COPY(MessageView)
-  typedef MessageView Self;
+  Q_DISABLE_COPY(ThreadView)
+  typedef ThreadView Self;
   typedef QtExt::Dialog Base;
 
   //enum HookIndex {
@@ -34,7 +35,7 @@ class MessageView : public QtExt::Dialog
   //};
 
 public:
-  explicit MessageView(MessageHandler *h, QWidget *parent = nullptr);
+  explicit ThreadView(MessageHandler *h, QWidget *parent = nullptr);
 
 signals:
   void threadsSelected(const TextThreadList &threads);
@@ -69,7 +70,7 @@ protected:
 public slots:
   void clear();
   void reset();
-  void select();
+  void save();
   void processMessage(const QByteArray &data, qint64 signature, const QString &provider);
 
   void setActive(bool active);
@@ -110,6 +111,7 @@ protected:
 
 protected slots:
   void setEncoding(const QString &name);
+  void showHook();
 
 private:
   void createLayout();
@@ -129,10 +131,11 @@ private:
 
   QList<TextMessage> messages_;
 
-  QToolButton *selectButton_, *resetButton_;
+  QToolButton *saveButton_, *resetButton_, *hookButton_;
 
   RadioButtonGrid *leadingThreads_;
   CheckBoxGrid *supportThreads_;
+  HookDialog *hookDialog_;
 };
 
-#endif // MESSAGEVIEW_H
+#endif // THREADVIEW_H

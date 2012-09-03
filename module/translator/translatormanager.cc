@@ -52,6 +52,10 @@ TranslatorManager::TranslatorManager(QObject *parent)
   connect(this, SIGNAL(synchronizedChanged(bool)), SLOT(updateSynchronized(bool)));
 }
 
+QString
+TranslatorManager::name() const
+{ return tr("Honyaku"); }
+
 void
 TranslatorManager::updateSynchronized(bool t)
 {

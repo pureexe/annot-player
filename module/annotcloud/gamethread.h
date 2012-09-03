@@ -109,7 +109,6 @@ namespace AnnotCloud {
     bool isValid() const { return hasId(); }
     void clear() { (*this) = Self(); }
 
-
     // - Operators -
   public:
     //bool operator==(const Self &that) { return !operator!=(that); }

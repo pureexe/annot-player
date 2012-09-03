@@ -1,22 +1,25 @@
-// messageview.cc
+// threadview.cc
 // 10/16/2011
 
-#include "messageview.h"
+#include "threadview.h"
 #include "messagehandler.h"
 #include "checkboxgrid.h"
 #include "radiobuttongrid.h"
 #include "textcodecmanager.h"
+#include "hookdialog.h"
 #include "tr.h"
 #include "global.h"
 #ifdef WITH_WIN_TEXTHOOK
 # include "win/texthook/texthook.h"
 #endif // WITH_WIN_TEXTHOOK
+#include "project/common/acprotocol.h"
 #include "project/common/acui.h"
 #include "module/qtext/htmltag.h"
 #include "module/qtext/spinbox.h"
+//#include "module/qtext/ss.h"
 #include <QtGui>
 
-//#define DEBUG "messageview"
+//#define DEBUG "threadview"
 #include "module/debug/debug.h"
 
 #define WINDOW_FLAGS ( \
@@ -32,10 +35,10 @@
 
 // - Construction -
 
-MessageView::MessageView(MessageHandler *h, QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), active_(false), messageHandler_(h)
+ThreadView::ThreadView(MessageHandler *h, QWidget *parent)
+  : Base(parent, WINDOW_FLAGS), active_(false), messageHandler_(h), hookDialog_(0)
 {
-  setWindowTitle(tr("Message view"));
+  setWindowTitle(tr("Thread View"));
 
   createLayout();
 
@@ -44,7 +47,7 @@ MessageView::MessageView(MessageHandler *h, QWidget *parent)
 }
 
 void
-MessageView::createLayout()
+ThreadView::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
   ui->setWindowStyle(this);
@@ -74,7 +77,7 @@ MessageView::createLayout()
   //connect(textEdit_, SIGNAL(cursorPositionChanged()), SLOT(invalidateCurrentCharFormat()));
 
   QString ja = tr("ja"),
-          en = tr("en"),
+          //en = tr("en"),
           chs = tr("chs"),
           cht = tr("cht"),
           ko = tr("ko");
@@ -109,11 +112,20 @@ MessageView::createLayout()
   //      AcUi::CheckHint, TR(T_AUTO), tr("Auto-detect signal"), this, SLOT(invalidateCurrentHook()));
   //autoButton_->setChecked(false);
 
-  selectButton_ = ui->makeToolButton(
-        AcUi::PushHint | AcUi::HighlightHint | AcUi::InvertHint, TR(T_OK), tr("Listen to selected channel"), this, SLOT(select()));
+  saveButton_ = ui->makeToolButton(
+        AcUi::PushHint | AcUi::HighlightHint | AcUi::InvertHint,
+        TR(T_SAVE), tr("Subscribe to selected threads"), this, SLOT(save()));
+  //saveButton_->setStyleSheet(saveButton_->styleSheet() +
+  //  SS_BEGIN(QToolButton)
+  //    SS_FONT_SIZE(15pt)
+  //  SS_END
+  //);
 
   resetButton_ = ui->makeToolButton(
-        AcUi::PushHint, TR(T_RESET), tr("Reset changes and texts"), this, SLOT(reset()));
+        AcUi::PushHint, TR(T_RESET), tr("Clear recent threads"), this, SLOT(reset()));
+
+  hookButton_ = ui->makeToolButton(
+        AcUi::PushHint, tr("Import ITH Hook Code"), this, SLOT(showHook()));
 
   //hookCountLabel_ = ui->makeLabel(0, "/0", tr("Current signal"), hookIndexEdit_);
 
@@ -126,11 +138,13 @@ MessageView::createLayout()
   supportGroup->setLayout(supportThreads_->layout());
 
   QVBoxLayout *rows = new QVBoxLayout; {
-    QHBoxLayout *header = new QHBoxLayout;
+    QHBoxLayout *header = new QHBoxLayout,
+                *footer = new QHBoxLayout;
     rows->addLayout(header);
     rows->addWidget(leadingGroup);
     rows->addWidget(supportGroup);
     rows->addWidget(textEdit_);
+    rows->addLayout(footer);
 
     header->addWidget(encodingEdit_);
     //header->addWidget(hookIndexEdit_);
@@ -138,10 +152,12 @@ MessageView::createLayout()
     //header->addWidget(autoButton_); // TODO: auto detect is disabled, because hookName is unimplemented
     //header->addStretch();
     header->addWidget(resetButton_);
-    header->addWidget(selectButton_);
+    header->addWidget(saveButton_);
+    footer->addWidget(hookButton_);
 
     // left, top, right, bottom
     header->setContentsMargins(0, 0, 0, 0);
+    footer->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(4, 2, 4, 4);
   } setLayout(rows);
 }
@@ -149,7 +165,7 @@ MessageView::createLayout()
 // - Properties -
 
 void
-MessageView::setActive(bool active)
+ThreadView::setActive(bool active)
 {
   active_ = active;
 #ifdef WITH_WIN_TEXTHOOK
@@ -168,7 +184,7 @@ MessageView::setActive(bool active)
 }
 
 void
-MessageView::refresh()
+ThreadView::refresh()
 {
   //updateLeadingGrid();
   //updateSupportingGrid();
@@ -179,7 +195,7 @@ MessageView::refresh()
 }
 
 void
-MessageView::refreshEncodingEdit()
+ThreadView::refreshEncodingEdit()
 {
   int i = encodingEdit_->findText(TextCodecManager::globalInstance()->encoding());
   if (i >= 0 && i < encodingEdit_->count())
@@ -187,7 +203,7 @@ MessageView::refreshEncodingEdit()
 }
 
 void
-MessageView::setVisible(bool visible)
+ThreadView::setVisible(bool visible)
 {
   //if (active_ != visible)
   //  setActive(visible);
@@ -200,14 +216,14 @@ MessageView::setVisible(bool visible)
 // - Actions -
 
 void
-MessageView::addMessages(const QList<QByteArray> &l, qint64 signature, const QString &provider)
+ThreadView::addMessages(const QList<QByteArray> &l, qint64 signature, const QString &provider)
 {
   foreach (const QByteArray &data, l)
     processMessage(data, signature, provider);
 }
 
 void
-MessageView::select()
+ThreadView::save()
 {
   if (!leadingThreads_->hasSelection())
     return;
@@ -237,7 +253,7 @@ MessageView::select()
 }
 
 void
-MessageView::setThreads(const TextThreadList &l)
+ThreadView::setThreads(const TextThreadList &l)
 {
   clear();
   int index = 0;
@@ -259,7 +275,7 @@ MessageView::setThreads(const TextThreadList &l)
 }
 
 void
-MessageView::reset()
+ThreadView::reset()
 {
   if (messageHandler_->hasThreads())
     setThreads(messageHandler_->threads());
@@ -268,7 +284,7 @@ MessageView::reset()
 }
 
 void
-MessageView::clear()
+ThreadView::clear()
 {
   supportThreads_->clear();
   leadingThreads_->clear();
@@ -285,14 +301,14 @@ MessageView::clear()
 }
 
 //void
-//MessageView::invalidateHookCountLabel()
+//ThreadView::invalidateHookCountLabel()
 //{
 //  int count = signatures_.size() - 1;
 //  hookCountLabel_->setText(QString("/%1 ").arg(QString::number(count)));
 //}
 
 void
-MessageView::updateGrid()
+ThreadView::updateGrid()
 {
   supportThreads_->setItemsEnabled(true);
   int index = leadingThreads_->currentIndex();
@@ -301,17 +317,18 @@ MessageView::updateGrid()
 }
 
 void
-MessageView::updateButtons()
+ThreadView::updateButtons()
 {
   //if (supportThreads_->itemCount() > 1 && supportThreads_->contains(0))
   //  supportThreads_->setItemChecked(0, false);
 
-  selectButton_->setEnabled(leadingThreads_->hasSelection());
+  saveButton_->setEnabled(leadingThreads_->hasSelection());
   //resetButton_->setEnabled(!isEmpty());
+  //hookButton_->setEnabled(!isEmpty());
 }
 
 void
-MessageView::updateText()
+ThreadView::updateText()
 {
   if (isEmpty()) {
     textEdit_->clear();
@@ -364,7 +381,7 @@ MessageView::updateText()
 }
 
 //bool
-//MessageView::isBetterHook(ulong goodHookId, ulong badHookId)
+//ThreadView::isBetterHook(ulong goodHookId, ulong badHookId)
 //{
 //  QString badHookName = TextHook::globalInstance()->hookNameById(badHookId);
 //  if (badHookName.isEmpty())
@@ -378,7 +395,7 @@ MessageView::updateText()
 //}
 
 void
-MessageView::processMessage(const QByteArray &data, qint64 signature, const QString &provider)
+ThreadView::processMessage(const QByteArray &data, qint64 signature, const QString &provider)
 {
   DOUT("enter: signature =" << signature << ", data size =" << data.size());
 
@@ -411,7 +428,7 @@ MessageView::processMessage(const QByteArray &data, qint64 signature, const QStr
 }
 
 //void
-//MessageView::invalidateCurrentHook()
+//ThreadView::invalidateCurrentHook()
 //{
 //  if (processName_.isEmpty())
 //    return;
@@ -423,7 +440,7 @@ MessageView::processMessage(const QByteArray &data, qint64 signature, const QStr
 //}
 
 void
-MessageView::invalidateCurrentCharFormat()
+ThreadView::invalidateCurrentCharFormat()
 {
   QTextCharFormat fmt;
   fmt.setForeground(Qt::red);
@@ -431,7 +448,7 @@ MessageView::invalidateCurrentCharFormat()
 }
 
 void
-MessageView::setEncoding(const QString &name)
+ThreadView::setEncoding(const QString &name)
 {
   QString e = name;
   e.remove(QRegExp(" .*"));
@@ -441,9 +458,22 @@ MessageView::setEncoding(const QString &name)
 
 // - Events -
 
-//void MessageView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
-//void MessageView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
-//void MessageView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
-//void MessageView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
+//void ThreadView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
+//void ThreadView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
+//void ThreadView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
+//void ThreadView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
+
+// - Hook -
+
+void
+ThreadView::showHook()
+{
+  if (!hookDialog_) {
+    hookDialog_ = new HookDialog(this);
+    AC_FORWARD_MESSAGES(hookDialog_, this, Qt::AutoConnection)
+  }
+  hookDialog_->show();
+  hookDialog_->raise();
+}
 
 // EOF

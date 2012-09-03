@@ -50,7 +50,7 @@
 #define SS_STATUSBAR_WARNING    SS_STATUSBAR_(orange,normal)
 #define SS_STATUSBAR_ERROR      SS_STATUSBAR_(red,bold)
 #define SS_STATUSBAR_NOTIFY     SS_STATUSBAR_(red,normal)
-#define SS_STATUSBAR_MESSAGE    SS_STATUSBAR_(white,normal)
+#define SS_STATUSBAR_MESSAGE    SS_STATUSBAR_(snow,normal)
 
 // - Tool button -
 

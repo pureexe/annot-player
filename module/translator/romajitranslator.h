@@ -6,11 +6,8 @@
 
 #include "module/translator/networktranslator.h"
 
-QT_BEGIN_NAMESPACE
-class QNetworkReply;
-class QTextEncoder;
-class QTextDecoder;
-QT_END_NAMESPACE
+QT_FORWARD_DECLARE_CLASS(QTextEncoder)
+QT_FORWARD_DECLARE_CLASS(QTextDecoder)
 
 class RomajiTranslator : public NetworkTranslator
 {
@@ -19,7 +16,6 @@ class RomajiTranslator : public NetworkTranslator
   typedef RomajiTranslator Self;
   typedef NetworkTranslator Base;
 
-  QNetworkReply *reply_;
   QTextDecoder *decoder_;
   QTextEncoder *encoder_;
 
@@ -27,14 +23,15 @@ class RomajiTranslator : public NetworkTranslator
 public:
   explicit RomajiTranslator(QObject *parent = nullptr);
 
-public slots:
-  void translate(const QString &text, const QString &to, const QString &from = QString()) override
-  { Q_UNUSED(to) Q_UNUSED(from) translate(text); }
+  QString name() const override;
 
-  void translate(const QString &text);
+protected:
+  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from = QString()) override
+  { Q_UNUSED(to) Q_UNUSED(from) return createReply(text); }
 
-protected slots:
-  void processReply(QNetworkReply *reply) override;
+  QNetworkReply *createReply(const QString &text);
+
+  QString parseReply(const QByteArray &data) override;
 
 protected:
   QString translateUrl(const QString &text) const;

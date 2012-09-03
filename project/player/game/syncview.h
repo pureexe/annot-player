@@ -11,7 +11,7 @@
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 
 class ProcessView;
-class MessageView;
+class ThreadView;
 class MessageHandler;
 //class TokenView;
 
@@ -23,11 +23,11 @@ class SyncView : public AcMainWindow
   typedef AcMainWindow Base;
 
   ProcessView *processView_;
-  MessageView *messageView_;
+  ThreadView *threadView_;
   MessageHandler *messageHandler_;
   //TokenView *tokenView_;
 
-  QToolButton *processButton_, *messageButton_;
+  QToolButton *processButton_, *threadButton_;
 
 public:
   explicit SyncView(MessageHandler *h, QWidget *parent = nullptr);
@@ -38,13 +38,13 @@ signals:
 public:
   //TokenView *tokenView() const { return tokenView_; }
   ProcessView *processView() const { return processView_; }
-  MessageView *messageView() const { return messageView_; }
+  ThreadView *threadView() const { return threadView_; }
 
 public slots:
   void setProcessViewVisible(bool t);
-  void setMessageViewVisible(bool t);
-  void showMessageView();
-  void disableMessageView();
+  void setThreadViewVisible(bool t);
+  void showThreadView();
+  void disableThreadView();
 
   // - Events -
 public slots:

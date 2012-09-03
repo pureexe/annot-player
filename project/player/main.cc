@@ -315,6 +315,7 @@ main(int argc, char *argv[])
   }
 
   // Hashes
+  //qDebug() << qHash(QString("hook"));
   //qDebug() << qHash(QString("\\b"));
   //qDebug() << qHash(QString("docomo"));
   //qDebug() << qHash(QString("ue"));
@@ -363,6 +364,7 @@ main(int argc, char *argv[])
 
   // Set translate network cache directory, same as web settings' offline cache
   TranslatorSettings::globalSettings()->setCacheDirectory(G_PATH_CACHES);
+  TranslatorSettings::globalSettings()->setCacheSize(10);
 
   // Set annotation cache directory, shared across different annot apps
   AnnotationCacheManager::globalInstance()->setLocation(AC_PATH_CACHES);

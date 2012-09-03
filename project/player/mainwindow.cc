@@ -68,7 +68,7 @@
 # include "windowsregistry.h"
 #endif // Q_OS_WIN
 #ifdef AC_ENABLE_GAME
-# include "messageview.h"
+# include "threadview.h"
 # include "messagehandler.h"
 # include "processview.h"
 # include "processfilter.h"
@@ -788,13 +788,14 @@ MainWindow::createComponents(bool unique)
   syncView_ = new SyncView(messageHandler_, this);
   windows_.append(syncView_);
 
-  syncView_->setMessageViewVisible(false);
+  syncView_->setThreadViewVisible(false);
+  syncView_->disableThreadView();
 
-  //recentMessageView_ = new MessageView(this);
-  //windows_.append(recentMessageView_);
+  //recentThreadView_ = new ThreadView(this);
+  //windows_.append(recentThreadView_);
 
   AC_CONNECT_MESSAGES(syncView_, this, Qt::AutoConnection);
-  //AC_CONNECT_MESSAGES(recentMessageView_, this, Qt::AutoConnection);
+  //AC_CONNECT_MESSAGES(recentThreadView_, this, Qt::AutoConnection);
 
   processFilter_ = new ProcessFilter(gameLibrary_, this);
 
@@ -1291,8 +1292,8 @@ MainWindow::createConnections()
   connect(this, SIGNAL(attached(ProcessInfo)), syncView_->processView(), SIGNAL(attached(ProcessInfo)));
   connect(this, SIGNAL(detached(ProcessInfo)), syncView_->processView(), SIGNAL(detached(ProcessInfo)));
 
-  //connect(syncView_->processView(), SIGNAL(attached(ProcessInfo)), recentMessageView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
-  //connect(syncView_->processView(), SIGNAL(detached(ProcessInfo)), recentMessageView_, SLOT(clearProcessName()));
+  //connect(syncView_->processView(), SIGNAL(attached(ProcessInfo)), recentThreadView_, SLOT(setProcessNameFromProcessInfo(ProcessInfo)));
+  //connect(syncView_->processView(), SIGNAL(detached(ProcessInfo)), recentThreadView_, SLOT(clearProcessName()));
 
   connect(syncView_->processView(), SIGNAL(attached(ProcessInfo)), SLOT(synchronizeProcess(ProcessInfo)));
 
@@ -1303,11 +1304,11 @@ MainWindow::createConnections()
   connect(syncView_, SIGNAL(threadsSelected(TextThreadList,ProcessInfo)), SLOT(subscribeThreads(TextThreadList,ProcessInfo)));
 
   connect(this, SIGNAL(subscribeThreadsRequested(TextThreadList,ProcessInfo)), SLOT(subscribeThreads(TextThreadList,ProcessInfo)), Qt::QueuedConnection);
-  connect(this, SIGNAL(subscribeThreadsRequested(TextThreadList,ProcessInfo)), syncView_->messageView(), SLOT(setThreads(TextThreadList)), Qt::QueuedConnection);
+  connect(this, SIGNAL(subscribeThreadsRequested(TextThreadList,ProcessInfo)), syncView_->threadView(), SLOT(setThreads(TextThreadList)), Qt::QueuedConnection);
   connect(this, SIGNAL(hideSyncViewRequested()), syncView_, SLOT(hide()), Qt::QueuedConnection);
 
-  //connect(recentMessageView_, SIGNAL(channelSelected(ulong,QString)), SLOT(updateChannel(ulong,QString)));
-  //connect(recentMessageView_, SIGNAL(channelSelected(ulong,QString)), recentMessageView_, SLOT(hide()));
+  //connect(recentThreadView_, SIGNAL(channelSelected(ulong,QString)), SLOT(updateChannel(ulong,QString)));
+  //connect(recentThreadView_, SIGNAL(channelSelected(ulong,QString)), recentThreadView_, SLOT(hide()));
   connect(messageHandler_, SIGNAL(hashChanged(qint64)), annotationView_, SLOT(showAnnotationsAtPos(qint64)));
   connect(messageHandler_, SIGNAL(textChanged(QString,int)), SLOT(translateGameText(QString,int)));
 #endif // AC_ENABLE_GAME
@@ -2577,6 +2578,11 @@ MainWindow::createMenus()
     openButtonMenu_->setIcon(QIcon(RC_IMAGE_OPEN));
 
     openButtonMenu_->addAction(showLibraryAct_);
+#ifdef AC_ENABLE_GAME
+    openButtonMenu_->addSeparator();
+    openButtonMenu_->addAction(showProcessAct_);
+    openButtonMenu_->addAction(showSyncGameAct_);
+#endif // AC_ENABLE_GAME
     openButtonMenu_->addSeparator();
     openButtonMenu_->addAction(openFileAct_);
     openButtonMenu_->addAction(openUrlAct_);
@@ -4837,7 +4843,7 @@ MainWindow::showWindowPicker()
   static PickDialog *w = nullptr;
   if (!w) {
     w = new PickDialog(this);
-    w->setMessage(tr("Select annots window"));
+    w->setMessage(tr("Click the window to show annotations"));
     connect(w, SIGNAL(windowPicked(WId)), SIGNAL(windowPicked(WId)));
     connect(w, SIGNAL(cancelled()), SLOT(updateOsdWindowOnTop()));
     AC_CONNECT_MESSAGE(w, this, Qt::AutoConnection);
@@ -4857,7 +4863,7 @@ MainWindow::showProcess()
   if (!w) {
     w = new PickDialog(this);
     windows_.append(w);
-    w->setMessage(tr("Select process window to open"));
+    w->setMessage(tr("Click the galgame's window to sync with"));
 
     AC_CONNECT_MESSAGE(w, this, Qt::AutoConnection);
     connect(w, SIGNAL(windowPicked(WId)), SIGNAL(windowPicked(WId)));
@@ -5546,21 +5552,40 @@ MainWindow::setToken(const QString &input, bool async)
     g.setDigest(media.digest());
     g.setTokenId(media.tokenId());
     g.setLocation(media.location());
+    g.setHook(TextHook::globalInstance()->currentHook());
 
     g.setEncoding(TextCodecManager::globalInstance()->encoding());
     g.setThreads(messageHandler_->threads());
 
     gameLibrary_->visit(g);
 
-    if (!server_->isConnected() && dataManager_->hasGameThread())
-      dataManager_->removeGameThread();
+    if (!server_->isConnected()) {
+      if (dataManager_->hasGameThread())
+        dataManager_->removeGameThread();
+      if (dataManager_->hasGameHook())
+        dataManager_->removeGameHook();
+    }
 
-    if (server_->isConnected() && server_->isAuthorized()) {
-      GameThread t;
-      if (g.tokenId() == dataManager_->gameThread().tokenId())
-        t = dataManager_->gameThread();
-      else
-        t = server_->selectGameThreadWithTokenDigest(g.digest());
+    if (server_->isConnected() && server_->isAuthorized() &&
+        g.hasTokenId()) {
+      GameHook h = g.tokenId() == dataManager_->gameHook().tokenId() ?
+        dataManager_->gameHook() :
+        server_->selectGameHookWithTokenId(g.tokenId());
+      if (h.isValid()) {
+        if (g.hasHook() && g.hook() != h.text())
+          server_->updateGameHookTextWithId(g.hook(), h.id());
+      } else if (g.hasHook()) {
+        h.setUserId(server_->user().id());
+        h.setTokenId(g.tokenId());
+        h.setUpdateTime(now / 1000);
+        h.setText(g.hook());
+        qint64 id = server_->submitGameHook(h);
+        h.setId(id);
+      }
+
+      GameThread t = g.tokenId() == dataManager_->gameThread().tokenId() ?
+        dataManager_->gameThread() :
+        server_->selectGameThreadWithTokenId(g.tokenId());
 
       TextThread tt;
       foreach (const TextThread &i, g.threads())
@@ -5577,7 +5602,8 @@ MainWindow::setToken(const QString &input, bool async)
           t.setSignature(tt.signature());
           t.setProvider(tt.provider());
           t.setType(tt.role());
-          server_->submitGameThread(t);
+          qint64 id = server_->submitGameThread(t);
+          t.setId(id);
         }
       } else if (tt.hasRole() && (
                  tt.hasSignature() && tt.signature() != t.signature() ||
@@ -5594,6 +5620,7 @@ MainWindow::setToken(const QString &input, bool async)
         server_->updateGameThread(t);
       }
 
+      dataManager_->setGameHook(h);
       dataManager_->setGameThread(t);
     }
   }
@@ -5719,16 +5746,19 @@ void
 MainWindow::showOcnTranslation(const QString &text, bool extra)
 {
   int lang = server_->user().language();
+  QString t = text;
+
+  if (Traits::isAsianLanguage(lang))
+    t.remove("\r\n");
+
+  if (t.contains('['))
+    t.replace('[', "\\[")
+     .replace(']', "\\]");
+
   if (extra)
-    showAdditionalTranslation(
-      Traits::isAsianLanguage(lang) ? QString(text).remove("\r\n") : text,
-      TranslatorManager::Ocn
-    );
+    showAdditionalTranslation(t, TranslatorManager::Ocn);
   else
-    showTranslation(
-      Traits::isAsianLanguage(lang) ? QString(text).remove("\r\n") : text,
-      TranslatorManager::Ocn
-    );
+    showTranslation(t, TranslatorManager::Ocn);
 }
 
 void
@@ -8362,6 +8392,8 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     emit message(TR(T_MESSAGE_TRY_LOGINFROMCACHE));
     User user = cache_->selectUserWithNameAndPassword(userName, encryptedPassword);
     if (user.isValid()) {
+      if (!Traits::isKnownLanguage(user.language()))
+        user.setLanguage(Traits::English);
       settings->setUserName(userName);
       settings->setPassword(encryptedPassword);
 
@@ -8545,7 +8577,7 @@ MainWindow::openProcessId(ulong pid)
     return;
   }
 
-  if (TextHook::globalInstance()->isProcessAttached(pid))
+  if (TextHook::globalInstance()->containsProcess(pid))
     emit message(tr("process was attached") + QString(" (pid = %1)").arg(pid));
   else {
     bool ok = TextHook::globalInstance()->attachOneProcess(pid);
@@ -8585,7 +8617,7 @@ MainWindow::openProcessPath(const QString &path)
   else if (pid == QCoreApplication::applicationPid())
     emit warning(tr("cannot sync with myself"));
   else {
-    QtWin::createProcessWithExecutablePath(path);
+    QtWin::createProcess(path);
     emit message(tr("told process to start") + QString(" (name = %1)").arg(processName));
     pid = QtWinnt::getProcessIdByName(processName);
   }
@@ -8646,39 +8678,53 @@ MainWindow::synchronizeProcess(const ProcessInfo &pi, bool async)
   if (!gameLibrary_->isEmpty())
     g = gameLibrary_->findGameByDigest(digest);
 
-  if (!g.hasDigest() && server_->isConnected()) {
+  if (!(g.hasDigest() && g.hasHook()) && server_->isConnected()) {
     DOUT("inetMutex locking");
     inetMutex_.lock();
     DOUT("inetMutex locked");
 
-    dataManager_->gameThread() = server_->selectGameThreadWithTokenDigest(digest);
-    DOUT("thread id =" << dataManager_->gameThread().id());
+    dataManager_->gameHook() = server_->selectGameHookWithTokenDigest(digest);
+    if (!g.hasHook() && dataManager_->hasGameHook())
+      g.setHook(dataManager_->gameHook().text());
+
+    if (!g.hasDigest()) {
+      dataManager_->gameThread() = server_->selectGameThreadWithTokenDigest(digest);
+      DOUT("thread id =" << dataManager_->gameThread().id());
+
+      if (dataManager_->hasGameThread()) {
+        const GameThread &t = dataManager_->gameThread();
+        g.setTokenId(t.tokenId());
+        g.setDigest(digest);
+        g.setLocation(QDir::fromNativeSeparators(pi.executablePath));
+        g.setEncoding(Traits::codePageToEncoding(t.encoding()));
+        g.setVisitTime(QDateTime::currentMSecsSinceEpoch());
+        g.setVisitCount(1);
+
+        TextThread tt;
+        tt.setProvider(t.provider());
+        tt.setRole(t.type());
+        tt.setSignature(t.signature());
+        g.threads().append(tt);
+      }
+    }
 
     DOUT("inetMutex unlocking");
     inetMutex_.unlock();
     DOUT("inetMutex unlocked");
-
-    if (dataManager_->hasGameThread()) {
-      const GameThread &t = dataManager_->gameThread();
-      g.setTokenId(t.tokenId());
-      g.setDigest(digest);
-      g.setLocation(QDir::fromNativeSeparators(pi.executablePath));
-      g.setEncoding(Traits::codePageToEncoding(t.encoding()));
-      g.setVisitTime(QDateTime::currentMSecsSinceEpoch());
-      g.setVisitCount(1);
-
-      TextThread tt;
-      tt.setProvider(t.provider());
-      tt.setRole(t.type());
-      tt.setSignature(t.signature());
-      g.threads().append(tt);
-    }
   }
 
   if (!g.hasDigest()) {
     emit openProcessRequested();
     DOUT("exit: unknown name");
     return;
+  }
+
+  if (g.hasHook() && !TextHook::globalInstance()->containsHook(pi.processId, g.hook())) {
+    bool ok = TextHook::globalInstance()->addHook(pi.processId, g.hook());
+    if (ok)
+      emit message(tr("add text hook") + ": " + g.hook());
+    else
+      emit warn(tr("failed to add text hook") + ": " + g.hook());
   }
 
   // Detect encoding
@@ -8759,6 +8805,7 @@ MainWindow::updateSubscription(const TextThreadList &threads, bool async)
     return;
   }
 
+  g.setHook(TextHook::globalInstance()->currentHook());
   g.setThreads(threads);
   g.setEncoding(TextCodecManager::globalInstance()->encoding());
 
@@ -8770,11 +8817,27 @@ MainWindow::updateSubscription(const TextThreadList &threads, bool async)
     inetMutex_.lock();
     DOUT("inetMutex locked");
 
-    GameThread t;
-    if (g.tokenId() == dataManager_->gameThread().tokenId())
-      t = dataManager_->gameThread();
-    else
-      t = server_->selectGameThreadWithTokenId(g.tokenId());
+    if (g.hasHook()) {
+      GameHook h = g.tokenId() == dataManager_->gameHook().tokenId() ?
+        dataManager_->gameHook() :
+        server_->selectGameHookWithTokenId(g.tokenId());
+      if (h.isValid()) {
+        if (g.hasHook() && g.hook() != h.text())
+          server_->updateGameHookTextWithId(g.hook(), h.id());
+      } else if (g.hasHook()) {
+        h.setUserId(server_->user().id());
+        h.setTokenId(g.tokenId());
+        h.setUpdateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+        h.setText(g.hook());
+        qint64 id = server_->submitGameHook(h);
+        h.setId(id);
+      }
+      dataManager_->setGameHook(h);
+    }
+
+    GameThread t = g.tokenId() == dataManager_->gameThread().tokenId() ?
+      dataManager_->gameThread() :
+      server_->selectGameThreadWithTokenId(g.tokenId());
 
     TextThread tt;
     foreach (const TextThread &i, g.threads())
@@ -8792,7 +8855,8 @@ MainWindow::updateSubscription(const TextThreadList &threads, bool async)
           t.setSignature(tt.signature());
           t.setProvider(tt.provider());
           t.setType(tt.role());
-          server_->submitGameThread(t);
+          qint64 id = server_->submitGameThread(t);
+          t.setId(id);
         }
     } else if (tt.hasRole() && (
                tt.hasSignature() && tt.signature() != t.signature() ||
@@ -8987,19 +9051,19 @@ MainWindow::showGamePreferences()
   showSyncGame(false); // false: hide process
 
   //if (visible) {
-  //  recentMessageView_->clear();
+  //  recentThreadView_->clear();
 //
   //  QList<QByteArray> l;
   //  foreach (const QByteArray &a, messageHandler_->recentMessages())
   //    l.prepend(a);
   //  if (!l.isEmpty()) {
-  //    recentMessageView_->addMessages(l, messageHandler_->signature(), messageHandler_->function());
-  //    recentMessageView_->setCurrentIndex(1);
+  //    recentThreadView_->addMessages(l, messageHandler_->signature(), messageHandler_->function());
+  //    recentThreadView_->setCurrentIndex(1);
   //  }
   //}
-  //recentMessageView_->setVisible(visible);
+  //recentThreadView_->setVisible(visible);
   //if (visible)
-  //  recentMessageView_->raise();
+  //  recentThreadView_->raise();
 }
 
 #endif // AC_ENABLE_GAME
@@ -11821,9 +11885,9 @@ MainWindow::toggleFresheyeTranslator(bool t)
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
   if (t)
-    emit message(tr("load freshEYE Honyaku"));
+    emit messageOnce(tr("freshEYE Honyaku On"));
   else
-    emit message(tr("offload freshEYE Honyaku"));
+    emit messageOnce(tr("freshEYE Honyaku Off"));
 }
 
 void
@@ -11833,9 +11897,9 @@ MainWindow::toggleYahooTranslator(bool t)
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
   if (t)
-    emit message(tr("load Yahoo! Honyaku"));
+    emit messageOnce(tr("Yahoo! Honyaku On"));
   else
-    emit message(tr("offload Yahoo! Honyaku"));
+    emit messageOnce(tr("Yahoo! Honyaku Off"));
 }
 
 void
@@ -11845,9 +11909,9 @@ MainWindow::toggleOcnTranslator(bool t)
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
   if (t)
-    emit message(tr("load OCN Honyaku"));
+    emit messageOnce(tr("OCN Honyaku On"));
   else
-    emit message(tr("offload OCN Honyaku"));
+    emit messageOnce(tr("OCN Honyaku Off"));
 }
 
 void
@@ -11857,9 +11921,9 @@ MainWindow::toggleSdlTranslator(bool t)
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
   if (t)
-    emit message(tr("load SDL Translator"));
+    emit messageOnce(tr("SDL Translator On"));
   else
-    emit message(tr("offload SDL Translator"));
+    emit messageOnce(tr("SDL Translator Off"));
 }
 
 void
@@ -11869,9 +11933,9 @@ MainWindow::toggleInfoseekTranslator(bool t)
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
   if (t)
-    emit message(tr("load Infoseek Honyaku"));
+    emit messageOnce(tr("Infoseek Honyaku On"));
   else
-    emit message(tr("offload Infoseek Honyaku"));
+    emit messageOnce(tr("Infoseek Honyaku Off"));
 }
 
 void
@@ -11881,9 +11945,9 @@ MainWindow::toggleNiftyTranslator(bool t)
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
   if (t)
-    emit message(tr("load @nifty honyaku"));
+    emit messageOnce(tr("@nifty Honyaku On"));
   else
-    emit message(tr("offload @nifty honyaku"));
+    emit messageOnce(tr("@nifty Honyaku Off"));
 }
 
 void
@@ -11893,9 +11957,9 @@ MainWindow::toggleExciteTranslator(bool t)
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
   if (t)
-    emit message(tr("load Excite Honyaku"));
+    emit messageOnce(tr("Excite Honyaku On"));
   else
-    emit message(tr("offload Excite Honyaku"));
+    emit messageOnce(tr("Excite Honyaku off"));
 }
 
 void
@@ -11905,9 +11969,9 @@ MainWindow::toggleGoogleTranslator(bool t)
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
   if (t)
-    emit message(tr("load Google Translator"));
+    emit messageOnce(tr("Google Translator On"));
   else
-    emit message(tr("offload Google Translator"));
+    emit messageOnce(tr("Google Translator Off"));
 }
 
 void
@@ -11917,9 +11981,9 @@ MainWindow::toggleMicrosoftTranslator(bool t)
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
   if (t)
-    emit message(tr("load Microsoft Translator"));
+    emit messageOnce(tr("Microsoft Translator On"));
   else
-    emit message(tr("offload Microsoft Translator"));
+    emit messageOnce(tr("Microsoft Translator Off"));
 }
 
 void
@@ -11929,9 +11993,9 @@ MainWindow::toggleRomajiTranslator(bool t)
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
   if (t)
-    emit message(tr("load Romaji Translator"));
+    emit messageOnce(tr("Romaji On"));
   else
-    emit message(tr("offload Romaji Translator"));
+    emit messageOnce(tr("Romaji Off"));
 }
 
 // - Translator -

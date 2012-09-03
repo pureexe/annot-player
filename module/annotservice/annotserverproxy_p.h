@@ -7,6 +7,7 @@
 #include "module/annotservice/cloudservicesoap_p.h"
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
+#include "module/annotcloud/gamehook.h"
 #include "module/annotcloud/gamethread.h"
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/user.h"
@@ -26,6 +27,8 @@ class AnnotationServerProxy: public QObject
   typedef AnnotCloud::AliasList AliasList;
   typedef AnnotCloud::Annotation Annotation;
   typedef AnnotCloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::GameHook GameHook;
+  typedef AnnotCloud::GameHookList GameHookList;
   typedef AnnotCloud::GameThread GameThread;
   typedef AnnotCloud::GameThreadList GameThreadList;
 
@@ -65,7 +68,9 @@ public:
   qint64 submitAnnotationTextWithTokenId(const QString &text, qint64 pos, qint32 posType, qint64 tokenId);
   qint64 submitAnnotationTextAndTokenDigest(const QString &text, qint64 pos, qint32 posType, const QString &digest, qint32 section);
 
+  qint64 submitGameHook(const GameHook &hook);
   qint64 submitGameThread(const GameThread &thread);
+
   // - Deletion -
 public:
   bool deleteAnnotationWithId(qint64 id);
@@ -75,6 +80,7 @@ public:
 public:
   bool updateAnnotationTextWithId(const QString &text, qint64 id);
   bool updateAnnotationUserIdWithId(qint64 userId, qint64 id);
+  bool updateGameHookTextWithId(const QString &text, qint64 id);
   bool updateGameThread(const GameThread &thread);
 
   // - Queries -
@@ -91,8 +97,12 @@ public:
   AliasList selectAliasesWithTokenId(qint64 tid);
   AliasList selectRelatedAliasesWithTokenId(qint64 tid);
 
+  GameHook selectGameHookWithTokenId(qint64 tid);
+  GameHook selectGameHookWithTokenDigest(const QString &digest);
+
   GameThread selectGameThreadWithTokenId(qint64 tid);
   GameThread selectGameThreadWithTokenDigest(const QString &digest);
+
   // - Live -
 public:
   QString chat(const QString &message);

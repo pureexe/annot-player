@@ -23,8 +23,9 @@ public:
   explicit BingTranslator(QObject *parent = nullptr)
     : Base(parent), reply_(nullptr) { }
 
-public slots:
-  void translate(const QString &text, const QString &to, const QString &from = QString()) override;
+protected:
+  void doTranslate(const QString &text, const QString &to, const QString &from) override;
+  void doTranslate(const QString &text, const QString &to, const QString &from) override;
 
 protected:
   static QUrl translateUrl(const QString &text, const QString &to, const QString &from = QString());

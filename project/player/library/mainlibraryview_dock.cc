@@ -12,9 +12,9 @@ MainLibraryDock::MainLibraryDock(QWidget *parent)
 {
   setContentsMargins(0, 0, 0, 0);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  setFeatures(QDockWidget::NoDockWidgetFeatures);
 
   setTitleBarWidget(new QWidget(this));
-  setFeatures(QDockWidget::NoDockWidgetFeatures);
 }
 
 void

@@ -8,6 +8,7 @@
 #include "project/common/acsettings.h"
 #include "module/mrlanalysis/mrlanalysis.h"
 #include "module/qtext/overlaylayout.h"
+#include "module/qtext/layoutwidget.h"
 #include "module/qtext/ss.h"
 #include "module/qtext/string.h"
 #include <QtGui>
@@ -89,11 +90,9 @@ UrlDialog::createLayout()
     //footer->addWidget(saveButton_);
     footer->addWidget(openButton_);
 
-    rows->setContentsMargins(9, 9, 9, 9);
-    //setContentsMargins(0, 0, 0, 0);
-  } setLayout(rows);
-
-#undef MAKE_BUDDY
+    rows->setContentsMargins(4, 4, 4, 4);
+    setContentsMargins(0, 0, 0, 0);
+  } setCentralWidget(new LayoutWidget(rows, this));
 
   setStyleSheet(styleSheet() +
     SS_BEGIN(QToolButton)
@@ -238,6 +237,11 @@ UrlDialog::verifyEditText()
       SS_COLOR(red)
     SS_END
   ));
+
+  if (valid)
+    showMessage(tr("Valid") + ": " + t);
+  else if (!t.isEmpty())
+    warn(tr("Invalid") + ": " + t);
 }
 
 // EOF

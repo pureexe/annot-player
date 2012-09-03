@@ -395,6 +395,46 @@ AnnotationServerProxy::selectUser(const QString &userName, const QString &passwo
 // - Submissions -
 
 qint64
+AnnotationServerProxy::submitGameHook(const GameHook &hook)
+{
+  DOUT("enter");
+
+  tns__gameHook arg0;
+  arg0.flags = hook.flags();
+  arg0.id = hook.id();
+  arg0.userId = hook.userId();
+  arg0.tokenId = hook.tokenId();
+  arg0.updateTime = hook.updateTime();
+  arg0.updateIp = hook.updateIp();
+  std::string text;
+  if (hook.hasText()) {
+    text = hook.text().toStdString();
+    arg0.text = &text;
+  }
+
+  tns__submitGameHook request;
+  request.hook = &arg0;
+
+  tns__submitGameHookResponse response;
+  mutex_.lock();
+  int err = proxy_->submitGameHook(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->submitGameHook(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return 0;
+  }
+
+  qint64 ret = response.return_;
+  DOUT("exit: tid =" << ret);
+  return ret;
+}
+
+qint64
 AnnotationServerProxy::submitGameThread(const GameThread &thread)
 {
   DOUT("enter");
@@ -922,6 +962,89 @@ AnnotationServerProxy::submitAnnotationTextAndTokenDigest(const QString &text, q
 
 // - Queries -
 
+GameHook
+AnnotationServerProxy::selectGameHookWithTokenDigest(const QString &digest)
+{
+  DOUT("enter");
+  GameHook ret;
+
+  if (digest.size() != Traits::TOKEN_DIGEST_LENGTH) {
+    DOUT("exit: error: invalid digest =" << digest());
+    return ret;
+  }
+
+  tns__selectGameHookWithTokenDigest request;
+  std::string arg0;
+  arg0 = digest.toStdString();
+  request.tokenDigest = &arg0;
+
+  tns__selectGameHookWithTokenDigestResponse response;
+  mutex_.lock();
+  int err = proxy_->selectGameHookWithTokenDigest(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->selectGameHookWithTokenDigest(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return ret;
+  }
+
+  tns__gameHook *p = response.return_;
+  if (p) {
+    ret.setFlags(p->flags);
+    ret.setId(p->id);
+    ret.setUserId(p->userId);
+    ret.setUpdateTime(p->updateTime);
+    ret.setUpdateIp(p->updateIp);
+    ret.setTokenId(p->tokenId);
+    if (p->text)
+      ret.setText(QString::fromStdString(*p->text));
+  }
+  DOUT("exit: tid =" << ret.id());
+  return ret;
+}
+
+GameHook
+AnnotationServerProxy::selectGameHookWithTokenId(qint64 tid)
+{
+  DOUT("enter");
+  GameHook ret;
+
+  tns__selectGameHookWithTokenId request;
+  request.tokenId = tid;
+
+  tns__selectGameHookWithTokenIdResponse response;
+  mutex_.lock();
+  int err = proxy_->selectGameHookWithTokenId(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->selectGameHookWithTokenId(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return ret;
+  }
+
+  tns__gameHook *p = response.return_;
+  if (p) {
+    ret.setFlags(p->flags);
+    ret.setTokenId(p->tokenId);
+    ret.setId(p->id);
+    ret.setUserId(p->userId);
+    ret.setUpdateTime(p->updateTime);
+    ret.setUpdateIp(p->updateIp);
+    if (p->text)
+      ret.setText(QString::fromStdString(*p->text));
+  }
+  DOUT("exit: tid =" << ret.id());
+  return ret;
+}
+
 GameThread
 AnnotationServerProxy::selectGameThreadWithTokenDigest(const QString &digest)
 {
@@ -1427,6 +1550,35 @@ AnnotationServerProxy::updateGameThread(const GameThread &thread)
   if (err)
     for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
       err = proxy_->updateGameThread(&request, &response);
+  mutex_.unlock();
+  if (err) {
+    DOUT("soap error, err =" << err);
+    emit soapError(err);
+    DOUT("exit");
+    return false;
+  }
+
+  bool ret = response.return_;
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+bool
+AnnotationServerProxy::updateGameHookTextWithId(const QString &text, qint64 id)
+{
+  DOUT("enter: id =" << id << ", text =" << text);
+
+  tns__updateGameHookTextWithId request;
+  std::string arg0 = text.toStdString();
+  request.text = &arg0;
+  request.id = id;
+
+  tns__updateGameHookTextWithIdResponse response;
+  mutex_.lock();
+  int err = proxy_->updateGameHookTextWithId(&request, &response);
+  if (err)
+    for (int i = 0; err == SoapConnectionError && i < MaxConnectionRetries; i++)
+      err = proxy_->updateGameHookTextWithId(&request, &response);
   mutex_.unlock();
   if (err) {
     DOUT("soap error, err =" << err);

@@ -15,9 +15,9 @@
 #endif // Q_OS_WIN
 #include "project/common/acui.h"
 #include "project/common/aciconbutton.h"
+#include "module/qtext/overlaylayout.h"
 #include "module/qtext/toolbutton.h"
 #include "module/qtext/withsizehint.h"
-#include "module/qtext/overlaylayout.h"
 #include <QtCore>
 #include <QtGui>
 
@@ -97,8 +97,6 @@ EmbeddedPlayerUi::EmbeddedPlayerUi(SignalHub *hub, Player *player, AnnotationSer
   calibration_ = new PositionCalibration(hub, player, this);
 
   toggleDockButton_ = new AcIconButton(this); {
-    toggleDockButton_->setCheckable(true);
-    toggleDockButton_->setChecked(true);
     toggleDockButton_->setGraphicsEffect(AcUi::globalInstance()->makeHaloEffect(QColor("orange")));
     connect(toggleDockButton_, SIGNAL(clicked()), SLOT(toggleOnTop()));
     updateDockButton();
@@ -485,7 +483,6 @@ EmbeddedPlayerUi::showWhenEmbedded()
 void
 EmbeddedPlayerUi::updateDockButton()
 {
-  toggleDockButton_->setChecked(true);
   if (top_) {
     toggleDockButton_->setStyleSheet(SS_TOOLBUTTON_DOCK_BOTTOM);
     toggleDockButton_->setToolTip(TR(T_TOOLTIP_DOCK_BOTTOM));

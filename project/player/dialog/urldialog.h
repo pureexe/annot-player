@@ -4,17 +4,17 @@
 // urldialog.h
 // 2/7/2012
 
-#include "project/common/acwindow.h"
+#include "project/common/acmainwindow.h"
 
 QT_FORWARD_DECLARE_CLASS(QToolButton)
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-class UrlDialog : public AcWindow
+class UrlDialog : public AcMainWindow
 {
   Q_OBJECT
   Q_DISABLE_COPY(UrlDialog)
   typedef UrlDialog Self;
-  typedef AcWindow Base;
+  typedef AcMainWindow Base;
 
   QComboBox *edit_;
   QToolButton *urlButton_,

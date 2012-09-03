@@ -142,9 +142,9 @@ DynamicOcnTranslator::processData(const QByteArray &data)
         begin += sizeof(OCN_AREA_BEGIN2) -1;
         int end = data.indexOf(OCN_AREA_END, begin);
         if (end > 0) {
-          QString text = data.mid(begin, end - begin);
+          QByteArray text = data.mid(begin, end - begin);
           DOUT("text =" << text);
-          if (!text.isEmpty()) {
+          if (!text.isEmpty() && text != OCN_FORBIDDEN_TEXT) {
             emit translated(text);
             DOUT("exit: ok");
             return;

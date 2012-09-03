@@ -39,7 +39,10 @@ Icons::computerIcon()
 
 QIcon
 Icons::iconForFile(const QFileInfo &fi)
-{ return iconProvider.icon(fi); }
+{
+  QIcon ret = iconProvider.icon(fi);
+  return ret.isNull() ? fileIcon() : ret;
+}
 
 QIcon
 Icons::iconForSuffix(const QString &suffix)

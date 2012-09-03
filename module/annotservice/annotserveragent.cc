@@ -213,6 +213,25 @@ AnnotationServerAgent::selectTokenId(const Token &token)
 }
 
 qint64
+AnnotationServerAgent::submitGameHook(const GameHook &hook)
+{
+  DOUT("enter: text =" << hook.text());
+  if (!isAuthorized()) {
+    DOUT("exit: not authorized");
+    return 0;
+  }
+
+  if (!hook.hasTokenId() || !hook.hasText()) {
+    DOUT("exit: incomplete game hook");
+    return 0;
+  }
+
+  qint64 ret = proxy_->submitGameHook(hook);
+  DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+qint64
 AnnotationServerAgent::submitGameThread(const GameThread &thread)
 {
   DOUT("enter: type =" << thread.type());
@@ -228,6 +247,15 @@ AnnotationServerAgent::submitGameThread(const GameThread &thread)
 
   qint64 ret = proxy_->submitGameThread(thread);
   DOUT("exit: ret =" << ret);
+  return ret;
+}
+
+bool
+AnnotationServerAgent::submitGameHooks(const GameHookList &hooks)
+{
+  bool ret = true;
+  foreach (const GameHook &h, hooks)
+    ret = ret && submitGameHook(h);
   return ret;
 }
 
@@ -343,6 +371,19 @@ AnnotationServerAgent::submitAnnotations(const AnnotationList &tokens)
     ret = ret && submitAnnotation(a);
   return ret;
 }
+
+GameHook
+AnnotationServerAgent::selectGameHookWithTokenId(qint64 tid)
+{
+  GameHook ret;
+  if (tid)
+    ret = proxy_->selectGameHookWithTokenId(tid);
+  return ret;
+}
+
+GameHook
+AnnotationServerAgent::selectGameHookWithTokenDigest(const QString &digest)
+{ return proxy_->selectGameHookWithTokenDigest(digest); }
 
 GameThread
 AnnotationServerAgent::selectGameThreadWithTokenId(qint64 tid)
@@ -494,6 +535,17 @@ AnnotationServerAgent::updateGameThread(const GameThread &thread)
   if (!thread.hasId() || !thread.hasTokenId() || !thread.hasEncoding() || !thread.hasSignature() || !thread.hasProvider())
     return false;
   return proxy_->updateGameThread(thread);
+}
+
+bool
+AnnotationServerAgent::updateGameHookTextWithId(const QString &text, qint64 id)
+{
+  if (!isAuthorized())
+    return false;
+  if (!id)
+    return false;
+
+  return proxy_->updateGameHookTextWithId(text, id);
 }
 
 bool

@@ -6,9 +6,6 @@ DEFINES += WITH_MODULE_TRANSLATOR
 DEPENDPATH += $$PWD
 
 HEADERS += \
-    $$PWD/bingtranslator.h \
-    $$PWD/bingtranslator_p.h \
-    $$PWD/dynamicocntranslator.h \
     $$PWD/excitetranslator.h \
     $$PWD/excitetranslator_p.h \
     $$PWD/fresheyetranslator.h \
@@ -39,8 +36,6 @@ HEADERS += \
     $$PWD/yahootranslator_p.h
 
 SOURCES += \
-    $$PWD/bingtranslator.cc \
-    $$PWD/dynamicocntranslator.cc \
     $$PWD/excitetranslator.cc \
     $$PWD/fresheyetranslator.cc \
     $$PWD/googletranslator.cc \

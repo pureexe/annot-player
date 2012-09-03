@@ -61,7 +61,8 @@ namespace QtWin {
   QList<ulong> getThreadIdsByProcessId(ulong dwOwnerPID);
   QList<ulong> getProcessIdsByParentProcessId(ulong dwOwnerPID);
 
-  bool createProcessWithExecutablePath(const QString &path);
+  ///  \var environ is a list of assignments, such as "var=value"
+  bool createProcess(const QString &path, const QStringList &environ = QStringList());
 
   bool isProcessActiveWithId(ulong dwProcessId);
 
@@ -202,6 +203,7 @@ namespace QtWin {
   QString getSystemRoot();
   QString getProgramFilesPath();
   QString getAppDataPath();
+  QString getLocalAppDataPath();
 
   QString getFontsPath();
   QString getMusicPath();

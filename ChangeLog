@@ -2,6 +2,12 @@ ChangeLog (UTF-8)
 Annot Stream
 Since 6/18/2011
 
+9/3/2012 MON	annot-player	0.1.9.2
+        * Able to add user-defined ITH hook code for game.
+          The added hook code is then shared by all users.
+        * Highlight tool buttons.
+		* Fix the bug which causes OCN translation failed to show up.
+
 8/31/2012 FRI	annot-player	0.1.9.1
         * Thread profile will be saved online at annot.me and shared with all users.
           After sync with a game, the thread profile will be saved both offline and online.

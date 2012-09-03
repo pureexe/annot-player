@@ -7,7 +7,7 @@
 
 // - Roots -
 
-#define CODEPAGE_NONE       0
+#define CODEPAGE_NULL       0
 
 #define CODEPAGE_UTF8       65001
 #define CODEPAGE_UTF16      1200

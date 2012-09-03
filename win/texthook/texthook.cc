@@ -6,10 +6,10 @@
 #include "qtwin/qtwin.h"
 #include <QtCore>
 
-//#define DEBUG "qth"
+#define DEBUG "texthook"
 #include "module/debug/debug.h"
 
-// - Constructions -
+// - Properties -
 
 void
 TextHook::setEnabled(bool t)
@@ -32,8 +32,6 @@ TextHook::stop()
   clear();
   Ihf::unload();
 }
-
-// - Properties -
 
 WId
 TextHook::parentWinId() const
@@ -62,11 +60,38 @@ TextHook::clear()
   DOUT("exit");
 }
 
+QList<ulong>
+TextHook::attachedProcesses(bool checkActive) const
+{
+  if (isEmpty() || !checkActive)
+    return pids_;
+
+  QList<ulong> ret;
+  foreach (ulong pid, pids_)
+    if (QtWin::isProcessActiveWithId(pid))
+      ret.append(pid);
+  return ret;
+}
+
+ulong
+TextHook::anyAttachedProcess(bool checkActive) const
+{
+  if (isEmpty())
+    return 0;
+ if (!checkActive)
+   return pids_.first();
+
+  foreach (ulong pid, pids_)
+    if (QtWin::isProcessActiveWithId(pid))
+      return pid;
+  return 0;
+}
+
 bool
 TextHook::attachOneProcess(ulong pid, bool checkActive)
 {
   DOUT("enter: pid =" << pid);
-  DOUT("isAttached =" << isProcessAttached(pid));
+  DOUT("isAttached =" << containsProcess(pid));
   if (!isActive())
     start();
 
@@ -75,13 +100,15 @@ TextHook::attachOneProcess(ulong pid, bool checkActive)
     return false;
   }
 
-  if (isProcessAttached(pid))
+  if (containsProcess(pid)) {
+    DOUT("exit: pid already attached");
     return true;
+  }
 
   detachAllProcesses();
 
   bool ret = Ihf::attachProcess(pid);
-  if (ret && !isProcessAttached(pid)) {
+  if (ret && !containsProcess(pid)) {
     pids_.removeAll(pid);
     pids_.append(pid);
     emit processAttached(pid);
@@ -95,7 +122,7 @@ bool
 TextHook::attachProcess(ulong pid, bool checkActive)
 {
   DOUT("enter: pid =" << pid);
-  DOUT("isAttached =" << isProcessAttached(pid));
+  DOUT("isAttached =" << containsProcess(pid));
   if (!isActive())
     start();
 
@@ -105,7 +132,7 @@ TextHook::attachProcess(ulong pid, bool checkActive)
   }
 
   bool ret = Ihf::attachProcess(pid);
-  if (ret && !isProcessAttached(pid)) {
+  if (ret && !containsProcess(pid)) {
     pids_.removeAll(pid);
     pids_.append(pid);
     emit processAttached(pid);
@@ -119,7 +146,7 @@ bool
 TextHook::detachProcess(ulong pid, bool checkActive)
 {
   DOUT("enter: pid =" << pid);
-  DOUT("isAttached =" << isProcessAttached(pid));
+  DOUT("isAttached =" << containsProcess(pid));
   Q_ASSERT(isActive());
 
   int i = pids_.indexOf(pid);
@@ -128,6 +155,8 @@ TextHook::detachProcess(ulong pid, bool checkActive)
     return false;
   }
   pids_.removeAt(i);
+
+  hooks_.remove(pid);
 
   if (checkActive && !QtWin::isProcessActiveWithId(pid)) {
     DOUT("exit: ret = false, isActive = false");
@@ -145,12 +174,10 @@ TextHook::detachAllProcesses()
   DOUT("enter");
   foreach (ulong pid, pids_)
     detachProcess(pid);
+  if (!hooks_.isEmpty())
+    hooks_.clear();
   DOUT("exit");
 }
-
-bool
-TextHook::isProcessAttached(ulong pid) const
-{ return pids_.contains(pid); }
 
 // - Helpers -
 
@@ -217,6 +244,51 @@ TextHook::guessEncodingForFile(const QString &fileName)
   }
   auto p = db.find(fileName);
   return p == db.end() ? QString() : p.value();
+}
+
+// - Hook -
+
+bool
+TextHook::addHook(ulong pid, const QString &code)
+{
+  DOUT("enter: pid =" << pid << ", code =" << code);
+  if (isEmpty() || !containsProcess(pid)) {
+    DOUT("exit: failed, process not attached");
+    return false;
+  }
+  if (hooks_.contains(pid)) {
+    DOUT("exit: failed, hook code not found");
+    return false;
+  }
+  bool ok = Ihf::addHook(pid, code, addedHookName());
+  if (ok)
+    hooks_[pid] = code;
+  DOUT("exit: ret =" << ok);
+  return ok;
+}
+
+bool
+TextHook::removeHook(ulong pid)
+{
+  DOUT("enter");
+  auto p = hooks_.find(pid);
+  if (p == hooks_.end()) {
+    DOUT("exit: not hooked");
+    return false;
+  }
+
+  DOUT("remove existing hook, THIS SHOULD NOT HAPPEN");
+  bool ok = Ihf::removeHook(pid, p.value());
+  hooks_.erase(p);
+  DOUT("exit: ret =" << ok);
+  return ok;
+}
+
+QString
+TextHook::processHook(ulong pid) const
+{
+  auto p = hooks_.find(pid);
+  return p == hooks_.end() ? QString() : p.value();
 }
 
 // EOF

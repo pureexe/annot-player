@@ -5,6 +5,7 @@
 
 #include "module/annotcloud/alias.h"
 #include "module/annotcloud/annotation.h"
+#include "module/annotcloud/gamehook.h"
 #include "module/annotcloud/gamethread.h"
 #include "module/annotcloud/token.h"
 #include "module/annotcloud/user.h"
@@ -24,6 +25,8 @@ class DataManager : public QObject
   typedef AnnotCloud::AliasList AliasList;
   typedef AnnotCloud::Annotation Annotation;
   typedef AnnotCloud::AnnotationList AnnotationList;
+  typedef AnnotCloud::GameHook GameHook;
+  typedef AnnotCloud::GameHookList GameHookList;
   typedef AnnotCloud::GameThread GameThread;
   typedef AnnotCloud::GameThreadList GameThreadList;
 
@@ -32,6 +35,7 @@ class DataManager : public QObject
   AliasList aliases_;
   AnnotationList annots_;
 
+  GameHook hook_;
   GameThread thread_;
 
   mutable QStringList urls_; // annotation urls
@@ -76,6 +80,10 @@ public:
   GameThread &gameThread() { return thread_; }
   bool hasGameThread() const { return thread_.isValid(); }
 
+  const GameHook &gameHook() const { return hook_; }
+  GameHook &gameHook() { return hook_; }
+  bool hasGameHook() const { return hook_.isValid(); }
+
 public slots:
   void setUser(const User &user) { user_ = user; invalidateUser(); }
   void setToken(const Token &token) { token_ = token; invalidateToken(); }
@@ -87,6 +95,7 @@ public slots:
   void addAnnotation(const Annotation &annot);
   void updateAnnotation(const Annotation &annot);
   void setGameThread(const GameThread &thread) { thread_ = thread; }
+  void setGameHook(const GameHook &hook) { hook_ = hook; }
 
   void updateAnnotationTextWithId(const QString &text, qint64 id);
   void updateAnnotationUserIdWithId(qint64 userId, qint64 id);
@@ -99,6 +108,7 @@ public slots:
   void removeAliases() { setAliases(AliasList()); }
   void removeAnnotations() { setAnnotations(AnnotationList()); }
   void removeGameThread() { setGameThread(GameThread()); }
+  void removeGameHook() { setGameHook(GameHook()); }
   //void clear() { removeToken(); removeAliases(); removeAnnotations(); removeGameThread(); }
 
   void invalidateUser() { emit userChanged(user_); }

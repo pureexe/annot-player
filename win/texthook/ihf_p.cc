@@ -1,10 +1,6 @@
 // ihf_p.cc
 // 10/15/2011
 
-//#define XXX "/HW4@6E8F0!B5346E41" // tukumonotuki
-#define XXX "/HSN-4@B14B4!F20AE0D2" // koichoko
-#include <QDebug>
-
 #include "ihf_p.h"
 #include "ith_p.h"
 #include "textthread_p.h"
@@ -47,11 +43,13 @@ Ihf::load()
   if (IHF_Init()) {
     IHF_GetHookManager(&hookManager_);
     if (hookManager_) {
-      //hookManager_->RegisterProcessAttachCallback(ProcessAttach);
-      //hookManager_->RegisterProcessDetachCallback(ProcessDetach);
-      //hookManager_->RegisterProcessNewHookCallback(ProcessNewHook);
-      hookManager_->RegisterThreadCreateCallback(threadCreateCallback);
-      hookManager_->RegisterThreadRemoveCallback(threadRemoveCallback);
+      //hookManager_->RegisterProcessAttachCallback(processAttach);
+      //hookManager_->RegisterProcessDetachCallback(processDetach);
+      //hookManager_->RegisterProcessNewHookCallback(processNewHook);
+
+      hookManager_->RegisterThreadCreateCallback(threadCreate);
+      hookManager_->RegisterThreadRemoveCallback(threadRemove);
+      //hookManager_->RegisterThreadResetCallback(threadReset);
       IHF_Start();
     }
   }
@@ -66,8 +64,13 @@ Ihf::unload()
 {
   DOUT("enter: hook manager =" << hookManager_);
   if (hookManager_) {
+    //hookManager_->RegisterProcessAttachCallback(0);
+    //hookManager_->RegisterProcessDetachCallback(0);
+    //hookManager_->RegisterProcessNewHookCallback(0);
+
     hookManager_->RegisterThreadCreateCallback(0);
     hookManager_->RegisterThreadRemoveCallback(0);
+    //hookManager_->RegisterThreadResetCallback(0);
     IHF_Cleanup();
   }
   DOUT("exit");
@@ -75,10 +78,37 @@ Ihf::unload()
 
 // - Callbacks -
 
+//DWORD
+//Ihf::processAttach(DWORD pid)
+//{
+//  DOUT("enter");
+//  Q_UNUSED(pid);
+//  DOUT("exit");
+//  return 0;
+//}
+
+//DWORD
+//Ihf::processDetach(DWORD pid)
+//{
+//  DOUT("enter");
+//  Q_UNUSED(pid);
+//  DOUT("exit");
+//  return 0;
+//}
+
+//DWORD
+//Ihf::processNewHook(DWORD pid)
+//{
+//  DOUT("enter");
+//  Q_UNUSED(pid);
+//  DOUT("exit");
+//  return 0;
+//}
+
 // See: HelloITH/main.cpp
 // See: ThreadCreate in ITH/window.cpp
 DWORD
-Ihf::threadCreateCallback(TextThread *t)
+Ihf::threadCreate(TextThread *t)
 {
   DOUT("enter: pid =" << t->PID());
   Q_ASSERT(hookManager_);
@@ -102,14 +132,14 @@ Ihf::threadCreateCallback(TextThread *t)
 
   TextThreadDelegate *d = new TextThreadDelegate(t, messageInterval_, parentWindow_);
   threadDelegates_[t] = d;
-  t->RegisterOutputCallBack(threadOutputCallback, d);
+  t->RegisterOutputCallBack(threadOutput, d);
   DOUT("exit");
   return 0;
 }
 
 // See also: HelloITH/main.cpp
 DWORD
-Ihf::threadRemoveCallback(TextThread *t)
+Ihf::threadRemove(TextThread *t)
 {
   DOUT("enter");
   Q_ASSERT(t);
@@ -124,7 +154,7 @@ Ihf::threadRemoveCallback(TextThread *t)
 
 // See: HelloITH/main.cpp
 DWORD
-Ihf::threadOutputCallback(TextThread *t, BYTE *data,DWORD dataLength, DWORD newLine, PVOID pUserData)
+Ihf::threadOutput(TextThread *t, BYTE *data,DWORD dataLength, DWORD newLine, PVOID pUserData)
 {
   DOUT("enter: newLine =" << newLine << ", dataLength =" << dataLength);
   Q_UNUSED(t)
@@ -150,16 +180,10 @@ bool
 Ihf::attachProcess(DWORD pid)
 {
   DOUT("enter: pid =" << pid);
-  DWORD module = IHF_InjectByPID(pid, 0); // 0 means the default engine is used
+  DWORD module = IHF_InjectByPID(pid, ITH_DEFAULT_ENGINE);
 
-  // CHECKPOINT XXX
-  //enum { InsertDelay = 500 }; // in msec
-  //::Sleep(InsertDelay);
-  //
-  //wchar_t name[] = L"fuck";
-  //HookParam hp;
-  //qDebug()<<1111<<Ith::parseHookCode(XXX, &hp);
-  //qDebug()<<2222<<IHF_InsertHook(pid, &hp, name);
+  enum { AttachDelay = 500 }; // in msec
+  ::Sleep(AttachDelay);
 
   DOUT("exit: module =" << module);
   return module +1;

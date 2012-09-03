@@ -38,6 +38,16 @@ GameLibrary::containsLocation(const QString &location) const
   return digestByLocation_.contains(location);
 }
 
+bool
+GameLibrary::containsExecutable(const QString &fileName) const
+{
+  QString k = '/' + fileName;
+  for (auto p = digestByLocation_.constBegin(); p != digestByLocation_.constEnd(); ++p)
+    if (p.key().endsWith(k, Qt::CaseInsensitive))
+      return true;
+  return false;
+}
+
 Game
 GameLibrary::findGameByDigest(const QString &digest) const
 {
@@ -140,6 +150,10 @@ GameLibrary::visit(const Game &game)
     p->setEnabled(game.isEnabled());
     p->visitCount() += game.visitCount();
     p->setVisitTime(game.visitTime());
+    if (game.hasDigest())
+      p->setDigest(game.digest());
+    if (game.hasTokenId())
+      p->setTokenId(game.tokenId());
     if (game.hasLocation())
       p->setLocation(game.location());
     if (game.hasTitle())
@@ -148,6 +162,8 @@ GameLibrary::visit(const Game &game)
       p->setEncoding(game.encoding());
     if (game.hasThreads())
       p->setThreads(game.threads());
+    if (game.hasHook())
+      p->setHook(game.hook());
   }
 
   DOUT("exit");

@@ -18,7 +18,7 @@
 // - Construction -
 
 RomajiTranslator::RomajiTranslator(QObject *parent)
-  : Base(parent), reply_(0)
+  : Base(parent)
 {
   QTextCodec *codec = QTextCodec::codecForName(ROMAJI_ENCODING);
   Q_ASSERT(codec);
@@ -27,6 +27,10 @@ RomajiTranslator::RomajiTranslator(QObject *parent)
   encoder_ = codec->makeEncoder();
   Q_ASSERT(encoder_);
 }
+
+QString
+RomajiTranslator::name() const
+{ return tr("Romaji"); }
 
 // - Encoding -
 
@@ -51,20 +55,9 @@ RomajiTranslator::translateUrl(const QString &text) const
   return url;
 }
 
-void
-RomajiTranslator::translate(const QString &text)
-{
-  if (!isEnabled())
-    return;
-  DOUT("enter: text =" << text);
-  if (reply_ && isSynchronized()) {
-    //reply_->abort();
-    reply_->deleteLater();
-    DOUT("abort previous reply");
-  }
-  reply_ = networkAccessManager()->get(QNetworkRequest(translateUrl(text)));
-  DOUT("exit");
-}
+QNetworkReply*
+RomajiTranslator::createReply(const QString &text)
+{ return networkAccessManager()->get(QNetworkRequest(translateUrl(text))); }
 
 // SIJS to %-encoding: http://www.url-encode-decode.com/
 // Input: ‰½ŒÌ‚¾‚ë‚¤\nƒiƒj><
@@ -83,74 +76,48 @@ RomajiTranslator::translate(const QString &text)
 // </td></tr>
 // </table>
 // <!-- ROMAJI.ORG DISPLAY RESULT AREA -->
-void
-RomajiTranslator::processReply(QNetworkReply *reply)
+QString
+RomajiTranslator::parseReply(const QByteArray &data)
 {
-  DOUT("enter");
-  Q_ASSERT(reply);
-  reply->deleteLater();
-
-  if (isSynchronized() && reply_ != reply) {
-    DOUT("exit: reply changed");
-    return;
-  }
-  reply_ = nullptr;
-
-  if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit errorMessage(tr("network error from Romaji Translator") + ": " + reply->errorString());
-    DOUT("exit: error =" << reply->error() << ", reason =" << reply->errorString());
-    return;
-  }
-
+  QString ret;
   enum {
     area_begin_len = sizeof(ROMAJI_AREA_BEGIN)  -1,
     line_begin_len = sizeof(ROMAJI_LINE_BEGIN) -1,
     line_end_len = sizeof(ROMAJI_LINE_BEGIN) -1
   };
-  QByteArray data = reply->readAll();
   if (!data.isEmpty()) {
     int begin = data.indexOf(ROMAJI_AREA_BEGIN);
     if (begin >= 0) {
       begin += area_begin_len;
       int end = data.indexOf(ROMAJI_AREA_END, begin);
       if (end > 0) {
-        data = data.mid(begin, end - begin);
+        QByteArray area = data.mid(begin, end - begin);
 
-        QString text;
         end = 0;
         forever {
-          begin = data.indexOf(ROMAJI_LINE_BEGIN, end);
+          begin = area.indexOf(ROMAJI_LINE_BEGIN, end);
           if (begin < 0)
             break;
           begin += line_begin_len;
-          end = data.indexOf(ROMAJI_LINE_END, begin);
+          end = area.indexOf(ROMAJI_LINE_END, begin);
           if (end < 0)
             break;
-          QByteArray line = data.mid(begin, end - begin);
+          QByteArray line = area.mid(begin, end - begin);
           end += line_end_len;
 
           QString t = decodeText(line);
           if (!t.isEmpty()) {
-            if (text.isEmpty())
-              text = t;
+            if (ret.isEmpty())
+              ret = t;
             else
-              text.append('\n')
-                  .append(t);
+              ret.append('\n')
+                 .append(t);
           }
-        }
-
-        DOUT("text =" << text);
-        if (!text.isEmpty()) {
-          emit translated(text);
-          DOUT("exit: ok");
-          return;
         }
       }
     }
   }
-
-  emit errorMessage(tr("network error from Romaji Translator"));
-  DOUT("exit: error");
+  return ret;
 }
 
 // EOF

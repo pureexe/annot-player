@@ -27,6 +27,8 @@ public:
 public:
   explicit TranslatorManager(QObject *parent = nullptr);
 
+  QString name() const override;
+
   ulong services() const { return services_; }
   bool hasServices() const { return services_; }
   bool hasService(int service) const { return services_ & (1 << service); }
@@ -66,14 +68,15 @@ public slots:
     );
   }
 
-  void translate(const QString &text, const QString &to, const QString &from = QString()) override
+public:
+  void doTranslate(const QString &text, const QString &to, const QString &from = QString()) override
   {
     for (int service = 0; service < ServiceCount; service++)
       if (hasService(service))
-        translate(service, text, to, from);
+        doTranslate(service, text, to, from);
   }
 
-  void translate(int service, const QString &text, const QString &to, const QString &from = QString())
+  void doTranslate(int service, const QString &text, const QString &to, const QString &from = QString())
   {
     if (!isEnabled())
       return;

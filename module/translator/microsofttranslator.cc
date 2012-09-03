@@ -8,7 +8,6 @@
 #endif // WITH_MODULE_QTEXT
 #include <QtNetwork/QAuthenticator>
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 
@@ -18,8 +17,12 @@
 // - Construction -
 
 MicrosoftTranslator::MicrosoftTranslator(QObject *parent)
-  : Base(parent), reply_(nullptr)
+  : Base(parent)
 { connect(networkAccessManager(), SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), SLOT(authenticate(QNetworkReply*,QAuthenticator*))); }
+
+QString
+MicrosoftTranslator::name() const
+{ return tr("Microsoft Translator"); }
 
 // See: http://www.developer.nokia.com/Community/Discussion/showthread.php?211356-QNetworkRequest-Authentication
 void
@@ -58,21 +61,11 @@ MicrosoftTranslator::translateRequest(const QUrl &url)
   return ret;
 }
 
-void
-MicrosoftTranslator::translate(const QString &text, const QString &to, const QString &from)
+QNetworkReply*
+MicrosoftTranslator::createReply(const QString &text, const QString &to, const QString &from)
 {
-  if (!isEnabled())
-    return;
-  DOUT("enter: text =" << text);
-  if (reply_ && isSynchronized()) {
-    //reply_->abort();
-    reply_->deleteLater();
-    DOUT("abort previous reply");
-  }
   QUrl query = translateUrl(text, to, from);
-  DOUT("query =" << query);
-  reply_ = networkAccessManager()->get(translateRequest(query));
-  DOUT("exit");
+  return networkAccessManager()->get(translateRequest(query));
 }
 
 // Sample request: http://api.microsofttranslator.com/v2/Http.svc/Translate?appId=FCB48AFBE3CB7B0E7AA146C950762FC87EA13FBB&text=hello&from=en&to=ja
@@ -96,27 +89,12 @@ MicrosoftTranslator::translate(const QString &text, const QString &to, const QSt
 //     </content>
 //   </entry>
 // </feed>
-void
-MicrosoftTranslator::processReply(QNetworkReply *reply)
+QString
+MicrosoftTranslator::parseReply(const QByteArray &data)
 {
-  DOUT("enter");
-  Q_ASSERT(reply);
-  reply->deleteLater();
-
-  if (isSynchronized() && reply_ != reply) {
-    DOUT("exit: reply changed");
-    return;
-  }
-  reply_ = nullptr;
-
-  if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit errorMessage(tr("network error from Microsoft Translator") + ": " + reply->errorString());
-    DOUT("exit: error =" << reply->error() << ", reason =" << reply->errorString());
-    return;
-  }
-
+  QString ret;
   QDomDocument doc;
-  doc.setContent(reply->readAll());
+  doc.setContent(data);
   if (!doc.isNull()) {
     QDomElement e = doc.documentElement();
     if (!e.isNull() && // "feed"
@@ -125,18 +103,11 @@ MicrosoftTranslator::processReply(QNetworkReply *reply)
       QDomNode n = e.firstChild(); // <m:properties>
       if (!n.isNull() &&
           !(e=n.firstChildElement()).isNull()) { // <d:Text>
-        QString t = e.text();
-        if (!t.isEmpty()) {
-          emit translated(t);
-          DOUT("exit: ok:" << t);
-          return;
-        }
+        ret = e.text();
       }
     }
   }
-
-  emit errorMessage(tr("network error from Microsoft Translator"));
-  DOUT("exit: error");
+  return ret;
 }
 
 // EOF

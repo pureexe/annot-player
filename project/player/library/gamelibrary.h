@@ -39,6 +39,8 @@ public:
   Game findGameByLocation(const QString &location) const;
   bool containsLocation(const QString &location) const;
 
+  bool containsExecutable(const QString &fileName) const;
+
 public slots:
   void save();
   void load();

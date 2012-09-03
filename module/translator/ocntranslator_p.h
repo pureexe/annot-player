@@ -25,4 +25,6 @@
 #define OCN_AUTH_PREFIX "0a15be08"
 #define OCN_AUTH_SUFFIX "63676930312e6f636e2e6e652e6a70"
 
+#define OCN_FORBIDDEN_TEXT  "Translation-Forbidden:\nYou don&#39;t have permission to access translation-system."
+
 #endif // OCNTRANSLATOR_P_H

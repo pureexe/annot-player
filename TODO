@@ -5,10 +5,10 @@ http://db.tt/SrtkzxIJ
 http://qt-project.org/wiki/Category:Add-ons
 
 # Changes
-annot-player
-annot-down
-annot-dict
-README,ChangeLog
+annot-*
+texthook.dll
+mousehook.dll
+picker.dll
 
 # key ideas
 - stream trial games, and sub trial games in chinese
@@ -39,19 +39,43 @@ work on streaming
   http://www.codeproject.com/Articles/43586/File-System-Filter-Driver-Tutorial
   - in the future, use acipc to bypass license issue
 
-# 0.1.9.2
-- make koi choko works after inserthook
 
-- GUI for adding ITH code
-  - save on to the cloud if succeeded, no way to delete it
+# 0.1.9.2
+
+XXX "/HW4@6E8F0!B5346E41" // tukumonotuki
+
+XXX "/HSN-4@B14B4!F20AE0D2" // koichoko
+
+# 0.1.9.3
+- finish applocale
+
+- translator
+  - use Microsoft LCID extensively for translator
+  http://download.microsoft.com/download/9/5/E/95EF66AF-9026-4BB0-A41D-A4F81802D92C/%5BMS-LCID%5D.pdf&pli=1
+  use it as global for translation
+  - retry translate on network error, save last translate text when synchronized
+    instead of using reply_->attribute
+
+able to delete/edit guest by anyone
+
+CHANGE LANGUAGE IDENTIFIER TO MICROSOFT LCID!!!!!!!!!!!!!
+- change traditional chinese to chinese
+  - add traditional language as well
+make difference between simplified chinese and traditional chinese
+
+# 0.1.9.4
+
+- improve internet translation speed
+  - maybe using curl?
+
+- create a better game semi-auto translator
+  create a better gui for human translation with ocn suggestions, etc
+  - translate using google
+  - automatically generate transation for human
+  - human edit the translation
 
 - game
   - grant/share edit permission for token
-
-- figure out a better textedit for display japanese text well
-  - word by word translation
-  - refer to:
-    http://www.rikai.com/perl/Home.pl
 
 - mac: share game term (names, sp...)
   - able to share it online
@@ -59,12 +83,22 @@ work on streaming
     term_id term_status term_flag user_id term_create_ip term_create_time term_update_time term_update_ip term_type term_from term_to term_source, term_target
     term_bless_count term_curse_count term_block_count
 
+- figure out a better textedit for display japanese text well
+  - word by word translation
+  - refer to:
+    http://www.rikai.com/perl/Home.pl
+
+- what's the best wa for offline translation?
 investigate atlas, etc
   check the translate.cs source code
 - atlas: http://software.fujitsu.com/jp/atlas/
 - LEC
 
-# 0.1.9.3
+
+online word translator
+http://www.csse.monash.edu.au/~jwb/cgi-bin/wwwjdic.cgi?9T
+
+- kirikiri[1-2], guess default encoding with utf16
 
 - search engine
   - redesign searchengine mechanism, using a global search engine pool

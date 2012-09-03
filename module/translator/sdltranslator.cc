@@ -12,54 +12,24 @@
 //#define DEBUG "sdltranslator"
 #include "module/debug/debug.h"
 
+// - Properties -
+
+QString
+SdlTranslator::name() const
+{ return tr("SDL Translator"); }
+
 // - Translate -
 
 QString
 SdlTranslator::translateUrl(const QString &text)
 { return SDL_API + text; }
 
-void
-SdlTranslator::translate(const QString &text)
-{
-  if (!isEnabled())
-    return;
-  DOUT("enter: text =" << text);
-  if (reply_ && isSynchronized()) {
-    //reply_->abort();
-    reply_->deleteLater();
-    DOUT("abort previous reply");
-  }
-  reply_ = networkAccessManager()->get(QNetworkRequest(translateUrl(text)));
-  DOUT("exit");
-}
+QNetworkReply*
+SdlTranslator::createReply(const QString &text)
+{ return networkAccessManager()->get(QNetworkRequest(translateUrl(text))); }
 
-void
-SdlTranslator::processReply(QNetworkReply *reply)
-{
-  DOUT("enter");
-  Q_ASSERT(reply);
-  reply->deleteLater();
-
-  if (isSynchronized() && reply_ != reply) {
-    DOUT("exit: reply changed");
-    return;
-  }
-  reply_ = nullptr;
-
-  if (!reply->isFinished() || reply->error() != QNetworkReply::NoError) {
-    emit errorMessage(tr("network error from SDL Translator") + ": " + reply->errorString());
-    DOUT("exit: error =" << reply->error() << ", reason =" << reply->errorString());
-    return;
-  }
-
-  QString text = reply->readAll();
-  if (text.isEmpty()) {
-    emit errorMessage(tr("network error from SDL Translator"));
-    DOUT("exit: error");
-  }
-
-  emit translated(text);
-  DOUT("exit: ok");
-}
+QString
+SdlTranslator::parseReply(const QByteArray &data)
+{ return data; }
 
 // EOF

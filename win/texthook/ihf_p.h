@@ -7,8 +7,8 @@
 #include <QtCore/QHash>
 #include <QtGui/QWidget>
 
-class HookManager;
-class TextThread;
+class HookManager; // opaque
+class TextThread; // opaque
 class TextThreadDelegate;
 
 class Ihf
@@ -46,9 +46,15 @@ public:
 
   // - Callbacks -
 protected:
-  static ulong threadCreateCallback(TextThread *t);
-  static ulong threadRemoveCallback(TextThread *t);
-  static ulong threadOutputCallback(TextThread *t, uchar *data, ulong dataLength, ulong bNewLine, void *pUserData);
+  //static ulong processAttach(ulong pid);
+  //static ulong processDetach(ulong pid);
+  //static ulong processNewHook(ulong pid);
+
+  static ulong threadCreate(TextThread *t);
+  static ulong threadRemove(TextThread *t);
+  static ulong threadOutput(TextThread *t, uchar *data, ulong dataLength, ulong bNewLine, void *pUserData);
+  //static ulong threadReset(TextThread *t);
+  //static ulong threadFilter(TextThread *t);
 };
 
 // EOF

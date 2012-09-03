@@ -86,6 +86,23 @@ namespace AnnotCloud {
       Russian = AC_LANG('r','u')    // 29301 / 25
     };
 
+    inline bool isKnownLanguage(int lang)
+    {
+      switch (lang) {
+      case English:
+      case Japanese:
+      case Chinese:
+      case Korean:
+      case French:
+      case German:
+      case Italian:
+      case Spanish:
+      case Portuguese:
+      case Russian: return true;
+      default:      return false;
+      }
+    }
+
     inline QByteArray languageCode(int lang)
     {
       QByteArray ret(2, 0);

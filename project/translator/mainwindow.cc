@@ -598,7 +598,7 @@ MainWindow::translate(const QString &input)
   //textTranslator_->translate(t, language_); // FIXME: inlining is not working under clang T_T
   for (int service = 0; service < TranslatorManager::ServiceCount; service++)
     if (textTranslator_->hasService(service))
-      textTranslator_->translate(service, t, languageCode_);
+      textTranslator_->doTranslate(service, t, languageCode_);
 
   jdicTranslator_->translate(t, languageCode_);
   kotobankTranslator_->translate(t, languageCode_);
