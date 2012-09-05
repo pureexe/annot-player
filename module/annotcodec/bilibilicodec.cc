@@ -227,7 +227,7 @@ BilibiliCodec::parseAttribute(const QString &attr)
   //  t = CORE_CMD_VERBATIM;
   ret.setText(t);
 
-  ret.setLanguage(Traits::Chinese);
+  ret.setLanguage(Traits::SimplifiedChinese);
 
   return ret;
 }

@@ -27,7 +27,9 @@ qint64
 TextThreadDelegate::signature() const
 {
   if (!signature_)
-    signature_ = threadContext() + threadSubcontext();
+    signature_ =
+        (threadContext() & 0xFFFF) |
+        (threadSubcontext() & 0xFFFF)<<16;
   return signature_;
 }
 

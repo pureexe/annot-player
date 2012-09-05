@@ -26,7 +26,7 @@ public:
   static const char *host() { return "http://kotobank.jp"; }
 
 protected:
-  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from) override
+  QNetworkReply *createReply(const QString &text, int to, int from) override
   { Q_UNUSED(from) Q_UNUSED(to) return createReply(text); }
 
   QNetworkReply *createReply(const QString &text);

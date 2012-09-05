@@ -1,7 +1,7 @@
 #ifndef YAHOOTRANSLATOR_P_H
 #define YAHOOTRANSLATOR_P_H
 
-// yahootranslator_config.h
+// yahootranslator_p.h
 // 8/2l/2012
 // See: https://github.com/alice0775/userChrome.js/blob/master/popupTranslate.uc.xul
 

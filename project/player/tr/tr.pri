@@ -11,7 +11,6 @@ SOURCES += \
     localizer.cc
 
 TRANSLATIONS += \
-    $$PWD/tr_en.ts \
     $$PWD/tr_ja.ts \
     $$PWD/tr_zh_TW.ts \
     $$PWD/tr_zh_CN.ts

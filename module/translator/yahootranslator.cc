@@ -23,20 +23,17 @@ YahooTranslator::name() const
 // See: http://jane.s89.xrea.com/test/read.cgi/kakolog/1180559017/306-307n
 // See: http://honyaku.yahoo.co.jp/lib/js/translation.js?2188
 const char*
-YahooTranslator::translateLanguage(const QString &lcode)
+YahooTranslator::lcode(int lang)
 {
-  if (lcode.isEmpty())
-    return 0;
-  else if (lcode == "en")
-    return "E";
-  else if (lcode == "ja")
-    return "J";
-  else if (lcode == "zh-CHS")
+  switch (lang) {
+  case English: return "E";
+  case Japanese: return "J";
+  case TraditionalChinese: // FIXME
+  case SimplifiedChinese:
     return "C-CN";
-  else if (lcode == "zh-CHT")
-    return "C-CN"; // FIXME
-  else if (lcode == "ko")
+  case Korean:
     return "K";
+    // FIXME:
   //else if (lcode == "fr")
   //  return "F"; // FIXME
   //else if (lcode == "de")
@@ -47,8 +44,9 @@ YahooTranslator::translateLanguage(const QString &lcode)
   //  return "S"; // FIXME
   //else if (lcode == "pt")
   //  return "P"; // FIXME
-  else
+  default:
     return 0;
+  }
 }
 
 QString
@@ -60,10 +58,10 @@ YahooTranslator::translateUrl(const QString &text, const char *to, const char *f
 }
 
 QNetworkReply*
-YahooTranslator::createReply(const QString &text, const QString &to, const QString &from)
+YahooTranslator::createReply(const QString &text, int to, int from)
 {
-  const char *f = translateLanguage(from),
-             *t = translateLanguage(to);
+  const char *f = lcode(from),
+             *t = lcode(to);
   QString url = translateUrl(text, t ? t : "E", f ? f : "J");
   return networkAccessManager()->get(QNetworkRequest(url));
 }

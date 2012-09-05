@@ -85,7 +85,7 @@ ProcessFilter::currentGamePid() const
 
     DOUT("location =" << location);
     int i = location.lastIndexOf('\\');
-    QString fileName = i < 0 ? location : location.right(location.size() - i -1);
+    QString fileName = i < 0 ? location : location.mid(i +1);
     DOUT("executable =" << fileName);
 
     if (library_->containsExecutable(fileName)) {

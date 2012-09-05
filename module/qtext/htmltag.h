@@ -26,7 +26,7 @@ inline QString html_tag_close(const QString &tag)
 
 // <html>
 
-#define HTML_OPEN()             HTML_TAG_OPEN(html)
+#define HTML_OPEN()             "<html>" //HTML_TAG_OPEN(html)
 #define HTML_CLOSE()            HTML_TAG_CLOSE(html)
 
 inline QString html_open()      { return HTML_OPEN(); }
@@ -34,7 +34,7 @@ inline QString html_close()     { return HTML_CLOSE(); }
 
 // <header>
 
-#define HTML_HEAD_OPEN()        HTML_TAG_OPEN(head)
+#define HTML_HEAD_OPEN()        "<head>" //HTML_TAG_OPEN(head)
 #define HTML_HEAD_CLOSE()       HTML_TAG_CLOSE(head)
 #define HTML_HEAD()             HTML_TAG(head)
 
@@ -46,7 +46,7 @@ inline QString html_head(const QString &content, const QString &attr = "")
 
 // <body>
 
-#define HTML_BODY_OPEN()        HTML_TAG_OPEN(body)
+#define HTML_BODY_OPEN()        "<body>" //HTML_TAG_OPEN(body)
 #define HTML_BODY_CLOSE()       HTML_TAG_CLOSE(body)
 #define HTML_BODY()             HTML_TAG(body)
 
@@ -58,7 +58,7 @@ inline QString html_body(const QString &content, const QString &attr = "")
 
 // <title>
 
-#define HTML_TITLE_OPEN()        HTML_TAG_OPEN(title)
+#define HTML_TITLE_OPEN()        "<title>" //HTML_TAG_OPEN(title)
 #define HTML_TITLE_CLOSE()       HTML_TAG_CLOSE(title)
 #define HTML_TITLE(_content)     HTML_TITLE_OPEN() _content HTML_TITLE_CLOSE()
 
@@ -69,7 +69,7 @@ inline QString html_title(const QString &text)
 
 // <br>
 
-#define HTML_BR_OPEN()          HTML_TAG_OPEN(br)
+#define HTML_BR_OPEN()          "<br>" //HTML_TAG_OPEN(br)
 #define HTML_BR_CLOSE()         HTML_TAG_CLOSE(br)
 #define HTML_BR()               HTML_TAG(br)
 
@@ -79,7 +79,7 @@ inline QString html_br()        { return HTML_BR(); }
 
 // <center>
 
-#define HTML_CENTER_OPEN()             HTML_TAG_OPEN(center)
+#define HTML_CENTER_OPEN()             "<center>" //HTML_TAG_OPEN(center)
 #define HTML_CENTER_CLOSE()            HTML_TAG_CLOSE(center)
 #define HTML_CENTER()                  HTML_TAG(center)
 
@@ -118,7 +118,7 @@ inline QString html_a(const QString &content = "", const QString &href = "")
 
 // <div>
 
-#define HTML_DIV_OPEN()            HTML_TAG_OPEN(div)
+#define HTML_DIV_OPEN()            "<div>" //HTML_TAG_OPEN(div)
 #define HTML_DIV_CLOSE()           HTML_TAG_CLOSE(div)
 #define HTML_DIV(_content)         HTML_DIV_OPEN() _content HTML_DIV_CLOSE()
 
@@ -169,7 +169,7 @@ inline QString html_ss(const QString &content = "", const QString &style = "")
 
 // <em>
 
-#define HTML_EM_OPEN()          HTML_TAG_OPEN(em)
+#define HTML_EM_OPEN()          "<em>" //HTML_TAG_OPEN(em)
 #define HTML_EM_CLOSE()         HTML_TAG_CLOSE(em)
 #define HTML_EM(_content)       HTML_EM_OPEN() _content HTML_EM_CLOSE()
 
@@ -181,7 +181,7 @@ inline QString html_em(const QString &content = "")
 
 // <strong>
 
-#define HTML_STRONG_OPEN()      HTML_TAG_OPEN(strong)
+#define HTML_STRONG_OPEN()      "<strong>" //HTML_TAG_OPEN(strong)
 #define HTML_STRONG_CLOSE()     HTML_TAG_CLOSE(strong)
 #define HTML_STRONG(_content)   HTML_STRONG_OPEN() _content HTML_STRONG_CLOSE()
 
@@ -193,7 +193,7 @@ inline QString html_strong(const QString &content = "")
 
 // - Table -
 
-#define HTML_TABLE_OPEN()       HTML_TAG_OPEN(table)
+#define HTML_TABLE_OPEN()       "<table>" //HTML_TAG_OPEN(table)
 #define HTML_TABLE_CLOSE()      HTML_TAG_CLOSE(table)
 #define HTML_TABLE(_content)    HTML_TABLE_OPEN() _content HTML_TABLE_CLOSE()
 
@@ -203,35 +203,41 @@ inline QString html_table_close() { return HTML_TABLE_CLOSE(); }
 inline QString html_table(const QString &content = "")
 { return html_table_open() + content + html_table_close(); }
 
-#define HTML_TR_OPEN()       HTML_TAG_OPEN(tr)
-#define HTML_TR_CLOSE()      HTML_TAG_CLOSE(tr)
-#define HTML_TR(_content)    HTML_TR_OPEN() _content HTML_TR_CLOSE()
+#define HTML_TR_OPEN(_attr)     HTML_TAG_OPEN(tr, _attr)
+#define HTML_TR_CLOSE()         HTML_TAG_CLOSE(tr)
+#define HTML_TR(_content, _attr)    HTML_TR_OPEN(_attr) _content HTML_TR_CLOSE()
 
-inline QString html_tr_open() { return HTML_TR_OPEN(); }
+inline QString html_tr_open(const QString &attr = "")
+{ return "<tr " + attr + ">"; }
+
 inline QString html_tr_close() { return HTML_TR_CLOSE(); }
 
-inline QString html_tr(const QString &content = "")
-{ return html_tr_open() + content + html_tr_close(); }
+inline QString html_tr(const QString &content = "", const QString &attr = "")
+{ return html_tr_open(attr) + content + html_tr_close(); }
 
-#define HTML_TH_OPEN()       HTML_TAG_OPEN(th)
-#define HTML_TH_CLOSE()      HTML_TAG_CLOSE(th)
-#define HTML_TH(_content)    HTML_TH_OPEN() _content HTML_TH_CLOSE()
+#define HTML_TH_OPEN(_attr)     HTML_TAG_OPEN(th, _attr)
+#define HTML_TH_CLOSE()         HTML_TAG_CLOSE(th)
+#define HTML_TH(_content, _attr)    HTML_TH_OPEN(_attr) _content HTML_TH_CLOSE()
 
-inline QString html_th_open() { return HTML_TH_OPEN(); }
+inline QString html_th_open(const QString &attr = "")
+{ return "<th " + attr + ">"; }
+
 inline QString html_th_close() { return HTML_TH_CLOSE(); }
 
-inline QString html_th(const QString &content = "")
-{ return html_th_open() + content + html_th_close(); }
+inline QString html_th(const QString &content = "", const QString &attr = "")
+{ return html_th_open(attr) + content + html_th_close(); }
 
-#define HTML_TD_OPEN()       HTML_TAG_OPEN(td)
-#define HTML_TD_CLOSE()      HTML_TAG_CLOSE(td)
-#define HTML_TD(_content)    HTML_TD_OPEN() _content HTML_TD_CLOSE()
+#define HTML_TD_OPEN(_attr)     HTML_TAG_OPEN(td, _attr)
+#define HTML_TD_CLOSE()         HTML_TAG_CLOSE(td)
+#define HTML_TD(_content, _attr)    HTML_TD_OPEN(_attr) _content HTML_TD_CLOSE()
 
-inline QString html_td_open() { return HTML_TD_OPEN(); }
+inline QString html_td_open(const QString &attr = "")
+{ return "<td " + attr + ">"; }
+
 inline QString html_td_close() { return HTML_TD_CLOSE(); }
 
-inline QString html_td(const QString &content = "")
-{ return html_td_open() + content + html_td_close(); }
+inline QString html_td(const QString &content = "", const QString &attr = "")
+{ return html_td_open(attr) + content + html_td_close(); }
 
 // - CSS -
 

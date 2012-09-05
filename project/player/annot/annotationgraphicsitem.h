@@ -139,7 +139,8 @@ protected slots:
   void showTraditionalChinese();
   void translateToEnglish();
   void translateToJapanese();
-  void translateToChinese();
+  void translateToTraditionalChinese();
+  void translateToSimplifiedChinese();
   void translateToKorean();
   void translateToFrench();
   void translateToGerman();

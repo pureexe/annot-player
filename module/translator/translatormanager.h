@@ -17,13 +17,13 @@ class TranslatorManager : public Translator
   // - Constructions -
 public:
   enum ServiceProvider { Romaji = 0, Microsoft, Google, Yahoo, Infoseek,
-                         Ocn, Fresheye, Nifty, Excite, Sdl, ServiceCount};
+                         Ocn, Fresheye, Nifty, Excite, Sdl, Systran, ServiceCount};
   enum ServiceProviderBit {
     RomajiBit = 1 << Romaji, MicrosoftBit = 1 << Microsoft, GoogleBit = 1 << Google,
     OcnBit = 1 << Ocn, ExciteBit = 1 << Excite, SdlBit = 1 << Sdl, YahooBit = 1 << Yahoo,
-    NiftyBit = 1 << Nifty, InfoseekBit = 1 << Infoseek, FresheyeBit = 1 << Fresheye
+    NiftyBit = 1 << Nifty, InfoseekBit = 1 << Infoseek, FresheyeBit = 1 << Fresheye, SystranBit = 1 << Systran
   };
-  enum { AllServices = RomajiBit | MicrosoftBit | GoogleBit | YahooBit | OcnBit | ExciteBit | SdlBit | NiftyBit | InfoseekBit | FresheyeBit};
+  enum { AllServices = RomajiBit | MicrosoftBit | GoogleBit | YahooBit | OcnBit | ExciteBit | SdlBit | NiftyBit | InfoseekBit | FresheyeBit | SystranBit };
 public:
   explicit TranslatorManager(QObject *parent = nullptr);
 
@@ -54,6 +54,7 @@ signals:
   void translatedByNifty(const QString &text);
   void translatedByExcite(const QString &text);
   void translatedBySdl(const QString &text);
+  void translatedBySystran(const QString &text);
   void translatedByYahoo(const QString &text);
 
 public slots:
@@ -69,14 +70,14 @@ public slots:
   }
 
 public:
-  void doTranslate(const QString &text, const QString &to, const QString &from = QString()) override
+  void doTranslate(const QString &text, int to, int from = 0) override
   {
     for (int service = 0; service < ServiceCount; service++)
       if (hasService(service))
         doTranslate(service, text, to, from);
   }
 
-  void doTranslate(int service, const QString &text, const QString &to, const QString &from = QString())
+  void doTranslate(int service, const QString &text, int to, int from = 0)
   {
     if (!isEnabled())
       return;

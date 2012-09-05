@@ -2,11 +2,20 @@ ChangeLog (UTF-8)
 Annot Stream
 Since 6/18/2011
 
+9/5/2012 WED	annot-player	0.1.9.3
+        * Integrate with MetCab.
+          Able to show annotated galgame text with furigana.
+          Hover-and-translate ability is not implemented yet.
+        * If AppLocale is installed on your Windows, launch galgame using AppLocale with 0x0411 by default.
+        * Add SYSTRANet translation support.
+        * Distinguish Traditional Chinese and Simplified Chinese.
+
 9/3/2012 MON	annot-player	0.1.9.2
         * Able to add user-defined ITH hook code for game.
-          The added hook code is then shared by all users.
+          The added hook code is then shared by all users online.
         * Highlight tool buttons.
-		* Fix the bug which causes OCN translation failed to show up.
+        * Translations are cached.
+        * Fix the bug which causes OCN translation failed to show up.
 
 8/31/2012 FRI	annot-player	0.1.9.1
         * Thread profile will be saved online at annot.me and shared with all users.

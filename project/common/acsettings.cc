@@ -5,6 +5,7 @@
 #include "project/common/acglobal.h"
 #include "project/common/acui.h"
 #include "module/qtext/algorithm.h"
+#include "module/mstypes/lcid.h"
 #ifdef WITH_MODULE_CRYPT
 # include "module/crypt/crypt.h"
 # include "module/crypt/simplecrypt.h"
@@ -33,7 +34,7 @@
 #define SK_BILIACCOUNT  "BilibiliAccount"
 
 #define SK_LANGUAGE     "Language"
-#define SK_LANGUAGESCRIPT "LanguageScript"
+//#define SK_LANGUAGESCRIPT "LanguageScript"
 
 #define SK_THEME        "Theme"
 #define SK_AERO         "Aero"
@@ -68,7 +69,7 @@ AcSettings::sync()
 
 bool
 AcSettings::fackCcp() const
-{ return language() == QLocale::Chinese; }
+{ return language() == LCID_ZH_CN; }
 
 // - Settings -
 
@@ -236,35 +237,26 @@ AcSettings::language() const
 { return value(SK_LANGUAGE).toInt(); }
 
 void
-AcSettings::setLanguage(int language, int script)
-{
-  setValue(SK_LANGUAGE, language);
-  setLanguageScript(script);
-}
-
-int
-AcSettings::languageScript() const
-{ return value(SK_LANGUAGESCRIPT).toInt(); }
-
-void
-AcSettings::setLanguageScript(int script)
-{ setValue(SK_LANGUAGESCRIPT, script); }
+AcSettings::setLanguage(int language)
+{ setValue(SK_LANGUAGE, language); }
 
 bool
 AcSettings::isEnglish() const
-{ return language() == QLocale::English; }
+{ return language() == LCID_EN_US; }
 
 bool
 AcSettings::isJapanese() const
-{ return language() == QLocale::Japanese; }
+{ return language() == LCID_JA_JP; }
 
 bool
 AcSettings::isChinese() const
-{ return language() == QLocale::Chinese; }
-
-bool
-AcSettings::isKorean() const
-{ return language() == QLocale::Korean; }
+{
+  switch (language()) {
+  case LCID_ZH_TW:
+  case LCID_ZH_CN: return true;
+  default: return false;
+  }
+}
 
 // - GUI -
 

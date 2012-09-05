@@ -1,6 +1,10 @@
 #ifndef _QTEXT_SS_H
 #define _QTEXT_SS_H
 
+#ifdef _MSC_VER
+# pragma warning (disable:4005)     // C4005: redefinition of SS_LEFT, SS_RIGHT on Windows
+#endif // _MSC_VER
+
 // qtext/ss.h
 // 7/15/2011
 #include <QtCore/QString>

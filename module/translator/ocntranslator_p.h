@@ -1,7 +1,7 @@
 #ifndef OCNTRANSLATOR_P_H
 #define OCNTRANSLATOR_P_H
 
-// ocntranslator_config.h
+// ocntranslator_p.h
 // 7/15/2012
 
 // - Defines -

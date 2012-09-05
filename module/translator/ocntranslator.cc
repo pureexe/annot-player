@@ -33,36 +33,35 @@ OcnTranslator::currentAuthKey()
 
 // - Translate -
 
-QByteArray
-OcnTranslator::postData(const QString &text, const QString &to, const QString &from, const QByteArray &key)
+const char*
+OcnTranslator::lcode(int lang)
 {
-  const char *lang_to =
-    to == "en" ? "en" :
-    to == "ko" ? "ko" :
-    to == "zh-CHS" ? "zh" :
-    to == "zh-CHT" ? "tw" :
-    "en";
+  switch (lang) {
+  case English: return "en";
+  case Korean: return "ko";
+  case TraditionalChinese: return "tw";
+  case SimplifiedChinese: return "zh";
+  default: return 0;
+  }
+}
 
-  const char *lang_from =
-    from.isEmpty() ? "ja" :
-    from == "en" ? "en" :
-    from == "ko" ? "ko" :
-    from == "zh-CHS" ? "zh" :
-    from == "zh-CHT" ? "tw" :
-    "ja";
-
+QByteArray
+OcnTranslator::postData(const QString &text, const char *to, const char *from, const QByteArray &key)
+{
   QByteArray ret = QUrl::toPercentEncoding(text);
   return ret.prepend("&" OCN_KEY_TEXT "=")
      .prepend(key).prepend("&" OCN_KEY_AUTH "=")
-     .prepend(lang_to).prepend(lang_from).prepend(OCN_KEY_LANG "=");
+     .prepend(to).prepend(from).prepend(OCN_KEY_LANG "=");
 }
 
 QNetworkReply*
-OcnTranslator::createReply(const QString &text, const QString &to, const QString &from)
+OcnTranslator::createReply(const QString &text, int to, int from)
 {
   QNetworkRequest req(QUrl(OCN_API));
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-  QByteArray data = postData(text, to, from, currentAuthKey());
+  const char *t = lcode(to),
+             *f = lcode(from);
+  QByteArray data = postData(text, t ? t : "en", f ? f : "ja", currentAuthKey());
   return networkAccessManager()->post(req, data);
 }
 

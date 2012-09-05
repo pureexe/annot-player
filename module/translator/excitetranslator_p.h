@@ -1,7 +1,7 @@
 #ifndef EXCITETRANSLATOR_P_H
 #define EXCITETRANSLATOR_P_H
 
-// excitetranslator_config.h
+// excitetranslator_p.h
 // 7/15/2012
 
 // - Defines -

@@ -58,6 +58,7 @@ win32 {
 
 LUADIR=$$DESTDIR/lua
 DOCDIR=$$DESTDIR/doc
+TABLEDIR=$$DESTDIR/table
 IMAGEDIR=$$DESTDIR/images
 JSFDIR=$$DESTDIR/jsf
 AVATARDIR=$$DESTDIR/avatars
@@ -81,6 +82,7 @@ mac {
 DEFINES += \
     AVATARDIR=\\\"$$AVATARDIR\\\" \
     DOCDIR=\\\"$$DOCDIR\\\" \
+    TABLEDIR=\\\"$$TABLEDIR\\\" \
     IMAGEDIR=\\\"$$IMAGDIR\\\" \
     LUADIR=\\\"$$LUADIR\\\" \
     JSFDIR=\\\"$$JSFDIR\\\"
@@ -109,11 +111,13 @@ win32 {
     LUA_HOME            = $$DEV_HOME/lua
     FREETYPE_HOME       = $$DEV_HOME/freetype
     FONTCONFIG_HOME     = $$DEV_HOME/fontconfig
+    MECAB_HOME          = $$DEV_HOME/mecab
     #LUA_VERSION = 52
     #LUA_VERSION = 5.1
     LUA_VERSION =
 
     ITH_HOME            = $$DEV_HOME/ith
+
     WDK_HOME            = c:/winddk/current
 
     INCLUDEPATH        += $$DEV_HOME/inttypes/include
@@ -137,6 +141,7 @@ unix {
     #WSF_HOME            = ${HOME}/opt/wso2/wsf
     #CDIO_HOME          = /usr
     #FFMPEG_HOME         = /usr
+    MECAB_HOME          = /usr
     GPAC_HOME           = /usr
     MP4V2_HOME          = /usr
     LIVE_HOME           = /usr
@@ -167,6 +172,7 @@ mac {
     #FFMPEG_HOME         = $$MACPORTS_HOME
     GPAC_HOME           = ${HOME}/opt/gpac
     MP4V2_HOME          = $$MACPORTS_HOME
+    MECAB_HOME          = $$MACPORTS_HOME
     LIVE_HOME           = ${HOME}/opt/live
     POPPLER_HOME        = ${HOME}/opt/poppler
     BOOST_HOME          = $$MACPORTS_HOME
@@ -197,6 +203,8 @@ INCLUDEPATH     += $$GSOAP_HOME/include
 #LIBS            += -L$$GSOAP_HOME/lib
 INCLUDEPATH     += $$ZLIB_HOME/include
 LIBS            += -L$$ZLIB_HOME/lib
+INCLUDEPATH     += $$MECAB_HOME/include
+LIBS            += -L$$MECAB_HOME/lib
 INCLUDEPATH     += $$FREETYPE_HOME/include \
                    $$FREETYPE_HOME/include/freetype2
 LIBS            += -L$$FREETYPE_HOME/lib

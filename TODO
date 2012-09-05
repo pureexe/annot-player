@@ -5,10 +5,18 @@ http://db.tt/SrtkzxIJ
 http://qt-project.org/wiki/Category:Add-ons
 
 # Changes
-annot-*
-texthook.dll
-mousehook.dll
-picker.dll
+annot-player.ext
+annot-dict.exe
+remove doc/zhs2zht.txt,zht2zhs.txt
+add table/*.txt
+libmecab.dll
+mecab/ipac
+
+README, CHANGES
+
+---
+rebuild
+reupload all exe
 
 # key ideas
 - stream trial games, and sub trial games in chinese
@@ -40,65 +48,17 @@ work on streaming
   - in the future, use acipc to bypass license issue
 
 
-# 0.1.9.2
-
-XXX "/HW4@6E8F0!B5346E41" // tukumonotuki
-
-XXX "/HSN-4@B14B4!F20AE0D2" // koichoko
-
-# 0.1.9.3
-- finish applocale
-
-- translator
-  - use Microsoft LCID extensively for translator
-  http://download.microsoft.com/download/9/5/E/95EF66AF-9026-4BB0-A41D-A4F81802D92C/%5BMS-LCID%5D.pdf&pli=1
-  use it as global for translation
-  - retry translate on network error, save last translate text when synchronized
-    instead of using reply_->attribute
-
-able to delete/edit guest by anyone
-
-CHANGE LANGUAGE IDENTIFIER TO MICROSOFT LCID!!!!!!!!!!!!!
-- change traditional chinese to chinese
-  - add traditional language as well
-make difference between simplified chinese and traditional chinese
-
 # 0.1.9.4
+- show curent annotated text when toggle showgametext
+- debug applocale on windows xp
 
-- improve internet translation speed
-  - maybe using curl?
+- fix deploy system on mac os x
 
-- create a better game semi-auto translator
-  create a better gui for human translation with ocn suggestions, etc
-  - translate using google
-  - automatically generate transation for human
-  - human edit the translation
-
-- game
-  - grant/share edit permission for token
-
-- mac: share game term (names, sp...)
-  - able to share it online
-  - database: dict_term
-    term_id term_status term_flag user_id term_create_ip term_create_time term_update_time term_update_ip term_type term_from term_to term_source, term_target
-    term_bless_count term_curse_count term_block_count
-
-- figure out a better textedit for display japanese text well
-  - word by word translation
-  - refer to:
-    http://www.rikai.com/perl/Home.pl
-
-- what's the best wa for offline translation?
-investigate atlas, etc
-  check the translate.cs source code
-- atlas: http://software.fujitsu.com/jp/atlas/
-- LEC
-
-
-online word translator
-http://www.csse.monash.edu.au/~jwb/cgi-bin/wwwjdic.cgi?9T
-
-- kirikiri[1-2], guess default encoding with utf16
+  - show popup when hover using edict
+    or even wwwjdic / kotobank
+    mouse hovered text: key: qcursor:pos
+    http://www.qtforum.org/article/31604/figure-out-which-character-the-mouse-is-hovering-over-in-a-qtextedit.html
+    edict
 
 - search engine
   - redesign searchengine mechanism, using a global search engine pool
@@ -107,18 +67,50 @@ http://www.csse.monash.edu.au/~jwb/cgi-bin/wwwjdic.cgi?9T
     - need a better way for grouping translator
   - library view and others, redesign
   - copy title / location, search title
+
+- able to show annotated  japanese annotation from nicovideo
+
+- create a better game semi-auto translator
+  create a better gui for human translation with ocn suggestions, etc
+  - translate using google
+  - automatically generate transation for human
+  - human edit the translation
+
+- what's the best wa for offline translation?
+investigate atlas, etc
+  check the translate.cs source code
+- atlas: http://software.fujitsu.com/jp/atlas/
+- LEC
+
+# 0.1.9.5
+
+- parse using yahoo, automatically popup translation for difficult word
+ http://stackoverflow.com/questions/3254652/several-ways-of-placing-an-image-in-a-qtextedit
+  - yahoo api to show furigana
+  http://d.hatena.ne.jp/mitaina/20090908/1252416034
+  http://developer.yahoo.co.jp/webapi/jlp/furigana/v1/furigana.html
+  http://cgi.geocities.jp/ydevnet/sample/jlp/sample2/ma_sample.php
+
+FIXME: XXX "/HW4@6E8F0!B5346E41" // tukumonotuki
+
+
+- grant/share edit permission for token
+- able to delete/edit guest by anyone
+
+- try curl or hack qnetworkaccessmanager
+  - improve ocn translation speed using curl
 - hack qnetworkaccessmanager source code to get a stable orignal download stream
   - make stable download session
     - maybe, sth is wrong in createRequest?
-- able to subscribe to bilibili session
+- stable download
 - able to grab all downloadable to bilibili session
+- able to subscribe to bilibili session
 
-- qtext locale class
-  - add hash code for en, etc
-  - add iso 2 digit name
-  - handle english/chinese
-
-# 0.1.9.3
+- mac: share game term (names, sp...)
+  - able to share it online
+  - database: dict_term
+    term_id term_status term_flag user_id term_create_ip term_create_time term_update_time term_update_ip term_type term_from term_to term_source, term_target
+    term_bless_count term_curse_count term_block_count
 
 - slogan
   annotated life
@@ -635,9 +627,3 @@ http://cmusphinx.sourceforge.net/wiki/download/
 - qunit
 http://www.youtube.com/watch?v=P4kv-AoAJ-Q
 https://gitorious.org/quint
-
-##
-# Code Snips
-##
-- enable drag/drop image to textedit
- http://stackoverflow.com/questions/3254652/several-ways-of-placing-an-image-in-a-qtextedit

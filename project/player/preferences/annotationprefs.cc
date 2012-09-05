@@ -99,7 +99,7 @@ AnnotationPreferencesTab::createLayout()
     offsetEdit_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
   } connect(offsetEdit_, SIGNAL(valueChanged(int)), SLOT(saveOffset()));
   QLabel *offsetLabel = ui->makeLabel(AcUi::BuddyHint, tr("Delay Time"), tr("Delay time"), offsetEdit_);
-  QToolButton *offsetReset = ui->makeToolButton(AcUi::PushHint, TR(T_RESET), this, SLOT(resetOffset()));
+  QToolButton *offsetReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetOffset()));
 
   opacityEdit_ = new QtExt::SpinBox; {
     enum { Min = 50, Max = 100 };
@@ -113,6 +113,7 @@ AnnotationPreferencesTab::createLayout()
   QLabel *opacityLabel = ui->makeLabel(AcUi::BuddyHint, tr("Font Opacity"), tr("Annotation Transparency"), opacityEdit_);
   QToolButton *opacityReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetOpacity()));
 
+#ifdef AC_ENABLE_GAME
   backgroundOpacityEdit_ = new QtExt::SpinBox; {
     enum { Min = 0, Max = 80 };
     backgroundOpacityEdit_->setSuffix(" %");
@@ -124,6 +125,7 @@ AnnotationPreferencesTab::createLayout()
   } connect(backgroundOpacityEdit_, SIGNAL(valueChanged(int)), SLOT(saveBackgroundOpacity()));
   QLabel *backgroundOpacityLabel = ui->makeLabel(AcUi::BuddyHint, tr("Background Opacity"), tr("Background Opacity") + " (" + tr("Galgame Only") + ")", backgroundOpacityEdit_);
   QToolButton *backgroundOpacityReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetBackgroundOpacity()));
+#endif // AC_ENABLE_GAME
 
   speedEdit_ = new QtExt::DoubleSpinBox; {
     Q_ASSERT(MinSpeed);

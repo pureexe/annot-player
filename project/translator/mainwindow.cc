@@ -22,6 +22,9 @@
 #include "module/translator/translatormanager.h"
 #include "module/translator/jdictranslator.h"
 #include "module/translator/kotobanktranslator.h"
+#ifdef WITH_MODULE_MECABHIGHLIGHTER
+# include "module/mecabhighlighter/mecabhighlighter.h"
+#endif // WITH_MODULE_MECABHIGHLIGHTER
 #include <QtGui>
 #include <boost/foreach.hpp>
 
@@ -70,14 +73,14 @@ enum { DEFAULT_TRANSLATORS = TranslatorManager::RomajiBit | TranslatorManager::O
      Qt::WindowType(0)
 
 MainWindow::MainWindow(QWidget *parent)
-  : Base(parent, WINDOW_FLAGS), disposed_(false), translatedTextChanged_(true)
+  : Base(parent, WINDOW_FLAGS), language_(0), disposed_(false), translatedTextChanged_(true)
 {
   //if (Settings::globalSettings()->windowOnTop())
   //  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
   setWindowTitle(tr("Annot Translator"));
   setWindowIcon(QIcon(RC_IMAGE_APP));
 
-  createSearchEngines();
+  //createSearchEngines();
   createLayout();
   createActions();
 
@@ -91,6 +94,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(textTranslator_, SIGNAL(translatedByOcn(QString)), SLOT(showOcnTranslation(QString)));
   connect(textTranslator_, SIGNAL(translatedByExcite(QString)), SLOT(showExciteTranslation(QString)));
   connect(textTranslator_, SIGNAL(translatedBySdl(QString)), SLOT(showSdlTranslation(QString)));
+  connect(textTranslator_, SIGNAL(translatedBySystran(QString)), SLOT(showSystranTranslation(QString)));
   connect(textTranslator_, SIGNAL(translatedByNifty(QString)), SLOT(showNiftyTranslation(QString)));
   connect(textTranslator_, SIGNAL(translatedByInfoseek(QString)), SLOT(showInfoseekTranslation(QString)));
   connect(textTranslator_, SIGNAL(translatedByYahoo(QString)), SLOT(showYahooTranslation(QString)));
@@ -136,6 +140,7 @@ MainWindow::MainWindow(QWidget *parent)
   ocnButton_->setChecked(t & TranslatorManager::OcnBit);
   exciteButton_->setChecked(t & TranslatorManager::ExciteBit);
   sdlButton_->setChecked(t & TranslatorManager::SdlBit);
+  systranButton_->setChecked(t & TranslatorManager::SystranBit);
   niftyButton_->setChecked(t & TranslatorManager::NiftyBit);
   infoseekButton_->setChecked(t & TranslatorManager::InfoseekBit);
   yahooButton_->setChecked(t & TranslatorManager::YahooBit);
@@ -150,16 +155,16 @@ MainWindow::MainWindow(QWidget *parent)
   translateEdit_->setFocus();
 }
 
-void
-MainWindow::createSearchEngines()
-{
-  enum { LastEngine = SearchEngineFactory::WikiZh };
-  for (int i = 0; i <= LastEngine; i++) {
-    SearchEngine *e = SearchEngineFactory::globalInstance()->create(i);
-    e->setParent(this);
-    searchEngines_.append(e);
-  }
-}
+//void
+//MainWindow::createSearchEngines()
+//{
+//  enum { LastEngine = SearchEngineFactory::WikiZh };
+//  for (int i = 0; i <= LastEngine; i++) {
+//    SearchEngine *e = SearchEngineFactory::globalInstance()->create(i);
+//    e->setParent(this);
+//    searchEngines_.append(e);
+//  }
+//}
 
 // searchbutton [ language ] |auto| |clipboard|
 // textedit
@@ -190,8 +195,8 @@ MainWindow::createLayout()
     languageCombo_->addItem(QIcon(ACRC_IMAGE_JAPANESE), tr("Japanese"));
   }
   int lang = Settings::globalSettings()->languageIndex();
-  if (lang > 0 && lang < languageCombo_->count())
-    languageCombo_->setCurrentIndex(lang);
+  lang = qBound(0, lang, languageCombo_->count());
+  languageCombo_->setCurrentIndex(lang);
   connect(languageCombo_, SIGNAL(activated(int)), SLOT(updateLanguage()));
   connect(languageCombo_, SIGNAL(activated(int)), SLOT(translate()));
 
@@ -206,12 +211,16 @@ MainWindow::createLayout()
   ocnButton_ = ui->makeCheckBox(0, tr("OCN"), tr("OCN Honyaku") + " (en,zh,ko)", this, SLOT(updateTranslators()));
   exciteButton_ = ui->makeCheckBox(0, tr("Excite"), tr("Excite Honyaku") + " (en)", this, SLOT(updateTranslators()));
   sdlButton_ = ui->makeCheckBox(0, tr("SDL"), tr("SDL Translator") + " (en)", this, SLOT(updateTranslators()));
+  systranButton_ = ui->makeCheckBox(0, tr("SYSTRAN"), tr("SYSTRAN Translator") + " (en)", this, SLOT(updateTranslators()));
   niftyButton_ = ui->makeCheckBox(0, tr("@nifty"), tr("@nifty honyaku") + " (en)", this, SLOT(updateTranslators()));
 
   translateEdit_ = new TranslateEdit;
   connect(translateEdit_, SIGNAL(textChanged()), SLOT(autoTranslate()));
   connect(translateEdit_, SIGNAL(selectedTextChanged(QString)), SLOT(highlightText(QString)));
   connect(translateEdit_, SIGNAL(selectedTextChanged(QString)), SLOT(autoTranslate(QString)));
+#ifdef WITH_MODULE_MECABHIGHLIGHTER
+  new MeCabHighlighter(translateEdit_);
+#endif // WITH_MODULE_MECABHIGHLIGHTER
 
   for (size_t i = 0; i < sizeof(browsers_)/sizeof(*browsers_); i++) {
     QTextBrowser *b = browsers_[i] = new TranslateBrowser;
@@ -253,6 +262,7 @@ MainWindow::createLayout()
     translators->addWidget(niftyButton_);
     translators->addWidget(exciteButton_);
     translators->addWidget(sdlButton_);
+    translators->addWidget(systranButton_);
 
     QSplitter *h = new QSplitter(Qt::Horizontal),
               *left = new QSplitter(Qt::Vertical),
@@ -435,19 +445,19 @@ void
 MainWindow::updateLanguage()
 {
   switch (languageCombo_->currentIndex()) {
-  case English: languageCode_ = "en"; break;
-  case TraditionalChinese: languageCode_  = "zh-CHT"; break;
-  case SimplifiedChinese: languageCode_  = "zh-CHS"; break;
-  case Korean: languageCode_ = "ko"; break;
-  case French: languageCode_ = "fr"; break;
-  case German: languageCode_ = "de"; break;
-  case Italian: languageCode_ = "it"; break;
-  case Spanish: languageCode_ = "es"; break;
-  case Portuguese: languageCode_ = "pt"; break;
-  case Russian: languageCode_ = "ru"; break;
-  case Japanese: languageCode_ = "ja"; break;
+  case English: language_ = Translator::English; break;
+  case TraditionalChinese: language_  = Translator::TraditionalChinese; break;
+  case SimplifiedChinese: language_  = Translator::SimplifiedChinese; break;
+  case Korean:  language_ = Translator::Korean; break;
+  case French:  language_ = Translator::French; break;
+  case German:  language_ = Translator::German; break;
+  case Italian: language_ = Translator::Italian; break;
+  case Spanish: language_ = Translator::Spanish; break;
+  case Portuguese: language_ = Translator::Portuguese; break;
+  case Russian: language_ = Translator::Russian; break;
+  case Japanese:language_ = Translator::Japanese; break;
 
-  default: Q_ASSERT(0); languageCode_ = "en";
+  default: Q_ASSERT(0); language_ = Translator::English;
   }
 }
 
@@ -463,6 +473,7 @@ MainWindow::updateTranslators()
   textTranslator_->setService(TranslatorManager::Ocn, ocnButton_->isChecked());
   textTranslator_->setService(TranslatorManager::Excite, exciteButton_->isChecked());
   textTranslator_->setService(TranslatorManager::Sdl, sdlButton_->isChecked());
+  textTranslator_->setService(TranslatorManager::Systran, systranButton_->isChecked());
   textTranslator_->setService(TranslatorManager::Nifty, niftyButton_->isChecked());
   textTranslator_->setService(TranslatorManager::Infoseek, infoseekButton_->isChecked());
   textTranslator_->setService(TranslatorManager::Yahoo, yahooButton_->isChecked());
@@ -598,10 +609,10 @@ MainWindow::translate(const QString &input)
   //textTranslator_->translate(t, language_); // FIXME: inlining is not working under clang T_T
   for (int service = 0; service < TranslatorManager::ServiceCount; service++)
     if (textTranslator_->hasService(service))
-      textTranslator_->doTranslate(service, t, languageCode_);
+      textTranslator_->doTranslate(service, t, language_);
 
-  jdicTranslator_->translate(t, languageCode_);
-  kotobankTranslator_->translate(t, languageCode_);
+  jdicTranslator_->translate(t, language_);
+  kotobankTranslator_->translate(t, language_);
 }
 
 void
@@ -637,18 +648,18 @@ MainWindow::quit()
   QTimer::singleShot(fadeAnimation()->duration(), this, SLOT(close()));
 }
 
-void
-MainWindow::searchWithEngine(int engine, const QString &key)
-{
-  if (engine >= 0 && engine < searchEngines_.size() && !key.isEmpty()) {
-    const SearchEngine *e = searchEngines_[engine];
-    if (e) {
-      QString url = e->search(key);
-      if (!url.isEmpty())
-        openUrl(url);
-    }
-  }
-}
+//void
+//MainWindow::searchWithEngine(int engine, const QString &key)
+//{
+//  if (engine >= 0 && engine < searchEngines_.size() && !key.isEmpty()) {
+//    const SearchEngine *e = searchEngines_[engine];
+//    if (e) {
+//      QString url = e->search(key);
+//      if (!url.isEmpty())
+//        openUrl(url);
+//    }
+//  }
+//}
 
 void
 MainWindow::saveSettings()
@@ -697,6 +708,15 @@ MainWindow::showSdlTranslation(const QString &text)
   showTextTranslation(
     "SDL: "
     HTML_SS_OPEN(color:brown) + text + HTML_SS_CLOSE()
+  );
+}
+
+void
+MainWindow::showSystranTranslation(const QString &text)
+{
+  showTextTranslation(
+    "SYSTRAN: "
+    HTML_SS_OPEN(color:olive) + text + HTML_SS_CLOSE()
   );
 }
 
@@ -785,7 +805,7 @@ MainWindow::processUrl(const QUrl &url)
       currentDictionary() == Kotobank) {
     if (t.startsWith("/word/")) {
       enum { PrefixSize = 6 }; // size of "/word/"
-      t = t.right(t.size() - PrefixSize );
+      t = t.mid(PrefixSize);
       t.remove(QRegExp("?.*"));
       translate(t);
       return;
@@ -811,7 +831,9 @@ MainWindow::highlightText(const QString &input)
   if (t.isEmpty())
     return;
 
+#ifndef WITH_MODULE_MECABHIGHLIGHTER
   translateEdit_->highlightText(input);
+#endif // WITH_MODULE_MECABHIGHLIGHTER
   BOOST_FOREACH (TranslateBrowser *e, browsers_)
     e->highlightText(input);
 }

@@ -5,13 +5,16 @@ DEFINES += WITH_MODULE_TEXTCODEC
 DEPENDPATH += $$PWD
 
 HEADERS += $$PWD/textcodec.h
-SOURCES += $$PWD/textcodec.cc
+SOURCES += \
+    $$PWD/textcodec_ja.cc \
+    $$PWD/textcodec_zh.cc
 
-DOC_FILES += \
-  $$ROOTDIR/module/qtext/doc/utftable.zhs_zht.txt \
-  $$ROOTDIR/module/qtext/doc/utftable.zht_zhs.txt
+TABLE_FILES += \
+    $$ROOTDIR/module/qtext/table/hirakata.txt \
+    $$ROOTDIR/module/qtext/table/zhszht.txt \
+    $$ROOTDIR/module/qtext/table/zhtzhs.txt
 
-OTHER_FILES += $$DOC_FILES
+OTHER_FILES += $$TABLE_FILES
 
 QT += core
 

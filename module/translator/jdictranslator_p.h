@@ -1,7 +1,7 @@
 #ifndef JDICTRANSLATOR_P_H
 #define JDICTRANSLATOR_P_H
 
-// jdictranslator_config.h
+// jdictranslator_p.h
 // 8/11/2012
 
 // - Defines -

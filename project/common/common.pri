@@ -48,6 +48,7 @@ SOURCES += \
     $$PWD/acabout.cc \
     $$PWD/acaccountprefs_p.cc \
     $$PWD/acapplication.cc \
+    $$PWD/acapplication_tr.cc \
     $$PWD/acbrowser.cc \
     $$PWD/accomboedit.cc \
     $$PWD/acconsole.cc \

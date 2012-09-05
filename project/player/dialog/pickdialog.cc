@@ -156,6 +156,8 @@ PickDialog::setVisible(bool visible)
     pickedWindow_ = 0; // reset picked window
   else if (!pickedWindow_)
     emit cancelled();
+
+  //QApplication::setOverrideCursor(visible ? Qt::PointingHandCursor : Qt::ArrowCursor);
 }
 
 void

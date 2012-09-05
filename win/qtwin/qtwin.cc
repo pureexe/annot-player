@@ -315,6 +315,10 @@ QtWin::createProcess(const QString &filePath, const QStringList &env)
     }
   }
 
+  DWORD dwCreationFlags = CREATE_DEFAULT_ERROR_MODE;
+  if (lpEnvironment)
+    dwCreationFlags |= CREATE_UNICODE_ENVIRONMENT;
+
   // See: http://msdn.microsoft.com/en-us/library/windows/desktop/ms682425(v=vs.85).aspx
   //
   // BOOL WINAPI CreateProcess(
@@ -335,7 +339,7 @@ QtWin::createProcess(const QString &filePath, const QStringList &env)
     pwszParam,          // app param
     0, 0,               // security attributes
     false,              // inherited
-    CREATE_DEFAULT_ERROR_MODE, // creation flags
+    dwCreationFlags,
     lpEnvironment,
     lpCurrentDirectory,
     &siStartupInfo,

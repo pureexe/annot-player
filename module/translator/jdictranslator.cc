@@ -33,7 +33,7 @@ JdicTranslator::name() const
 { return "WWWJDIC"; }
 
 const char*
-JdicTranslator::dictionaryForLanguage(const QString &lang)
+JdicTranslator::dictionary(int lang)
 {
   // FIXME: only enlish dictionary is working, others would incur network error
   Q_UNUSED(lang)

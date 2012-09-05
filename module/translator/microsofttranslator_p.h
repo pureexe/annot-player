@@ -1,7 +1,7 @@
 #ifndef MICROSOFTTRANSLATOR_P_H
 #define MICROSOFTTRANSLATOR_P_H
 
-// microsofttranslator_config.h
+// microsofttranslator_p.h
 // 11/2/2011
 //
 // Sign-up: https://datamarket.azure.com/dataset/1899a118-d202-492c-aa16-ba21c33c06cb

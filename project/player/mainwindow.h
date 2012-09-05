@@ -60,6 +60,7 @@ class RippleImageFilter;
 class SignalHub;
 class Tray;
 class TranslatorManager;
+class MeCabParser;
 
 class AcPlayerServer;
 class AcDownloader;
@@ -200,6 +201,7 @@ public slots:
   void translate(const QString &text, bool extra = false);
   void translate(const QString &text, int lang, bool extra = false);
   void translateGameText(const QString &text, int role);
+  void showGameText(const QString &text, int role);
 
   void showTraditionalChinese(const QString &gbk);
 
@@ -221,6 +223,10 @@ public slots:
   void setSubtitleColor(int colorId);
 private:
   void uncheckSubtitleColorActions();
+
+protected:
+  bool isGameTextVisible() const;
+  bool isAppLocaleEnabled() const;
 
 public slots:
   void onFocusedWidgetChanged(QWidget *w_old, QWidget *w_new);
@@ -481,7 +487,8 @@ protected slots:
 
   void setUserLanguageToEnglish();
   void setUserLanguageToJapanese();
-  void setUserLanguageToChinese();
+  void setUserLanguageToTraditionalChinese();
+  void setUserLanguageToSimplifiedChinese();
   void setUserLanguageToKorean();
   void setUserLanguageToFrench();
   void setUserLanguageToGerman();
@@ -560,6 +567,7 @@ protected slots:
   void showOcnTranslation(const QString &text, bool extra = false);
   void showExciteTranslation(const QString &text) { showTranslation(text, TranslatorManager::Excite); }
   void showSdlTranslation(const QString &text) { showTranslation(text, TranslatorManager::Sdl); }
+  void showSystranTranslation(const QString &text) { showTranslation(text, TranslatorManager::Systran); }
   void showNiftyTranslation(const QString &text) { showTranslation(text, TranslatorManager::Nifty); }
   void showInfoseekTranslation(const QString &text) { showTranslation(text, TranslatorManager::Infoseek); }
 
@@ -571,6 +579,7 @@ protected slots:
   void showOcnAdditionalTranslation(const QString &text) { showOcnTranslation(text, true); }
   void showExciteAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Excite); }
   void showSdlAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Sdl); }
+  void showSystranAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Systran); }
   void showNiftyAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Nifty); }
   void showInfoseekAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Infoseek); }
 
@@ -825,6 +834,9 @@ private:
           //*toggleAutoOpenCurrentGameAct_,
           *openCurrentGameAct_;
 #endif // AC_ENABLE_GAME
+private:
+  QAction *toggleGameTextVisibleAct_,
+          *toggleAppLocaleEnabledAct_;
 
   // - Helpers -
 protected:
@@ -889,6 +901,7 @@ protected slots:
   void toggleOcnTranslator(bool t);
   void toggleExciteTranslator(bool t);
   void toggleSdlTranslator(bool t);
+  void toggleSystranTranslator(bool t);
   void toggleNiftyTranslator(bool t);
   void toggleInfoseekTranslator(bool t);
 
@@ -993,6 +1006,8 @@ private:
   AnnotationServerAgent *server_;
 
   Player *player_;
+
+  MeCabParser *mecab_;
 
   AnnotationDatabase *cache_,
                      *queue_;
@@ -1118,6 +1133,7 @@ private:
           *toggleOcnTranslatorAct_,
           *toggleRomajiTranslatorAct_,
           *toggleSdlTranslatorAct_,
+          *toggleSystranTranslatorAct_,
           *toggleNiftyTranslatorAct_,
           *toggleInfoseekTranslatorAct_;
 
@@ -1297,7 +1313,8 @@ private:
 
   QAction *setUserLanguageToEnglishAct_,
           *setUserLanguageToJapaneseAct_,
-          *setUserLanguageToChineseAct_,
+          *setUserLanguageToTraditionalChineseAct_,
+          *setUserLanguageToSimplifiedChineseAct_,
           *setUserLanguageToKoreanAct_,
           *setUserLanguageToFrenchAct_,
           *setUserLanguageToGermanAct_,

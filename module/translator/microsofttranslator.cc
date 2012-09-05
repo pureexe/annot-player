@@ -37,15 +37,35 @@ MicrosoftTranslator::authenticate(QAuthenticator *auth)
 
 // - Translate -
 
+// See: http://msdn.microsoft.com/en-us/library/hh456380.aspx
+const char*
+MicrosoftTranslator::lcode(int lang)
+{
+  switch (lang) {
+  case English:  return "en";
+  case Japanese: return "ja";
+  case TraditionalChinese:  return "zh-CHT";
+  case SimplifiedChinese:   return "zh-CHS";
+  case Korean:   return "ko";
+  case French:   return "fr";
+  case German:   return "de";
+  case Italian:  return "it";
+  case Spanish:  return "es";
+  case Portuguese: return "pt";
+  case Russian:  return "ru";
+  default: return 0;
+  }
+}
+
 // See: http://social.msdn.microsoft.com/Forums/nl-NL/DataMarket/thread/8b8e203d-b2d7-4c81-a3ff-2e1e4e65d18c
 QUrl
-MicrosoftTranslator::translateUrl(const QString &text, const QString &to, const QString &from)
+MicrosoftTranslator::translateUrl(const QString &text, int to, int from)
 {
 #define QUOTE(_str) QString("'%1'").arg(_str)
   QUrl ret(AZURE_API);
-  if (!from.isEmpty())
-    ret.addQueryItem(AZURE_API_FROM, QUOTE(from));
-  ret.addQueryItem(AZURE_API_TO, QUOTE(to));
+  if (from)
+    ret.addQueryItem(AZURE_API_FROM, QUOTE(lcode(from)));
+  ret.addQueryItem(AZURE_API_TO, QUOTE(lcode(to)));
   ret.addEncodedQueryItem(AZURE_API_TEXT, QUrl::toPercentEncoding(QUOTE(text)));
 #undef QUOTE
   return ret;
@@ -62,7 +82,7 @@ MicrosoftTranslator::translateRequest(const QUrl &url)
 }
 
 QNetworkReply*
-MicrosoftTranslator::createReply(const QString &text, const QString &to, const QString &from)
+MicrosoftTranslator::createReply(const QString &text, int to, int from)
 {
   QUrl query = translateUrl(text, to, from);
   return networkAccessManager()->get(translateRequest(query));

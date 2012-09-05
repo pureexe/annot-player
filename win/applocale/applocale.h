@@ -13,7 +13,7 @@ class AppLocale : public QObject
 
   int lcid_;
 public:
-  static ulong createProcess(const QString &path, int icid);
+  static bool createProcess(const QString &path, int icid);
 
   static bool isAvailable();
 
@@ -24,7 +24,7 @@ public:
   explicit AppLocale(QObject *parent = nullptr)
     : Base(parent), lcid_(0) { }
 
-  ulong createProcess(const QString &path)
+  bool createProcess(const QString &path)
   { return createProcess(path, lcid_); }
 
   int lcid() const { return lcid_; }

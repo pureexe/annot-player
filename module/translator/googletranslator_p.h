@@ -1,7 +1,7 @@
 #ifndef GOOGLETRANSLATOR_P_H
 #define GOOGLETRANSLATOR_P_H
 
-// googletranslator.h
+// googletranslator_p.h
 // 6/30/2012
 
 #include "module/translator/googletranslator.h"

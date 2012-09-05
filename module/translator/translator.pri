@@ -29,6 +29,8 @@ HEADERS += \
     $$PWD/romajitranslator_p.h \
     $$PWD/sdltranslator.h \
     $$PWD/sdltranslator_p.h \
+    $$PWD/systrantranslator.h \
+    $$PWD/systrantranslator_p.h \
     $$PWD/translatormanager.h \
     $$PWD/translatorsettings.h \
     $$PWD/translator.h \
@@ -48,6 +50,7 @@ SOURCES += \
     $$PWD/ocntranslator.cc \
     $$PWD/romajitranslator.cc \
     $$PWD/sdltranslator.cc \
+    $$PWD/systrantranslator.cc \
     $$PWD/translatormanager.cc \
     $$PWD/translator.cc \
     $$PWD/yahootranslator.cc

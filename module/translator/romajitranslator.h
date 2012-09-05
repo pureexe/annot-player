@@ -26,7 +26,7 @@ public:
   QString name() const override;
 
 protected:
-  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from = QString()) override
+  QNetworkReply *createReply(const QString &text, int to, int from) override
   { Q_UNUSED(to) Q_UNUSED(from) return createReply(text); }
 
   QNetworkReply *createReply(const QString &text);

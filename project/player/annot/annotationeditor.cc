@@ -132,7 +132,7 @@ AnnotationEditor::createRibons()
   } connect(renderEffectComboBox_, SIGNAL(activated(int)), SLOT(setRenderEffect(int)));
 
   // - Code ribon
-  QGroupBox *codeRibon = new QGroupBox; {
+  QGroupBox *codeRibon = new QGroupBox(this); {
     QVBoxLayout *rows = new QVBoxLayout;
     QHBoxLayout *row0 = new QHBoxLayout,
                 *row1 = new QHBoxLayout;
@@ -460,6 +460,7 @@ AnnotationEditor::text() const
 void
 AnnotationEditor::setText(const QString &text)
 {
+  text_ = text;
   if (text.isEmpty() || text.trimmed().isEmpty()) {
     clear();
     return;
@@ -475,6 +476,7 @@ AnnotationEditor::code2html()
 {
   DOUT("enter: text follows");
   DOUT(textEdit_->toPlainText());
+  text_ = textEdit_->toPlainText();
   QString html;
   QStringList tags;
   boost::tie(html, tags) = ANNOT_PARSE_CODE(textEdit_->toPlainText());
@@ -492,6 +494,8 @@ AnnotationEditor::code2html()
 void
 AnnotationEditor::html2code()
 {
+  textEdit_->setPlainText(text_);
+  /*
   DOUT("enter: tidy =" << isTidyEnabled());
   QString html = textEdit_->toHtml();
   DOUT("html follows");
@@ -504,6 +508,7 @@ AnnotationEditor::html2code()
   DOUT(textEdit_->toPlainText());
   clearFormat();
   DOUT("exit");
+  */
 }
 
 // - Slots -
@@ -595,6 +600,7 @@ AnnotationEditor::setCodeMode()
 {
   if (!isCodeMode())
     html2code();
+  textEdit_->setReadOnly(false);
 
   ribonStackLayout_->setCurrentIndex(CodeRibonIndex);
   htmlRibonButton_->setChecked(false);
@@ -608,6 +614,7 @@ AnnotationEditor::setHtmlMode()
 {
   if (!isHtmlMode())
     code2html();
+  textEdit_->setReadOnly(true);
 
   ribonStackLayout_->setCurrentIndex(HtmlRibonIndex);
   htmlRibonButton_->setChecked(true);

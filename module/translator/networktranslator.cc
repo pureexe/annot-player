@@ -28,7 +28,7 @@ NetworkTranslator::networkAccessManager() const
 // - Actions -
 
 void
-NetworkTranslator::translate(const QString &text, const QString &to, const QString &from)
+NetworkTranslator::translate(const QString &text, int to, int from)
 {
   if (!isEnabled() || text.isEmpty())
     return;
@@ -49,7 +49,7 @@ NetworkTranslator::translate(const QString &text, const QString &to, const QStri
 }
 
 void
-NetworkTranslator::doTranslate(const QString &text, const QString &to, const QString &from)
+NetworkTranslator::doTranslate(const QString &text, int to, int from)
 {
   if (!isEnabled())
     return;

@@ -31,6 +31,10 @@ set ITH_DLLS=IHF.dll,IHF_DLL.dll,ITH_Engine.dll
 set OPENSSL_HOME=/Volumes/win/dev/openssl/1.0.0j
 set OPENSSL_DLLS=libeay32.dll,ssleay32.dll
 
+set MECAB_HOME=/Volumes/win/dev/mecab
+set MECAB_DLL=libmecab.dll
+set MECAB_DATA=dic
+
 set CYGWIN_HOME=
 set CYGWIN_VERSION=cygwin1
 set CYGWIN_EXES=lftp.exe,chmod.exe
@@ -122,6 +126,9 @@ cp -v "%OPENSSL_HOME%"/{%OPENSSL_DLLS%} . || exit /b 1
 ::cp -v "%LUA_HOME%"/bin/%LUA_DLL% . || exit /b 1
 cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
 
+cp -v "%MECAB_HOME%"/bin/%MECAB_DLL% . || exit /b 1
+cp -Rv "%MECAB_HOME%"/%MECAB_DATA% . || exit /b 1
+
 ::cp -v "%CURL_HOME%"/bin/%CURL_BIN% . || exit /b 1
 ::cp -v "%GZIP_HOME%"/bin/%GZIP_BIN% . || exit /b 1
 
@@ -168,7 +175,15 @@ cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit
 
 :: doc
 cp -Rv "%SOURCE%"/module/qtext/doc . || exit /b 1
+
+:: etc
+cp -Rv "%SOURCE%"/module/mecabsettings/etc . || exit /b 1
+
+:: images
 cp -Rv "%SOURCE%"/module/qtext/images . || exit /b 1
+
+:: table
+cp -Rv "%SOURCE%"/module/textcodec/table . || exit /b 1
 
 :: jsf
 cp -Rv "%SOURCE%"/module/annotcloud/jsf . || exit /b 1

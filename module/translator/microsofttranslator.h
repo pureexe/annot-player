@@ -24,7 +24,7 @@ public:
   QString name() const override;
 
 protected:
-  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from) override;
+  QNetworkReply *createReply(const QString &text, int to, int from) override;
   QString parseReply(const QByteArray &data) override;
 
 protected slots:
@@ -32,8 +32,9 @@ protected slots:
 
 protected:
   static void authenticate(QAuthenticator *auth);
-  static QUrl translateUrl(const QString &text, const QString &to, const QString &from = QString());
+  static QUrl translateUrl(const QString &text, int to, int from = 0);
   static QNetworkRequest translateRequest(const QUrl &url);
+  static const char *lcode(int lang);
 };
 
 #endif // MICROSOFTTRANSLATOR_H

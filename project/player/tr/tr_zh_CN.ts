@@ -859,7 +859,7 @@
         <translation>自动整理HTML</translation>
     </message>
     <message>
-        <location filename="../annot/annotationeditor.cc" line="821"/>
+        <location filename="../annot/annotationeditor.cc" line="828"/>
         <source>Text is too long &gt;_&lt;</source>
         <translation>内容太长了</translation>
     </message>
@@ -867,115 +867,115 @@
 <context>
     <name>AnnotationGraphicsItem</name>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="468"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="555"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="471"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="558"/>
         <source>Mon</source>
         <translation>月</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="469"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="556"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="472"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="559"/>
         <source>Tue</source>
         <translation>火</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="470"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="557"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="473"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="560"/>
         <source>Wed</source>
         <translation>水</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="471"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="558"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="474"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="561"/>
         <source>Thu</source>
         <translation>木</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="472"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="559"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="475"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="562"/>
         <source>Fri</source>
         <translation>金</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="473"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="560"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="476"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="563"/>
         <source>Sat</source>
         <translation>土</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="474"/>
-        <location filename="../annot/annotationgraphicsitem.cc" line="561"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="477"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="564"/>
         <source>Sun</source>
         <translation>日</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="548"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="551"/>
         <source>days</source>
         <translation>天前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="549"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="552"/>
         <source>weeks</source>
         <translation>周前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="550"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="553"/>
         <source>months</source>
         <translation>个月前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="572"/>
         <location filename="../annot/annotationgraphicsitem.cc" line="575"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="578"/>
         <source>hr</source>
         <translation>小时前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="578"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="581"/>
         <source>min</source>
         <translation>分前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="581"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="584"/>
         <source>sec</source>
         <translation>秒前</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1335"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1340"/>
         <source>Search</source>
         <translation>检索</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1336"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1341"/>
         <source>Translate</source>
         <translation>翻译</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1342"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1347"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1346"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1351"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1347"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1352"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1349"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1354"/>
         <source>Release</source>
         <translation>释放</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1349"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1354"/>
         <source>MButton</source>
         <translation>鼠标中键</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1351"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1356"/>
         <source>Analytics</source>
         <translation>统计分析</translation>
     </message>
@@ -984,12 +984,12 @@
         <translation type="obsolete">双击</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1375"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1383"/>
         <source>Show Traditional Chinese</source>
         <translation>显示繁体中文</translation>
     </message>
     <message>
-        <location filename="../annot/annotationgraphicsitem.cc" line="1545"/>
+        <location filename="../annot/annotationgraphicsitem.cc" line="1553"/>
         <source>cannot edit other&apos;s annotation text</source>
         <translation>无法编辑别人的弹幕</translation>
     </message>
@@ -1230,19 +1230,19 @@
     </message>
     <message>
         <location filename="../preferences/annotationprefs.cc" line="45"/>
-        <location filename="../preferences/annotationprefs.cc" line="461"/>
+        <location filename="../preferences/annotationprefs.cc" line="463"/>
         <source>Annotation Color</source>
         <translation>弹幕光晕颜色</translation>
     </message>
     <message>
         <location filename="../preferences/annotationprefs.cc" line="54"/>
-        <location filename="../preferences/annotationprefs.cc" line="490"/>
+        <location filename="../preferences/annotationprefs.cc" line="492"/>
         <source>Subtitle Color</source>
         <translation>字幕光晕颜色</translation>
     </message>
     <message>
         <location filename="../preferences/annotationprefs.cc" line="63"/>
-        <location filename="../preferences/annotationprefs.cc" line="519"/>
+        <location filename="../preferences/annotationprefs.cc" line="521"/>
         <source>Highlight Color</source>
         <translation>高亮颜色</translation>
     </message>
@@ -1273,14 +1273,14 @@
         <translation>字体透明度</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="426"/>
-        <location filename="../preferences/annotationprefs.cc" line="434"/>
+        <location filename="../preferences/annotationprefs.cc" line="428"/>
+        <location filename="../preferences/annotationprefs.cc" line="436"/>
         <source>font opacity saved</source>
         <translation>字体透明度已保存</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="445"/>
-        <location filename="../preferences/annotationprefs.cc" line="453"/>
+        <location filename="../preferences/annotationprefs.cc" line="447"/>
+        <location filename="../preferences/annotationprefs.cc" line="455"/>
         <source>background opacity saved</source>
         <translation>背景透明度已保存</translation>
     </message>
@@ -1294,19 +1294,19 @@
         <translation>弹幕透明度</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="121"/>
-        <location filename="../preferences/annotationprefs.cc" line="125"/>
+        <location filename="../preferences/annotationprefs.cc" line="122"/>
+        <location filename="../preferences/annotationprefs.cc" line="126"/>
         <source>Background Opacity</source>
         <translation>背景透明度</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="121"/>
-        <location filename="../preferences/annotationprefs.cc" line="125"/>
+        <location filename="../preferences/annotationprefs.cc" line="122"/>
+        <location filename="../preferences/annotationprefs.cc" line="126"/>
         <source>Galgame Only</source>
         <translation>仅限Galgame</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="134"/>
+        <location filename="../preferences/annotationprefs.cc" line="136"/>
         <source>Speedup</source>
         <translation>倍数</translation>
     </message>
@@ -1323,18 +1323,18 @@
         <translation type="obsolete">移动速度</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="138"/>
+        <location filename="../preferences/annotationprefs.cc" line="140"/>
         <source>Moving speed, the larger the faster</source>
         <translation>移动速度，数值越大越快</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="138"/>
+        <location filename="../preferences/annotationprefs.cc" line="140"/>
         <source>Moving Speed</source>
         <translation>弹幕速度</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="147"/>
-        <location filename="../preferences/annotationprefs.cc" line="160"/>
+        <location filename="../preferences/annotationprefs.cc" line="149"/>
+        <location filename="../preferences/annotationprefs.cc" line="162"/>
         <source>Scale</source>
         <translation>倍数</translation>
     </message>
@@ -1343,36 +1343,36 @@
         <translation type="obsolete">大小</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="151"/>
+        <location filename="../preferences/annotationprefs.cc" line="153"/>
         <source>Annotation size</source>
         <translation>弹幕尺寸</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="151"/>
+        <location filename="../preferences/annotationprefs.cc" line="153"/>
         <source>Normal Size</source>
         <translation>通常大小</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="164"/>
+        <location filename="../preferences/annotationprefs.cc" line="166"/>
         <source>Fullscreen Size</source>
         <translation>全屏大小</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="164"/>
+        <location filename="../preferences/annotationprefs.cc" line="166"/>
         <source>Annotation size in fullscreen</source>
         <translation>全屏时弹幕的大小</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="369"/>
-        <location filename="../preferences/annotationprefs.cc" line="377"/>
-        <location filename="../preferences/annotationprefs.cc" line="388"/>
-        <location filename="../preferences/annotationprefs.cc" line="396"/>
+        <location filename="../preferences/annotationprefs.cc" line="371"/>
+        <location filename="../preferences/annotationprefs.cc" line="379"/>
+        <location filename="../preferences/annotationprefs.cc" line="390"/>
+        <location filename="../preferences/annotationprefs.cc" line="398"/>
         <source>annotation size saved</source>
         <translation>弹幕大小已保存</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="407"/>
-        <location filename="../preferences/annotationprefs.cc" line="415"/>
+        <location filename="../preferences/annotationprefs.cc" line="409"/>
+        <location filename="../preferences/annotationprefs.cc" line="417"/>
         <source>annotation speed saved</source>
         <translation>弹幕速度已保存</translation>
     </message>
@@ -1385,26 +1385,26 @@
         <translation type="obsolete">滚动弹幕移动最小像素</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="291"/>
-        <location filename="../preferences/annotationprefs.cc" line="299"/>
+        <location filename="../preferences/annotationprefs.cc" line="293"/>
+        <location filename="../preferences/annotationprefs.cc" line="301"/>
         <source>font saved</source>
         <translation>字体已保存</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="311"/>
-        <location filename="../preferences/annotationprefs.cc" line="319"/>
+        <location filename="../preferences/annotationprefs.cc" line="313"/>
+        <location filename="../preferences/annotationprefs.cc" line="321"/>
         <source>Japanese font saved</source>
         <translation>日文字体保存</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="331"/>
-        <location filename="../preferences/annotationprefs.cc" line="339"/>
+        <location filename="../preferences/annotationprefs.cc" line="333"/>
+        <location filename="../preferences/annotationprefs.cc" line="341"/>
         <source>Chinese font saved</source>
         <translation>中文字体保存</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="350"/>
-        <location filename="../preferences/annotationprefs.cc" line="358"/>
+        <location filename="../preferences/annotationprefs.cc" line="352"/>
+        <location filename="../preferences/annotationprefs.cc" line="360"/>
         <source>offset saved</source>
         <translation>延迟时间已保存</translation>
     </message>
@@ -1413,20 +1413,20 @@
         <translation type="obsolete">解析度已保存</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="466"/>
-        <location filename="../preferences/annotationprefs.cc" line="484"/>
+        <location filename="../preferences/annotationprefs.cc" line="468"/>
+        <location filename="../preferences/annotationprefs.cc" line="486"/>
         <source>annotation color saved</source>
         <translation>弹幕颜色已保存</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="495"/>
-        <location filename="../preferences/annotationprefs.cc" line="513"/>
+        <location filename="../preferences/annotationprefs.cc" line="497"/>
+        <location filename="../preferences/annotationprefs.cc" line="515"/>
         <source>subtitle color saved</source>
         <translation>字幕颜色已保存</translation>
     </message>
     <message>
-        <location filename="../preferences/annotationprefs.cc" line="524"/>
-        <location filename="../preferences/annotationprefs.cc" line="542"/>
+        <location filename="../preferences/annotationprefs.cc" line="526"/>
+        <location filename="../preferences/annotationprefs.cc" line="544"/>
         <source>highlight color saved</source>
         <translation>加亮颜色已保存</translation>
     </message>
@@ -2944,7 +2944,7 @@
         <translation>谷歌翻译</translation>
     </message>
     <message>
-        <location filename="../../../module/translator/googletranslator.cc" line="126"/>
+        <location filename="../../../module/translator/googletranslator.cc" line="142"/>
         <source>network error from Google Translator</source>
         <translation>连接Google服务器失败</translation>
     </message>
@@ -2986,42 +2986,42 @@
         <translation type="obsolete">添加ITH钩子</translation>
     </message>
     <message>
-        <location filename="../game/hookdialog.cc" line="31"/>
+        <location filename="../game/hookdialog.cc" line="34"/>
         <source>Import ITH Hook Code</source>
         <translation>导入ITH文本钩子</translation>
     </message>
     <message>
-        <location filename="../game/hookdialog.cc" line="40"/>
+        <location filename="../game/hookdialog.cc" line="43"/>
         <source>ITH Hook Code</source>
         <translation>ITH Hook Code</translation>
     </message>
     <message>
-        <location filename="../game/hookdialog.cc" line="106"/>
+        <location filename="../game/hookdialog.cc" line="109"/>
         <source>not synchronized with any game</source>
         <translation>尚未与Galgame同步</translation>
     </message>
     <message>
-        <location filename="../game/hookdialog.cc" line="111"/>
+        <location filename="../game/hookdialog.cc" line="114"/>
         <source>hook code already added</source>
         <translation>钩子已添加</translation>
     </message>
     <message>
-        <location filename="../game/hookdialog.cc" line="124"/>
+        <location filename="../game/hookdialog.cc" line="127"/>
         <source>add text hook</source>
         <translation>导入ITH钩子</translation>
     </message>
     <message>
-        <location filename="../game/hookdialog.cc" line="165"/>
+        <location filename="../game/hookdialog.cc" line="168"/>
         <source>ITH hook is already imported</source>
         <translation>ITH钩子已导入</translation>
     </message>
     <message>
-        <location filename="../game/hookdialog.cc" line="198"/>
+        <location filename="../game/hookdialog.cc" line="203"/>
         <source>Valid</source>
         <translation>有效</translation>
     </message>
     <message>
-        <location filename="../game/hookdialog.cc" line="200"/>
+        <location filename="../game/hookdialog.cc" line="205"/>
         <source>Invalid</source>
         <translation>无效</translation>
     </message>
@@ -3216,517 +3216,517 @@
 <context>
     <name>Localizer</name>
     <message>
-        <location filename="localizer.cc" line="167"/>
+        <location filename="localizer.cc" line="47"/>
         <source>Windows</source>
         <translation>Windows</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="168"/>
+        <location filename="localizer.cc" line="48"/>
         <source>Source</source>
         <translation>资源</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="169"/>
+        <location filename="localizer.cc" line="49"/>
         <source>Library</source>
         <translation>我的收藏</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="172"/>
+        <location filename="localizer.cc" line="52"/>
         <source>Start</source>
         <translation>开始</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="173"/>
+        <location filename="localizer.cc" line="53"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="174"/>
-        <location filename="localizer.cc" line="456"/>
-        <location filename="localizer.cc" line="457"/>
+        <location filename="localizer.cc" line="54"/>
+        <location filename="localizer.cc" line="336"/>
+        <location filename="localizer.cc" line="337"/>
         <source>Blacklist</source>
         <translation>NG设定</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="175"/>
+        <location filename="localizer.cc" line="55"/>
         <source>Default</source>
         <translation>默认</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="176"/>
+        <location filename="localizer.cc" line="56"/>
         <source>Random</source>
         <translation>随机</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="177"/>
+        <location filename="localizer.cc" line="57"/>
         <source>Position</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="178"/>
+        <location filename="localizer.cc" line="58"/>
         <source>Progress</source>
         <translation>进度</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="179"/>
+        <location filename="localizer.cc" line="59"/>
         <source>Media</source>
         <translation>媒体</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="180"/>
+        <location filename="localizer.cc" line="60"/>
         <source>Data</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="183"/>
+        <location filename="localizer.cc" line="63"/>
         <source>URL</source>
         <translation>链接</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="184"/>
+        <location filename="localizer.cc" line="64"/>
         <source>State</source>
         <translation>状态</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="185"/>
+        <location filename="localizer.cc" line="65"/>
         <source>Volume</source>
         <translation>音量</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="186"/>
-        <location filename="localizer.cc" line="279"/>
+        <location filename="localizer.cc" line="66"/>
+        <location filename="localizer.cc" line="159"/>
         <source>User</source>
         <translation>魔法师</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="187"/>
+        <location filename="localizer.cc" line="67"/>
         <source>Nickname</source>
         <translation>昵称</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="188"/>
+        <location filename="localizer.cc" line="68"/>
         <source>Percentage</source>
         <translation>百分比</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="189"/>
+        <location filename="localizer.cc" line="69"/>
         <source>Speed</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="190"/>
+        <location filename="localizer.cc" line="70"/>
         <source>Email</source>
         <translation>邮箱</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="191"/>
-        <location filename="localizer.cc" line="280"/>
-        <location filename="localizer.cc" line="433"/>
-        <location filename="localizer.cc" line="439"/>
+        <location filename="localizer.cc" line="71"/>
+        <location filename="localizer.cc" line="160"/>
+        <location filename="localizer.cc" line="313"/>
+        <location filename="localizer.cc" line="319"/>
         <source>Login</source>
         <translation>登录</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="192"/>
+        <location filename="localizer.cc" line="72"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="193"/>
+        <location filename="localizer.cc" line="73"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="194"/>
+        <location filename="localizer.cc" line="74"/>
         <source>Galgame</source>
         <translation>Galgame</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="195"/>
+        <location filename="localizer.cc" line="75"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="196"/>
+        <location filename="localizer.cc" line="76"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="197"/>
+        <location filename="localizer.cc" line="77"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="198"/>
+        <location filename="localizer.cc" line="78"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="199"/>
-        <location filename="localizer.cc" line="830"/>
+        <location filename="localizer.cc" line="79"/>
+        <location filename="localizer.cc" line="710"/>
         <source>Backlog</source>
         <translation>弹幕历史记录</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="200"/>
+        <location filename="localizer.cc" line="80"/>
         <source>Console</source>
         <translation>Debug控制台</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="201"/>
+        <location filename="localizer.cc" line="81"/>
         <source>Remove</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="202"/>
+        <location filename="localizer.cc" line="82"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="203"/>
+        <location filename="localizer.cc" line="83"/>
         <source>Enable</source>
         <translation>有效</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="205"/>
-        <location filename="localizer.cc" line="381"/>
+        <location filename="localizer.cc" line="85"/>
+        <location filename="localizer.cc" line="261"/>
         <source>Menu</source>
         <translation>菜单</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="206"/>
+        <location filename="localizer.cc" line="86"/>
         <source>HTML</source>
         <translation>HTML</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="208"/>
+        <location filename="localizer.cc" line="88"/>
         <source>Rich</source>
         <translation>Rich</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="209"/>
+        <location filename="localizer.cc" line="89"/>
         <source>Code</source>
         <translation>代码</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="210"/>
+        <location filename="localizer.cc" line="90"/>
         <source>Slot</source>
         <translation>Slot</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="211"/>
-        <location filename="localizer.cc" line="451"/>
-        <location filename="localizer.cc" line="452"/>
+        <location filename="localizer.cc" line="91"/>
+        <location filename="localizer.cc" line="331"/>
+        <location filename="localizer.cc" line="332"/>
         <source>Previous</source>
         <translation>前一个</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="212"/>
+        <location filename="localizer.cc" line="92"/>
         <source>Preferences</source>
         <translation>设定</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="213"/>
-        <location filename="localizer.cc" line="453"/>
-        <location filename="localizer.cc" line="454"/>
+        <location filename="localizer.cc" line="93"/>
+        <location filename="localizer.cc" line="333"/>
+        <location filename="localizer.cc" line="334"/>
         <source>Next</source>
         <translation>下一个</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="214"/>
-        <location filename="localizer.cc" line="379"/>
+        <location filename="localizer.cc" line="94"/>
+        <location filename="localizer.cc" line="259"/>
         <source>Fast forward</source>
         <translation>快进</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="215"/>
+        <location filename="localizer.cc" line="95"/>
         <source>Rewind</source>
         <translation>后退</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="216"/>
+        <location filename="localizer.cc" line="96"/>
         <source>Verbatim</source>
         <translation>转义</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="217"/>
-        <location filename="localizer.cc" line="338"/>
-        <location filename="localizer.cc" line="481"/>
-        <location filename="localizer.cc" line="482"/>
+        <location filename="localizer.cc" line="97"/>
+        <location filename="localizer.cc" line="218"/>
+        <location filename="localizer.cc" line="361"/>
+        <location filename="localizer.cc" line="362"/>
         <source>Subtitle</source>
         <translation>字幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="218"/>
+        <location filename="localizer.cc" line="98"/>
         <source>Audio track</source>
         <translation>音轨</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="219"/>
+        <location filename="localizer.cc" line="99"/>
         <source>Section</source>
         <translation>章节</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="220"/>
+        <location filename="localizer.cc" line="100"/>
         <source>Word Count</source>
         <oldsource>Word count</oldsource>
         <translation>字数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="221"/>
+        <location filename="localizer.cc" line="101"/>
         <source>unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="222"/>
+        <location filename="localizer.cc" line="102"/>
         <source>Bless</source>
         <translation>祝福</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="223"/>
+        <location filename="localizer.cc" line="103"/>
         <source>Curse</source>
         <translation>诅咒</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="224"/>
+        <location filename="localizer.cc" line="104"/>
         <source>Block</source>
         <translation>屏蔽</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="225"/>
+        <location filename="localizer.cc" line="105"/>
         <source>Message</source>
         <translation>信息</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="227"/>
+        <location filename="localizer.cc" line="107"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="228"/>
+        <location filename="localizer.cc" line="108"/>
         <source>Foreground color</source>
         <translation>前景色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="229"/>
+        <location filename="localizer.cc" line="109"/>
         <source>Background color</source>
         <translation>背景色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="230"/>
+        <location filename="localizer.cc" line="110"/>
         <source>Bold</source>
         <translation>粗体</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="231"/>
+        <location filename="localizer.cc" line="111"/>
         <source>Strike out</source>
         <translation>划去</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="232"/>
+        <location filename="localizer.cc" line="112"/>
         <source>Italic</source>
         <translation>斜体</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="233"/>
+        <location filename="localizer.cc" line="113"/>
         <source>Underline</source>
         <translation>下划线</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="235"/>
+        <location filename="localizer.cc" line="115"/>
         <source>Dark</source>
         <translation>深色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="236"/>
+        <location filename="localizer.cc" line="116"/>
         <source>Black</source>
         <translation>黑色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="237"/>
+        <location filename="localizer.cc" line="117"/>
         <source>Blue</source>
         <translation>蓝色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="238"/>
+        <location filename="localizer.cc" line="118"/>
         <source>Brown</source>
         <translation>棕色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="239"/>
+        <location filename="localizer.cc" line="119"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="240"/>
+        <location filename="localizer.cc" line="120"/>
         <source>Gray</source>
         <translation>灰色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="241"/>
+        <location filename="localizer.cc" line="121"/>
         <source>Green</source>
         <translation>绿色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="242"/>
+        <location filename="localizer.cc" line="122"/>
         <source>Magenta</source>
         <translation>品红</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="243"/>
+        <location filename="localizer.cc" line="123"/>
         <source>Orange</source>
         <translation>桔黄色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="244"/>
+        <location filename="localizer.cc" line="124"/>
         <source>Pink</source>
         <translation>粉色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="245"/>
+        <location filename="localizer.cc" line="125"/>
         <source>Purple</source>
         <translation>紫色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="246"/>
+        <location filename="localizer.cc" line="126"/>
         <source>Red</source>
         <translation>红色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="247"/>
+        <location filename="localizer.cc" line="127"/>
         <source>White</source>
         <translation>白色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="248"/>
+        <location filename="localizer.cc" line="128"/>
         <source>Yellow</source>
         <translation>黄色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="249"/>
+        <location filename="localizer.cc" line="129"/>
         <source>Light blue</source>
         <translation>淡蓝色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="251"/>
+        <location filename="localizer.cc" line="131"/>
         <source>Alien</source>
         <translation>火星文</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="252"/>
+        <location filename="localizer.cc" line="132"/>
         <source>English</source>
         <translation>英文</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="253"/>
+        <location filename="localizer.cc" line="133"/>
         <source>Japanese</source>
         <translation>日文</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="254"/>
+        <location filename="localizer.cc" line="134"/>
         <source>Chinese</source>
         <translation>中文</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="255"/>
+        <location filename="localizer.cc" line="135"/>
         <source>Traditional Chinese</source>
         <translation>繁体中文</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="256"/>
+        <location filename="localizer.cc" line="136"/>
         <source>Simplified Chinese</source>
         <translation>简体中文</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="257"/>
+        <location filename="localizer.cc" line="137"/>
         <source>Korean</source>
         <translation>韩文</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="258"/>
+        <location filename="localizer.cc" line="138"/>
         <source>French</source>
         <translation>法语</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="259"/>
+        <location filename="localizer.cc" line="139"/>
         <source>German</source>
         <translation>德语</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="260"/>
+        <location filename="localizer.cc" line="140"/>
         <source>Italian</source>
         <translation>意大利语</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="261"/>
+        <location filename="localizer.cc" line="141"/>
         <source>Spanish</source>
         <translation>西班牙语</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="262"/>
+        <location filename="localizer.cc" line="142"/>
         <source>Portuguese</source>
         <translation>葡萄牙语</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="263"/>
+        <location filename="localizer.cc" line="143"/>
         <source>Russian</source>
         <translation>俄罗斯语</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="265"/>
+        <location filename="localizer.cc" line="145"/>
         <source>Attach</source>
         <translation>同步</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="266"/>
+        <location filename="localizer.cc" line="146"/>
         <source>Detach</source>
         <translation>切断同步</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="267"/>
+        <location filename="localizer.cc" line="147"/>
         <source>Attached</source>
         <translation>同步成功</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="268"/>
+        <location filename="localizer.cc" line="148"/>
         <source>Detached</source>
         <translation>切断同步</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="269"/>
+        <location filename="localizer.cc" line="149"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="270"/>
+        <location filename="localizer.cc" line="150"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="278"/>
+        <location filename="localizer.cc" line="158"/>
         <source>Annot Player</source>
         <translation>とある再生使</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="281"/>
-        <location filename="localizer.cc" line="329"/>
-        <location filename="localizer.cc" line="430"/>
-        <location filename="localizer.cc" line="448"/>
+        <location filename="localizer.cc" line="161"/>
+        <location filename="localizer.cc" line="209"/>
+        <location filename="localizer.cc" line="310"/>
+        <location filename="localizer.cc" line="328"/>
         <source>Seek</source>
         <translation>指定时间移动</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="283"/>
+        <location filename="localizer.cc" line="163"/>
         <source>Open Media File</source>
         <translation>打开媒体文件</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="339"/>
+        <location filename="localizer.cc" line="219"/>
         <source>Game</source>
         <translation>Galgame</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="580"/>
+        <location filename="localizer.cc" line="460"/>
         <source>Annotation Source</source>
         <translation>管理弹幕源</translation>
     </message>
@@ -3735,47 +3735,47 @@
         <translation type="obsolete">选择信号源</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="347"/>
+        <location filename="localizer.cc" line="227"/>
         <source>Open media file</source>
         <translation>打开媒体文件</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="284"/>
+        <location filename="localizer.cc" line="164"/>
         <source>Select Media Device</source>
         <oldsource>Select media device</oldsource>
         <translation>选择媒体设备</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="285"/>
+        <location filename="localizer.cc" line="165"/>
         <source>Open Video Device</source>
         <oldsource>Open video device</oldsource>
         <translation>选择视频设备</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="286"/>
+        <location filename="localizer.cc" line="166"/>
         <source>Open Audio Device</source>
         <oldsource>Open audio device</oldsource>
         <translation>选择音频设备</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="287"/>
-        <location filename="localizer.cc" line="364"/>
+        <location filename="localizer.cc" line="167"/>
+        <location filename="localizer.cc" line="244"/>
         <source>Open Subtitle</source>
         <oldsource>Open subtitle</oldsource>
         <translation>打开字幕文件</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="289"/>
+        <location filename="localizer.cc" line="169"/>
         <source>Annotations Analytics</source>
         <translation>弹幕统计分析</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="327"/>
+        <location filename="localizer.cc" line="207"/>
         <source>Trace Window</source>
         <translation>追踪窗口</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="337"/>
+        <location filename="localizer.cc" line="217"/>
         <source>Image</source>
         <translation>镜像</translation>
     </message>
@@ -3784,69 +3784,69 @@
         <translation type="obsolete">实验中</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="484"/>
+        <location filename="localizer.cc" line="364"/>
         <source>Annotation Subtitle</source>
         <oldsource>Annotation subtitle</oldsource>
         <translation>弹幕字幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="577"/>
+        <location filename="localizer.cc" line="457"/>
         <source>Search Annotations</source>
         <translation>弹幕检索</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="836"/>
+        <location filename="localizer.cc" line="716"/>
         <source>Scale Up</source>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="836"/>
-        <location filename="localizer.cc" line="839"/>
+        <location filename="localizer.cc" line="716"/>
+        <location filename="localizer.cc" line="719"/>
         <source>LButton</source>
         <translation>左键</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="839"/>
+        <location filename="localizer.cc" line="719"/>
         <source>Scale Down</source>
         <translation>缩小</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="842"/>
+        <location filename="localizer.cc" line="722"/>
         <source>Reset Offset</source>
         <translation>无延迟时间</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="845"/>
+        <location filename="localizer.cc" line="725"/>
         <source>Increase Offset</source>
         <translation>增加延迟时间</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="848"/>
+        <location filename="localizer.cc" line="728"/>
         <source>Decrease Offset</source>
         <translation>减少延迟时间</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="851"/>
+        <location filename="localizer.cc" line="731"/>
         <source>Reset Rotation</source>
         <translation>默认角度</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="854"/>
+        <location filename="localizer.cc" line="734"/>
         <source>Rotate Up</source>
         <translation>顺时针旋转</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="857"/>
+        <location filename="localizer.cc" line="737"/>
         <source>Rotate Down</source>
         <translation>逆时针旋转</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="860"/>
+        <location filename="localizer.cc" line="740"/>
         <source>Copy URL</source>
         <translation>复制链接</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="861"/>
+        <location filename="localizer.cc" line="741"/>
         <source>Copy Title</source>
         <translation>复制标题</translation>
     </message>
@@ -3864,76 +3864,76 @@
         <translation type="obsolete">标记</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="288"/>
-        <location filename="localizer.cc" line="583"/>
+        <location filename="localizer.cc" line="168"/>
+        <location filename="localizer.cc" line="463"/>
         <source>Comments</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="373"/>
+        <location filename="localizer.cc" line="253"/>
         <source>Open Directory</source>
         <oldsource>Open directory</oldsource>
         <translation>打开文件所在目录</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="702"/>
+        <location filename="localizer.cc" line="582"/>
         <source>Repeat Current Media</source>
         <oldsource>Repeat current media</oldsource>
         <translation>循环再生</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="710"/>
+        <location filename="localizer.cc" line="590"/>
         <source>No Repeat</source>
         <oldsource>No repeat</oldsource>
         <translation>不循环</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="828"/>
+        <location filename="localizer.cc" line="708"/>
         <source>Label Player with Annotations</source>
         <oldsource>Label player with annots</oldsource>
         <translation>显示弹幕标记</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="831"/>
+        <location filename="localizer.cc" line="711"/>
         <source>Prefer Offline Annotations</source>
         <oldsource>Prefer offline annotations</oldsource>
         <translation>优先离线弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="833"/>
+        <location filename="localizer.cc" line="713"/>
         <source>Reset Scale</source>
         <oldsource>Reset scale</oldsource>
         <translation>默认大小</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="833"/>
-        <location filename="localizer.cc" line="842"/>
-        <location filename="localizer.cc" line="851"/>
+        <location filename="localizer.cc" line="713"/>
+        <location filename="localizer.cc" line="722"/>
+        <location filename="localizer.cc" line="731"/>
         <source>Mid</source>
         <translation>中键</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="834"/>
+        <location filename="localizer.cc" line="714"/>
         <source>Reset annotation scale</source>
         <translation>重置大小</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="837"/>
+        <location filename="localizer.cc" line="717"/>
         <source>Scale up</source>
         <translation>放大</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="836"/>
-        <location filename="localizer.cc" line="839"/>
-        <location filename="localizer.cc" line="845"/>
-        <location filename="localizer.cc" line="848"/>
-        <location filename="localizer.cc" line="854"/>
-        <location filename="localizer.cc" line="857"/>
+        <location filename="localizer.cc" line="716"/>
+        <location filename="localizer.cc" line="719"/>
+        <location filename="localizer.cc" line="725"/>
+        <location filename="localizer.cc" line="728"/>
+        <location filename="localizer.cc" line="734"/>
+        <location filename="localizer.cc" line="737"/>
         <source>Wheel</source>
         <translation>滑轮</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="840"/>
+        <location filename="localizer.cc" line="720"/>
         <source>Scale down</source>
         <translation>缩小</translation>
     </message>
@@ -3942,17 +3942,17 @@
         <translation type="obsolete">无延迟时间</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="843"/>
+        <location filename="localizer.cc" line="723"/>
         <source>Reset annotation offset in time</source>
         <translation>重置弹幕延迟时间</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="846"/>
+        <location filename="localizer.cc" line="726"/>
         <source>Increase offset</source>
         <translation>增加延迟时间</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="849"/>
+        <location filename="localizer.cc" line="729"/>
         <source>Decrease offset</source>
         <translation>减少延迟时间</translation>
     </message>
@@ -3961,17 +3961,17 @@
         <translation type="obsolete">默认角度</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="852"/>
+        <location filename="localizer.cc" line="732"/>
         <source>Reset annotation rotation</source>
         <translation>重置弹幕旋转角度</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="855"/>
+        <location filename="localizer.cc" line="735"/>
         <source>Rotate up</source>
         <translation>顺时针旋转</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="858"/>
+        <location filename="localizer.cc" line="738"/>
         <source>Rotate down</source>
         <translation>逆时针旋转</translation>
     </message>
@@ -3980,88 +3980,88 @@
         <translation type="obsolete">拷贝链接到剪贴板</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="862"/>
+        <location filename="localizer.cc" line="742"/>
         <source>Actual Size</source>
         <oldsource>Actual size</oldsource>
         <translation>实际大小</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="864"/>
+        <location filename="localizer.cc" line="744"/>
         <source>Hue up</source>
         <translation>色度增加</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="865"/>
+        <location filename="localizer.cc" line="745"/>
         <source>Hue down</source>
         <translation>色度减少</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="866"/>
+        <location filename="localizer.cc" line="746"/>
         <source>Contrast up</source>
         <translation>对比度增加</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="867"/>
+        <location filename="localizer.cc" line="747"/>
         <source>Contrast down</source>
         <translation>对比度减少</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="868"/>
+        <location filename="localizer.cc" line="748"/>
         <source>Gamma up</source>
         <translation>伽马值增加</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="869"/>
+        <location filename="localizer.cc" line="749"/>
         <source>Gamma down</source>
         <translation>伽马值减少</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="870"/>
+        <location filename="localizer.cc" line="750"/>
         <source>Brightness up</source>
         <translation>辉度增加</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="871"/>
+        <location filename="localizer.cc" line="751"/>
         <source>Brightness down</source>
         <translation>辉度减少</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="872"/>
+        <location filename="localizer.cc" line="752"/>
         <source>Saturation up</source>
         <translation>饱和度增加</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="873"/>
+        <location filename="localizer.cc" line="753"/>
         <source>Saturation down</source>
         <translation>饱和度减少</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="875"/>
+        <location filename="localizer.cc" line="755"/>
         <source>Hue</source>
         <translation>色度</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="876"/>
+        <location filename="localizer.cc" line="756"/>
         <source>Saturation</source>
         <translation>饱和度</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="877"/>
+        <location filename="localizer.cc" line="757"/>
         <source>Gamma</source>
         <translation>伽马</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="878"/>
+        <location filename="localizer.cc" line="758"/>
         <source>Contrast</source>
         <translation>对比度</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="879"/>
+        <location filename="localizer.cc" line="759"/>
         <source>Brightness</source>
         <translation>辉度</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="881"/>
+        <location filename="localizer.cc" line="761"/>
         <source>Media information</source>
         <translation>媒体信息</translation>
     </message>
@@ -4074,20 +4074,20 @@
         <translation type="obsolete">选择信号源</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="290"/>
-        <location filename="localizer.cc" line="405"/>
+        <location filename="localizer.cc" line="170"/>
+        <location filename="localizer.cc" line="285"/>
         <source>Live Channel</source>
         <oldsource>Live Mode</oldsource>
         <translation>实况频道</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="291"/>
-        <location filename="localizer.cc" line="408"/>
+        <location filename="localizer.cc" line="171"/>
+        <location filename="localizer.cc" line="288"/>
         <source>Sync Mode</source>
         <translation>同步模式</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="295"/>
+        <location filename="localizer.cc" line="175"/>
         <source>unrecognized command</source>
         <translation>未知的命令</translation>
     </message>
@@ -4096,76 +4096,76 @@
         <translation type="obsolete">截图失败</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="296"/>
+        <location filename="localizer.cc" line="176"/>
         <source>failed to digest media ID</source>
         <oldsource>failed to hash token</oldsource>
         <translation>标记媒体失败</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="297"/>
+        <location filename="localizer.cc" line="177"/>
         <source>invalid username</source>
         <translation>用户名错误</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="298"/>
+        <location filename="localizer.cc" line="178"/>
         <source>invalid password</source>
         <translation>密码错误</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="299"/>
+        <location filename="localizer.cc" line="179"/>
         <source>invalid time format</source>
         <translation>时间格式错误</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="300"/>
+        <location filename="localizer.cc" line="180"/>
         <source>invalid media</source>
         <oldsource>invalid token</oldsource>
         <translation>媒体情报未知</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="301"/>
+        <location filename="localizer.cc" line="181"/>
         <source>invalid device path</source>
         <translation>设备路径错误</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="302"/>
+        <location filename="localizer.cc" line="182"/>
         <source>file does not exist</source>
         <oldsource>file not existed</oldsource>
         <translation>文件不存在</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="303"/>
+        <location filename="localizer.cc" line="183"/>
         <source>failed to load subtitle</source>
         <translation>字幕加载失败</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="304"/>
+        <location filename="localizer.cc" line="184"/>
         <source>clipboard not available</source>
         <translation>剪贴板无效</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="305"/>
+        <location filename="localizer.cc" line="185"/>
         <source>failed to query media</source>
         <oldsource>failed to submit token</oldsource>
         <translation>搜索媒体情报失败</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="306"/>
+        <location filename="localizer.cc" line="186"/>
         <source>failed to submit annotation</source>
         <translation>提交弹幕失败</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="307"/>
+        <location filename="localizer.cc" line="187"/>
         <source>failed to synchronize offline queue,:return try later</source>
         <translation>同步离线弹幕失败，等下再试试</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="308"/>
+        <location filename="localizer.cc" line="188"/>
         <source>no media</source>
         <translation>没有打开媒体</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="309"/>
+        <location filename="localizer.cc" line="189"/>
         <source>network error</source>
         <translation>网络魔法无效</translation>
     </message>
@@ -4174,125 +4174,125 @@
         <translation type="obsolete">截图已保存到桌面</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="371"/>
+        <location filename="localizer.cc" line="251"/>
         <source>Download Current Media</source>
         <oldsource>Download current media</oldsource>
         <translation>下载当前动画</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="581"/>
+        <location filename="localizer.cc" line="461"/>
         <source>Show media information</source>
         <translation>显示媒体情报</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="600"/>
+        <location filename="localizer.cc" line="480"/>
         <source>Select game process</source>
         <translation>选择游戏进程</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="611"/>
+        <location filename="localizer.cc" line="491"/>
         <source>Game Settings</source>
         <translation>Galgame设定</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="612"/>
+        <location filename="localizer.cc" line="492"/>
         <source>Game settings</source>
         <oldsource>Game Preferences</oldsource>
         <translation>Galgame设定</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="688"/>
+        <location filename="localizer.cc" line="568"/>
         <source>Minimize and pause</source>
         <translation>最小化并暂停</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="715"/>
+        <location filename="localizer.cc" line="595"/>
         <source>Enable Aero</source>
         <translation>开启毛玻璃(Aero)</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="716"/>
+        <location filename="localizer.cc" line="596"/>
         <source>Disable Aero</source>
         <translation>禁用毛玻璃(Aero)</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="742"/>
+        <location filename="localizer.cc" line="622"/>
         <source>Monitor Clipboard</source>
         <oldsource>Monitor clipboard</oldsource>
         <translation>监视剪贴板</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="804"/>
+        <location filename="localizer.cc" line="684"/>
         <source>History</source>
         <translation>历史记录</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="805"/>
+        <location filename="localizer.cc" line="685"/>
         <source>Website</source>
         <translation>网站</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="807"/>
+        <location filename="localizer.cc" line="687"/>
         <source>Annotation effect</source>
         <translation>弹幕渲染方式</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="808"/>
+        <location filename="localizer.cc" line="688"/>
         <source>Transparent</source>
         <translation>透明</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="809"/>
+        <location filename="localizer.cc" line="689"/>
         <source>Shadow</source>
         <translation>阴影</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="810"/>
+        <location filename="localizer.cc" line="690"/>
         <source>Blur</source>
         <translation>模糊</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="812"/>
+        <location filename="localizer.cc" line="692"/>
         <source>Increase</source>
         <translation>增加</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="813"/>
+        <location filename="localizer.cc" line="693"/>
         <source>Decrease</source>
         <translation>减少</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="815"/>
+        <location filename="localizer.cc" line="695"/>
         <source>Second</source>
         <translation>秒</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="816"/>
+        <location filename="localizer.cc" line="696"/>
         <source>Minute</source>
         <translation>分</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="817"/>
+        <location filename="localizer.cc" line="697"/>
         <source>Hour</source>
         <translation>时</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="819"/>
+        <location filename="localizer.cc" line="699"/>
         <source>Network Proxy</source>
         <translation>网络代理</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="820"/>
+        <location filename="localizer.cc" line="700"/>
         <source>Render Context Menu</source>
         <translation>渲染右键菜单</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="822"/>
+        <location filename="localizer.cc" line="702"/>
         <source>http://nicovideo.jp</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="823"/>
+        <location filename="localizer.cc" line="703"/>
         <source>http://bilibili.tv</source>
         <translation></translation>
     </message>
@@ -4301,42 +4301,42 @@
         <translation type="obsolete">评论复制到了剪切板</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="313"/>
+        <location filename="localizer.cc" line="193"/>
         <source>long string got truncated</source>
         <translation>文本太长不得不截断</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="314"/>
+        <location filename="localizer.cc" line="194"/>
         <source>window always on top</source>
         <translation>窗口总在前面</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="316"/>
+        <location filename="localizer.cc" line="196"/>
         <source>try to get user information from cache</source>
         <translation>正在离线缓存中搜索主人的信息</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="317"/>
+        <location filename="localizer.cc" line="197"/>
         <source>succeeded to login user from cache</source>
         <translation>从离线缓存找到主人的信息</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="318"/>
+        <location filename="localizer.cc" line="198"/>
         <source>failed to login user from cache</source>
         <translation>没有从离线缓存中找到主人的信息</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="321"/>
+        <location filename="localizer.cc" line="201"/>
         <source>Username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="322"/>
+        <location filename="localizer.cc" line="202"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="324"/>
+        <location filename="localizer.cc" line="204"/>
         <source>Comment</source>
         <translation>评论</translation>
     </message>
@@ -4345,35 +4345,35 @@
         <translation type="obsolete">输入命令</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="326"/>
+        <location filename="localizer.cc" line="206"/>
         <source>Annotation prefix</source>
         <oldsource>Input prefix</oldsource>
         <translation>弹幕式样</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="332"/>
+        <location filename="localizer.cc" line="212"/>
         <source>All files</source>
         <translation>所有文件</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="333"/>
+        <location filename="localizer.cc" line="213"/>
         <source>All supported</source>
         <translation>支持的格式</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="181"/>
-        <location filename="localizer.cc" line="334"/>
+        <location filename="localizer.cc" line="61"/>
+        <location filename="localizer.cc" line="214"/>
         <source>Video</source>
         <translation>动画</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="182"/>
-        <location filename="localizer.cc" line="335"/>
+        <location filename="localizer.cc" line="62"/>
+        <location filename="localizer.cc" line="215"/>
         <source>Audio</source>
         <translation>音频</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="336"/>
+        <location filename="localizer.cc" line="216"/>
         <source>Picture</source>
         <translation>图片</translation>
     </message>
@@ -4382,20 +4382,20 @@
         <translation type="obsolete">程序</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="170"/>
-        <location filename="localizer.cc" line="343"/>
-        <location filename="localizer.cc" line="367"/>
-        <location filename="localizer.cc" line="368"/>
+        <location filename="localizer.cc" line="50"/>
+        <location filename="localizer.cc" line="223"/>
+        <location filename="localizer.cc" line="247"/>
+        <location filename="localizer.cc" line="248"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="344"/>
+        <location filename="localizer.cc" line="224"/>
         <source>Open media file or game process</source>
         <translation>打开媒体文件或游戏程序</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="346"/>
+        <location filename="localizer.cc" line="226"/>
         <source>Open File</source>
         <oldsource>Open file</oldsource>
         <translation>打开文件</translation>
@@ -4406,63 +4406,63 @@
         <translation type="obsolete">打开CD/DVD</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="355"/>
+        <location filename="localizer.cc" line="235"/>
         <source>Open DVD/VCD/CD Device</source>
         <oldsource>Open DVD/VCD/CD device</oldsource>
         <translation>打开DVD/VCD/CD</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="356"/>
+        <location filename="localizer.cc" line="236"/>
         <source>Open media device</source>
         <translation>打开媒体设备</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="358"/>
+        <location filename="localizer.cc" line="238"/>
         <source>Open DVD/VCD Folder</source>
         <oldsource>Open DVD/VCD folder</oldsource>
         <translation>打开DVD/VCD文件夹</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="359"/>
+        <location filename="localizer.cc" line="239"/>
         <source>Open video folder</source>
         <translation>打开视频文件夹</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="361"/>
+        <location filename="localizer.cc" line="241"/>
         <source>Open CD Folder</source>
         <oldsource>Open CD folder</oldsource>
         <translation>打开CD文件夹</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="362"/>
+        <location filename="localizer.cc" line="242"/>
         <source>Open audio folder</source>
         <translation>打开音频文件夹</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="365"/>
+        <location filename="localizer.cc" line="245"/>
         <source>Load subtitle from file</source>
         <translation>从文件加载字幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="370"/>
+        <location filename="localizer.cc" line="250"/>
         <source>Open in Web Browser</source>
         <oldsource>Open in web browser</oldsource>
         <translation>用浏览器打开</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="171"/>
-        <location filename="localizer.cc" line="375"/>
+        <location filename="localizer.cc" line="51"/>
+        <location filename="localizer.cc" line="255"/>
         <source>Play</source>
         <oldsource>&amp;Play</oldsource>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="162"/>
+        <location filename="localizer.cc" line="42"/>
         <source>More</source>
         <translation>更多</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="163"/>
+        <location filename="localizer.cc" line="43"/>
         <source>Less</source>
         <translation>减少</translation>
     </message>
@@ -4471,171 +4471,171 @@
         <translation type="obsolete">弹幕Thread</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="376"/>
+        <location filename="localizer.cc" line="256"/>
         <source>Play media</source>
         <translation>再生媒体</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="378"/>
+        <location filename="localizer.cc" line="258"/>
         <source>Fast Forward</source>
         <translation>快进</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="382"/>
+        <location filename="localizer.cc" line="262"/>
         <source>Show menu</source>
         <translation>显示菜单</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="384"/>
+        <location filename="localizer.cc" line="264"/>
         <source>Pause</source>
         <oldsource>&amp;Pause</oldsource>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="385"/>
+        <location filename="localizer.cc" line="265"/>
         <source>Pause playing</source>
         <translation>暂停再生</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="387"/>
+        <location filename="localizer.cc" line="267"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="388"/>
+        <location filename="localizer.cc" line="268"/>
         <source>Stop playing</source>
         <translation>停止再生</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="390"/>
+        <location filename="localizer.cc" line="270"/>
         <source>Next Frame</source>
         <translation>下一帧</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="391"/>
+        <location filename="localizer.cc" line="271"/>
         <source>Next frame</source>
         <oldsource>&amp;Next frame</oldsource>
         <translation>下一帧</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="393"/>
+        <location filename="localizer.cc" line="273"/>
         <source>Replay</source>
         <oldsource>&amp;Replay</oldsource>
         <translation>重新再生</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="394"/>
+        <location filename="localizer.cc" line="274"/>
         <source>Restart playing</source>
         <translation>重新再生</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="396"/>
+        <location filename="localizer.cc" line="276"/>
         <source>Mini Player</source>
         <oldsource>Mini player</oldsource>
         <translation>Mini界面</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="397"/>
+        <location filename="localizer.cc" line="277"/>
         <source>Show mini player</source>
         <translation>显示mini再生界面</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="399"/>
+        <location filename="localizer.cc" line="279"/>
         <source>Embed Player</source>
         <oldsource>Embed player</oldsource>
         <translation>嵌入再生</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="400"/>
+        <location filename="localizer.cc" line="280"/>
         <source>Embed player window</source>
         <translation>嵌入放器窗口</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="402"/>
+        <location filename="localizer.cc" line="282"/>
         <source>Embed On Top</source>
         <oldsource>Embed on top</oldsource>
         <translation>嵌入播放器置顶</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="403"/>
+        <location filename="localizer.cc" line="283"/>
         <source>Embed player window on the top</source>
         <translation>嵌入播放器窗口置顶</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="405"/>
-        <location filename="localizer.cc" line="883"/>
+        <location filename="localizer.cc" line="285"/>
+        <location filename="localizer.cc" line="763"/>
         <source>experimental</source>
         <translation>实验</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="406"/>
+        <location filename="localizer.cc" line="286"/>
         <source>Toggle live mode</source>
         <translation>切换实况模式</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="409"/>
+        <location filename="localizer.cc" line="289"/>
         <source>Toggle Sync mode</source>
         <translation>切换同步模式</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="411"/>
+        <location filename="localizer.cc" line="291"/>
         <source>Fullscreen</source>
         <oldsource>&amp;Fullscreen</oldsource>
         <translation>全屏</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="412"/>
+        <location filename="localizer.cc" line="292"/>
         <source>Show fullscreen</source>
         <translation>切换全屏模式</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="414"/>
+        <location filename="localizer.cc" line="294"/>
         <source>Snapshot</source>
         <oldsource>&amp;Snapshot</oldsource>
         <translation>截图</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="415"/>
+        <location filename="localizer.cc" line="295"/>
         <source>Taks a snapshot of current frame</source>
         <translation>截图</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="417"/>
+        <location filename="localizer.cc" line="297"/>
         <source>Toggle Annotations</source>
         <oldsource>Toggle annot</oldsource>
         <translation>显示弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="418"/>
+        <location filename="localizer.cc" line="298"/>
         <source>Toggle annotations</source>
         <translation>显示或隐藏弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="419"/>
-        <location filename="localizer.cc" line="420"/>
+        <location filename="localizer.cc" line="299"/>
+        <location filename="localizer.cc" line="300"/>
         <source>Show Annotations</source>
         <oldsource>Show annots</oldsource>
         <translation>显示弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="421"/>
+        <location filename="localizer.cc" line="301"/>
         <source>Hide Annotations</source>
         <oldsource>Hide annots</oldsource>
         <translation>隐藏弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="422"/>
+        <location filename="localizer.cc" line="302"/>
         <source>Hide annotations</source>
         <translation>隐藏弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="424"/>
+        <location filename="localizer.cc" line="304"/>
         <source>Exit</source>
         <oldsource>E&amp;xit</oldsource>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="425"/>
+        <location filename="localizer.cc" line="305"/>
         <source>Quit the application</source>
         <translation>退出程序</translation>
     </message>
@@ -4645,121 +4645,121 @@
         <translation type="obsolete">帐户</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="428"/>
+        <location filename="localizer.cc" line="308"/>
         <source>Show user informatin</source>
         <oldsource>Show user panel</oldsource>
         <translation>显示帐户信息</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="431"/>
+        <location filename="localizer.cc" line="311"/>
         <source>Seek position</source>
         <translation>指定时间移动</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="434"/>
-        <location filename="localizer.cc" line="440"/>
+        <location filename="localizer.cc" line="314"/>
+        <location filename="localizer.cc" line="320"/>
         <source>Show login dialog</source>
         <translation>显示登录对话框</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="436"/>
-        <location filename="localizer.cc" line="437"/>
+        <location filename="localizer.cc" line="316"/>
+        <location filename="localizer.cc" line="317"/>
         <source>Logout</source>
         <oldsource>&amp;Logout</oldsource>
         <translation>退出登陆</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="442"/>
+        <location filename="localizer.cc" line="322"/>
         <source>Choose Live Time</source>
         <oldsource>Choose live time</oldsource>
         <translation>选择时间段</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="443"/>
+        <location filename="localizer.cc" line="323"/>
         <source>Show live mode dialog</source>
         <translation>选择实况模式</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="445"/>
+        <location filename="localizer.cc" line="325"/>
         <source>Choose Sync Time</source>
         <oldsource>Choose sync time</oldsource>
         <translation>选择同步模式</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="446"/>
+        <location filename="localizer.cc" line="326"/>
         <source>Show sync mode dialog</source>
         <translation>选择同步模式</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="449"/>
+        <location filename="localizer.cc" line="329"/>
         <source>Show seek dialog</source>
         <translation>指定时间再生</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="459"/>
+        <location filename="localizer.cc" line="339"/>
         <source>Pick Window</source>
         <oldsource>Pick window</oldsource>
         <translation>选择窗口</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="460"/>
+        <location filename="localizer.cc" line="340"/>
         <source>Show pick dialog</source>
         <translation>选择窗口</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="462"/>
+        <location filename="localizer.cc" line="342"/>
         <source>Pick Game Window</source>
         <oldsource>Pick process window</oldsource>
         <translation>选择游戏窗口</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="463"/>
+        <location filename="localizer.cc" line="343"/>
         <source>Select process window</source>
         <translation>选择进程窗口</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="465"/>
+        <location filename="localizer.cc" line="345"/>
         <source>Pick Annotation Window</source>
         <oldsource>Select Annotation Window</oldsource>
         <translation>选择弹幕窗口</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="466"/>
+        <location filename="localizer.cc" line="346"/>
         <source>Select window to show annots</source>
         <translation>选择再生窗口</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="468"/>
-        <location filename="localizer.cc" line="469"/>
+        <location filename="localizer.cc" line="348"/>
+        <location filename="localizer.cc" line="349"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="470"/>
+        <location filename="localizer.cc" line="350"/>
         <source>About us</source>
         <translation>关于我们</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="472"/>
-        <location filename="localizer.cc" line="473"/>
-        <location filename="localizer.cc" line="474"/>
+        <location filename="localizer.cc" line="352"/>
+        <location filename="localizer.cc" line="353"/>
+        <location filename="localizer.cc" line="354"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="476"/>
+        <location filename="localizer.cc" line="356"/>
         <source>Copy</source>
         <oldsource>&amp;Copy</oldsource>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="477"/>
+        <location filename="localizer.cc" line="357"/>
         <source>Paste</source>
         <oldsource>&amp;Paste</oldsource>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="479"/>
+        <location filename="localizer.cc" line="359"/>
         <source>Example</source>
         <translation>示例</translation>
     </message>
@@ -4768,272 +4768,272 @@
         <translation type="obsolete">字幕弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="485"/>
+        <location filename="localizer.cc" line="365"/>
         <source>Annotation as subtitle</source>
         <translation>字幕弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="487"/>
+        <location filename="localizer.cc" line="367"/>
         <source>DVD Sections</source>
         <oldsource>DVD sections</oldsource>
         <translation>DVD菜单</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="488"/>
+        <location filename="localizer.cc" line="368"/>
         <source>Select DVD sections</source>
         <translation>选择DVD的章节</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="490"/>
+        <location filename="localizer.cc" line="370"/>
         <source>Show Subtitle</source>
         <translation>显示字幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="491"/>
+        <location filename="localizer.cc" line="371"/>
         <source>Show subtitle</source>
         <oldsource>&amp;Show subtitle</oldsource>
         <translation>显示字幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="493"/>
+        <location filename="localizer.cc" line="373"/>
         <source>Hide Subtitle</source>
         <translation>隐藏字幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="494"/>
+        <location filename="localizer.cc" line="374"/>
         <source>Hide subtitle</source>
         <oldsource>&amp;Hide subtitle</oldsource>
         <translation>隐藏字幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="496"/>
+        <location filename="localizer.cc" line="376"/>
         <source>Show Sub Annotations</source>
         <translation>显示弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="497"/>
+        <location filename="localizer.cc" line="377"/>
         <source>Show subtitle annot</source>
         <translation>显示字幕弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="499"/>
+        <location filename="localizer.cc" line="379"/>
         <source>Show Non-sub Annotations</source>
         <translation>显示弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="500"/>
+        <location filename="localizer.cc" line="380"/>
         <source>Show non-sub annot</source>
         <translation>显示非字幕弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="502"/>
-        <location filename="localizer.cc" line="503"/>
+        <location filename="localizer.cc" line="382"/>
+        <location filename="localizer.cc" line="383"/>
         <source>Hide</source>
         <oldsource>&amp;Hide</oldsource>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="505"/>
+        <location filename="localizer.cc" line="385"/>
         <source>Auto Clear Console</source>
         <oldsource>Auto clear console</oldsource>
         <translation>自动隐藏控制台</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="506"/>
+        <location filename="localizer.cc" line="386"/>
         <source>Enable auto clear console</source>
         <translation>自动隐藏控制台</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="508"/>
+        <location filename="localizer.cc" line="388"/>
         <source>Stick Console</source>
         <oldsource>Stick console</oldsource>
         <translation>固定控制台</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="509"/>
+        <location filename="localizer.cc" line="389"/>
         <source>Disable auto clear console</source>
         <translation>取消隐藏控制台</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="511"/>
+        <location filename="localizer.cc" line="391"/>
         <source>Always On Top</source>
         <oldsource>Always on top</oldsource>
         <translation>总在前面</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="512"/>
+        <location filename="localizer.cc" line="392"/>
         <source>Show window on top</source>
         <translation>窗口总在前面</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="514"/>
+        <location filename="localizer.cc" line="394"/>
         <source>Advanced</source>
         <oldsource>&amp;Advanced</oldsource>
         <translation>高级</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="515"/>
+        <location filename="localizer.cc" line="395"/>
         <source>Advanced menu</source>
         <translation>高级菜单</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="517"/>
+        <location filename="localizer.cc" line="397"/>
         <source>Bless User</source>
         <translation>祝福魔法师</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="518"/>
+        <location filename="localizer.cc" line="398"/>
         <source>Bless user</source>
         <translation>祝福魔法师</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="520"/>
+        <location filename="localizer.cc" line="400"/>
         <source>Curse User</source>
         <translation>诅咒魔法师</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="521"/>
+        <location filename="localizer.cc" line="401"/>
         <source>Curse user</source>
         <translation>诅咒魔法师</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="523"/>
-        <location filename="localizer.cc" line="563"/>
+        <location filename="localizer.cc" line="403"/>
+        <location filename="localizer.cc" line="443"/>
         <source>Block User</source>
         <translation>屏蔽魔法师</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="526"/>
+        <location filename="localizer.cc" line="406"/>
         <source>Edit Annotation</source>
         <oldsource>Edit annot</oldsource>
         <translation>编辑弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="527"/>
+        <location filename="localizer.cc" line="407"/>
         <source>Edit annotation</source>
         <translation>编辑弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="529"/>
+        <location filename="localizer.cc" line="409"/>
         <source>Delete Annotation</source>
         <oldsource>Delete annot</oldsource>
         <translation>删除弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="530"/>
+        <location filename="localizer.cc" line="410"/>
         <source>Delete annotation</source>
         <translation>删除弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="532"/>
+        <location filename="localizer.cc" line="412"/>
         <source>Block Annotation</source>
         <oldsource>Block annot</oldsource>
         <translation>屏蔽弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="533"/>
+        <location filename="localizer.cc" line="413"/>
         <source>Block annotation</source>
         <translation>屏蔽弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="535"/>
+        <location filename="localizer.cc" line="415"/>
         <source>Bless Annotation</source>
         <oldsource>Bless annot</oldsource>
         <translation>祝福弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="536"/>
+        <location filename="localizer.cc" line="416"/>
         <source>Bless annotation</source>
         <translation>祝福弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="538"/>
+        <location filename="localizer.cc" line="418"/>
         <source>Curse Annotation</source>
         <oldsource>Curse annot</oldsource>
         <translation>诅咒弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="539"/>
+        <location filename="localizer.cc" line="419"/>
         <source>Curse annotation</source>
         <translation>诅咒弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="541"/>
+        <location filename="localizer.cc" line="421"/>
         <source>Bless Media</source>
         <oldsource>Bless Token</oldsource>
         <translation>祝福媒体</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="542"/>
+        <location filename="localizer.cc" line="422"/>
         <source>Bless media</source>
         <oldsource>Bless token</oldsource>
         <translation>祝福媒体</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="544"/>
+        <location filename="localizer.cc" line="424"/>
         <source>Curse Media</source>
         <oldsource>Curse Token</oldsource>
         <translation>诅咒媒体</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="545"/>
+        <location filename="localizer.cc" line="425"/>
         <source>Curse media</source>
         <oldsource>Curse token</oldsource>
         <translation>诅咒媒体</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="547"/>
+        <location filename="localizer.cc" line="427"/>
         <source>Hide Annotation</source>
         <oldsource>Hide annot</oldsource>
         <translation>隐藏弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="548"/>
+        <location filename="localizer.cc" line="428"/>
         <source>Hide annotation</source>
         <translation>隐藏弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="550"/>
+        <location filename="localizer.cc" line="430"/>
         <source>Show Annotation</source>
         <oldsource>Show annot</oldsource>
         <translation>显示弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="551"/>
+        <location filename="localizer.cc" line="431"/>
         <source>Show annotation</source>
         <translation>显示弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="553"/>
+        <location filename="localizer.cc" line="433"/>
         <source>Copy Annotation</source>
         <oldsource>Copy annot</oldsource>
         <translation>复制弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="554"/>
+        <location filename="localizer.cc" line="434"/>
         <source>Copy annotation</source>
         <translation>复制弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="556"/>
+        <location filename="localizer.cc" line="436"/>
         <source>Display User</source>
         <translation>显示魔法师</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="557"/>
+        <location filename="localizer.cc" line="437"/>
         <source>Display user</source>
         <oldsource>Display &amp;user</oldsource>
         <translation>显示用户</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="559"/>
-        <location filename="localizer.cc" line="560"/>
+        <location filename="localizer.cc" line="439"/>
+        <location filename="localizer.cc" line="440"/>
         <source>Subtitle History</source>
         <oldsource>Subtitle history</oldsource>
         <translation>字幕历史记录</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="561"/>
+        <location filename="localizer.cc" line="441"/>
         <source>Show subtitle history</source>
         <translation>显示字幕历史记录</translation>
     </message>
@@ -5042,67 +5042,67 @@
         <translation type="obsolete">弹幕Thread</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="734"/>
+        <location filename="localizer.cc" line="614"/>
         <source>Show annotations as thread</source>
         <translation>弹幕Thread</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="825"/>
+        <location filename="localizer.cc" line="705"/>
         <source>Aspect ratio</source>
         <translation>长宽比</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="826"/>
+        <location filename="localizer.cc" line="706"/>
         <source>New window</source>
         <translation>打开新窗口</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="829"/>
+        <location filename="localizer.cc" line="709"/>
         <source>Save Annotation Associations</source>
         <oldsource>Save annots associations</oldsource>
         <translation>保存弹幕关联</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="524"/>
-        <location filename="localizer.cc" line="564"/>
+        <location filename="localizer.cc" line="404"/>
+        <location filename="localizer.cc" line="444"/>
         <source>Block user</source>
         <translation>屏蔽魔法师</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="566"/>
+        <location filename="localizer.cc" line="446"/>
         <source>Clear Offline Cache</source>
         <oldsource>Clear offline cache</oldsource>
         <translation>清空离线缓冲</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="567"/>
+        <location filename="localizer.cc" line="447"/>
         <source>Remove offline cache</source>
         <translation>清空离线缓冲</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="569"/>
+        <location filename="localizer.cc" line="449"/>
         <source>Synchronize with Server</source>
         <oldsource>Synchronize with server</oldsource>
         <translation>和服务器同步</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="570"/>
+        <location filename="localizer.cc" line="450"/>
         <source>Connect to server and synchronize local cache</source>
         <translation>和服务器同步</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="571"/>
+        <location filename="localizer.cc" line="451"/>
         <source>Disconnect from Server</source>
         <oldsource>Disconnect from server</oldsource>
         <translation>和服务器断开</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="572"/>
+        <location filename="localizer.cc" line="452"/>
         <source>Disconnect from server and use local cache only</source>
         <translation>和服务器断开</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="578"/>
+        <location filename="localizer.cc" line="458"/>
         <source>Show annotation browser</source>
         <translation>显示弹幕浏览器</translation>
     </message>
@@ -5112,7 +5112,7 @@
         <translation type="obsolete">弹幕编辑</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="575"/>
+        <location filename="localizer.cc" line="455"/>
         <source>Show annotation editor</source>
         <translation>打开弹幕编辑器</translation>
     </message>
@@ -5121,7 +5121,7 @@
         <translation type="obsolete">标记</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="584"/>
+        <location filename="localizer.cc" line="464"/>
         <source>Show comment browser</source>
         <translation>显示评论</translation>
     </message>
@@ -5130,45 +5130,45 @@
         <translation type="obsolete">注册帐户</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="587"/>
+        <location filename="localizer.cc" line="467"/>
         <source>Proxy web browser</source>
         <oldsource>Show cloud browser</oldsource>
         <translation>浏览器</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="589"/>
-        <location filename="localizer.cc" line="590"/>
-        <location filename="localizer.cc" line="591"/>
+        <location filename="localizer.cc" line="469"/>
+        <location filename="localizer.cc" line="470"/>
+        <location filename="localizer.cc" line="471"/>
         <source>Edit</source>
         <oldsource>&amp;Edit</oldsource>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="597"/>
+        <location filename="localizer.cc" line="477"/>
         <source>Add alias</source>
         <oldsource>&amp;Add alias</oldsource>
         <translation>添加别名</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="599"/>
+        <location filename="localizer.cc" line="479"/>
         <source>Select Game Process</source>
         <oldsource>Select process</oldsource>
         <translation>选择游戏进程</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="603"/>
+        <location filename="localizer.cc" line="483"/>
         <source>Attach process</source>
         <oldsource>&amp;Attach process</oldsource>
         <translation>同步进程</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="606"/>
+        <location filename="localizer.cc" line="486"/>
         <source>Detach process</source>
         <oldsource>&amp;Detach process</oldsource>
         <translation>进程同步连接断开</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="609"/>
+        <location filename="localizer.cc" line="489"/>
         <source>Refresh process</source>
         <oldsource>&amp;Refresh process</oldsource>
         <translation>刷新进程</translation>
@@ -5179,147 +5179,147 @@
         <translation type="obsolete">变更监听频道</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="614"/>
-        <location filename="localizer.cc" line="615"/>
+        <location filename="localizer.cc" line="494"/>
+        <location filename="localizer.cc" line="495"/>
         <source>Playlist</source>
         <translation>再生列表</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="617"/>
+        <location filename="localizer.cc" line="497"/>
         <source>Application Language</source>
         <oldsource>Application language</oldsource>
         <translation>程序语言</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="618"/>
+        <location filename="localizer.cc" line="498"/>
         <source>Choose application language</source>
         <translation>选择程序语言</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="620"/>
+        <location filename="localizer.cc" line="500"/>
         <source>Any Language</source>
         <oldsource>Any language</oldsource>
         <translation>所有语种</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="621"/>
+        <location filename="localizer.cc" line="501"/>
         <source>All</source>
         <oldsource>&amp;All</oldsource>
         <translation>所有</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="622"/>
+        <location filename="localizer.cc" line="502"/>
         <source>Choose all languages</source>
         <translation>选择所有语言</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="624"/>
+        <location filename="localizer.cc" line="504"/>
         <source>Annotation Languages</source>
         <oldsource>Annot languages</oldsource>
         <translation>弹幕语言</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="625"/>
+        <location filename="localizer.cc" line="505"/>
         <source>Choose annotation language</source>
         <translation>选择弹幕语言</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="627"/>
+        <location filename="localizer.cc" line="507"/>
         <source>User Language</source>
         <oldsource>User language</oldsource>
         <translation>魔法师语言</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="628"/>
+        <location filename="localizer.cc" line="508"/>
         <source>Choose user language</source>
         <translation>选择用户语言</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="630"/>
-        <location filename="localizer.cc" line="798"/>
+        <location filename="localizer.cc" line="510"/>
+        <location filename="localizer.cc" line="678"/>
         <source>Anonymous</source>
         <translation>匿名</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="631"/>
+        <location filename="localizer.cc" line="511"/>
         <source>User anonymous</source>
         <translation>用户匿名</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="633"/>
+        <location filename="localizer.cc" line="513"/>
         <source>Show Translation</source>
         <oldsource>Show translation</oldsource>
         <translation>显示翻译</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="634"/>
+        <location filename="localizer.cc" line="514"/>
         <source>Display translation</source>
         <translation>显示翻译</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="636"/>
+        <location filename="localizer.cc" line="516"/>
         <source>Subtitle On Top</source>
         <oldsource>Subtitle on top</oldsource>
         <translation>字幕置顶</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="637"/>
+        <location filename="localizer.cc" line="517"/>
         <source>Display subtitle on the top/bottom</source>
         <translation>在顶端显示字幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="639"/>
+        <location filename="localizer.cc" line="519"/>
         <source>Subtitle Color</source>
         <oldsource>Subtitle color</oldsource>
         <translation>字幕颜色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="640"/>
+        <location filename="localizer.cc" line="520"/>
         <source>Select subtitle color</source>
         <translation>选择字幕颜色</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="642"/>
+        <location filename="localizer.cc" line="522"/>
         <source>Theme</source>
         <oldsource>&amp;Theme</oldsource>
         <translation>界面主题</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="643"/>
+        <location filename="localizer.cc" line="523"/>
         <source>Select GUI theme</source>
         <translation>选择见面主题</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="645"/>
-        <location filename="localizer.cc" line="646"/>
+        <location filename="localizer.cc" line="525"/>
+        <location filename="localizer.cc" line="526"/>
         <source>Create Date</source>
         <oldsource>Create date</oldsource>
         <translation>创建时间</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="164"/>
+        <location filename="localizer.cc" line="44"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="157"/>
+        <location filename="localizer.cc" line="37"/>
         <source>Time</source>
         <translation>时间</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="158"/>
+        <location filename="localizer.cc" line="38"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="165"/>
-        <location filename="localizer.cc" line="730"/>
-        <location filename="localizer.cc" line="731"/>
+        <location filename="localizer.cc" line="45"/>
+        <location filename="localizer.cc" line="610"/>
+        <location filename="localizer.cc" line="611"/>
         <source>Download</source>
         <translation>下载</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="574"/>
+        <location filename="localizer.cc" line="454"/>
         <source>Annotation Editor</source>
         <translation>编辑弹幕</translation>
     </message>
@@ -5328,28 +5328,28 @@
         <translation type="obsolete">弹幕统计分析</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="586"/>
+        <location filename="localizer.cc" line="466"/>
         <source>Browser</source>
         <oldsource>Proxy Browser</oldsource>
         <translation>浏览器</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="596"/>
+        <location filename="localizer.cc" line="476"/>
         <source>Add Alias</source>
         <translation>添加别名</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="602"/>
+        <location filename="localizer.cc" line="482"/>
         <source>Attach Process</source>
         <translation>同步进程</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="605"/>
+        <location filename="localizer.cc" line="485"/>
         <source>Detach Process</source>
         <translation>进程同步连接断开</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="608"/>
+        <location filename="localizer.cc" line="488"/>
         <source>Refresh Process</source>
         <translation>刷新进程</translation>
     </message>
@@ -5358,341 +5358,341 @@
         <translation type="obsolete">变更监听频道</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="647"/>
-        <location filename="localizer.cc" line="648"/>
+        <location filename="localizer.cc" line="527"/>
+        <location filename="localizer.cc" line="528"/>
         <source>Update Date</source>
         <oldsource>Update date</oldsource>
         <translation>更新日期</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="649"/>
+        <location filename="localizer.cc" line="529"/>
         <source>Blessed</source>
         <translation>祝福数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="650"/>
-        <location filename="localizer.cc" line="782"/>
+        <location filename="localizer.cc" line="530"/>
+        <location filename="localizer.cc" line="662"/>
         <source>Bless Count</source>
         <oldsource>Bless count</oldsource>
         <translation>祝福数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="651"/>
+        <location filename="localizer.cc" line="531"/>
         <source>Cursed</source>
         <translation>诅咒数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="652"/>
-        <location filename="localizer.cc" line="783"/>
+        <location filename="localizer.cc" line="532"/>
+        <location filename="localizer.cc" line="663"/>
         <source>Curse Count</source>
         <oldsource>Curse count</oldsource>
         <translation>诅咒数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="653"/>
-        <location filename="localizer.cc" line="795"/>
+        <location filename="localizer.cc" line="533"/>
+        <location filename="localizer.cc" line="675"/>
         <source>Blocked</source>
         <translation>NG数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="654"/>
-        <location filename="localizer.cc" line="784"/>
+        <location filename="localizer.cc" line="534"/>
+        <location filename="localizer.cc" line="664"/>
         <source>Block Count</source>
         <oldsource>Block count</oldsource>
         <translation>NG数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="655"/>
+        <location filename="localizer.cc" line="535"/>
         <source>Visited</source>
         <translation>再生数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="656"/>
-        <location filename="localizer.cc" line="786"/>
+        <location filename="localizer.cc" line="536"/>
+        <location filename="localizer.cc" line="666"/>
         <source>Visit Count</source>
         <oldsource>Visit count</oldsource>
         <translation>再生数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="657"/>
-        <location filename="localizer.cc" line="796"/>
+        <location filename="localizer.cc" line="537"/>
+        <location filename="localizer.cc" line="676"/>
         <source>Annot</source>
         <translation>弹幕数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="658"/>
-        <location filename="localizer.cc" line="690"/>
+        <location filename="localizer.cc" line="538"/>
+        <location filename="localizer.cc" line="570"/>
         <source>Annotation Count</source>
         <oldsource>Annotation count</oldsource>
         <translation>弹幕数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="660"/>
-        <location filename="localizer.cc" line="661"/>
-        <location filename="localizer.cc" line="767"/>
+        <location filename="localizer.cc" line="540"/>
+        <location filename="localizer.cc" line="541"/>
+        <location filename="localizer.cc" line="647"/>
         <source>Alias</source>
         <translation>别名</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="663"/>
+        <location filename="localizer.cc" line="543"/>
         <source>Backward</source>
         <oldsource>&amp;Backward</oldsource>
         <translation>后退</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="664"/>
+        <location filename="localizer.cc" line="544"/>
         <source>Forward</source>
         <oldsource>&amp;Forward</oldsource>
         <translation>前进</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="665"/>
-        <location filename="localizer.cc" line="667"/>
-        <location filename="localizer.cc" line="669"/>
-        <location filename="localizer.cc" line="671"/>
-        <location filename="localizer.cc" line="673"/>
+        <location filename="localizer.cc" line="545"/>
+        <location filename="localizer.cc" line="547"/>
+        <location filename="localizer.cc" line="549"/>
+        <location filename="localizer.cc" line="551"/>
+        <location filename="localizer.cc" line="553"/>
         <source>Forward %1 sec</source>
         <oldsource>Forward 5 sec</oldsource>
         <translation>前进%1秒</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="666"/>
-        <location filename="localizer.cc" line="668"/>
-        <location filename="localizer.cc" line="670"/>
-        <location filename="localizer.cc" line="672"/>
-        <location filename="localizer.cc" line="674"/>
+        <location filename="localizer.cc" line="546"/>
+        <location filename="localizer.cc" line="548"/>
+        <location filename="localizer.cc" line="550"/>
+        <location filename="localizer.cc" line="552"/>
+        <location filename="localizer.cc" line="554"/>
         <source>Backward %1 sec</source>
         <oldsource>Backward 5 sec</oldsource>
         <translation>后退%1秒</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="675"/>
-        <location filename="localizer.cc" line="677"/>
-        <location filename="localizer.cc" line="679"/>
+        <location filename="localizer.cc" line="555"/>
+        <location filename="localizer.cc" line="557"/>
+        <location filename="localizer.cc" line="559"/>
         <source>Forward %1 min</source>
         <oldsource>Forward 1 min</oldsource>
         <translation>前进%1分钟</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="676"/>
-        <location filename="localizer.cc" line="678"/>
-        <location filename="localizer.cc" line="680"/>
+        <location filename="localizer.cc" line="556"/>
+        <location filename="localizer.cc" line="558"/>
+        <location filename="localizer.cc" line="560"/>
         <source>Backward %1 min</source>
         <oldsource>Backward 1 min</oldsource>
         <translation>后退%1分钟</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="682"/>
+        <location filename="localizer.cc" line="562"/>
         <source>Recent</source>
         <translation>最近打开的文件</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="683"/>
+        <location filename="localizer.cc" line="563"/>
         <source>Recent File</source>
         <oldsource>Recent file</oldsource>
         <translation>最近的文件</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="687"/>
+        <location filename="localizer.cc" line="567"/>
         <source>Minimize and Pause</source>
         <translation>最小化并暂停</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="691"/>
+        <location filename="localizer.cc" line="571"/>
         <source>Hint maximum annotation count</source>
         <translation>弹幕数上限</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="696"/>
+        <location filename="localizer.cc" line="576"/>
         <source>Tracks</source>
         <translation>音轨</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="697"/>
+        <location filename="localizer.cc" line="577"/>
         <source>Media tracks</source>
         <translation>音轨</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="699"/>
+        <location filename="localizer.cc" line="579"/>
         <source>Auto Play Next Media</source>
         <oldsource>Auto play next media</oldsource>
         <translation>自动再生下一个</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="700"/>
+        <location filename="localizer.cc" line="580"/>
         <source>Automatically play next media</source>
         <translation>自动再生下一个媒体</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="704"/>
+        <location filename="localizer.cc" line="584"/>
         <source>Dock to the Top</source>
         <translation>嵌入顶部</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="705"/>
+        <location filename="localizer.cc" line="585"/>
         <source>Dock to the top</source>
         <translation>嵌入顶部显示</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="707"/>
+        <location filename="localizer.cc" line="587"/>
         <source>Dock to the Bottom</source>
         <translation>嵌入底部</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="708"/>
+        <location filename="localizer.cc" line="588"/>
         <source>Dock to the bottom</source>
         <translation>嵌入底部显示</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="712"/>
+        <location filename="localizer.cc" line="592"/>
         <source>Show Menubar</source>
         <translation>显示菜单栏</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="713"/>
+        <location filename="localizer.cc" line="593"/>
         <source>Show menubar</source>
         <translation>显示菜单栏</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="718"/>
+        <location filename="localizer.cc" line="598"/>
         <source>Check Internet Connection</source>
         <oldsource>Check Internet</oldsource>
         <translation>检查网络连接</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="719"/>
+        <location filename="localizer.cc" line="599"/>
         <source>Check Internet connection</source>
         <translation>检查网络连接</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="721"/>
+        <location filename="localizer.cc" line="601"/>
         <source>Remove Caches</source>
         <oldsource>Remove caches</oldsource>
         <translation>删除缓冲</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="722"/>
+        <location filename="localizer.cc" line="602"/>
         <source>Remove offline caches</source>
         <translation>删除离线缓冲</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="724"/>
+        <location filename="localizer.cc" line="604"/>
         <source>Link Accounts</source>
         <oldsource>Link accounts</oldsource>
         <translation>动画网站账户</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="725"/>
+        <location filename="localizer.cc" line="605"/>
         <source>Set accounts for websites</source>
         <translation>设定动画网站账户</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="727"/>
+        <location filename="localizer.cc" line="607"/>
         <source>Enable Blacklist</source>
         <translation>NG名单有效</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="728"/>
+        <location filename="localizer.cc" line="608"/>
         <source>Enable blacklist</source>
         <translation>NG有效</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="733"/>
+        <location filename="localizer.cc" line="613"/>
         <source>Annotation Analytics</source>
         <oldsource>Annotation analytics</oldsource>
         <translation>弹幕统计分析</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="736"/>
-        <location filename="localizer.cc" line="737"/>
-        <location filename="localizer.cc" line="739"/>
-        <location filename="localizer.cc" line="740"/>
+        <location filename="localizer.cc" line="616"/>
+        <location filename="localizer.cc" line="617"/>
+        <location filename="localizer.cc" line="619"/>
+        <location filename="localizer.cc" line="620"/>
         <source>Save Buffered Video</source>
         <translation>保存缓冲动画</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="744"/>
+        <location filename="localizer.cc" line="624"/>
         <source>Nothing</source>
         <translation>无</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="745"/>
+        <location filename="localizer.cc" line="625"/>
         <source>Shutdown</source>
         <translation>关机</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="746"/>
+        <location filename="localizer.cc" line="626"/>
         <source>Sleep</source>
         <translation>休眠</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="748"/>
+        <location filename="localizer.cc" line="628"/>
         <source>Standard</source>
         <translation>标准</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="749"/>
+        <location filename="localizer.cc" line="629"/>
         <source>Wide screen</source>
         <translation>宽屏</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="751"/>
+        <location filename="localizer.cc" line="631"/>
         <source>Allow Multiple Windows</source>
         <oldsource>Allow multiple windows</oldsource>
         <translation>允许多个窗口</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="753"/>
+        <location filename="localizer.cc" line="633"/>
         <source>Release Annotations</source>
         <oldsource>Release annotations</oldsource>
         <translation>释放捕获的弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="775"/>
+        <location filename="localizer.cc" line="655"/>
         <source>Login Time</source>
         <oldsource>LoginTime</oldsource>
         <translation>登录时间</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="777"/>
+        <location filename="localizer.cc" line="657"/>
         <source>Login IP</source>
         <translation>登录IP</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="778"/>
+        <location filename="localizer.cc" line="658"/>
         <source>Login Count</source>
         <translation>登录数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="785"/>
+        <location filename="localizer.cc" line="665"/>
         <source>Annot Count</source>
         <translation>弹幕数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="790"/>
+        <location filename="localizer.cc" line="670"/>
         <source>File</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="800"/>
+        <location filename="localizer.cc" line="680"/>
         <source>Maximize</source>
         <translation>最大化</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="801"/>
+        <location filename="localizer.cc" line="681"/>
         <source>Minimize</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="802"/>
+        <location filename="localizer.cc" line="682"/>
         <source>Restore</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="204"/>
-        <location filename="localizer.cc" line="593"/>
-        <location filename="localizer.cc" line="594"/>
-        <location filename="localizer.cc" line="684"/>
+        <location filename="localizer.cc" line="84"/>
+        <location filename="localizer.cc" line="473"/>
+        <location filename="localizer.cc" line="474"/>
+        <location filename="localizer.cc" line="564"/>
         <source>Clear</source>
         <translation>清空</translation>
     </message>
@@ -5701,192 +5701,192 @@
         <translation type="obsolete">打开CD</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="685"/>
+        <location filename="localizer.cc" line="565"/>
         <source>Clear recent files</source>
         <translation>清空最近的文件</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="693"/>
+        <location filename="localizer.cc" line="573"/>
         <source>Browse</source>
         <translation>浏览文件</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="694"/>
+        <location filename="localizer.cc" line="574"/>
         <source>Files in the same folder</source>
         <translation>相同文件夹里的文件</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="755"/>
+        <location filename="localizer.cc" line="635"/>
         <source>Filter Pattern</source>
         <oldsource>Filter pattern</oldsource>
         <translation>过滤文本</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="756"/>
+        <location filename="localizer.cc" line="636"/>
         <source>Filter Syntax</source>
         <oldsource>Filter syntax</oldsource>
         <translation>过滤语法</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="757"/>
+        <location filename="localizer.cc" line="637"/>
         <source>Filter Column</source>
         <oldsource>Filter column</oldsource>
         <translation>过滤的列</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="758"/>
+        <location filename="localizer.cc" line="638"/>
         <source>Regular Expression</source>
         <oldsource>Regular expression</oldsource>
         <translation>正则表达式</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="759"/>
+        <location filename="localizer.cc" line="639"/>
         <source>Wildcard</source>
         <translation>通配符</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="760"/>
+        <location filename="localizer.cc" line="640"/>
         <source>Fixed String</source>
         <oldsource>Fixed string</oldsource>
         <translation>通常字符串</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="762"/>
+        <location filename="localizer.cc" line="642"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="763"/>
+        <location filename="localizer.cc" line="643"/>
         <source>Name</source>
         <translation>名字</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="764"/>
+        <location filename="localizer.cc" line="644"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="765"/>
+        <location filename="localizer.cc" line="645"/>
         <source>Tag</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="325"/>
-        <location filename="localizer.cc" line="766"/>
+        <location filename="localizer.cc" line="205"/>
+        <location filename="localizer.cc" line="646"/>
         <source>Annotation</source>
         <translation>弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="311"/>
+        <location filename="localizer.cc" line="191"/>
         <source>copied to clipboard</source>
         <translation>已拷贝</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="349"/>
+        <location filename="localizer.cc" line="229"/>
         <source>Open Media URL</source>
         <oldsource>Open media URL</oldsource>
         <translation>打开在线媒体</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="350"/>
+        <location filename="localizer.cc" line="230"/>
         <source>Open media from Internet or local URL</source>
         <translation>打开在线或本地媒体链接</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="352"/>
+        <location filename="localizer.cc" line="232"/>
         <source>Import annots from URL</source>
         <translation>导入在线弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="353"/>
+        <location filename="localizer.cc" line="233"/>
         <source>Add annotations from URL</source>
         <translation>从URL添加弹幕</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="207"/>
+        <location filename="localizer.cc" line="87"/>
         <source>Homepage</source>
         <translation>公式主页</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="159"/>
+        <location filename="localizer.cc" line="39"/>
         <source>Device</source>
         <translation>设备</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="160"/>
+        <location filename="localizer.cc" line="40"/>
         <source>Preview</source>
         <translation>预览</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="161"/>
+        <location filename="localizer.cc" line="41"/>
         <source>Pixel</source>
         <translation>像素</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="166"/>
+        <location filename="localizer.cc" line="46"/>
         <source>Internet</source>
         <translation>Internet</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="427"/>
+        <location filename="localizer.cc" line="307"/>
         <source>About Me</source>
         <translation>关于我</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="768"/>
+        <location filename="localizer.cc" line="648"/>
         <source>UserID</source>
         <translation>魔法师ID</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="769"/>
+        <location filename="localizer.cc" line="649"/>
         <source>UserAlias</source>
         <translation>魔法师</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="770"/>
+        <location filename="localizer.cc" line="650"/>
         <source>TokenId</source>
         <oldsource>TokeId</oldsource>
         <translation>标记ID</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="771"/>
+        <location filename="localizer.cc" line="651"/>
         <source>Hash</source>
         <translation>Hash</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="772"/>
+        <location filename="localizer.cc" line="652"/>
         <source>Text</source>
         <translation>文本</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="773"/>
+        <location filename="localizer.cc" line="653"/>
         <source>Pos</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="774"/>
+        <location filename="localizer.cc" line="654"/>
         <source>Create Time</source>
         <oldsource>CreateTime</oldsource>
         <translation>创建时间</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="776"/>
+        <location filename="localizer.cc" line="656"/>
         <source>Update Time</source>
         <oldsource>UpdateTime</oldsource>
         <translation>更新时间</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="779"/>
+        <location filename="localizer.cc" line="659"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="780"/>
+        <location filename="localizer.cc" line="660"/>
         <source>Status</source>
         <translation>监听状态</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="781"/>
+        <location filename="localizer.cc" line="661"/>
         <source>Flags</source>
         <translation>Flags</translation>
     </message>
@@ -5899,32 +5899,32 @@
         <translation type="obsolete">诅咒数</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="788"/>
+        <location filename="localizer.cc" line="668"/>
         <source>PID</source>
         <translation>进程号</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="789"/>
+        <location filename="localizer.cc" line="669"/>
         <source>Folder</source>
         <translation>文件夹</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="791"/>
+        <location filename="localizer.cc" line="671"/>
         <source>Path</source>
         <translation>路径</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="793"/>
+        <location filename="localizer.cc" line="673"/>
         <source>Active</source>
         <translation>有效</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="794"/>
+        <location filename="localizer.cc" line="674"/>
         <source>Deleted</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="localizer.cc" line="797"/>
+        <location filename="localizer.cc" line="677"/>
         <source>n/a</source>
         <translation>未知</translation>
     </message>
@@ -6001,7 +6001,7 @@
         <translation type="obsolete">选择需要监听的进程窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2536"/>
+        <location filename="../mainwindow.cc" line="2587"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
@@ -6010,64 +6010,64 @@
         <translation type="obsolete">视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2552"/>
+        <location filename="../mainwindow.cc" line="2603"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2569"/>
-        <location filename="../mainwindow.cc" line="2570"/>
+        <location filename="../mainwindow.cc" line="2620"/>
+        <location filename="../mainwindow.cc" line="2621"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2571"/>
+        <location filename="../mainwindow.cc" line="2622"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3762"/>
+        <location filename="../mainwindow.cc" line="3813"/>
         <source>analyzing media ...</source>
         <translation>媒体分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3944"/>
+        <location filename="../mainwindow.cc" line="3995"/>
         <source>detaching all processes ...</source>
         <translation>进程同步断开...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4091"/>
+        <location filename="../mainwindow.cc" line="4142"/>
         <source>saved</source>
         <translation>已保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4093"/>
+        <location filename="../mainwindow.cc" line="4144"/>
         <source>failed to save snapshot</source>
         <translation>保存截图失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4117"/>
+        <location filename="../mainwindow.cc" line="4168"/>
         <source>snapshot saved on the destop</source>
         <translation>截图保存到了桌面上</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4342"/>
-        <location filename="../mainwindow.cc" line="8497"/>
+        <location filename="../mainwindow.cc" line="4393"/>
+        <location filename="../mainwindow.cc" line="8559"/>
         <source>updater launched, please close Annot Player</source>
         <translation>软件更新已打开，请关闭播放器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4345"/>
+        <location filename="../mainwindow.cc" line="4396"/>
         <source>opening update URL ...</source>
         <translation>正在打开...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4401"/>
+        <location filename="../mainwindow.cc" line="4452"/>
         <source>Buffering ...</source>
         <translation>正在缓冲…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4431"/>
+        <location filename="../mainwindow.cc" line="4482"/>
         <source>Download finished</source>
         <translation>下载完成</translation>
     </message>
@@ -6100,7 +6100,7 @@
         <translation type="obsolete">正在本地缓冲中搜索弹幕信息...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5699"/>
+        <location filename="../mainwindow.cc" line="5750"/>
         <source>offline database</source>
         <translation>离线数据库</translation>
     </message>
@@ -6109,12 +6109,12 @@
         <translation type="obsolete">提交弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6306"/>
+        <location filename="../mainwindow.cc" line="6362"/>
         <source>remove annotations</source>
         <translation>删除弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6318"/>
+        <location filename="../mainwindow.cc" line="6374"/>
         <source>capture annotations</source>
         <translation>捕获弹幕</translation>
     </message>
@@ -6127,30 +6127,30 @@
         <translation type="obsolete">使用%1/%2加鼠标来捕捉/释放弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7993"/>
+        <location filename="../mainwindow.cc" line="8055"/>
         <source>always on top enabled</source>
         <translation>总在前面有效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7995"/>
+        <location filename="../mainwindow.cc" line="8057"/>
         <source>always on top disabled</source>
         <translation>总在前面无效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8023"/>
-        <location filename="../mainwindow.cc" line="8066"/>
-        <location filename="../mainwindow.cc" line="8113"/>
-        <location filename="../mainwindow.cc" line="8158"/>
-        <location filename="../mainwindow.cc" line="8203"/>
+        <location filename="../mainwindow.cc" line="8085"/>
+        <location filename="../mainwindow.cc" line="8128"/>
+        <location filename="../mainwindow.cc" line="8175"/>
+        <location filename="../mainwindow.cc" line="8220"/>
+        <location filename="../mainwindow.cc" line="8265"/>
         <source>invalid cast id</source>
         <translation>无效的施法对象</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8029"/>
-        <location filename="../mainwindow.cc" line="8072"/>
-        <location filename="../mainwindow.cc" line="8119"/>
-        <location filename="../mainwindow.cc" line="8164"/>
-        <location filename="../mainwindow.cc" line="8209"/>
+        <location filename="../mainwindow.cc" line="8091"/>
+        <location filename="../mainwindow.cc" line="8134"/>
+        <location filename="../mainwindow.cc" line="8181"/>
+        <location filename="../mainwindow.cc" line="8226"/>
+        <location filename="../mainwindow.cc" line="8271"/>
         <source>cannot perform cast when offline</source>
         <translation>离线中魔法无效</translation>
     </message>
@@ -6183,23 +6183,23 @@
         <translation type="obsolete">退出登录中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1368"/>
-        <location filename="../mainwindow.cc" line="2370"/>
+        <location filename="../mainwindow.cc" line="1376"/>
+        <location filename="../mainwindow.cc" line="2422"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1401"/>
+        <location filename="../mainwindow.cc" line="1409"/>
         <source>Remove All</source>
         <translation>全部清除</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1403"/>
+        <location filename="../mainwindow.cc" line="1411"/>
         <source>Remove Non-existed</source>
         <translation>清除不存在的条目</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1416"/>
+        <location filename="../mainwindow.cc" line="1424"/>
         <source>Translator</source>
         <translation>翻译器</translation>
     </message>
@@ -6208,27 +6208,27 @@
         <translation type="obsolete">我的收藏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1435"/>
+        <location filename="../mainwindow.cc" line="1443"/>
         <source>Show Subtitle On Top</source>
         <translation>字幕置顶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1438"/>
+        <location filename="../mainwindow.cc" line="1446"/>
         <source>Show Subtitle</source>
         <translation>显示字幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1441"/>
+        <location filename="../mainwindow.cc" line="1449"/>
         <source>Show Non-Subtitle Annotation</source>
         <translation>显示非字幕弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1455"/>
+        <location filename="../mainwindow.cc" line="1463"/>
         <source>Convert to Traditional Chinese</source>
         <translation>变换为繁体中文</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1463"/>
+        <location filename="../mainwindow.cc" line="1471"/>
         <source>Always Show Timestamp</source>
         <translation>显示日期时间</translation>
     </message>
@@ -6237,80 +6237,80 @@
         <translation type="obsolete">抑制弹幕滚动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1475"/>
-        <location filename="../mainwindow.cc" line="7140"/>
+        <location filename="../mainwindow.cc" line="1483"/>
+        <location filename="../mainwindow.cc" line="7196"/>
         <source>Audio Delay</source>
         <translation>声音延迟时间</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1478"/>
-        <location filename="../mainwindow.cc" line="3079"/>
+        <location filename="../mainwindow.cc" line="1486"/>
+        <location filename="../mainwindow.cc" line="3130"/>
         <source>Open Annotation Files</source>
         <translation>打开本地弹幕文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1481"/>
+        <location filename="../mainwindow.cc" line="1489"/>
         <source>Import Annotations from URL</source>
         <translation>导入在线弹幕链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1485"/>
+        <location filename="../mainwindow.cc" line="1493"/>
         <source>Download Annotations (XML/JSON)</source>
         <translation>下载XML/JSON弹幕文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1488"/>
+        <location filename="../mainwindow.cc" line="1496"/>
         <source>Save Annotation File</source>
         <translation>保存弹幕XML/JSON文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1493"/>
+        <location filename="../mainwindow.cc" line="1501"/>
         <source>Check for Update</source>
         <translation>检查软件更新</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1532"/>
+        <location filename="../mainwindow.cc" line="1540"/>
         <source>Google Translator</source>
         <translation>谷歌翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1529"/>
+        <location filename="../mainwindow.cc" line="1537"/>
         <source>Infoseek Honyaku</source>
         <translation>Infoseek翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="351"/>
-        <location filename="../mainwindow.cc" line="9040"/>
+        <location filename="../mainwindow.cc" line="353"/>
+        <location filename="../mainwindow.cc" line="9105"/>
         <source>synchronizing with running game</source>
         <translation>与正在运行的galgame同步中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1467"/>
+        <location filename="../mainwindow.cc" line="1475"/>
         <source>No Drifting Annotations</source>
         <translation>抑制弹幕滚动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1538"/>
+        <location filename="../mainwindow.cc" line="1546"/>
         <source>@nifty honyaku</source>
         <translation>@nifty翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1541"/>
+        <location filename="../mainwindow.cc" line="1549"/>
         <source>Excite Honyaku</source>
         <translation>エキサイト翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1535"/>
+        <location filename="../mainwindow.cc" line="1543"/>
         <source>Microsoft Translator</source>
         <translation>微软翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1526"/>
+        <location filename="../mainwindow.cc" line="1534"/>
         <source>OCN Honyaku</source>
         <translation>OCN翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1517"/>
+        <location filename="../mainwindow.cc" line="1525"/>
         <source>Romaji Translator</source>
         <translation>变换为罗马字</translation>
     </message>
@@ -6319,42 +6319,47 @@
         <translation type="obsolete">与正在运行的galgame同步中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1520"/>
+        <location filename="../mainwindow.cc" line="1528"/>
         <source>Yahoo! Honyaku</source>
         <translation>Yahoo!翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1523"/>
+        <location filename="../mainwindow.cc" line="1531"/>
         <source>freshEYE Honyaku</source>
         <translation>freshEYE翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1544"/>
+        <location filename="../mainwindow.cc" line="1552"/>
         <source>SDL Translator</source>
         <translation>SDL翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1548"/>
+        <location filename="../mainwindow.cc" line="1555"/>
+        <source>SYSTRAN Translator</source>
+        <translation>SYSTRAN翻译</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="1559"/>
         <source>Stereo</source>
         <translation>立体声</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1551"/>
+        <location filename="../mainwindow.cc" line="1562"/>
         <source>Reverse</source>
         <translation>反转声道</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1554"/>
+        <location filename="../mainwindow.cc" line="1565"/>
         <source>Left</source>
         <translation>左声道</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1557"/>
+        <location filename="../mainwindow.cc" line="1568"/>
         <source>Right</source>
         <translation>右声道</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1560"/>
+        <location filename="../mainwindow.cc" line="1571"/>
         <source>Dolby&apos;s</source>
         <translation>杜比</translation>
     </message>
@@ -6363,80 +6368,80 @@
         <translation type="obsolete">与正在运行的Galgame同步</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2104"/>
-        <location filename="../mainwindow.cc" line="2105"/>
+        <location filename="../mainwindow.cc" line="2152"/>
+        <location filename="../mainwindow.cc" line="2153"/>
         <source>Translation Service</source>
         <translation>翻译服务</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2236"/>
-        <location filename="../mainwindow.cc" line="2237"/>
+        <location filename="../mainwindow.cc" line="2288"/>
+        <location filename="../mainwindow.cc" line="2289"/>
         <source>Subtitle Color</source>
         <translation>字幕颜色</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2288"/>
-        <location filename="../mainwindow.cc" line="2289"/>
+        <location filename="../mainwindow.cc" line="2340"/>
+        <location filename="../mainwindow.cc" line="2341"/>
         <source>Adjust Video</source>
         <translation>调整视频参数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2352"/>
-        <location filename="../mainwindow.cc" line="2353"/>
+        <location filename="../mainwindow.cc" line="2404"/>
+        <location filename="../mainwindow.cc" line="2405"/>
         <source>Import Annotations</source>
         <translation>导入弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2364"/>
-        <location filename="../mainwindow.cc" line="2365"/>
+        <location filename="../mainwindow.cc" line="2416"/>
+        <location filename="../mainwindow.cc" line="2417"/>
         <source>Subtitle</source>
         <translation>字幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2371"/>
+        <location filename="../mainwindow.cc" line="2423"/>
         <source>Play menu</source>
         <translation>再生菜单</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3653"/>
-        <location filename="../mainwindow.cc" line="8664"/>
+        <location filename="../mainwindow.cc" line="3704"/>
+        <location filename="../mainwindow.cc" line="8729"/>
         <source>Analyzing ...</source>
         <translation>分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3654"/>
+        <location filename="../mainwindow.cc" line="3705"/>
         <source>analyzing</source>
         <translation>分析中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3905"/>
+        <location filename="../mainwindow.cc" line="3956"/>
         <source>Paused</source>
         <translation>暂停再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3947"/>
+        <location filename="../mainwindow.cc" line="3998"/>
         <source>Stopped</source>
         <translation>再生停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4846"/>
+        <location filename="../mainwindow.cc" line="4897"/>
         <source>Click the window to show annotations</source>
         <translation>请单击希望显示弹幕的窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4866"/>
+        <location filename="../mainwindow.cc" line="4917"/>
         <source>Click the galgame&apos;s window to sync with</source>
         <translation>请单击galgame的窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8561"/>
-        <location filename="../mainwindow.cc" line="8576"/>
-        <location filename="../mainwindow.cc" line="8618"/>
+        <location filename="../mainwindow.cc" line="8623"/>
+        <location filename="../mainwindow.cc" line="8638"/>
+        <location filename="../mainwindow.cc" line="8680"/>
         <source>cannot sync with myself</source>
         <translation>播放器不能与自身同步</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8773"/>
+        <location filename="../mainwindow.cc" line="8838"/>
         <source>please synchronize with a game first</source>
         <translation>请首先与galgame同步</translation>
     </message>
@@ -6445,22 +6450,22 @@
         <translation type="obsolete">选定频道</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8899"/>
+        <location filename="../mainwindow.cc" line="8964"/>
         <source>opening process</source>
         <translation>正在打开程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9045"/>
+        <location filename="../mainwindow.cc" line="9110"/>
         <source>no running games in the library are detected</source>
         <translation>没有发现收藏的游戏在运行</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10137"/>
+        <location filename="../mainwindow.cc" line="10242"/>
         <source>Reaching End Soon ...</source>
         <translation>再生即将结束...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11601"/>
+        <location filename="../mainwindow.cc" line="11706"/>
         <source>opening</source>
         <translation>正在打开</translation>
     </message>
@@ -6549,13 +6554,13 @@
         <translation type="obsolete">再生中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4340"/>
-        <location filename="../mainwindow.cc" line="8495"/>
+        <location filename="../mainwindow.cc" line="4391"/>
+        <location filename="../mainwindow.cc" line="8557"/>
         <source>new version released at Google Code</source>
         <translation>在Google Code发现新版魔导书</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5042"/>
+        <location filename="../mainwindow.cc" line="5093"/>
         <source>unknown media</source>
         <translation>未知的媒体</translation>
     </message>
@@ -6572,14 +6577,14 @@
         <translation type="obsolete">导入在线弹幕链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2996"/>
-        <location filename="../mainwindow.cc" line="3030"/>
+        <location filename="../mainwindow.cc" line="3047"/>
+        <location filename="../mainwindow.cc" line="3081"/>
         <source>analyzing URL ...</source>
         <translation>媒体链接分析中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3000"/>
-        <location filename="../mainwindow.cc" line="3389"/>
+        <location filename="../mainwindow.cc" line="3051"/>
+        <location filename="../mainwindow.cc" line="3440"/>
         <source>failed to resolve URL</source>
         <translation>解析链接失败</translation>
     </message>
@@ -6616,54 +6621,54 @@
         <translation type="obsolete">程序退出中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8124"/>
-        <location filename="../mainwindow.cc" line="8169"/>
-        <location filename="../mainwindow.cc" line="8214"/>
+        <location filename="../mainwindow.cc" line="8186"/>
+        <location filename="../mainwindow.cc" line="8231"/>
+        <location filename="../mainwindow.cc" line="8276"/>
         <source>cannot perform cast to yourself</source>
         <translation>不能对自己施法</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8130"/>
+        <location filename="../mainwindow.cc" line="8192"/>
         <source>blessing user ...</source>
         <translation>正在祝福魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8141"/>
+        <location filename="../mainwindow.cc" line="8203"/>
         <source>user blessed</source>
         <translation>魔法师被祝福</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8175"/>
+        <location filename="../mainwindow.cc" line="8237"/>
         <source>cursing user ...</source>
         <translation>正在诅咒魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8186"/>
+        <location filename="../mainwindow.cc" line="8248"/>
         <source>user cursed</source>
         <translation>魔法师被诅咒</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8220"/>
+        <location filename="../mainwindow.cc" line="8282"/>
         <source>blocking user ...</source>
         <translation>正在屏蔽魔法师...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8231"/>
+        <location filename="../mainwindow.cc" line="8293"/>
         <source>user blocked</source>
         <translation>魔法师被屏蔽</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8332"/>
+        <location filename="../mainwindow.cc" line="8394"/>
         <source>connecting to server ...</source>
         <translation>正在连接服务器...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8349"/>
+        <location filename="../mainwindow.cc" line="8411"/>
         <source>server connected</source>
         <translation>服务器已连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8351"/>
+        <location filename="../mainwindow.cc" line="8413"/>
         <source>server disconnected</source>
         <translation>服务器断开</translation>
     </message>
@@ -6672,85 +6677,85 @@
         <translation type="obsolete">新版魔导书发现，下载地址：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2414"/>
+        <location filename="../mainwindow.cc" line="2466"/>
         <source>After Finished Playing</source>
         <translation>再生全部结束后</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2489"/>
-        <location filename="../mainwindow.cc" line="2490"/>
+        <location filename="../mainwindow.cc" line="2541"/>
+        <location filename="../mainwindow.cc" line="2542"/>
         <source>Annotation Information</source>
         <translation>弹幕情报</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2565"/>
+        <location filename="../mainwindow.cc" line="2616"/>
         <source>&amp;Settings</source>
         <translation>偏好</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2566"/>
+        <location filename="../mainwindow.cc" line="2617"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2992"/>
-        <location filename="../mainwindow.cc" line="3132"/>
+        <location filename="../mainwindow.cc" line="3043"/>
+        <location filename="../mainwindow.cc" line="3183"/>
         <source>importing annotations to Galgame is not allowed</source>
         <translation>无法向Galgame导入动画弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3057"/>
+        <location filename="../mainwindow.cc" line="3108"/>
         <source>Open File</source>
         <translation>打开文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3144"/>
+        <location filename="../mainwindow.cc" line="3195"/>
         <source>annotations already imported</source>
         <translation>弹幕已导入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3150"/>
+        <location filename="../mainwindow.cc" line="3201"/>
         <source>annotations not found</source>
         <translation>未找到弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3309"/>
+        <location filename="../mainwindow.cc" line="3360"/>
         <source>Open Subtitles</source>
         <translation>打开字幕文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3499"/>
+        <location filename="../mainwindow.cc" line="3550"/>
         <source>annotation file removed</source>
         <translation>移除弹幕文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3634"/>
+        <location filename="../mainwindow.cc" line="3685"/>
         <source>play file with unknown extension</source>
         <translation>尝试再生未知的扩展名</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3918"/>
+        <location filename="../mainwindow.cc" line="3969"/>
         <source>Confirm</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3919"/>
+        <location filename="../mainwindow.cc" line="3970"/>
         <source>Stop playing?</source>
         <translation>停止同步再生吗？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4015"/>
+        <location filename="../mainwindow.cc" line="4066"/>
         <source>Synchronized</source>
         <translation>同步完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4097"/>
-        <location filename="../mainwindow.cc" line="4103"/>
+        <location filename="../mainwindow.cc" line="4148"/>
+        <location filename="../mainwindow.cc" line="4154"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4338"/>
+        <location filename="../mainwindow.cc" line="4389"/>
         <source>you are using the lastest version</source>
         <translation>已经装备最新版本的魔导书</translation>
     </message>
@@ -6759,38 +6764,38 @@
         <translation type="obsolete">新版魔导书发现</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4889"/>
+        <location filename="../mainwindow.cc" line="4940"/>
         <source>please log in to save media information</source>
         <translation>标记媒体失败，请登录</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4894"/>
+        <location filename="../mainwindow.cc" line="4945"/>
         <source>information not saved for unknown media</source>
         <translation>标记媒体失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4897"/>
-        <location filename="../mainwindow.cc" line="4939"/>
+        <location filename="../mainwindow.cc" line="4948"/>
+        <location filename="../mainwindow.cc" line="4990"/>
         <source>saving media information ...</source>
         <translation>检索媒体情报...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4927"/>
+        <location filename="../mainwindow.cc" line="4978"/>
         <source>similar information already exists</source>
         <translation>相同的信息已存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4933"/>
+        <location filename="../mainwindow.cc" line="4984"/>
         <source>alias is not a valid URL</source>
         <translation>别名不是有效的URL</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4955"/>
+        <location filename="../mainwindow.cc" line="5006"/>
         <source>media information saved</source>
         <translation>媒体情报已保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5037"/>
+        <location filename="../mainwindow.cc" line="5088"/>
         <source>not connected to the Internet</source>
         <translation>无法连接Internet</translation>
     </message>
@@ -6799,259 +6804,269 @@
         <translation type="obsolete">未知的标记</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5047"/>
-        <location filename="../mainwindow.cc" line="5125"/>
+        <location filename="../mainwindow.cc" line="5098"/>
+        <location filename="../mainwindow.cc" line="5176"/>
         <source>updating annotations ...</source>
         <translation>更新弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5121"/>
+        <location filename="../mainwindow.cc" line="5172"/>
         <source>no changes</source>
         <translation>没有变更</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5331"/>
+        <location filename="../mainwindow.cc" line="5382"/>
         <source>searching for media information ...</source>
         <translation>搜索媒体信息...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5533"/>
+        <location filename="../mainwindow.cc" line="5584"/>
         <source>searching for media information in cache ...</source>
         <translation>正在本地cache中搜索弹幕情报...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5977"/>
+        <location filename="../mainwindow.cc" line="6033"/>
         <source>saving annotation ...</source>
         <translation>保存弹幕中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6685"/>
+        <location filename="../mainwindow.cc" line="6741"/>
         <source>use %1 with mouse or wheel to control annotations</source>
         <translation>使用%1与鼠标左中右键和滚轮一起捕捉弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="6977"/>
-        <location filename="../mainwindow.cc" line="6984"/>
+        <location filename="../mainwindow.cc" line="7033"/>
+        <location filename="../mainwindow.cc" line="7040"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="7143"/>
+        <location filename="../mainwindow.cc" line="7199"/>
         <source> sec.</source>
         <translation>秒</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8035"/>
+        <location filename="../mainwindow.cc" line="8097"/>
         <source>blessing media ...</source>
         <translation>正在祝福魔媒体...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8047"/>
+        <location filename="../mainwindow.cc" line="8109"/>
         <source>media blessed</source>
         <translation>祝福媒体成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8053"/>
+        <location filename="../mainwindow.cc" line="8115"/>
         <source>failed to bless media</source>
         <translation>祝福媒体失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8078"/>
+        <location filename="../mainwindow.cc" line="8140"/>
         <source>cursing media ...</source>
         <translation>正在诅咒媒体...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8090"/>
+        <location filename="../mainwindow.cc" line="8152"/>
         <source>media cursed</source>
         <translation>诅咒媒体成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8096"/>
+        <location filename="../mainwindow.cc" line="8158"/>
         <source>failed to curse media</source>
         <translation>诅咒媒体失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8558"/>
+        <location filename="../mainwindow.cc" line="8620"/>
         <source>found process id for window</source>
         <translation>发现窗口的进程</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8563"/>
+        <location filename="../mainwindow.cc" line="8625"/>
         <source>process id for window was not found</source>
         <translation>窗口的进程没有找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8581"/>
+        <location filename="../mainwindow.cc" line="8643"/>
         <source>process was attached</source>
         <translation>进程已同步</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8585"/>
+        <location filename="../mainwindow.cc" line="8647"/>
         <source>process attached</source>
         <translation>同步进程成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8597"/>
+        <location filename="../mainwindow.cc" line="8659"/>
         <source>failed to attach process </source>
         <translation>同步进程失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8599"/>
+        <location filename="../mainwindow.cc" line="8661"/>
         <source>Is the process running now?</source>
         <translation>游戏已经打开了吗？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8601"/>
+        <location filename="../mainwindow.cc" line="8663"/>
         <source>Run me as administrator and try again (o^^o)</source>
         <translation>换成管理员的身份试试吧</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8603"/>
+        <location filename="../mainwindow.cc" line="8665"/>
         <source>Restart the target process might help -_-</source>
         <translation>可能需要重启一下程序</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8616"/>
+        <location filename="../mainwindow.cc" line="8678"/>
         <source>process was started</source>
         <translation>程序已经启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8621"/>
+        <location filename="../mainwindow.cc" line="8686"/>
         <source>told process to start</source>
         <translation>刚刚让程序启动</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8629"/>
+        <location filename="../mainwindow.cc" line="8694"/>
         <source>failed to start process</source>
         <translation>开始程序失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8633"/>
+        <location filename="../mainwindow.cc" line="8698"/>
         <source>wait %1 seconds for process to start ...</source>
         <translation>等待%1秒程序启动...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8725"/>
+        <location filename="../mainwindow.cc" line="8784"/>
         <source>add text hook</source>
         <translation>导入文本</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8727"/>
+        <location filename="../mainwindow.cc" line="8786"/>
         <source>failed to add text hook</source>
         <translation>导入文本失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8734"/>
+        <location filename="../mainwindow.cc" line="8799"/>
         <source>resuming last game encoding</source>
         <translation>恢复上一次游戏的编码</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8743"/>
+        <location filename="../mainwindow.cc" line="8808"/>
         <source>detect game encoding</source>
         <translation>侦测到游戏的文本编码</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="8790"/>
+        <location filename="../mainwindow.cc" line="8855"/>
         <source>Saving ...</source>
         <translation>保存中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11888"/>
+        <location filename="../mainwindow.cc" line="11999"/>
         <source>freshEYE Honyaku On</source>
         <translation>O freshEYE翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11890"/>
+        <location filename="../mainwindow.cc" line="12001"/>
         <source>freshEYE Honyaku Off</source>
         <translation>X freshEYE翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11900"/>
+        <location filename="../mainwindow.cc" line="12011"/>
         <source>Yahoo! Honyaku On</source>
         <translation>O Yahoo!翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11902"/>
+        <location filename="../mainwindow.cc" line="12013"/>
         <source>Yahoo! Honyaku Off</source>
         <translation>X Yahoo!翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11912"/>
+        <location filename="../mainwindow.cc" line="12023"/>
         <source>OCN Honyaku On</source>
         <translation>O OCN翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11914"/>
+        <location filename="../mainwindow.cc" line="12025"/>
         <source>OCN Honyaku Off</source>
         <translation>X OCN翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11924"/>
+        <location filename="../mainwindow.cc" line="12035"/>
+        <source>SYSTRAN Translator On</source>
+        <translation>O SYSTRAN翻译</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="12037"/>
+        <source>SYSTRAN Translator Off</source>
+        <translation>X SYSTRAN翻译</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="12047"/>
         <source>SDL Translator On</source>
         <translation>O SDL翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11926"/>
+        <location filename="../mainwindow.cc" line="12049"/>
         <source>SDL Translator Off</source>
         <translation>X SDL翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11936"/>
+        <location filename="../mainwindow.cc" line="12059"/>
         <source>Infoseek Honyaku On</source>
         <translation>O Infoseek翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11938"/>
+        <location filename="../mainwindow.cc" line="12061"/>
         <source>Infoseek Honyaku Off</source>
         <translation>X Infoseek翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11948"/>
+        <location filename="../mainwindow.cc" line="12071"/>
         <source>@nifty Honyaku On</source>
         <translation>O @nifty翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11950"/>
+        <location filename="../mainwindow.cc" line="12073"/>
         <source>@nifty Honyaku Off</source>
         <translation>X @nifty翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11960"/>
+        <location filename="../mainwindow.cc" line="12083"/>
         <source>Excite Honyaku On</source>
         <translation>O エキサイト翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11962"/>
+        <location filename="../mainwindow.cc" line="12085"/>
         <source>Excite Honyaku off</source>
         <translation>X エキサイト翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11972"/>
+        <location filename="../mainwindow.cc" line="12095"/>
         <source>Google Translator On</source>
         <translation>O Google翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11974"/>
+        <location filename="../mainwindow.cc" line="12097"/>
         <source>Google Translator Off</source>
         <translation>X Google翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11984"/>
+        <location filename="../mainwindow.cc" line="12107"/>
         <source>Microsoft Translator On</source>
         <translation>O 微软翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11986"/>
+        <location filename="../mainwindow.cc" line="12109"/>
         <source>Microsoft Translator Off</source>
         <translation>X 微软翻译</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11996"/>
+        <location filename="../mainwindow.cc" line="12119"/>
         <source>Romaji On</source>
         <translation>O 变换为罗马字</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11998"/>
+        <location filename="../mainwindow.cc" line="12121"/>
         <source>Romaji Off</source>
         <translation>X 变换为罗马字</translation>
     </message>
@@ -7060,12 +7075,12 @@
         <translation type="obsolete">选定文本频道</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9116"/>
+        <location filename="../mainwindow.cc" line="9181"/>
         <source>updating anonymous status ...</source>
         <translation>更新匿名状态...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9157"/>
+        <location filename="../mainwindow.cc" line="9222"/>
         <source>updating user language ...</source>
         <translation>更新魔法师语言...</translation>
     </message>
@@ -7074,17 +7089,17 @@
         <translation type="obsolete">远程魔法修改匿名属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9128"/>
+        <location filename="../mainwindow.cc" line="9193"/>
         <source>failed to change user anonymous state</source>
         <translation>远程魔法修改匿名属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9138"/>
+        <location filename="../mainwindow.cc" line="9203"/>
         <source>you are anonymous now</source>
         <translation>主人已经匿名了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9140"/>
+        <location filename="../mainwindow.cc" line="9205"/>
         <source>you are not anonymous now</source>
         <translation>主人不再匿名了</translation>
     </message>
@@ -7093,65 +7108,65 @@
         <translation type="obsolete">远程魔法修改语言属性中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9169"/>
+        <location filename="../mainwindow.cc" line="9234"/>
         <source>failed to change user language</source>
         <translation>远程魔法修改语言属性失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9178"/>
+        <location filename="../mainwindow.cc" line="9243"/>
         <source>your language is </source>
         <translation>主人的语言属性是</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9272"/>
+        <location filename="../mainwindow.cc" line="9338"/>
         <source>restart the app to use the new language</source>
         <translation>使用新的语言需要重启播放器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9973"/>
+        <location filename="../mainwindow.cc" line="10078"/>
         <source>less files to browse</source>
         <translation>减少媒体</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10008"/>
+        <location filename="../mainwindow.cc" line="10113"/>
         <source>more files added</source>
         <translation>添加媒体</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10324"/>
-        <location filename="../mainwindow.cc" line="10345"/>
+        <location filename="../mainwindow.cc" line="10429"/>
+        <location filename="../mainwindow.cc" line="10450"/>
         <source>file saved</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10326"/>
-        <location filename="../mainwindow.cc" line="10347"/>
+        <location filename="../mainwindow.cc" line="10431"/>
+        <location filename="../mainwindow.cc" line="10452"/>
         <source>failed to save file</source>
         <translation>保存文件失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10486"/>
-        <location filename="../mainwindow.cc" line="10499"/>
+        <location filename="../mainwindow.cc" line="10591"/>
+        <location filename="../mainwindow.cc" line="10604"/>
         <source>copied</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10826"/>
+        <location filename="../mainwindow.cc" line="10931"/>
         <source>loading last audio channel</source>
         <translation>切换到上一次再生的声道</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10885"/>
+        <location filename="../mainwindow.cc" line="10990"/>
         <source>using last aspect ratio</source>
         <translation>使用上一次的长宽比</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11005"/>
+        <location filename="../mainwindow.cc" line="11110"/>
         <source>annotation URL already imported</source>
         <translation>弹幕链接已导入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11151"/>
+        <location filename="../mainwindow.cc" line="11256"/>
         <source>please enable Multiple Window from context menu</source>
         <translation>请开启允许多个窗口的选项</translation>
     </message>
@@ -7172,22 +7187,22 @@
         <translation type="obsolete">无法打开浏览器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11159"/>
+        <location filename="../mainwindow.cc" line="11264"/>
         <source>new window launched</source>
         <translation>打开新窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11221"/>
+        <location filename="../mainwindow.cc" line="11326"/>
         <source>buffered video will be saved</source>
         <translation>保存缓冲动画</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11223"/>
+        <location filename="../mainwindow.cc" line="11328"/>
         <source>buffered video will not be saved</source>
         <translation>不保存缓冲动画</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11266"/>
+        <location filename="../mainwindow.cc" line="11371"/>
         <source>resume annotations</source>
         <translation>释放捕捉的弹幕</translation>
     </message>
@@ -7196,52 +7211,52 @@
         <translation type="obsolete">使用上一次的长宽比</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10991"/>
+        <location filename="../mainwindow.cc" line="11096"/>
         <source>annot URL is already used</source>
         <translation>弹幕链接已导入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10997"/>
-        <location filename="../mainwindow.cc" line="11029"/>
+        <location filename="../mainwindow.cc" line="11102"/>
+        <location filename="../mainwindow.cc" line="11134"/>
         <source>media URL is being played </source>
         <translation>正在再生媒体链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11052"/>
+        <location filename="../mainwindow.cc" line="11157"/>
         <source>do nothings after finished playing all files</source>
         <translation>再生结束后什么都不做</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11061"/>
+        <location filename="../mainwindow.cc" line="11166"/>
         <source>put the computer to sleep after finished playing all files</source>
         <translation>再生结束后自动休眠</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11070"/>
+        <location filename="../mainwindow.cc" line="11175"/>
         <source>shutdown the computer after finished playing all files</source>
         <translation>再生结束后自动关闭计算机</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11137"/>
+        <location filename="../mainwindow.cc" line="11242"/>
         <source>allow multiple player windows</source>
         <translation>允许多个再生窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="11139"/>
+        <location filename="../mainwindow.cc" line="11244"/>
         <source>allow single player window</source>
         <translation>仅允许单一再生窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3168"/>
-        <location filename="../mainwindow.cc" line="5066"/>
-        <location filename="../mainwindow.cc" line="5701"/>
-        <location filename="../mainwindow.cc" line="10287"/>
+        <location filename="../mainwindow.cc" line="3219"/>
+        <location filename="../mainwindow.cc" line="5117"/>
+        <location filename="../mainwindow.cc" line="5752"/>
+        <location filename="../mainwindow.cc" line="10392"/>
         <source>annotations found</source>
         <translation>发现新弹幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="350"/>
-        <location filename="../mainwindow.cc" line="9042"/>
+        <location filename="../mainwindow.cc" line="352"/>
+        <location filename="../mainwindow.cc" line="9107"/>
         <source>Synchronizing ...</source>
         <translation>同期中...</translation>
     </message>
@@ -7250,65 +7265,65 @@
         <translation type="obsolete">与正在运行的Galgame同步</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1366"/>
-        <location filename="../mainwindow.cc" line="2346"/>
-        <location filename="../mainwindow.cc" line="2347"/>
+        <location filename="../mainwindow.cc" line="1374"/>
+        <location filename="../mainwindow.cc" line="2398"/>
+        <location filename="../mainwindow.cc" line="2399"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1371"/>
+        <location filename="../mainwindow.cc" line="1379"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1374"/>
-        <location filename="../mainwindow.cc" line="1376"/>
+        <location filename="../mainwindow.cc" line="1382"/>
+        <location filename="../mainwindow.cc" line="1384"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1378"/>
+        <location filename="../mainwindow.cc" line="1386"/>
         <source>Replay</source>
         <translation>重新再生</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1380"/>
+        <location filename="../mainwindow.cc" line="1388"/>
         <source>Previous</source>
         <translation>前一个</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1382"/>
+        <location filename="../mainwindow.cc" line="1390"/>
         <source>Next</source>
         <translation>下一个</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1384"/>
+        <location filename="../mainwindow.cc" line="1392"/>
         <source>Next Frame</source>
         <translation>下一帧</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1386"/>
+        <location filename="../mainwindow.cc" line="1394"/>
         <source>Snapshot</source>
         <translation>截图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1388"/>
+        <location filename="../mainwindow.cc" line="1396"/>
         <source>Snapshot All</source>
         <translation>截图（含弹幕）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1391"/>
+        <location filename="../mainwindow.cc" line="1399"/>
         <source>Login</source>
         <translation>登录</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1393"/>
+        <location filename="../mainwindow.cc" line="1401"/>
         <source>Logout</source>
         <translation>退出登陆</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1396"/>
+        <location filename="../mainwindow.cc" line="1404"/>
         <source>Update Annotations</source>
         <translation>更新弹幕</translation>
     </message>
@@ -7317,7 +7332,7 @@
         <translation type="obsolete">放大镜</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1491"/>
+        <location filename="../mainwindow.cc" line="1499"/>
         <source>About</source>
         <translation>关于软件</translation>
     </message>
@@ -7326,18 +7341,28 @@
         <translation type="obsolete">更新</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1507"/>
+        <location filename="../mainwindow.cc" line="1515"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1513"/>
+        <location filename="../mainwindow.cc" line="1521"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2173"/>
-        <location filename="../mainwindow.cc" line="2174"/>
+        <location filename="../mainwindow.cc" line="1582"/>
+        <source>Show Galgame Text</source>
+        <translation>显示Galgame日文文本</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="1586"/>
+        <source>Load Galgame using AppLocale</source>
+        <translation>使用AppLocale启动游戏</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="2225"/>
+        <location filename="../mainwindow.cc" line="2226"/>
         <source>Sync with Galgame</source>
         <translation>与Galgame同步</translation>
     </message>
@@ -7346,8 +7371,8 @@
         <translation type="obsolete">调整视频参数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2007"/>
-        <location filename="../mainwindow.cc" line="2008"/>
+        <location filename="../mainwindow.cc" line="2055"/>
+        <location filename="../mainwindow.cc" line="2056"/>
         <source>Search</source>
         <translation>检索</translation>
     </message>
@@ -7356,31 +7381,31 @@
         <translation type="obsolete">复制名称到剪贴板</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2014"/>
+        <location filename="../mainwindow.cc" line="2062"/>
         <source>Search with %1</source>
         <translation>搜索：%1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2091"/>
-        <location filename="../mainwindow.cc" line="2092"/>
+        <location filename="../mainwindow.cc" line="2139"/>
+        <location filename="../mainwindow.cc" line="2140"/>
         <source>Current media</source>
         <translation>动画链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2376"/>
-        <location filename="../mainwindow.cc" line="2377"/>
+        <location filename="../mainwindow.cc" line="2428"/>
+        <location filename="../mainwindow.cc" line="2429"/>
         <source>Audio Track</source>
         <translation>音轨</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2382"/>
-        <location filename="../mainwindow.cc" line="2383"/>
+        <location filename="../mainwindow.cc" line="2434"/>
+        <location filename="../mainwindow.cc" line="2435"/>
         <source>Audio Channel</source>
         <translation>声道</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2396"/>
-        <location filename="../mainwindow.cc" line="2397"/>
+        <location filename="../mainwindow.cc" line="2448"/>
+        <location filename="../mainwindow.cc" line="2449"/>
         <source>Adjust Audio</source>
         <translation>调整音频参数</translation>
     </message>
@@ -7389,24 +7414,24 @@
         <translation type="obsolete">再生结束后</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2415"/>
+        <location filename="../mainwindow.cc" line="2467"/>
         <source>After finished playing all files in the same folder</source>
         <translation>再生所有媒体结束后</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2425"/>
-        <location filename="../mainwindow.cc" line="2426"/>
+        <location filename="../mainwindow.cc" line="2477"/>
+        <location filename="../mainwindow.cc" line="2478"/>
         <source>Utilities</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2445"/>
-        <location filename="../mainwindow.cc" line="2446"/>
+        <location filename="../mainwindow.cc" line="2497"/>
+        <location filename="../mainwindow.cc" line="2498"/>
         <source>Settings</source>
         <translation>偏好</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1496"/>
+        <location filename="../mainwindow.cc" line="1504"/>
         <source>Preferences</source>
         <translation>设定</translation>
     </message>
@@ -7415,17 +7440,17 @@
         <translation type="obsolete">字幕置顶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1445"/>
+        <location filename="../mainwindow.cc" line="1453"/>
         <source>Image Filter</source>
         <translation>滤镜</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1451"/>
+        <location filename="../mainwindow.cc" line="1459"/>
         <source>Limit Bandwidth</source>
         <translation>限制弹幕刷屏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1459"/>
+        <location filename="../mainwindow.cc" line="1467"/>
         <source>Always Show Avatar</source>
         <translation>显示魔法师头像</translation>
     </message>
@@ -7434,28 +7459,32 @@
         <translation type="obsolete">静止弹幕优先</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1471"/>
+        <location filename="../mainwindow.cc" line="1479"/>
         <source>Trace Window</source>
         <translation>追踪窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="1572"/>
+        <source>Show Game Text</source>
+        <translation type="obsolete">显示游戏日文文本</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="1591"/>
         <source>Sync with Running Galgame</source>
         <translation>与正在运行的Galgame同步</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="2496"/>
-        <location filename="../mainwindow.cc" line="2497"/>
+        <location filename="../mainwindow.cc" line="2548"/>
+        <location filename="../mainwindow.cc" line="2549"/>
         <source>Annotation Settings</source>
         <translation>弹幕偏好</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="3660"/>
+        <location filename="../mainwindow.cc" line="3711"/>
         <source>failed to open media</source>
         <translation>媒体再生失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="4397"/>
+        <location filename="../mainwindow.cc" line="4448"/>
         <source>Complete</source>
         <translation>完成</translation>
     </message>
@@ -7464,37 +7493,37 @@
         <translation type="obsolete">缓冲</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5213"/>
+        <location filename="../mainwindow.cc" line="5264"/>
         <source>login is requied to to submit annotation URL</source>
         <translation>请登录以提交弹幕链接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5218"/>
+        <location filename="../mainwindow.cc" line="5269"/>
         <source>File saved</source>
         <translation>文件保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5230"/>
+        <location filename="../mainwindow.cc" line="5281"/>
         <source>URL is too long</source>
         <translation>链接过长</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5234"/>
+        <location filename="../mainwindow.cc" line="5285"/>
         <source>signing media ...</source>
         <translation>正在为文件签名...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5242"/>
+        <location filename="../mainwindow.cc" line="5293"/>
         <source>failed to analyze media</source>
         <translation>分析文件标记失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5313"/>
+        <location filename="../mainwindow.cc" line="5364"/>
         <source>media signed</source>
         <translation>文件签名成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="5315"/>
+        <location filename="../mainwindow.cc" line="5366"/>
         <source>failed to sign media</source>
         <translation>文件签名失败</translation>
     </message>
@@ -7507,29 +7536,29 @@
         <translation type="obsolete">在Google Code发现新版魔法书</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10370"/>
+        <location filename="../mainwindow.cc" line="10475"/>
         <source>analyzing annotation URL ...</source>
         <translation>解析弹幕链接中...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10642"/>
+        <location filename="../mainwindow.cc" line="10747"/>
         <source>resuming last play</source>
         <translation>恢复上一次再生位置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10702"/>
-        <location filename="../mainwindow.cc" line="10704"/>
+        <location filename="../mainwindow.cc" line="10807"/>
+        <location filename="../mainwindow.cc" line="10809"/>
         <source>loading last subtitle</source>
         <translation>加载上一次再生的字幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10709"/>
+        <location filename="../mainwindow.cc" line="10814"/>
         <source>hide last subtitle</source>
         <translation>隐藏上次的字幕</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="10768"/>
-        <location filename="../mainwindow.cc" line="10770"/>
+        <location filename="../mainwindow.cc" line="10873"/>
+        <location filename="../mainwindow.cc" line="10875"/>
         <source>loading last audio track</source>
         <translation>切换到上一次再生的音轨</translation>
     </message>
@@ -7562,7 +7591,7 @@
         <translation type="obsolete">文件不存在</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="9556"/>
+        <location filename="../mainwindow.cc" line="9623"/>
         <source>invalid lnk</source>
         <translation>快捷方式好像无效</translation>
     </message>
@@ -8676,6 +8705,14 @@
     </message>
 </context>
 <context>
+    <name>SystranTranslator</name>
+    <message>
+        <location filename="../../../module/translator/systrantranslator.cc" line="16"/>
+        <source>SYSTRAN Translator</source>
+        <translation>SYSTRAN翻译</translation>
+    </message>
+</context>
+<context>
     <name>ThreadView</name>
     <message>
         <source>Message view</source>
@@ -8967,37 +9004,37 @@
         <translation>检索</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="548"/>
+        <location filename="../token/tokenview.cc" line="549"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="549"/>
+        <location filename="../token/tokenview.cc" line="550"/>
         <source>File</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="550"/>
+        <location filename="../token/tokenview.cc" line="551"/>
         <source>Tag</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="552"/>
+        <location filename="../token/tokenview.cc" line="553"/>
         <source>Name</source>
         <translation>名字</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="553"/>
+        <location filename="../token/tokenview.cc" line="554"/>
         <source>Folder</source>
         <translation>文件夹</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="554"/>
+        <location filename="../token/tokenview.cc" line="555"/>
         <source>Brand</source>
         <translation>会社</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="581"/>
+        <location filename="../token/tokenview.cc" line="582"/>
         <source>don&apos;t forget to update annotations!</source>
         <translation>不要忘记更新弹幕哦！</translation>
     </message>
@@ -9022,7 +9059,7 @@
         <translation type="obsolete">tag</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="551"/>
+        <location filename="../token/tokenview.cc" line="552"/>
         <source>URL</source>
         <translation>链接</translation>
     </message>
@@ -9031,7 +9068,7 @@
         <translation type="obsolete">标题</translation>
     </message>
     <message>
-        <location filename="../token/tokenview.cc" line="577"/>
+        <location filename="../token/tokenview.cc" line="578"/>
         <source>cannot delete other&apos;s alias</source>
         <translation>无法删除别人的别名</translation>
     </message>
@@ -9050,7 +9087,7 @@
 <context>
     <name>TranslatorManager</name>
     <message>
-        <location filename="../../../module/translator/translatormanager.cc" line="57"/>
+        <location filename="../../../module/translator/translatormanager.cc" line="60"/>
         <source>Honyaku</source>
         <translation>翻译</translation>
     </message>

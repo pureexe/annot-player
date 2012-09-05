@@ -7,8 +7,11 @@
 #include "global.h"
 #include "tr.h"
 #include "localizer.h"
+#include "medialibrary.h"
+#include "gamelibrary.h"
 #include "annotationgraphicsitem.h"
 #include "module/translator/translatorsettings.h"
+#include "module/mecabsettings/mecabsettings.h"
 #ifdef Q_OS_WIN
 # include "windowsregistry.h"
 # include "module/player/player.h"
@@ -153,6 +156,7 @@ main(int argc, char *argv[])
 
   // Applications
   Application a(argc, argv);
+  a.loadTranslations();
 
 // Delayed after args are parsed
 //#ifdef Q_OS_WIN
@@ -181,123 +185,125 @@ main(int argc, char *argv[])
   detail::warmUp();
 
   // Initialize translator
-  {
-    int lang = ac->language(),
-        script = ac->languageScript();
-    if (!lang ||
-        lang == QLocale::Chinese && !script) {
-      QLocale system = QLocale::system();
-      lang =  system.language();
-      script = system.script();
-      //if (lang == QLocale::Japanese) {
-      //  settings->setAnnotationLanguages( // Ban Chinese language
-      //    Traits::JapaneseBit | Traits::UnknownLanguageBit |
-      //    Traits::EnglishBit | Traits::KoreanBit |
-      //    Traits::FrenchBit | Traits::GermanBit |
-      //    Traits::ItalianBit |
-      //    Traits::SpanishBit | Traits::PortugueseBit | Traits::RussianBit
-      //  );
-      //  settings->setAnnotationFilterEnabled(true);
-      //}
-      ac->setLanguage(lang, script);
-    }
-    Localizer::globalInstance()->setLocale(lang, script, false); // auto-update translator = false
-    Localizer::globalInstance()->installCurrentTranslator(&a);
-    DOUT("app language =" << lang);
-  }
+  //{
+  //  int lang = ac->language(),
+  //      script = ac->languageScript();
+  //  if (!lang ||
+  //      lang == QLocale::Chinese && !script) {
+  //    QLocale system = QLocale::system();
+  //    lang =  system.language();
+  //    script = system.script();
+  //    //if (lang == QLocale::Japanese) {
+  //    //  settings->setAnnotationLanguages( // Ban Chinese language
+  //    //    Traits::JapaneseBit | Traits::UnknownLanguageBit |
+  //    //    Traits::EnglishBit | Traits::KoreanBit |
+  //    //    Traits::FrenchBit | Traits::GermanBit |
+  //    //    Traits::ItalianBit |
+  //    //    Traits::SpanishBit | Traits::PortugueseBit | Traits::RussianBit
+  //    //  );
+  //    //  settings->setAnnotationFilterEnabled(true);
+  //    //}
+  //    ac->setLanguage(lang, script);
+  //  }
+  //  Localizer::globalInstance()->setLocale(lang, script, false); // auto-update translator = false
+  //  Localizer::globalInstance()->installCurrentTranslator(&a);
+  //  DOUT("app language =" << lang);
+  //}
 
   // Check update.
   QString previousVersion = settings->version();
   if (previousVersion != G_VERSION) {
     DOUT("update from old version");
-    bool majorUpdate = !previousVersion.startsWith(G_VERSION_MAJOR);
+    //bool majorUpdate = !previousVersion.startsWith(G_VERSION_MAJOR);
 
-    if (settings->annotationSpeedup() > 5)
-      settings->setAnnotationSpeedup(1.0);
-
-    settings->setAnnotationLanguages(QSet<int>());
-    settings->setAnnotationFilterEnabled(false);
-    settings->setTranslationServices(TranslatorManager::RomajiBit | TranslatorManager::OcnBit);
-
-    settings->setAnnotationSpeedup(1.0);
+    qreal previousVersionNumber = AcVersion::toNumber(previousVersion);
 
     //bool initial = previousVersion.isEmpty();
 
     QtExt::trashOrRemoveFile(G_PATH_DEBUG);
 
-    if (AcVersion::currentVersionNumber() < AcVersion::toNumber(ANNOTDB_VERSION)) {
+    if (previousVersionNumber < AcVersion::toNumber(ANNOTDB_VERSION)) {
       QtExt::trashOrRemoveFile(G_PATH_CACHEDB);
       QtExt::trashOrRemoveFile(G_PATH_QUEUEDB);
     }
 
-#ifdef Q_OS_WIN
-    if (majorUpdate) {
-      // Delete plugins/*.dat
-      QDir plugins(QCoreApplication::applicationDirPath() + "/plugins");
-      Q_ASSERT(plugins.exists());
-      foreach (const QFileInfo &fi, plugins.entryInfoList(QStringList() << "*.dat", QDir::Files)) {
-        DOUT("remove old plugins caches:" << fi.absoluteFilePath());
-        QFile::remove(fi.absoluteFilePath());
-      }
-    }
-#endif // Q_OS_WIN
+    if (previousVersionNumber < AcVersion::toNumber(GAME_LIBRARY_VERSION))
+      QtExt::trashOrRemoveFile(G_PATH_GAMEDB);
 
-    if (!QFile::exists(G_PATH_CACHES "/history.xml"))
-      QFile::rename(G_PATH_CACHES "/history.xml", G_PATH_MEDIADB);
+    if (previousVersionNumber < AcVersion::toNumber(MEDIA_LIBRARY_VERSION))
+      QtExt::trashOrRemoveFile(G_PATH_MEDIADB);
 
-#ifdef Q_OS_WIN
-    WindowsRegistry::globalInstance()->unregisterRawType("DVD");
-    WindowsRegistry::globalInstance()->unregisterRawType("AudioCD");
-    WindowsRegistry::globalInstance()->registerShell("DVD");
-#endif // Q__WS_WIN
+//#ifdef Q_OS_WIN
+//    if (majorUpdate) {
+//      // Delete plugins/*.dat
+//      QDir plugins(QCoreApplication::applicationDirPath() + "/plugins");
+//      Q_ASSERT(plugins.exists());
+//      foreach (const QFileInfo &fi, plugins.entryInfoList(QStringList() << "*.dat", QDir::Files)) {
+//        DOUT("remove old plugins caches:" << fi.absoluteFilePath());
+//        QFile::remove(fi.absoluteFilePath());
+//      }
+//    }
+//#endif // Q_OS_WIN
 
-    ac->setMenuThemeEnabled(false); // disable aero context menu effect, unless I combine qcolorization effect with my haloeffect
-    ac->setThemeId(AcUi::CyanTheme);
-    ac->sync();
+    if (previousVersionNumber < AcVersion::toNumber(SETTINGS_VERSION)) {
+      ac->setMenuThemeEnabled(false); // disable aero context menu effect, unless I combine qcolorization effect with my haloeffect
+      ac->setThemeId(AcUi::CyanTheme);
 
-    settings->setAnnotationFontFamily(QString());
-    settings->setAnnotationJapaneseFontFamily(QString());
-    settings->setAnnotationChineseFontFamily(QString());
-    settings->setAnnotationPositionResolution(0);
-    settings->setAnnotationOutlineColor(ANNOTATION_OUTLINE_COLOR);
-    settings->setSubtitleOutlineColor(ANNOTATION_OUTLINE_COLOR_SUB);
+      settings->setAnnotationLanguages(QSet<int>());
+      settings->setAnnotationFilterEnabled(false);
+      settings->setTranslationServices(TranslatorManager::RomajiBit | TranslatorManager::OcnBit);
+      settings->setAnnotationSpeedup(1.0);
 
-    settings->setWindowOnTop(false);
-    settings->setMultipleWindowsEnabled(false);
-    settings->setAutoSubmit(true);
-    settings->setAnnotationScale(ANNOTATION_SCALE);
-    settings->setAnnotationFullscreenScale(ANNOTATION_FULLSCREEN_SCALE);
-    settings->setSubtitleOnTop(true);
-    //settings->setPreferFloatAnnotation(true);
-    settings->setAnnotationAvatarVisible(false);
-    settings->setAnnotationPositionResolution(0);
-    settings->setAnnotationEffect(0);
-    settings->setAnnotationOffset(0);
-    settings->setSubtitleColor(0);
-    settings->setApplicationFilePath(QString());
-    //settings->setAnnotationLanguages(Traits::AllLanguages);
-    //settings->setAnnotationFilterEnabled(false);
+      settings->setAnnotationFontFamily(QString());
+      settings->setAnnotationJapaneseFontFamily(QString());
+      settings->setAnnotationChineseFontFamily(QString());
+      settings->setAnnotationPositionResolution(0);
+      settings->setAnnotationOutlineColor(ANNOTATION_OUTLINE_COLOR);
+      settings->setSubtitleOutlineColor(ANNOTATION_OUTLINE_COLOR_SUB);
 
-    //settings->setAnnotationLanguages(
-    //  settings->annotationLanguages() |
-    //  Traits::FrenchBit | Traits::GermanBit |
-    //  Traits::ItalianBit |
-    //  Traits::SpanishBit | Traits::PortugueseBit | Traits::RussianBit
-    //);
+      settings->setTranslateEnabled(true);
+      settings->setWindowOnTop(false);
+      settings->setMultipleWindowsEnabled(false);
+      settings->setAutoSubmit(true);
+      settings->setAnnotationScale(ANNOTATION_SCALE);
+      settings->setAnnotationFullscreenScale(ANNOTATION_FULLSCREEN_SCALE);
+      settings->setSubtitleOnTop(true);
+      //settings->setPreferFloatAnnotation(true);
+      settings->setAnnotationAvatarVisible(false);
+      settings->setAnnotationPositionResolution(0);
+      settings->setAnnotationEffect(0);
+      settings->setAnnotationOffset(0);
+      settings->setSubtitleColor(0);
+      settings->setApplicationFilePath(QString());
+      //settings->setAnnotationLanguages(Traits::AllLanguages);
+      //settings->setAnnotationFilterEnabled(false);
 
-    settings->setLive(false);
+      //settings->setAnnotationLanguages(
+      //  settings->annotationLanguages() |
+      //  Traits::FrenchBit | Traits::GermanBit |
+      //  Traits::ItalianBit |
+      //  Traits::SpanishBit | Traits::PortugueseBit | Traits::RussianBit
+      //);
 
-    if (majorUpdate) {
+      settings->setLive(false);
+
       settings->setSaturation(1.1*1.1*1.1);
       settings->setGamma(1/1.1);
       settings->setHue(2+2+2);
       settings->setContrast(1.1);
       settings->setBrightness(1.02*1.02);
 
+#ifdef Q_OS_WIN
+      WindowsRegistry::globalInstance()->unregisterRawType("DVD");
+      WindowsRegistry::globalInstance()->unregisterRawType("AudioCD");
+      WindowsRegistry::globalInstance()->registerShell("DVD");
+#endif // Q__WS_WIN
       detail::registerAssociations();
       settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
     }
 
+    ac->setVersion(AC_VERSION);
+    ac->sync();
     settings->setVersion(G_VERSION);
     settings->sync();
   }
@@ -307,11 +313,6 @@ main(int argc, char *argv[])
     detail::repairAssociations();
     settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
     settings->sync();
-  }
-
-  if (ac->version() != AC_VERSION) {
-    DOUT("update from old ac version");
-    ac->setVersion(AC_VERSION);
   }
 
   // Hashes
@@ -368,6 +369,9 @@ main(int argc, char *argv[])
 
   // Set annotation cache directory, shared across different annot apps
   AnnotationCacheManager::globalInstance()->setLocation(AC_PATH_CACHES);
+
+  // MeCab
+  MeCabSettings::setMeCabRcFile(G_PATH_MECABRC);
 
   // Set theme.
   {

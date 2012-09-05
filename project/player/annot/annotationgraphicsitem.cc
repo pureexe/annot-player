@@ -16,6 +16,7 @@
 #include "project/common/acrc.h"
 #include "module/annotcloud/annottag.h"
 #include "module/annotcloud/annothtml.h"
+#include "module/translator/translator.h"
 #include "module/searchengine/searchenginefactory.h"
 #include "module/searchengine/searchenginerc.h"
 #include "module/qtext/filesystem.h"
@@ -386,13 +387,15 @@ AnnotationGraphicsItem::updateText()
   if (annot_.hasLanguage())
     switch (annot_.language()) {
     case Traits::Japanese: font = AnnotationSettings::globalSettings()->defaultJapaneseFont(); break;
-    case Traits::Chinese: font = AnnotationSettings::globalSettings()->defaultChineseFont(); break;
+    case Traits::TraditionalChinese:
+    case Traits::SimplifiedChinese:
+      font = AnnotationSettings::globalSettings()->defaultChineseFont(); break;
     default:  font = AnnotationSettings::globalSettings()->font();
     }
   else
     switch (AcSettings::globalSettings()->language()) {
     case QLocale::Japanese: font = AnnotationSettings::globalSettings()->defaultJapaneseFont(); break;
-    case QLocale::Chinese: font = AnnotationSettings::globalSettings()->defaultChineseFont(); break;
+    case QLocale::Chinese:  font = AnnotationSettings::globalSettings()->defaultChineseFont(); break;
     default:  font = AnnotationSettings::globalSettings()->font();
     }
 
@@ -403,7 +406,7 @@ AnnotationGraphicsItem::updateText()
 
   QString text = annot_.text();
 
-  if (annot_.language() == Traits::Chinese &&
+  if (annot_.language() == Traits::SimplifiedChinese &&
       AnnotationSettings::globalSettings()->preferTraditionalChinese())
     text = TextCodec::zhs2zht(text);
   if (isSubtitle())
@@ -421,7 +424,7 @@ AnnotationGraphicsItem::updateText()
       (AnnotationSettings::globalSettings()->isSubtitleOnTop() ? TopStyle : BottomStyle) :
       AnnotationSettings::globalSettings()->preferFloat() ? FloatStyle : DriftStyle;
 
-  enum { MinWrapWidth = 300, MinWrapHeight = 200 };
+  enum { MinWrapWidth = 300, MinWrapHeight = 50 };
   int textWidth = -1;
   switch (style_) {
   case DriftStyle:
@@ -1050,6 +1053,7 @@ AnnotationGraphicsItem::isPaused() const
   case BottomStyle:
   case FloatStyle:
     return appearOpacityAni_ && appearOpacityAni_->state() == QAbstractAnimation::Paused;
+  default: Q_ASSERT(0);
   }
   return false;
 }
@@ -1087,6 +1091,7 @@ AnnotationGraphicsItem::pause()
       appearOpacityAni_->pause();
     break;
 
+  default: Q_ASSERT(0);
   //case SubtitleStyle:
   //  if (removeLaterTimer_ && removeLaterTimer_->isActive())
   //    removeLaterTimer_->stop();
@@ -1358,7 +1363,10 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
   translateMenu->addAction(QIcon(ACRC_IMAGE_ENGLISH), TR(T_ENGLISH), this, SLOT(translateToEnglish()));
   translateMenu->addSeparator();
   translateMenu->addAction(QIcon(ACRC_IMAGE_JAPANESE), TR(T_JAPANESE), this, SLOT(translateToJapanese()));
-  translateMenu->addAction(QIcon(ACRC_IMAGE_CHINESE), TR(T_CHINESE), this, SLOT(translateToChinese()));
+  translateMenu->addSeparator();
+  translateMenu->addAction(QIcon(ACRC_IMAGE_TRADITIONAL_CHINESE), TR(T_CHINESE), this, SLOT(translateToTraditionalChinese()));
+  translateMenu->addAction(QIcon(ACRC_IMAGE_SIMPLIFIED_CHINESE), TR(T_SIMPLIFIEDCHINESE), this, SLOT(translateToSimplifiedChinese()));
+  translateMenu->addSeparator();
   translateMenu->addAction(QIcon(ACRC_IMAGE_KOREAN), TR(T_KOREAN), this, SLOT(translateToKorean()));
   translateMenu->addSeparator();
   translateMenu->addAction(QIcon(ACRC_IMAGE_FRENCH), TR(T_FRENCH), this, SLOT(translateToFrench()));
@@ -1370,7 +1378,7 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
 
   m->addMenu(translateMenu);
 
-  if (annot_.language() == Traits::Chinese &&
+    if (annot_.language() == Traits::SimplifiedChinese &&
       !AnnotationSettings::globalSettings()->preferTraditionalChinese())
     m->addAction(QIcon(ACRC_IMAGE_TRADITIONAL_CHINESE), tr("Show Traditional Chinese"), this, SLOT(showTraditionalChinese()));
 
@@ -1779,42 +1787,46 @@ AnnotationGraphicsItem::showTraditionalChinese()
 
 void
 AnnotationGraphicsItem::translateToEnglish()
-{ translate(Traits::English); }
+{ translate(Translator::English); }
 
 void
 AnnotationGraphicsItem::translateToJapanese()
-{ translate(Traits::Japanese); }
+{ translate(Translator::Japanese); }
 
 void
-AnnotationGraphicsItem::translateToChinese()
-{ translate(Traits::Chinese); }
+AnnotationGraphicsItem::translateToTraditionalChinese()
+{ translate(Translator::TraditionalChinese); }
+
+void
+AnnotationGraphicsItem::translateToSimplifiedChinese()
+{ translate(Translator::SimplifiedChinese); }
 
 void
 AnnotationGraphicsItem::translateToKorean()
-{ translate(Traits::Korean); }
+{ translate(Translator::Korean); }
 
 void
 AnnotationGraphicsItem::translateToFrench()
-{ translate(Traits::French); }
+{ translate(Translator::French); }
 
 void
 AnnotationGraphicsItem::translateToGerman()
-{ translate(Traits::German); }
+{ translate(Translator::German); }
 
 void
 AnnotationGraphicsItem::translateToItalian()
-{ translate(Traits::Italian); }
+{ translate(Translator::Italian); }
 
 void
 AnnotationGraphicsItem::translateToSpanish()
-{ translate(Traits::Spanish); }
+{ translate(Translator::Spanish); }
 
 void
 AnnotationGraphicsItem::translateToPortuguese()
-{ translate(Traits::Portuguese); }
+{ translate(Translator::Portuguese); }
 
 void
 AnnotationGraphicsItem::translateToRussian()
-{ translate(Traits::Russian); }
+{ translate(Translator::Russian); }
 
 // EOF

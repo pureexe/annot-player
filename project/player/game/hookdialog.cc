@@ -11,6 +11,9 @@
 #include "win/texthook/texthook.h"
 #include <QtGui>
 
+#define DEBUG "hookdialog"
+#include "module/debug/debug.h"
+
 // - Constructions -
 
 // Koichoko, fack MSVC orz
@@ -157,12 +160,14 @@ HookDialog::refresh()
 {
   updateEnabled();
   if (isEnabled())
-    setText(TextHook::globalInstance()->currentHook());
-  else
     paste();
+  else
+    setText(TextHook::globalInstance()->currentHook());
   verifyEditText();
-  if (!isEnabled())
+  if (!isEnabled()) {
     showMessage(tr("ITH hook is already imported"));
+    DOUT("current hook =" << text());
+  }
 }
 
 // - Events -

@@ -1,4 +1,4 @@
-# utftable.zht_zhs.txt
+# zhtzhs.txt
 # 6/16/2012
 # credits: http://simplify.codeplex.com/ (3/22/2008)
 # license: GPLv2

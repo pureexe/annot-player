@@ -1,7 +1,7 @@
 #ifndef NIFTYTRANSLATOR_P_H
 #define NIFTYTRANSLATOR_P_H
 
-// niftytranslator_config.h
+// niftytranslator_p.h
 // 8/2l/2012
 // See: https://github.com/alice0775/userChrome.js/blob/master/popupTranslate.uc.xul
 

@@ -10,14 +10,30 @@
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
 
-ulong
+#define ENV_LAYER   "__COMPAT_LAYER"
+#define ENV_LCID    "AppLocaleID"
+
+bool
 AppLocale::createProcess(const QString &path, int lcid)
 {
-  QStringList env;
-  if (lcid)
-    env << "__COMPAT_LAYER=#APPLICATIONLOCALE"
-        << "AppLocaleID=0" + QString::number(lcid, 16);
-  return QtWin::createProcess(path, env);
+  //QStringList env;
+  //if (lcid) {
+  //  env << "__COMPAT_LAYER=#APPLICATIONLOCALE"
+  //      << "AppLocaleID=0" + QString::number(lcid, 16);
+  //return QtWin::createProcess(path, env);
+
+  QByteArray layer_bak = qgetenv(ENV_LAYER),
+             lcid_bak = qgetenv(ENV_LCID);
+
+  qputenv(ENV_LAYER, "#APPLICATIONLOCALE");
+  qputenv(ENV_LCID, QString::number(lcid, 16).toLocal8Bit());
+
+  bool ret = QtWin::createProcess(path);
+
+  qputenv(ENV_LAYER, layer_bak);
+  qputenv(ENV_LCID, lcid_bak);
+
+  return ret;
 }
 
 bool

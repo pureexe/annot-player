@@ -26,32 +26,21 @@ InfoseekTranslator::name() const
 // ja-zht => JCT
 // zht-ja => CJT, not CTJ!
 const char*
-InfoseekTranslator::translateLanguage(const QString &lcode)
+InfoseekTranslator::lcode(int lang)
 {
-  if (lcode.isEmpty())
-    return 0;
-  else if (lcode == "en")
-    return "E";
-  else if (lcode == "ja")
-    return "J";
-  else if (lcode == "zh-CHS")
-    return "C";
-  else if (lcode == "zh-CHT")
-    return "CT";
-  else if (lcode == "ko")
-    return "K";
-  else if (lcode == "fr")
-    return "F";
-  else if (lcode == "de")
-    return "G";
-  else if (lcode == "it")
-    return "I";
-  else if (lcode == "es")
-    return "S";
-  else if (lcode == "pt")
-    return "P";
-  else
-    return 0;
+  switch (lang) {
+  case English:  return "E";
+  case Japanese: return "J";
+  case TraditionalChinese: return "CT";
+  case SimplifiedChinese: return "C";
+  case Korean:  return "K";
+  case French:  return "F";
+  case German:  return "G";
+  case Italian: return "I";
+  case Spanish: return "S";
+  case Portuguese: return "P";
+  default:      return 0;
+  }
 }
 
 QString
@@ -64,10 +53,10 @@ InfoseekTranslator::translateUrl(const QString &text, const char *to, const char
 }
 
 QNetworkReply*
-InfoseekTranslator::createReply(const QString &text, const QString &to, const QString &from)
+InfoseekTranslator::createReply(const QString &text, int to, int from)
 {
-  const char *f = translateLanguage(from),
-             *t = translateLanguage(to);
+  const char *f = lcode(from),
+             *t = lcode(to);
   QString url = translateUrl(text, t ? t : "E", f ? f : "J");
   return networkAccessManager()->get(QNetworkRequest(url));
 }

@@ -1,4 +1,4 @@
-#lutftable.zhs_zht.txt
+# zhszht.txt
 # 6/16/2012
 # Translated by Google.
 # credits: http://simplify.codeplex.com/ (3/22/2008)

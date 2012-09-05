@@ -1,7 +1,7 @@
 #ifndef INFOSEEKTRANSLATOR_P_H
 #define INFOSEEKTRANSLATOR_P_H
 
-// infoseektranslator_config.h
+// infoseektranslator_p.h
 // 8/20/2012
 // See: http://transer.com/sdk/rest_api_function.html
 // See (auth): http://translation.infoseek.ne.jp/js/translation-text.js

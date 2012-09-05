@@ -4,7 +4,7 @@
 DEFINES += PROJECT_PLAYER
 
 VERSION_MAJOR = 0.1.9.
-VERSION_MINOR = 2
+VERSION_MINOR = 3
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -36,7 +36,10 @@ include($$ROOTDIR/module/imagefilter/imagefilter.pri)
 include($$ROOTDIR/module/ioutil/ioutil.pri)
 include($$ROOTDIR/module/magnifier/magnifier.pri)
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
+include($$ROOTDIR/module/mecabparser/mecabparser.pri)
+include($$ROOTDIR/module/mecabsettings/mecabsettings.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
+include($$ROOTDIR/module/mstypes/mstypes.pri)
 include($$ROOTDIR/module/nicoutil/nicoutil.pri)
 include($$ROOTDIR/module/player/player.pri)
 include($$ROOTDIR/module/qt/qt.pri)
@@ -71,14 +74,6 @@ mac {
 
 QT      += core gui network sql svg webkit xml
 #CONFIG(static): QTPLUGIN += qsqlite
-
-DEFINES += WITH_QT_CORE \
-           WITH_QT_GUI \
-           WITH_QT_NETWORK \
-           WITH_QT_SQL \
-           WITH_QT_SVG \
-           WITH_QT_WEBKIT \
-           WITH_QT_XML
 
 # Increase heap space
 #win32 {
@@ -375,7 +370,7 @@ mac {
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop desktop-kde icon lua doc jsf avatar image
+    INSTALLS += target desktop desktop-kde icon lua doc jsf avatar image table
 
     target.path = $$BINDIR
 
@@ -398,6 +393,10 @@ unix:!mac {
     DOCDIR = $$DATADIR/annot/player/doc
     doc.path = $$DOCDIR
     doc.files = $$DOC_FILES
+
+    TABLEDIR = $$DATADIR/annot/player/table
+    doc.path = $$TABLEDIR
+    doc.files = $$TABLE_FILES
 
     JSFDIR = $$DATADIR/annot/player/jsf
     jsf.path = $$JSFDIR

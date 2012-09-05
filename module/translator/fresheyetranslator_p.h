@@ -1,7 +1,7 @@
 #ifndef FRESHEYETRANSLATOR_P_H
 #define FRESHEYETRANSLATOR_P_H
 
-// fresheyetranslator_config.h
+// fresheyetranslator_p.h
 // 8/2l/2012
 // See: https://github.com/alice0775/userChrome.js/blob/master/popupTranslate.uc.xul
 

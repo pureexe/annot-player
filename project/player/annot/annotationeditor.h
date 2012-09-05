@@ -164,6 +164,7 @@ private:
 
 private:
   qint64 id_;
+  QString text_;
   QTextEdit *textEdit_;
 
   // Header

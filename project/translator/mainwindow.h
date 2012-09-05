@@ -5,7 +5,7 @@
 // 8/13/2012
 
 #include "project/common/acmainwindow.h"
-#include "module/searchengine/searchenginefactory.h"
+//#include "module/searchengine/searchenginefactory.h"
 #include <QtCore/QList>
 #include <QtCore/QString>
 
@@ -78,10 +78,10 @@ class MainWindow : public AcMainWindow
   QToolButton *autoButton_, *clipboardButton_, *topButton_;
   QCheckBox *romajiButton_, *yahooButton_, *microsoftButton_, *googleButton_,
             *exciteButton_, *ocnButton_, *fresheyeButton_, *sdlButton_,
-            *niftyButton_, *infoseekButton_;
+            *niftyButton_, *infoseekButton_, *systranButton_;
   QRadioButton *kotobankButton_, *jdicButton_;
 
-  QString languageCode_;
+  int language_;
 
 public:
   explicit MainWindow(QWidget *parent = nullptr);
@@ -124,7 +124,7 @@ protected slots:
   void showAbout();
 
 protected slots:
-  void searchWithEngine(int engine, const QString &key);
+  //void searchWithEngine(int engine, const QString &key);
   //void searchCurrentTitleWithGoogle() { searchWithEngine(SearchEngineFactory::Google, currentTitle()); }
   //void searchCurrentTitleWithGoogleImages() { searchWithEngine(SearchEngineFactory::GoogleImages, currentTitle()); }
   //void searchCurrentTitleWithBing()   { searchWithEngine(SearchEngineFactory::Bing, currentTitle()); }
@@ -144,6 +144,7 @@ protected slots:
   void showOcnTranslation(const QString &text);
   void showRomajiTranslation(const QString &text);
   void showSdlTranslation(const QString &text);
+  void showSystranTranslation(const QString &text);
   void showNiftyTranslation(const QString &text);
   void showInfoseekTranslation(const QString &text);
   void showYahooTranslation(const QString &text);
@@ -163,7 +164,7 @@ protected slots:
 private:
   void createLayout();
   void createActions();
-  void createSearchEngines();
+  //void createSearchEngines();
 
 private:
   bool disposed_;
@@ -173,7 +174,7 @@ private:
 
   TrayIcon *trayIcon_;
 
-  QList<SearchEngine *> searchEngines_;
+  //QList<SearchEngine *> searchEngines_;
   QMenuBar *menuBar_;
   QMenu *contextMenu_;
 };

@@ -10,7 +10,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
-#define GAME_LIBRARY_VERSION    "0.1.8"
+#define GAME_LIBRARY_VERSION    "0.1.9.3"
 
 class GameLibrary : public QObject
 {

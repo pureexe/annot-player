@@ -23,17 +23,19 @@ class GoogleTranslator : public Translator
 
   // - Constructions -
 public:
-  explicit GoogleTranslator::GoogleTranslator(QObject *parent = nullptr)
+  explicit GoogleTranslator(QObject *parent = nullptr)
     : Base(parent), nam_(nullptr), page_(nullptr)
   { }
 
   QString name() const override;
 
-public slots:
-  void doTranslate(const QString &text, const QString &to, const QString &from) override;
+protected slots:
+  void doTranslate(const QString &text, int to, int from) override;
 
 protected:
-  static QString translateUrl(const QString &text, const QString &to, const QString &from = QString());
+  static QString translateUrl(const QString &text, const char *to, const char *from = 0);
+  static const char *lcode(int lang);
+
   QNetworkAccessManager *networkAccessManager();
   QWebPage *createWebPage();
   //QWebPage *allocateWebPage();

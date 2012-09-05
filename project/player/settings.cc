@@ -33,6 +33,8 @@
 #define SK_LIVE         "Live"
 #define SK_PREFERLOCALDB  "PreferLocalDatabase"
 #define SK_MENUBAR      "MenuBar"
+#define SK_SHOWGAMETEXT  "ShowGameText"
+#define SK_APPLOC   "AppLocale"
 #define SK_TRANSLATE    "Translate"
 #define SK_SUBTITLECOLOR "SubtitleColor"
 #define SK_HIGHLIGHTCOLOR "AnnotationHighlightColor"
@@ -261,6 +263,22 @@ Settings::setMultipleWindowsEnabled(bool t)
 { setValue(SK_MULTIWINDOW, t); }
 
 bool
+Settings::isGameTextVisible() const
+{ return value(SK_SHOWGAMETEXT, true).toBool(); }
+
+void
+Settings::setGameTextVisible(bool t)
+{ setValue(SK_SHOWGAMETEXT, t); }
+
+bool
+Settings::isAppLocaleEnabled() const
+{ return value(SK_APPLOC, true).toBool(); }
+
+void
+Settings::setAppLocaleEnabled(bool t)
+{ setValue(SK_APPLOC, t); }
+
+bool
 Settings::isQueueEmpty() const
 { return value(SK_QUEUEEMPTY).toBool(); }
 
@@ -294,7 +312,7 @@ Settings::setAutoSubmit(bool t)
 
 bool
 Settings::isTranslateEnabled() const
-{ return value(SK_TRANSLATE).toBool(); }
+{ return value(SK_TRANSLATE, true).toBool(); }
 
 void
 Settings::setTranslateEnabled(bool enabled)

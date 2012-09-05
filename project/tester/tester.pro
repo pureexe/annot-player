@@ -25,9 +25,6 @@ include($$ROOTDIR/module/download/download.pri)
 
 QT      += core gui
 
-DEFINES += WITH_QT_CORE \
-           WITH_QT_GUI
-
 ## Sources
 
 TEMPLATE      = app

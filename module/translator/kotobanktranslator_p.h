@@ -1,7 +1,7 @@
 #ifndef KOTOBANKTRANSLATOR_P_H
 #define KOTOBANKTRANSLATOR_P_H
 
-// kotobanktranslator_config.h
+// kotobanktranslator_p.h
 // 8/20/2012
 
 // - Defines -

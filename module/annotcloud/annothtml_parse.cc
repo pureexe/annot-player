@@ -1,5 +1,8 @@
 // annothtml_parse.cc
 // 8/19/2011
+//
+// Qt CSS restriction:
+// doc.trolltech.com/4.8/richtext-html-subset.html
 
 #include "module/annotcloud/annothtml.h"
 #include "module/annotcloud/annottag.h"
@@ -32,10 +35,9 @@ AnnotationHtmlParser::parseLeadingTag(const QString &text)
   //  else
   //    index++;
   //if (index >= text.size())
-
   int index = text.indexOf(' ');
   return index < 0 ? RETURN(text, QString()) :
-                     RETURN(text.mid(0, index), text.mid(index + 1));
+                     RETURN(text.left(index), text.mid(index + 1));
 }
 
 std::pair<QString, QString>
@@ -45,16 +47,16 @@ AnnotationHtmlParser::parseNextToken(const QString &text)
 #define SELF(_text) parseNextToken(_text)
   typedef std::pair<QString, QString> RETURN;
 
-  if (text.isEmpty())
-    return RETURN();
+  switch (text.size()) {
+  case 0: return RETURN();
+  case 1: return RETURN(text, QString());
+  }
 
-  if (text.size() == 1)
-    return RETURN(text, QString());
-
-  char ch0 = text[0].toLatin1();
+  ushort ch0 = text[0].unicode();
   switch (ch0) {
   case ' ':
-    return SELF(text.trimmed());
+  case '\n':
+    return text.size() == 1 ? RETURN() : SELF(text.mid(1));
   case '{': case '}':
   case '[': case ']':
     return RETURN(text[0], text.mid(1));
@@ -62,8 +64,10 @@ AnnotationHtmlParser::parseNextToken(const QString &text)
 
   int mid = 0;
   for (int i = 1; !mid && i < text.size(); i++) {
-    switch (text[i].toLatin1()) {
+    switch (text[i].unicode()) {
     case ' ':
+    case '\n':
+    case '<': case '>':
       if (ch0 == CORE_CMDCH)
         mid = i;
       break;
@@ -78,10 +82,8 @@ AnnotationHtmlParser::parseNextToken(const QString &text)
       break;
     }
   }
-  if (!mid)
-    return RETURN(text, QString());
-  else
-    return RETURN(text.mid(0, mid), text.mid(mid).trimmed());
+  return mid ? RETURN(text.left(mid), text.mid(mid).trimmed()) :
+               RETURN(text, QString());
 #undef SELF
 }
 
@@ -112,7 +114,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
     ST_LeftSquareBracket = '[',
     ST_RightSquareBracket = ']' };
 
-  std::stack<std::pair<QString, char> > stack; // pair<QString, StringType>
+  std::stack<std::pair<QString, ushort> > stack; // pair<QString, StringType>
 
   if (text.startsWith(CORE_CMD_VERBATIM)) {
     parsed = text.mid(QString(CORE_CMD_VERBATIM).size());
@@ -189,7 +191,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
       break;
     }
 
-    char current_ch = current[0].toLatin1();
+    ushort current_ch = current[0].unicode();
     switch (current_ch) {
     case '}':
       if (stack.empty()) {
@@ -301,7 +303,7 @@ AnnotationHtmlParser::toHtml(const QString &text) const
 
     case CORE_CMDCH:
       if (current.size() == 2) {
-        char ch1 = current[1].toLatin1();
+        ushort ch1 = current[1].unicode();
         switch (ch1) {
         case CORE_CMDCH:
         case '{': case '}':

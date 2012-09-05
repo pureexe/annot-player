@@ -509,7 +509,8 @@ TokenView::languageToString(int lang)
   //case Traits::AnyLanguage:     return TR(T_ANYLANGUAGE);
   case Traits::English:         return TR(T_ENGLISH);
   case Traits::Japanese:        return TR(T_JAPANESE);
-  case Traits::Chinese:         return TR(T_CHINESE);
+  case Traits::TraditionalChinese:   return TR(T_CHINESE);
+  case Traits::SimplifiedChinese:    return TR(T_SIMPLIFIEDCHINESE);
   case Traits::Korean:          return TR(T_KOREAN);
   case Traits::French:          return TR(T_FRENCH);
   case Traits::German:          return TR(T_GERMAN);

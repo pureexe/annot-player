@@ -126,12 +126,12 @@ MainWindow::MainWindow(QWidget *parent)
     << QString("http://www.bilibili.tv/html/arcgg.html")
   );
 
-  int lang = AcSettings::globalSettings()->language();
-  switch (lang) {
-  case QLocale::English: setHomePage(HOMEPAGE_JP); break;
-  case QLocale::Chinese: setHomePage(HOMEPAGE_ZH); break;
-  default:               setHomePage(HOMEPAGE_JP);
-  }
+  if (AcSettings::globalSettings()->isJapanese())
+    setHomePage(HOMEPAGE_JP);
+  else if (AcSettings::globalSettings()->isChinese())
+    setHomePage(HOMEPAGE_ZH);
+  else
+    setHomePage(HOMEPAGE_JP);
   setHomePages(QStringList()
     << "google.com"
     << "nicovideo.jp"
@@ -196,12 +196,9 @@ MainWindow::MainWindow(QWidget *parent)
   DOUT("load search history");
   int searchEngine = settings->searchEngine();
   if (searchEngine < 0)
-    switch (lang) {
-    case QLocale::Japanese: searchEngine = SearchEngineFactory::Nicovideo; break;
-    case QLocale::Chinese:  searchEngine = SearchEngineFactory::Bilibili; break;
-    case QLocale::English:
-    default:                searchEngine = SearchEngineFactory::Google;
-    }
+    searchEngine = AcSettings::globalSettings()->isJapanese() ? SearchEngineFactory::Nicovideo :
+                   AcSettings::globalSettings()->isChinese() ? SearchEngineFactory::Bilibili :
+                   SearchEngineFactory::Google;
   setSearchEngine(searchEngine);
 
   QStringList searches = settings->recentSearches();

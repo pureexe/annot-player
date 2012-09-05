@@ -20,25 +20,25 @@ FresheyeTranslator::name() const
 // - Translate -
 
 QByteArray
-FresheyeTranslator::postData(const QString &text, const QString &to, const QString &from)
+FresheyeTranslator::postData(const QString &text, int to, int from)
 {
   return (
-    from.isEmpty() || from == "ja" ? (
-      to == "zh-CHS" ? FRESHEYE_POST_JA_CN :
-      to == "zh-CHT" ? FRESHEYE_POST_JA_TW :
+    !from || from == Japanese ? (
+      to == TraditionalChinese ? FRESHEYE_POST_JA_TW :
+      to == SimplifiedChinese ? FRESHEYE_POST_JA_CN :
       FRESHEYE_POST_JA_EN
-  ) : from == "en" ? FRESHEYE_POST_EN_JA :
-      from == "zh-CHS" ? FRESHEYE_POST_CN_JA :
-      from == "zh-CHT" ? FRESHEYE_POST_TW_JA :
+  ) : from == English ? FRESHEYE_POST_EN_JA :
+      from == TraditionalChinese ? FRESHEYE_POST_TW_JA :
+      from == SimplifiedChinese ? FRESHEYE_POST_CN_JA :
       FRESHEYE_POST_JA_EN
   ) + QUrl::toPercentEncoding(text);
 }
 
 QNetworkReply*
-FresheyeTranslator::createReply(const QString &text, const QString &to, const QString &from)
+FresheyeTranslator::createReply(const QString &text, int to, int from)
 {
   DOUT("enter: text =" << text);
-  QString url = to.startsWith("zh-") ? FRESHEYE_API_ZH : FRESHEYE_API_EN;
+  QString url = isChineseLanguage(to) ? FRESHEYE_API_ZH : FRESHEYE_API_EN;
   QNetworkRequest req(url);
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
   DOUT("exit");

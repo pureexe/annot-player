@@ -28,7 +28,7 @@ public:
   // - Construction -
 public:
   TextMessage() : signature_(0) { }
-  explicit TextMessage(const QByteArray &data, qint64 signature = 0) : data_(data), signature_(signature) { }
+  explicit TextMessage(const QByteArray &data, qint64 signature = 0) : signature_(signature), data_(data) { }
 };
 
 #endif // TEXTMESSAGE_H

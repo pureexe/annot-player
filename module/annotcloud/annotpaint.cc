@@ -7,9 +7,9 @@
 #include <QtCore/QHash>
 #include <QtCore/QMultiMap>
 #include <QtGui/QPainter>
-#ifdef WITH_QT_SVG
+#ifdef QT_SVG_LIB
 # include <QtSvg/QSvgGenerator>
-#endif // WITH_QT_SVG
+#endif // QT_SVG_LIB
 //#include <boost/bimap.hpp>
 #include <boost/foreach.hpp>
 #include <climits>

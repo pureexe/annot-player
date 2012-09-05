@@ -1,7 +1,7 @@
 #ifndef ROMAJITRANSLATOR_P_H
 #define ROMAJITRANSLATOR_P_H
 
-// romajitranslator_config.h
+// romajitranslator_p.h
 // 7/15/2012
 
 // - Defines -

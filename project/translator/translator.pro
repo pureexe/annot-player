@@ -15,9 +15,12 @@ include($$ROOTDIR/module/animation/animation.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
 include($$ROOTDIR/module/imagefilter/imagefilter.pri)
+include($$ROOTDIR/module/mecabhighlighter/mecabhighlighter.pri)
+include($$ROOTDIR/module/mecabsettings/mecabsettings.pri)
+include($$ROOTDIR/module/mstypes/mstypes.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
-include($$ROOTDIR/module/searchengine/searchengine.pri)
+#include($$ROOTDIR/module/searchengine/searchengine.pri)
 include($$ROOTDIR/module/translator/translator.pri)
 
 !mac: include($$ROOTDIR/module/metacall/metacall.pri)
@@ -36,11 +39,6 @@ mac {
 
 QT      += core gui network xml
 #CONFIG(static): QTPLUGIN += qsqlite
-
-DEFINES += WITH_QT_CORE \
-           WITH_QT_GUI \
-           WITH_QT_NETWORK \
-           WITH_QT_XML
 
 win32 {
   #DEFINES += AC_ENABLE_GAME
@@ -104,7 +102,6 @@ mac {
 ## Translations
 
 TRANSLATIONS += \
-    $$PWD/tr/tr_en.ts \
     $$PWD/tr/tr_ja.ts \
     $$PWD/tr/tr_zh_TW.ts \
     $$PWD/tr/tr_zh_CN.ts

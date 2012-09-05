@@ -51,6 +51,10 @@ public:
   void addWindow(QWidget *w);
   void removeWindow(QWidget *w);
 
+  // - i18n -
+public:
+  void loadTranslations();
+
   // - Events -
 public:
   bool event(QEvent *e) override;

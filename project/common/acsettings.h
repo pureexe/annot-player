@@ -61,15 +61,11 @@ public:
   // - i18n -
 
   int language() const; ///< Application language
-  void setLanguage(int lang, int script = 0);
-
-  int languageScript() const; ///< Application language script
-  void setLanguageScript(int script);
+  void setLanguage(int lang);
 
   bool isEnglish() const;
   bool isJapanese() const;
   bool isChinese() const;
-  bool isKorean() const;
 
   // - GUI -
 

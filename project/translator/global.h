@@ -48,4 +48,12 @@
 # define G_PATH_CACHES G_PATH_PROFILE
 #endif // Q_OS_
 
+#if defined(Q_OS_WIN) || defined (Q_OS_MAC)
+# define G_PATH_ETC   QCoreApplication::applicationDirPath() + "/" "etc"
+#else
+# define G_PATH_ETC   "/usr/etc"
+#endif // Q_OS_
+
+#define G_PATH_MECABRC  G_PATH_ETC "/mecabrc"
+
 #endif // GLOBAL_H

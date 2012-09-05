@@ -3,7 +3,6 @@
 #include "mainwindow.h"
 #include "global.h"
 #include "application.h"
-#include "rc.h"
 #include "settings.h"
 #include "project/common/actranslator.h"
 #include "project/common/acsettings.h"
@@ -11,9 +10,7 @@
 #include "project/common/acui.h"
 #include "module/translator/translatorsettings.h"
 #include "module/translator/translatormanager.h"
-#ifdef WITH_MODULE_QT
-# include "module/qt/qtrc.h"
-#endif // WITH_MODULE_QT
+#include "module/mecabsettings/mecabsettings.h"
 #include <QtGui>
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
@@ -52,43 +49,6 @@ namespace { namespace detail {
            size.width() > desktop.width() && size.height() > desktop.height();
   }
 
-  // i18n
-
-  inline QTranslator *translatorForLanguage(int lang, int script = 0)
-  {
-    QString qm;
-    switch (lang) {
-    case QLocale::English: qm = RC_TR_EN; break;
-    case QLocale::Japanese: qm = RC_TR_JA; break;
-    case QLocale::Chinese: qm = script == QLocale::SimplifiedChineseScript ? RC_TR_ZH_CN : RC_TR_ZH_TW; break;
-    default: qm = RC_TR_EN;
-    }
-
-    QTranslator *t = new QTranslator;
-    if (t->load(qm)) return t;
-    else { Q_ASSERT(0); delete t; return 0; }
-  }
-
-#ifdef WITH_MODULE_QT
-  inline QTranslator *qtTranslatorForLanguage(int lang, int script = 0)
-  {
-    const char *qm = nullptr;
-    switch (lang) {
-    case QLocale::Japanese: qm = "qt_ja"; break;
-    case QLocale::Chinese: qm = script == QLocale::SimplifiedChineseScript ? "qt_zh_CN" : "qt_zh_TW"; break;
-    }
-
-    if (qm) {
-      QTranslator *t = new QTranslator(qApp);
-      if (t->load(qm, QTRC_PREFIX_TR))
-        return t;
-      else
-        delete t;
-    }
-    return 0;
-  }
-#endif // WITH_MODULE_QT
-
 } } // namespace detail
 
 // - Main -
@@ -102,11 +62,13 @@ main(int argc, char *argv[])
   QTextCodec::setCodecForCStrings(codec);
   QTextCodec::setCodecForTr(codec);
 
+
   // Applications
   Application a(argc, argv);
 #ifdef Q_OS_WIN
   QDir::setCurrent(QCoreApplication::applicationDirPath());
 #endif // Q_OS_WIN
+  a.loadTranslations();
 
   if (!a.isSingleInstance()) {
     DOUT("exit: not single instance");
@@ -132,26 +94,6 @@ main(int argc, char *argv[])
   }
 
   AcSettings *settings = AcSettings::globalSettings();
-  {
-    int lang = settings->language(),
-        script = settings->languageScript();
-    if (!lang ||
-        lang == QLocale::Chinese && !script) {
-      const QLocale system = QLocale::system();
-      lang =  system.language();
-      script =  system.script();
-      settings->setLanguage(lang, script);
-    }
-    QTranslator *t = detail::translatorForLanguage(lang, script);
-    Q_ASSERT(t);
-    if (t)
-      a.installTranslator(t);
-#ifdef WITH_MODULE_QT
-    t = detail::qtTranslatorForLanguage(lang, script);
-    if (t)
-      a.installTranslator(t);
-#endif // WITH_MODULE_QT
-  }
 
   // Set theme.
   {
@@ -167,6 +109,9 @@ main(int argc, char *argv[])
   // Set cache location
   TranslatorSettings::globalSettings()->setCacheDirectory(G_PATH_CACHES);
   TranslatorSettings::globalSettings()->setCacheSize(20);
+
+  // MeCab
+  MeCabSettings::setMeCabRcFile(G_PATH_MECABRC);
 
   // Set network proxy
   if (settings->isProxyEnabled()) {

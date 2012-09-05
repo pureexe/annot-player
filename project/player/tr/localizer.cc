@@ -1,10 +1,8 @@
 // localizer.cc
 // 9/16/2011
 
-#include "localizer.h"
-#include "tr.h"
-#include "rc.h" // This breaks the modularity of this pri
-#include "module/qt/qtrc.h"
+#include "tr/localizer.h"
+#include "tr/tr.h"
 #include <QtCore>
 
 #ifdef Q_OS_MAC
@@ -26,124 +24,6 @@
 # define K_ESC         "Esc"
 # define K_CAPSLOCK    "CapsLock"
 #endif // Q_OS_MAC
-
-// - Constructions -
-
-void
-Localizer::setLocale(int language, int script, bool updateTranslator)
-{
-  if (language_ != language || script_ != script) {
-    if (updateTranslator)
-      removeCurrentTranslator(qApp);
-    language_ = language;
-    script_ = script;
-    if (updateTranslator)
-      installCurrentTranslator(qApp);
-
-    emit localeChanged();
-  }
-}
-
-// - Properties -
-
-const Localizer::QTranslatorList&
-Localizer::tr_en() const
-{
-  if (tr_en_.isEmpty()) {
-    QTranslator*
-    t = new QTranslator(const_cast<Self *>(this));
-    t->load(RC_TR_EN);
-    tr_en_.append(t);
-
-    if (!QString(RC_TR_EN).isEmpty()) {
-      t = new QTranslator(const_cast<Self *>(this));
-      t->load(RC_TR_EN);
-      tr_en_.append(t);
-    }
-  }
-  return tr_en_;
-}
-
-const Localizer::QTranslatorList&
-Localizer::tr_ja() const
-{
-  if (tr_ja_.isEmpty()) {
-    QTranslator*
-    t = new QTranslator(const_cast<Self *>(this));
-    t->load(RC_TR_JA);
-    tr_ja_.append(t);
-
-    if (!QString(RC_TR_JA).isEmpty()) {
-      t = new QTranslator(const_cast<Self *>(this));
-      t->load(QTRC_TR_JA);
-      tr_ja_.append(t);
-    }
-  }
-  return tr_ja_;
-}
-
-const Localizer::QTranslatorList&
-Localizer::tr_zh_CN() const
-{
-  if (tr_zh_CN_.isEmpty()) {
-    QTranslator*
-    t = new QTranslator(const_cast<Self *>(this));
-    t->load(RC_TR_ZH_CN);
-    tr_zh_CN_.append(t);
-
-    if (!QString(RC_TR_ZH_CN).isEmpty()) {
-      t = new QTranslator(const_cast<Self *>(this));
-      t->load(QTRC_TR_ZH_CN);
-      tr_zh_CN_.append(t);
-    }
-  }
-  return tr_zh_CN_;
-}
-
-const Localizer::QTranslatorList&
-Localizer::tr_zh_TW() const
-{
-  if (tr_zh_TW_.isEmpty()) {
-    QTranslator*
-    t = new QTranslator(const_cast<Self *>(this));
-    t->load(RC_TR_ZH_TW);
-    tr_zh_TW_.append(t);
-
-    if (!QString(RC_TR_ZH_TW).isEmpty()) {
-      t = new QTranslator(const_cast<Self *>(this));
-      t->load(QTRC_TR_ZH_TW);
-      tr_zh_TW_.append(t);
-    }
-  }
-  return tr_zh_TW_;
-}
-
-Localizer::QTranslatorList
-Localizer::currentTranslators() const
-{
-  switch (language_) {
-  case QLocale::English:   return tr_en();
-  case QLocale::Japanese:  return tr_ja();
-  case QLocale::Chinese:   return script_ == QLocale::SimplifiedChineseScript ? tr_zh_CN() : tr_zh_TW();
-  default: return tr_en();
-  }
-}
-
-void
-Localizer::installCurrentTranslator(QCoreApplication *a)
-{
-  if (a)
-    foreach (QTranslator *t, currentTranslators())
-      a->installTranslator(t);
-}
-
-void
-Localizer::removeCurrentTranslator(QCoreApplication *a)
-{
-  if (a)
-    foreach (QTranslator *t, currentTranslators())
-      a->removeTranslator(t);
-}
 
 // - Translations -
 
@@ -891,3 +771,121 @@ Localizer::translate(int tid)
 }
 
 // EOF
+/*
+
+void
+Localizer::setLocale(int language, int script, bool updateTranslator)
+{
+  if (language_ != language || script_ != script) {
+    if (updateTranslator)
+      removeCurrentTranslator(qApp);
+    language_ = language;
+    script_ = script;
+    if (updateTranslator)
+      installCurrentTranslator(qApp);
+
+    emit localeChanged();
+  }
+}
+
+// - Properties -
+
+const Localizer::QTranslatorList&
+Localizer::tr_en() const
+{
+  if (tr_en_.isEmpty()) {
+    QTranslator*
+    t = new QTranslator(const_cast<Self *>(this));
+    t->load(RC_TR_EN);
+    tr_en_.append(t);
+
+    if (!QString(RC_TR_EN).isEmpty()) {
+      t = new QTranslator(const_cast<Self *>(this));
+      t->load(RC_TR_EN);
+      tr_en_.append(t);
+    }
+  }
+  return tr_en_;
+}
+
+const Localizer::QTranslatorList&
+Localizer::tr_ja() const
+{
+  if (tr_ja_.isEmpty()) {
+    QTranslator*
+    t = new QTranslator(const_cast<Self *>(this));
+    t->load(RC_TR_JA);
+    tr_ja_.append(t);
+
+    if (!QString(RC_TR_JA).isEmpty()) {
+      t = new QTranslator(const_cast<Self *>(this));
+      t->load(QTRC_TR_JA);
+      tr_ja_.append(t);
+    }
+  }
+  return tr_ja_;
+}
+
+const Localizer::QTranslatorList&
+Localizer::tr_zh_CN() const
+{
+  if (tr_zh_CN_.isEmpty()) {
+    QTranslator*
+    t = new QTranslator(const_cast<Self *>(this));
+    t->load(RC_TR_ZH_CN);
+    tr_zh_CN_.append(t);
+
+    if (!QString(RC_TR_ZH_CN).isEmpty()) {
+      t = new QTranslator(const_cast<Self *>(this));
+      t->load(QTRC_TR_ZH_CN);
+      tr_zh_CN_.append(t);
+    }
+  }
+  return tr_zh_CN_;
+}
+
+const Localizer::QTranslatorList&
+Localizer::tr_zh_TW() const
+{
+  if (tr_zh_TW_.isEmpty()) {
+    QTranslator*
+    t = new QTranslator(const_cast<Self *>(this));
+    t->load(RC_TR_ZH_TW);
+    tr_zh_TW_.append(t);
+
+    if (!QString(RC_TR_ZH_TW).isEmpty()) {
+      t = new QTranslator(const_cast<Self *>(this));
+      t->load(QTRC_TR_ZH_TW);
+      tr_zh_TW_.append(t);
+    }
+  }
+  return tr_zh_TW_;
+}
+
+Localizer::QTranslatorList
+Localizer::currentTranslators() const
+{
+  switch (language_) {
+  case QLocale::English:   return tr_en();
+  case QLocale::Japanese:  return tr_ja();
+  case QLocale::Chinese:   return script_ == QLocale::SimplifiedChineseScript ? tr_zh_CN() : tr_zh_TW();
+  default: return tr_en();
+  }
+}
+
+void
+Localizer::installCurrentTranslator(QCoreApplication *a)
+{
+  if (a)
+    foreach (QTranslator *t, currentTranslators())
+      a->installTranslator(t);
+}
+
+void
+Localizer::removeCurrentTranslator(QCoreApplication *a)
+{
+  if (a)
+    foreach (QTranslator *t, currentTranslators())
+      a->removeTranslator(t);
+}
+*/

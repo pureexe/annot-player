@@ -67,29 +67,45 @@ GoogleTranslator::createWebPage()
 
 // - Translate -
 
+const char*
+GoogleTranslator::lcode(int lang)
+{
+  switch (lang) {
+  case English:  return "en";
+  case Japanese: return "ja";
+  case TraditionalChinese:  return "zh-TW";
+  case SimplifiedChinese:   return "zh-CN";
+  case Korean:   return "ko";
+  case French:   return "fr";
+  case German:   return "de";
+  case Italian:  return "it";
+  case Spanish:  return "es";
+  case Portuguese: return "pt";
+  case Russian:  return "ru";
+  default: return 0;
+  }
+}
+
 QString
-GoogleTranslator::translateUrl(const QString &text, const QString &to, const QString &from)
+GoogleTranslator::translateUrl(const QString &text, const char *to, const char *from)
 {
   return QString("http://translate.google.com/#%1|%2|%3")
-      .arg(from.isEmpty() ? QString("auto") : from)
-      .arg(to == "zh-CHS" ? QString("zh-CN") : to == "zh-CHT" ? QString("zh-TW") : to)
+      .arg(from ? from : "auto")
+      .arg(to)
       .arg(text);
 }
 
 void
-GoogleTranslator::doTranslate(const QString &text, const QString &to, const QString &from)
+GoogleTranslator::doTranslate(const QString &text, int to, int from)
 {
-  if (!isEnabled())
-    return;
   DOUT("enter");
-
   if (page_ && isSynchronized()) {
     //reply_->abort();
     page_->deleteLater();
     DOUT("abort previous webpage");
   }
 
-  QString url = translateUrl(text, to, from);
+  QString url = translateUrl(text, lcode(to), lcode(from));
   DOUT("url =" << url);
 
   page_ = createWebPage();

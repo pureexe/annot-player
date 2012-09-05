@@ -12,6 +12,7 @@
 #include "module/translator/ocntranslator.h"
 #include "module/translator/romajitranslator.h"
 #include "module/translator/sdltranslator.h"
+#include "module/translator/systrantranslator.h"
 #include "module/translator/yahootranslator.h"
 #include <boost/foreach.hpp>
 
@@ -36,6 +37,7 @@ TranslatorManager::TranslatorManager(QObject *parent)
   ADD(Nifty)
   ADD(Excite)
   ADD(Sdl)
+  ADD(Systran)
 #undef ADD
 
   connect(t_[Romaji], SIGNAL(translated(QString)), SIGNAL(translatedByRomaji(QString)));
@@ -48,6 +50,7 @@ TranslatorManager::TranslatorManager(QObject *parent)
   connect(t_[Nifty], SIGNAL(translated(QString)), SIGNAL(translatedByNifty(QString)));
   connect(t_[Excite], SIGNAL(translated(QString)), SIGNAL(translatedByExcite(QString)));
   connect(t_[Sdl], SIGNAL(translated(QString)), SIGNAL(translatedBySdl(QString)));
+  connect(t_[Systran], SIGNAL(translated(QString)), SIGNAL(translatedBySystran(QString)));
 
   connect(this, SIGNAL(synchronizedChanged(bool)), SLOT(updateSynchronized(bool)));
 }

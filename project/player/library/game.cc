@@ -22,8 +22,8 @@ namespace { // anonymous
 #define TAG_ROOT    "library"
 #define TAG_VALUE   "game"
 
-#define TAG_ANCHOR      "anchor"
-#define TAG_FUNCTION    "function"
+//#define TAG_ANCHOR      "anchor"
+//#define TAG_FUNCTION    "function"
 #define TAG_ENCODING    "encoding"
 #define TAG_ENABLED     "enabled"
 #define TAG_TOKENID     "tokenId"
@@ -46,8 +46,9 @@ namespace { // anonymous
   //bool enabled_;
 
 enum Hash {
-  H_Anchor = 109354850,
-  H_Function = 206218750,
+  //H_Anchor = 109354850,
+  //H_Function = 206218750,
+
   H_Encoding = 77964743,
   H_Enabled = 206017140,
   H_TokenId = 190956052,
@@ -100,13 +101,8 @@ Game::readList(const QString &fileName)
   while (!e.isNull()) {
     QDomElement c = e.firstChildElement();
     Self v;
-    TextThread oldThread; // TO BE REMOVED
     while (!c.isNull()) {
       switch (qHash(c.tagName())) {
-      // TO BE REMOVED
-      case H_Anchor:     oldThread.setSignature(c.text().toLongLong()); break;
-      case H_Function:   oldThread.setProvider(c.text()); break;
-
       case H_Encoding:   v.setEncoding(c.text()); break;
       case H_Enabled:    v.setEnabled(c.text() == "true"); break;
       case H_TokenId:    v.setTokenId(c.text().toLongLong()); break;
@@ -142,10 +138,6 @@ Game::readList(const QString &fileName)
       c = c.nextSiblingElement();
     }
 
-    if (oldThread.hasSignature()) {
-      oldThread.setRole(TextThread::LeadingRole);
-      v.threads().append(oldThread);
-    }
     if (v.hasThreads())
       ret.append(v);
     e = e.nextSiblingElement(TAG_VALUE);
@@ -180,13 +172,8 @@ Game::readHash(const QString &fileName)
   while (!e.isNull()) {
     QDomElement c = e.firstChildElement();
     Self v;
-    TextThread oldThread; // TO BE REMOVED
     while (!c.isNull()) {
       switch (qHash(c.tagName())) {
-      // TO BE REMOVED
-      case H_Anchor:     oldThread.setSignature(c.text().toLongLong()); break;
-      case H_Function:   oldThread.setProvider(c.text()); break;
-
       case H_Encoding:   v.setEncoding(c.text()); break;
       case H_Enabled:    v.setEnabled(c.text() == "true"); break;
       case H_TokenId:    v.setTokenId(c.text().toLongLong()); break;
@@ -220,11 +207,6 @@ Game::readHash(const QString &fileName)
       default: DOUT("warning: unknown tag:" << c.tagName());
       }
       c = c.nextSiblingElement();
-    }
-
-    if (oldThread.hasSignature()) {
-      oldThread.setRole(TextThread::LeadingRole);
-      v.threads().append(oldThread);
     }
 
     QString k = v.key();

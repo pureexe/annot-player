@@ -80,15 +80,10 @@ QString
 RomajiTranslator::parseReply(const QByteArray &data)
 {
   QString ret;
-  enum {
-    area_begin_len = sizeof(ROMAJI_AREA_BEGIN)  -1,
-    line_begin_len = sizeof(ROMAJI_LINE_BEGIN) -1,
-    line_end_len = sizeof(ROMAJI_LINE_BEGIN) -1
-  };
   if (!data.isEmpty()) {
     int begin = data.indexOf(ROMAJI_AREA_BEGIN);
     if (begin >= 0) {
-      begin += area_begin_len;
+      begin += sizeof(ROMAJI_AREA_BEGIN) -1;
       int end = data.indexOf(ROMAJI_AREA_END, begin);
       if (end > 0) {
         QByteArray area = data.mid(begin, end - begin);
@@ -98,12 +93,12 @@ RomajiTranslator::parseReply(const QByteArray &data)
           begin = area.indexOf(ROMAJI_LINE_BEGIN, end);
           if (begin < 0)
             break;
-          begin += line_begin_len;
+          begin += sizeof(ROMAJI_LINE_BEGIN) -1;
           end = area.indexOf(ROMAJI_LINE_END, begin);
           if (end < 0)
             break;
           QByteArray line = area.mid(begin, end - begin);
-          end += line_end_len;
+          end += sizeof(ROMAJI_LINE_END) -1;
 
           QString t = decodeText(line);
           if (!t.isEmpty()) {

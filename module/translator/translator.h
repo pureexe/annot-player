@@ -4,6 +4,7 @@
 // translator.h
 // 11/2/2011
 
+#include "module/mstypes/lcid.h"
 #include <QtCore/QObject>
 #include <QtCore/QHash>
 #include <QtCore/QString>
@@ -20,11 +21,27 @@ class Translator : public QObject
 
   QHash<QString, QString> cache_;
 
-  // - Constructions -
+  // - Types -
 public:
-  ///  Return lcode, usually 2 letters
-  static QString languageCode(int language, int script = 0);
+  enum Language {
+    NoLanguage = 0,
+    English = LCID_EN_US,
+    Japanese = LCID_JA_JP,
+    TraditionalChinese = LCID_ZH_TW,
+    SimplifiedChinese = LCID_ZH_CN,
+    Korean = LCID_KO_KR,
+    French = LCID_FR,
+    German = LCID_DE,
+    Italian = LCID_IT,
+    Spanish = LCID_ES,
+    Portuguese = LCID_PT,
+    Russian = LCID_RU
+  };
 
+  static bool isChineseLanguage(int lcid)
+  { return lcid == TraditionalChinese || lcid == SimplifiedChinese; }
+
+  // - Construction -
 public:
   explicit Translator(QObject *parent = nullptr)
     : Base(parent), enabled_(true), synchronized_(true) { }
@@ -41,7 +58,8 @@ signals:
   void synchronizedChanged(bool t);
 
 public slots:
-  virtual void translate(const QString &text, const QString &to, const QString &from = QString());
+  ///  \param from and \param to are supposed in Microsoft LCID format.
+  virtual void translate(const QString &text, int to, int from = 0);
 
   void setEnabled(bool t)
   {
@@ -58,7 +76,7 @@ public slots:
   void clearCache() { if (!cache_.isEmpty()) cache_.clear(); }
 
 protected:
-  virtual void doTranslate(const QString &text, const QString &to, const QString &from) = 0;
+  virtual void doTranslate(const QString &text, int to, int from) = 0;
 
   void cacheTranslation(const QString &s, const QString &t) { cache_[s] = t; }
   const QHash<QString, QString> &cachedTranslation() { return cache_; }

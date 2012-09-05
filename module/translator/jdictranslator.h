@@ -25,11 +25,11 @@ public:
 
   QString name() const override;
 
-  static const char *dictionaryForLanguage(const QString &lang);
+  static const char *dictionary(int lang);
 
 protected:
-  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from) override
-  { Q_UNUSED(from) return createReply(text, dictionaryForLanguage(to)); }
+  QNetworkReply *createReply(const QString &text, int to, int from) override
+  { Q_UNUSED(from) return createReply(text, dictionary(to)); }
 
   QNetworkReply *createReply(const QString &text, const char *dict = 0);
 

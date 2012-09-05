@@ -6,10 +6,7 @@ DEFINES += WITH_WIN_APPLOCALE
 INCLUDEPATH += $$PWD
 DEPENDPATH  += $$PWD
 
-HEADERS += \
-    $$PWD/applocale.h \
-    $$PWD/lcid.h
-
+HEADERS += $$PWD/applocale.h
 SOURCES += $$PWD/applocale.cc 
 
 QT +=   core

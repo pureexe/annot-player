@@ -21,11 +21,11 @@ public:
   QString name() const override;
 
 protected:
-  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from) override;
+  QNetworkReply *createReply(const QString &text, int to, int from) override;
 
   QString parseReply(const QByteArray &data) override;
 
-  static QByteArray postData(const QString &text, const QString &to, const QString &from);
+  static QByteArray postData(const QString &text, int to, int from);
 };
 
 #endif // FRESHEYETRANSLATOR_H

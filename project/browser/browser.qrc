@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>tr/tr_en.qm</file>
         <file>tr/tr_ja.qm</file>
         <file>tr/tr_zh_CN.qm</file>
         <file>tr/tr_zh_TW.qm</file>

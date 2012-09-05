@@ -21,13 +21,14 @@ public:
   QString name() const override;
 
 protected:
-  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from) override;
+  QNetworkReply *createReply(const QString &text, int to, int from) override;
 
   QString parseReply(const QByteArray &data) override;
 
 protected:
-  static QByteArray postData(const QString &text, const QString &to, const QString &from, const QByteArray &key);
+  static QByteArray postData(const QString &text, const char *to, const char *from, const QByteArray &key);
   static QByteArray currentAuthKey();
+  static const char *lcode(int lang);
 };
 
 #endif // OCNTRANSLATOR_H

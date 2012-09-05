@@ -713,194 +713,194 @@
         <translation>とあるブラウザ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="318"/>
+        <location filename="../mainwindow.cc" line="315"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="319"/>
+        <location filename="../mainwindow.cc" line="316"/>
         <source>New Window</source>
         <translation>新しいウィンドウ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="257"/>
-        <location filename="../mainwindow.cc" line="320"/>
+        <location filename="../mainwindow.cc" line="254"/>
+        <location filename="../mainwindow.cc" line="317"/>
         <source>New Tab</source>
         <translation>新しいタブ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="322"/>
+        <location filename="../mainwindow.cc" line="319"/>
         <source>Clip</source>
         <translation>ページを保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="252"/>
-        <location filename="../mainwindow.cc" line="324"/>
+        <location filename="../mainwindow.cc" line="249"/>
+        <location filename="../mainwindow.cc" line="321"/>
         <source>Close Tab</source>
         <translation>タブを閉じる</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="325"/>
+        <location filename="../mainwindow.cc" line="322"/>
         <source>Close Window</source>
         <translation>ウィンドウを閉じる</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="326"/>
+        <location filename="../mainwindow.cc" line="323"/>
         <source>Exit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="338"/>
+        <location filename="../mainwindow.cc" line="335"/>
         <source>&amp;View</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="267"/>
-        <location filename="../mainwindow.cc" line="339"/>
+        <location filename="../mainwindow.cc" line="264"/>
+        <location filename="../mainwindow.cc" line="336"/>
         <source>Reload</source>
         <translation>リロード</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="242"/>
+        <location filename="../mainwindow.cc" line="239"/>
         <source>Unrecognized Gesture</source>
         <translation>未知のジェスチャー</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="247"/>
+        <location filename="../mainwindow.cc" line="244"/>
         <source>Open Link in Background Tab</source>
         <translation>新規タブで開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="262"/>
+        <location filename="../mainwindow.cc" line="259"/>
         <source>Undo Close Tab</source>
         <translation>閉じたタブを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="277"/>
+        <location filename="../mainwindow.cc" line="274"/>
         <source>Forward</source>
         <translation>次に進む</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="272"/>
+        <location filename="../mainwindow.cc" line="269"/>
         <source>Backward</source>
         <translation>前に戻る</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="282"/>
+        <location filename="../mainwindow.cc" line="279"/>
         <source>Previous Tab</source>
         <translation>前のタブ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="287"/>
+        <location filename="../mainwindow.cc" line="284"/>
         <source>Next Tab</source>
         <translation>次のタブ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="292"/>
+        <location filename="../mainwindow.cc" line="289"/>
         <source>Minimize Window</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="302"/>
+        <location filename="../mainwindow.cc" line="299"/>
         <source>Scroll Top</source>
         <translation>トップへ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="307"/>
+        <location filename="../mainwindow.cc" line="304"/>
         <source>Scroll Bottom</source>
         <translation>ボトムへ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="340"/>
+        <location filename="../mainwindow.cc" line="337"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="341"/>
+        <location filename="../mainwindow.cc" line="338"/>
         <source>Inspect</source>
         <translation>検查</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="343"/>
+        <location filename="../mainwindow.cc" line="340"/>
         <source>Actual Size</source>
         <translation>ズームをリセット</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="344"/>
+        <location filename="../mainwindow.cc" line="341"/>
         <source>Zoom In</source>
         <translation>ズームイン</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="345"/>
+        <location filename="../mainwindow.cc" line="342"/>
         <source>Zoom Out</source>
         <translation>ズームアウト</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="350"/>
+        <location filename="../mainwindow.cc" line="347"/>
         <source>&amp;Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="351"/>
+        <location filename="../mainwindow.cc" line="348"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="579"/>
-        <location filename="../mainwindow.cc" line="593"/>
+        <location filename="../mainwindow.cc" line="576"/>
+        <location filename="../mainwindow.cc" line="590"/>
         <source>opening new window</source>
         <translation>新しいウィンドウを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="610"/>
-        <location filename="../mainwindow.cc" line="624"/>
-        <location filename="../mainwindow.cc" line="638"/>
+        <location filename="../mainwindow.cc" line="607"/>
+        <location filename="../mainwindow.cc" line="621"/>
+        <location filename="../mainwindow.cc" line="635"/>
         <source>opening</source>
         <translation>開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="652"/>
+        <location filename="../mainwindow.cc" line="649"/>
         <source>saving</source>
         <translation>保存中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="834"/>
+        <location filename="../mainwindow.cc" line="831"/>
         <source>Click any edge of the screen to toggle tool bars.</source>
         <translation>エッジをクリックしてば、ツールバーを非表示になります。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="888"/>
+        <location filename="../mainwindow.cc" line="885"/>
         <source>file saved</source>
         <translation>セーブした</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="297"/>
-        <location filename="../mainwindow.cc" line="347"/>
+        <location filename="../mainwindow.cc" line="294"/>
+        <location filename="../mainwindow.cc" line="344"/>
         <source>Toggle Full Screen</source>
         <translation>フルスクリーン</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="354"/>
+        <location filename="../mainwindow.cc" line="351"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="356"/>
+        <location filename="../mainwindow.cc" line="353"/>
         <source>&amp;Console</source>
         <translation>コンソール</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="357"/>
+        <location filename="../mainwindow.cc" line="354"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="369"/>
+        <location filename="../mainwindow.cc" line="366"/>
         <source>restoring last sessions ...</source>
         <translation>前回のセションを回復中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="807"/>
+        <location filename="../mainwindow.cc" line="804"/>
         <source>Double click any tab to exit full screen.</source>
         <translation>タブをﾀﾞﾌﾞﾙｸﾘｯｸでﾌﾙｽｸﾘｰﾝを終了。</translation>
     </message>
@@ -909,17 +909,17 @@
         <translation type="obsolete">ツールバーを非表示。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="395"/>
+        <location filename="../mainwindow.cc" line="392"/>
         <source>logging in bilibili.tv as %1 ...</source>
         <translation>%1でビリビリ動画を登録中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="400"/>
+        <location filename="../mainwindow.cc" line="397"/>
         <source>logging in nicovideo.jp as %1 ...</source>
         <translation>%1でニコニコ動画を登録中…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="595"/>
+        <location filename="../mainwindow.cc" line="592"/>
         <source>failed open new window</source>
         <translation>新規ウィンドウの開くに失敗した</translation>
     </message>

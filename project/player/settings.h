@@ -11,6 +11,8 @@
 #include <QtCore/QSet>
 #include <QtGui/QColor>
 
+#define SETTINGS_VERSION    "0.1.9.3"
+
 class Settings : public QSettings
 {
   Q_OBJECT
@@ -34,6 +36,12 @@ public:
 
   QString applicationFilePath() const;
   void setApplicationFilePath(const QString &path);
+
+  bool isGameTextVisible() const;
+  void setGameTextVisible(bool t);
+
+  bool isAppLocaleEnabled() const;
+  void setAppLocaleEnabled(bool t);
 
   bool isQueueEmpty() const; ///< If database queue is empty
   void setQueueEmpty(bool empty);

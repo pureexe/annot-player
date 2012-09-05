@@ -5,18 +5,25 @@
 // 7/15/2011
 #define ACRC_NULL       ""
 
-#define ACRC_PREFIX_IMAGE ":/images/"
+#define ACRC_PREFIX_IMAGE   ":/images/"
 
 #define ACRC_IMAGE_NULL     ACRC_PREFIX_IMAGE "null.png"
 
-//#define ACRC_PREFIX_TR    ":/tr/"
-//#define ACRC_TR_NULL      ""
+#define ACRC_PREFIX_TR      ":/tr/"
+#define ACRC_TR_NULL        AC  RC_NULL
 
 // - Apps -
 #define ACRC_IMAGE_BROWSER      ACRC_PREFIX_IMAGE "browser.png"
 #define ACRC_IMAGE_DOWNLOADER   ACRC_PREFIX_IMAGE "downloader.png"
 #define ACRC_IMAGE_PLAYER       ACRC_PREFIX_IMAGE "player.png"
 #define ACRC_IMAGE_TRANSLATOR   ACRC_PREFIX_IMAGE "translator.png"
+
+// - Translations -
+
+#define ACRC_TR_EN              ACRC_PREFIX_TR "tr_en"
+#define ACRC_TR_JA              ACRC_PREFIX_TR "tr_ja"
+#define ACRC_TR_ZH_TW           ACRC_PREFIX_TR "tr_zh_TW"
+#define ACRC_TR_ZH_CN           ACRC_PREFIX_TR "tr_zh_CN"
 
 // - Flags -
 

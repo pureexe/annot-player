@@ -1,4 +1,4 @@
-// textcodec.cc
+// textcodec_zh.cc
 // 6/16/2012
 //
 // See also:
@@ -15,16 +15,16 @@
 #include "module/debug/debug.h"
 
 #ifdef Q_OS_LINUX
-# ifndef DOCDIR
-#  define DOCDIR    "/usr/share/annot"
+# ifndef TABLEDIR
+#  define TABLEDIR   "/usr/share/annot"
 # endif // DOCDIR
-# define RC_PREFIX   DOCDIR "/"
+# define RC_PREFIX   TABLEDIR "/"
 #else
-# define RC_PREFIX   QCoreApplication::applicationDirPath() + "/doc/"
+# define RC_PREFIX   QCoreApplication::applicationDirPath() + "/table/"
 #endif // Q_OS_LINUX
 
-#define RC_UTFTABLE_ZHS_ZHT RC_PREFIX "utftable.zhs_zht.txt"
-#define RC_UTFTABLE_ZHT_ZHS RC_PREFIX "utftable.zht_zhs.txt"
+#define RC_TABLE_ZHS_ZHT RC_PREFIX "zhszht.txt"
+#define RC_TABLE_ZHT_ZHS RC_PREFIX "zhtzhs.txt"
 
 // - Converters -
 
@@ -33,7 +33,7 @@ TextCodec::zhs2zht(const QString &input)
 {
   static std::map<ushort, ushort> map;
   if (map.empty()) {
-    QFile file(RC_UTFTABLE_ZHS_ZHT);
+    QFile file(RC_TABLE_ZHS_ZHT);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
       DOUT("error: utftable does not exist");
       return QString();
@@ -65,7 +65,7 @@ TextCodec::zht2zhs(const QString &input)
 {
   static std::map<ushort, ushort> map;
   if (map.empty()) {
-    QFile file(RC_UTFTABLE_ZHT_ZHS);
+    QFile file(RC_TABLE_ZHT_ZHS);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
       DOUT("error: utftable does not exist");
       return QString();

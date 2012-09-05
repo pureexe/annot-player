@@ -21,12 +21,12 @@ public:
   QString name() const override;
 
 protected:
-  QNetworkReply *createReply(const QString &text, const QString &to, const QString &from) override;
+  QNetworkReply *createReply(const QString &text, int to, int from) override;
   QString parseReply(const QByteArray &data) override;
 
 protected:
   static QString translateUrl(const QString &text, const char *to, const char *from);
-  static const char *translateLanguage(const QString &lcode);
+  static const char *lcode(int lang);
 };
 
 #endif // INFOSEEKTRANSLATOR_H

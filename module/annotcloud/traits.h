@@ -4,11 +4,11 @@
 // annotcloud/traits.h
 // 8/17/2011
 
-#include "win/qtwin/codepage.h"
-#include <QtCore/QLocale>
+#include "module/mstypes/codepage.h"
+#include "module/mstypes/lcid.h"
 #include <QtCore/QString>
 
-#define AC_LANG(ch1, ch2)   (int(ch1) << 8 | (ch2))
+//#define AC_LANG(ch1, ch2)   (int(ch1) << 8 | (ch2))
 
 namespace AnnotCloud {
 
@@ -74,24 +74,41 @@ namespace AnnotCloud {
       NoLanguage = 0,
       //AnyLanguage = 0x1,
       //UnknownLanguage = 0x2,
-      English = AC_LANG('e','n'),   // 25966 / 16
-      Japanese = AC_LANG('j','a'),  // 27233 / 17
-      Chinese = AC_LANG('z','h'),   // 31336 / 18
-      Korean = AC_LANG('k','o'),    // 27503 / 19
-      French = AC_LANG('f','r'),    // 26226 / 20
-      German = AC_LANG('d','e'),    // 25701 / 21
-      Italian = AC_LANG('i','t'),   // 26996 / 22
-      Spanish = AC_LANG('e','s'),   // 25971 / 23
-      Portuguese = AC_LANG('p','t'),// 28788 / 24
-      Russian = AC_LANG('r','u')    // 29301 / 25
+      English = LCID_EN_US,
+      Japanese = LCID_JA_JP,
+      TraditionalChinese = LCID_ZH_TW,
+      SimplifiedChinese = LCID_ZH_CN,
+      Korean = LCID_KO_KR,
+      French = LCID_FR,
+      German = LCID_DE,
+      Italian = LCID_IT,
+      Spanish = LCID_ES,
+      Portuguese = LCID_PT,
+      Russian = LCID_RU
     };
+
+    // TO BE REMOVED!!!
+    //  English = AC_LANG('e','n'),   // 25966 / 16
+    //  Japanese = AC_LANG('j','a'),  // 27233 / 17
+    //  Chinese = AC_LANG('z','h'),   // 31336 / 18
+    //  Korean = AC_LANG('k','o'),    // 27503 / 19
+    //  French = AC_LANG('f','r'),    // 26226 / 20
+    //  German = AC_LANG('d','e'),    // 25701 / 21
+    //  Italian = AC_LANG('i','t'),   // 26996 / 22
+    //  Spanish = AC_LANG('e','s'),   // 25971 / 23
+    //  Portuguese = AC_LANG('p','t'),// 28788 / 24
+    //  Russian = AC_LANG('r','u')    // 29301 / 25
+
+    inline bool isChineseLanguage(int lang)
+    { return lang == TraditionalChinese || lang == SimplifiedChinese; }
 
     inline bool isKnownLanguage(int lang)
     {
       switch (lang) {
       case English:
       case Japanese:
-      case Chinese:
+      case TraditionalChinese:
+      case SimplifiedChinese:
       case Korean:
       case French:
       case German:
@@ -112,21 +129,7 @@ namespace AnnotCloud {
     }
 
     inline QLocale::Language localeLanguage(int lang)
-    {
-      switch (lang) {
-      case English: return QLocale::English;
-      case Japanese:return QLocale::Japanese;
-      case Chinese: return QLocale::Chinese;
-      case Korean:  return QLocale::Korean;
-      case French:  return QLocale::French;
-      case German:  return QLocale::German;
-      case Italian: return QLocale::Italian;
-      case Spanish: return QLocale::Spanish;
-      case Portuguese: return QLocale::Portuguese;
-      case Russian: return QLocale::Russian;
-      default:      return QLocale::AnyLanguage;
-      }
-    }
+    { return ::lcidToLocaleLanguage(lang); }
 
     inline bool isRomanLanguage(int lang)
     {
@@ -145,7 +148,8 @@ namespace AnnotCloud {
     {
       switch (lang) {
       case Japanese:
-      case Chinese:
+      case TraditionalChinese:
+      case SimplifiedChinese:
       case Korean:
         return true;
       default: return false;

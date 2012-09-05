@@ -17,12 +17,9 @@ namespace { // anonymous
 qint32
 Alias::guessUrlLanguage(const QString &url, qint32 defval)
 {
-  if (url.contains(MA_EIGEN_NICOVIDEO, Qt::CaseInsensitive))
-    return Traits::Japanese;
-  else if (url.contains(MA_EIGEN_YOUTUBE, Qt::CaseInsensitive))
-    return defval;
-  else
-    return Traits::Chinese;
+  return url.contains(MA_EIGEN_NICOVIDEO, Qt::CaseInsensitive) ? qint32(Traits::Japanese) :
+         url.contains(MA_EIGEN_YOUTUBE, Qt::CaseInsensitive) ? defval :
+         qint32(Traits::SimplifiedChinese);
 }
 
 // EOF

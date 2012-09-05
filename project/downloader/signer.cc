@@ -76,7 +76,7 @@ Signer::signFileWithUrl(const QString &fileName, const QString &url, bool async)
   QString name = QFileInfo(fileName).fileName();
   if (!name.isEmpty()) {
     if (name.size() > Traits::MAX_ALIAS_LENGTH) {
-      name = name.mid(0, Traits::MAX_ALIAS_LENGTH);
+      name = name.left(Traits::MAX_ALIAS_LENGTH);
       emit warning(tr("truncate long file name") + ": " + name);
     }
     srcAlias.setUserId(server_->user().id());

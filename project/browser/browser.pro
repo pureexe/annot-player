@@ -25,6 +25,7 @@ include($$ROOTDIR/module/download/download.pri)
 #include($$ROOTDIR/module/magnifier/magnifier.pri)
 include($$ROOTDIR/module/mousegesture/mousegesture.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
+include($$ROOTDIR/module/mstypes/mstypes.pri)
 include($$ROOTDIR/module/nicoutil/nicoutil.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
@@ -44,12 +45,6 @@ mac {
 
 QT      += core gui network webkit xml
 #CONFIG(static): QTPLUGIN += qsqlite
-
-DEFINES += WITH_QT_CORE \
-           WITH_QT_GUI \
-           WITH_QT_NETWORK \
-           WITH_QT_WEBKIT \
-           WITH_QT_XML
 
 win32 {
   #DEFINES += AC_ENABLE_GAME
@@ -113,7 +108,6 @@ mac {
 ## Translations
 
 TRANSLATIONS += \
-    $$PWD/tr/tr_en.ts \
     $$PWD/tr/tr_ja.ts \
     $$PWD/tr/tr_zh_TW.ts \
     $$PWD/tr/tr_zh_CN.ts

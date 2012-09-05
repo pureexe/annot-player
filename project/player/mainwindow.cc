@@ -73,6 +73,7 @@
 # include "processview.h"
 # include "processfilter.h"
 # include "syncview.h"
+# include "win/applocale/applocale.h"
 #endif // AC_ENABLE_GAME
 #include "project/common/acabout.h"
 #include "project/common/acbrowser.h"
@@ -86,6 +87,7 @@
 #include "project/common/acui.h"
 #include "module/annotdb/annotdb.h"
 #include "module/annotdown/annotationdownloader.h"
+#include "module/mecabparser/mecabparser.h"
 #include "module/player/player.h"
 #include "module/player/playerdefs.h"
 #include "module/annotcodec/annotationcodecmanager.h"
@@ -508,7 +510,7 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
     //toggleAnnotationLanguageToUnknownAct_->setChecked(l & Traits::UnknownLanguageBit);
     toggleAnnotationLanguageToEnglishAct_->setChecked(l.contains(Traits::English));
     toggleAnnotationLanguageToJapaneseAct_->setChecked(l.contains(Traits::Japanese));
-    toggleAnnotationLanguageToChineseAct_->setChecked(l.contains(Traits::Chinese));
+    toggleAnnotationLanguageToChineseAct_->setChecked(l.contains(Traits::TraditionalChinese));
     toggleAnnotationLanguageToKoreanAct_->setChecked(l.contains(Traits::Korean));
     toggleAnnotationLanguageToFrenchAct_->setChecked(l.contains(Traits::French));
     toggleAnnotationLanguageToGermanAct_->setChecked(l.contains(Traits::German));
@@ -679,6 +681,9 @@ MainWindow::createComponents(bool unique)
 
   miniConsole_ = new MiniConsole(annotationView_);
   miniConsole_->setAutoClearInterval(MiniConsoleTimeout);
+
+  // MeCab
+  mecab_ = new MeCabParser(this);
 
   // Rubber bands
   attractRubberBand_ = new QtExt::CircularRubberBand(QRubberBand::Line, annotationView_);
@@ -1259,7 +1264,7 @@ MainWindow::createConnections()
   connect(clipboardMonitor_, SIGNAL(mediaUrlEntered(QString)), SLOT(enterMediaUrl(QString)));
 
   // Language:
-  connect(Localizer::globalInstance(), SIGNAL(localeChanged()), SLOT(invalidateAppLanguage()));
+  //connect(Localizer::globalInstance(), SIGNAL(localeChanged()), SLOT(invalidateAppLanguage()));
 
   // Translator:
   connect(translator_, SIGNAL(translatedByRomaji(QString)), SLOT(showRomajiTranslation(QString)));
@@ -1270,6 +1275,7 @@ MainWindow::createConnections()
   connect(translator_, SIGNAL(translatedByOcn(QString)), SLOT(showOcnTranslation(QString)));
   connect(translator_, SIGNAL(translatedByExcite(QString)), SLOT(showExciteTranslation(QString)));
   connect(translator_, SIGNAL(translatedBySdl(QString)), SLOT(showSdlTranslation(QString)));
+  connect(translator_, SIGNAL(translatedBySystran(QString)), SLOT(showSystranTranslation(QString)));
   connect(translator_, SIGNAL(translatedByNifty(QString)), SLOT(showNiftyTranslation(QString)));
   connect(translator_, SIGNAL(translatedByInfoseek(QString)), SLOT(showInfoseekTranslation(QString)));
 
@@ -1281,6 +1287,7 @@ MainWindow::createConnections()
   connect(extraTranslator_, SIGNAL(translatedByOcn(QString)), SLOT(showOcnAdditionalTranslation(QString)));
   connect(extraTranslator_, SIGNAL(translatedByExcite(QString)), SLOT(showExciteAdditionalTranslation(QString)));
   connect(extraTranslator_, SIGNAL(translatedBySdl(QString)), SLOT(showSdlAdditionalTranslation(QString)));
+  connect(extraTranslator_, SIGNAL(translatedBySystran(QString)), SLOT(showSystranAdditionalTranslation(QString)));
   connect(extraTranslator_, SIGNAL(translatedByNifty(QString)), SLOT(showNiftyAdditionalTranslation(QString)));
   connect(extraTranslator_, SIGNAL(translatedByInfoseek(QString)), SLOT(showInfoseekAdditionalTranslation(QString)));
 
@@ -1311,6 +1318,7 @@ MainWindow::createConnections()
   //connect(recentThreadView_, SIGNAL(channelSelected(ulong,QString)), recentThreadView_, SLOT(hide()));
   connect(messageHandler_, SIGNAL(hashChanged(qint64)), annotationView_, SLOT(showAnnotationsAtPos(qint64)));
   connect(messageHandler_, SIGNAL(textChanged(QString,int)), SLOT(translateGameText(QString,int)));
+  connect(messageHandler_, SIGNAL(textChanged(QString,int)), SLOT(showGameText(QString,int)), Qt::QueuedConnection);
 #endif // AC_ENABLE_GAME
   //connect(player_, SIGNAL(opening()), SLOT(backlogDialog()));
   // MRL resolver
@@ -1544,6 +1552,9 @@ MainWindow::createActions()
   connect(toggleSdlTranslatorAct_ = new QAction(tr("SDL Translator") + " (en)", this),
           SIGNAL(triggered(bool)), SLOT(toggleSdlTranslator(bool)));
           toggleSdlTranslatorAct_->setCheckable(true);
+  connect(toggleSystranTranslatorAct_ = new QAction(tr("SYSTRAN Translator") + " (en)", this),
+          SIGNAL(triggered(bool)), SLOT(toggleSystranTranslator(bool)));
+          toggleSystranTranslatorAct_->setCheckable(true);
 
   connect(setStereoChannelAct_ = new QAction(tr("Stereo"), this),
           SIGNAL(triggered(bool)), SLOT(setStereoChannel()));
@@ -1568,11 +1579,65 @@ MainWindow::createActions()
           SIGNAL(triggered(bool)), SLOT(setSubmit(bool)));
           toggleSubmitAct_->setCheckable(true);
 
+  toggleGameTextVisibleAct_ = new QAction(tr("Show Galgame Text"), this);
+          toggleGameTextVisibleAct_->setCheckable(true);
+          toggleGameTextVisibleAct_->setChecked(Settings::globalSettings()->isGameTextVisible());
+
+  toggleAppLocaleEnabledAct_ = new QAction(tr("Load Galgame using AppLocale"), this);
+          toggleAppLocaleEnabledAct_->setCheckable(true);
+          toggleAppLocaleEnabledAct_->setChecked(Settings::globalSettings()->isAppLocaleEnabled());
+
 #ifdef AC_ENABLE_GAME
   connect(openCurrentGameAct_ = new QAction(tr("Sync with Running Galgame"), this),
           SIGNAL(triggered()), SLOT(openCurrentGame()));
 #endif // AC_ENABLE_GAME
 
+  connect(setAppLanguageToEnglishAct_ = new QAction(QIcon(RC_IMAGE_ENGLISH), TR(T_ENGLISH), this),
+          SIGNAL(triggered(bool)), SLOT(setAppLanguageToEnglish()));
+          setAppLanguageToEnglishAct_->setCheckable(true);
+  connect(setAppLanguageToJapaneseAct_ = new QAction(QIcon(RC_IMAGE_JAPANESE), TR(T_JAPANESE), this),
+          SIGNAL(triggered(bool)), SLOT(setAppLanguageToJapanese()));
+          setAppLanguageToJapaneseAct_->setCheckable(true);
+  connect(setAppLanguageToTraditionalChineseAct_ = new QAction(QIcon(ACRC_IMAGE_TRADITIONAL_CHINESE), TR(T_CHINESE), this),
+          SIGNAL(triggered(bool)), SLOT(setAppLanguageToTraditionalChinese()));
+          setAppLanguageToTraditionalChineseAct_->setCheckable(true);
+  connect(setAppLanguageToSimplifiedChineseAct_ = new QAction(QIcon(ACRC_IMAGE_SIMPLIFIED_CHINESE), TR(T_SIMPLIFIEDCHINESE), this),
+          SIGNAL(triggered(bool)), SLOT(setAppLanguageToSimplifiedChinese()));
+          setAppLanguageToSimplifiedChineseAct_->setCheckable(true);
+
+  connect(setUserLanguageToEnglishAct_ = new QAction(QIcon(ACRC_IMAGE_ENGLISH), TR(T_ENGLISH), this),
+          SIGNAL(triggered(bool)), SLOT(setUserLanguageToEnglish()));
+          setUserLanguageToEnglishAct_->setCheckable(true);
+  connect(setUserLanguageToJapaneseAct_ = new QAction(QIcon(ACRC_IMAGE_JAPANESE), TR(T_JAPANESE), this),
+          SIGNAL(triggered(bool)), SLOT(setUserLanguageToJapanese()));
+          setUserLanguageToJapaneseAct_->setCheckable(true);
+  connect(setUserLanguageToKoreanAct_ = new QAction(QIcon(ACRC_IMAGE_KOREAN), TR(T_KOREAN), this),
+          SIGNAL(triggered(bool)), SLOT(setUserLanguageToKorean()));
+          setUserLanguageToKoreanAct_->setCheckable(true);
+  connect(setUserLanguageToFrenchAct_ = new QAction(QIcon(ACRC_IMAGE_FRENCH), TR(T_FRENCH), this),
+          SIGNAL(triggered(bool)), SLOT(setUserLanguageToFrench()));
+          setUserLanguageToFrenchAct_->setCheckable(true);
+  connect(setUserLanguageToGermanAct_ = new QAction(QIcon(ACRC_IMAGE_GERMAN), TR(T_GERMAN), this),
+          SIGNAL(triggered(bool)), SLOT(setUserLanguageToGerman()));
+          setUserLanguageToGermanAct_->setCheckable(true);
+  connect(setUserLanguageToItalianAct_ = new QAction(QIcon(ACRC_IMAGE_ITALIAN), TR(T_ITALIAN), this),
+          SIGNAL(triggered(bool)), SLOT(setUserLanguageToItalian()));
+          setUserLanguageToItalianAct_->setCheckable(true);
+  connect(setUserLanguageToSpanishAct_ = new QAction(QIcon(ACRC_IMAGE_SPANISH), TR(T_SPANISH), this),
+          SIGNAL(triggered(bool)), SLOT(setUserLanguageToSpanish()));
+          setUserLanguageToSpanishAct_->setCheckable(true);
+  connect(setUserLanguageToPortugueseAct_ = new QAction(QIcon(ACRC_IMAGE_PORTUGUESE), TR(T_PORTUGUESE), this),
+          SIGNAL(triggered(bool)), SLOT(setUserLanguageToPortuguese()));
+          setUserLanguageToPortugueseAct_->setCheckable(true);
+  connect(setUserLanguageToRussianAct_ = new QAction(QIcon(ACRC_IMAGE_RUSSIAN), TR(T_RUSSIAN), this),
+          SIGNAL(triggered(bool)), SLOT(setUserLanguageToRussian()));
+          setUserLanguageToRussianAct_->setCheckable(true);
+  connect(setUserLanguageToTraditionalChineseAct_ = new QAction(QIcon(ACRC_IMAGE_TRADITIONAL_CHINESE), TR(T_CHINESE), this),
+          SIGNAL(triggered(bool)), SLOT(setUserLanguageToTraditionalChinese()));
+          setUserLanguageToTraditionalChineseAct_->setCheckable(true);
+  connect(setUserLanguageToSimplifiedChineseAct_ = new QAction(QIcon(ACRC_IMAGE_SIMPLIFIED_CHINESE), TR(T_SIMPLIFIEDCHINESE), this),
+          SIGNAL(triggered(bool)), SLOT(setUserLanguageToSimplifiedChinese()));
+          setUserLanguageToSimplifiedChineseAct_->setCheckable(true);
 
   // TODO clean up actions
   // *** CHECKPOINT ***
@@ -1717,23 +1782,6 @@ MainWindow::createActions()
   MAKE_ACTION(moreFilesAct_,    MORE,     this,  SLOT(moreBrowsedFiles()))
   MAKE_ACTION(lessFilesAct_,    LESS,     this,  SLOT(lessBrowsedFiles()))
   MAKE_ACTION(openBrowsedDirectoryAct_, OPENDIRECTORY, this,  SLOT(openBrowsedDirectory()))
-
-  MAKE_TOGGLE(setAppLanguageToEnglishAct_,  ENGLISH, this, SLOT(setAppLanguageToEnglish()))
-  MAKE_TOGGLE(setAppLanguageToJapaneseAct_, JAPANESE,this, SLOT(setAppLanguageToJapanese()))
-  MAKE_TOGGLE(setAppLanguageToTraditionalChineseAct_,TRADITIONALCHINESE, this, SLOT(setAppLanguageToTraditionalChinese()))
-  MAKE_TOGGLE(setAppLanguageToSimplifiedChineseAct_, SIMPLIFIEDCHINESE, this, SLOT(setAppLanguageToSimplifiedChinese()))
-
-  MAKE_TOGGLE(setUserLanguageToEnglishAct_,  ENGLISH, this, SLOT(setUserLanguageToEnglish()))
-  MAKE_TOGGLE(setUserLanguageToJapaneseAct_, JAPANESE,this, SLOT(setUserLanguageToJapanese()))
-  MAKE_TOGGLE(setUserLanguageToChineseAct_, CHINESE, this, SLOT(setUserLanguageToChinese()))
-  MAKE_TOGGLE(setUserLanguageToKoreanAct_, KOREAN, this, SLOT(setUserLanguageToKorean()))
-  MAKE_TOGGLE(setUserLanguageToFrenchAct_, FRENCH, this, SLOT(setUserLanguageToFrench()))
-  MAKE_TOGGLE(setUserLanguageToGermanAct_, GERMAN, this, SLOT(setUserLanguageToGerman()))
-  MAKE_TOGGLE(setUserLanguageToItalianAct_, ITALIAN, this, SLOT(setUserLanguageToItalian()))
-  MAKE_TOGGLE(setUserLanguageToSpanishAct_, SPANISH, this, SLOT(setUserLanguageToSpanish()))
-  MAKE_TOGGLE(setUserLanguageToPortugueseAct_, PORTUGUESE, this, SLOT(setUserLanguageToPortuguese()));
-  MAKE_TOGGLE(setUserLanguageToRussianAct_, RUSSIAN, this, SLOT(setUserLanguageToRussian()));
-  //MAKE_TOGGLE(setUserLanguageToUnknownAct_, UNKNOWNLANGUAGE, this, SLOT(setUserLanguageToUnknown()))
 
   MAKE_TOGGLE(toggleAnnotationLanguageToEnglishAct_,  ENGLISH, this, SLOT(invalidateAnnotationLanguages()))
   MAKE_TOGGLE(toggleAnnotationLanguageToJapaneseAct_, JAPANESE,this, SLOT(invalidateAnnotationLanguages()))
@@ -2117,6 +2165,7 @@ MainWindow::createMenus()
     translatorMenu_->addAction(toggleNiftyTranslatorAct_);
     translatorMenu_->addAction(toggleExciteTranslatorAct_);
     translatorMenu_->addAction(toggleSdlTranslatorAct_);
+    translatorMenu_->addAction(toggleSystranTranslatorAct_);
   }
 
   annotationEffectMenu_ = new QMenu(this); {
@@ -2155,7 +2204,10 @@ MainWindow::createMenus()
     userLanguageMenu_->addAction(setUserLanguageToEnglishAct_);
     userLanguageMenu_->addSeparator();
     userLanguageMenu_->addAction(setUserLanguageToJapaneseAct_);
-    userLanguageMenu_->addAction(setUserLanguageToChineseAct_);
+    userLanguageMenu_->addSeparator();
+    userLanguageMenu_->addAction(setUserLanguageToTraditionalChineseAct_);
+    userLanguageMenu_->addAction(setUserLanguageToSimplifiedChineseAct_);
+    userLanguageMenu_->addSeparator();
     userLanguageMenu_->addAction(setUserLanguageToKoreanAct_);
     userLanguageMenu_->addSeparator();
     userLanguageMenu_->addAction(setUserLanguageToFrenchAct_);
@@ -2501,8 +2553,7 @@ MainWindow::createMenus()
     annotationSettingsMenu_->addAction(toggleAnnotationAvatarVisibleAct_);
     annotationSettingsMenu_->addAction(toggleAnnotationMetaVisibleAct_);
     annotationSettingsMenu_->addAction(toggleAnnotationBandwidthLimitedAct_);
-    //if (!AcSettings::globalSettings()->isJapanese())
-      annotationSettingsMenu_->addAction(toggleAnnotationTraditionalChineseAct_);
+    annotationSettingsMenu_->addAction(toggleAnnotationTraditionalChineseAct_);
     annotationSettingsMenu_->addSeparator();
     annotationSettingsMenu_->addAction(toggleSubtitleAnnotationVisibleAct_);
     annotationSettingsMenu_->addAction(toggleSubtitleOnTopAct_);
@@ -5257,7 +5308,7 @@ MainWindow::signFileWithUrl(const QString &path, const QString &url, bool async)
   QString fileName = QFileInfo(path).fileName();
   if (!fileName.isEmpty()) {
     if (fileName.size() > Traits::MAX_ALIAS_LENGTH) {
-      fileName = fileName.mid(0, Traits::MAX_ALIAS_LENGTH);
+      fileName = fileName.left(Traits::MAX_ALIAS_LENGTH);
       emit warning(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + fileName);
     }
     Alias a;
@@ -5371,7 +5422,7 @@ MainWindow::setToken(const QString &input, bool async)
         QString fileName = QFileInfo(path).fileName();
         if (!fileName.isEmpty()) {
           if (fileName.size() > Traits::MAX_ALIAS_LENGTH) {
-            fileName = fileName.mid(0, Traits::MAX_ALIAS_LENGTH);
+            fileName = fileName.left(Traits::MAX_ALIAS_LENGTH);
             emit warning(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + fileName);
           }
 
@@ -5829,6 +5880,11 @@ MainWindow::showTranslation(const QString &text, int service)
       CORE_CMD_COLOR_CYAN " SDL: "  :
       CORE_CMD_COLOR_YELLOW " ";
     break;
+  case TranslatorManager::Systran:
+    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_BLUE " SYSTRAN: "  :
+      CORE_CMD_COLOR_YELLOW " ";
+    break;
   }
   showSubtitle(text, userLang, prefix);
 }
@@ -5922,7 +5978,7 @@ MainWindow::submitLiveText(const QString &text, bool async)
     if (text.size() <= Traits::MAX_ANNOT_LENGTH)
       annot.setText(text);
     else {
-      annot.setText(text.mid(0, Traits::MAX_ANNOT_LENGTH));
+      annot.setText(text.left(Traits::MAX_ANNOT_LENGTH));
       emit warning(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + annot.text());
     }
   }
@@ -6014,7 +6070,7 @@ MainWindow::submitText(const QString &text, bool async)
     if (text.size() <= Traits::MAX_ANNOT_LENGTH)
       annot.setText(text);
     else {
-      annot.setText(text.mid(0, Traits::MAX_ANNOT_LENGTH));
+      annot.setText(text.left(Traits::MAX_ANNOT_LENGTH));
       emit warning(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + annot.text());
     }
   }
@@ -7296,6 +7352,7 @@ MainWindow::updateContextMenu()
     contextMenu_->addMenu(translatorMenu_);
     contextMenu_->addAction(toggleTranslateAct_);
     contextMenu_->addAction(toggleSubtitleOnTopAct_);
+    contextMenu_->addAction(toggleGameTextVisibleAct_);
     contextMenu_->addAction(showBacklogAct_);
   }
 
@@ -7307,6 +7364,7 @@ MainWindow::updateContextMenu()
       (hub_->isSignalTokenMode() || !player_->hasMedia())) {
     openCurrentGameAct_->setEnabled(!gameLibrary_->isEmpty());
     contextMenu_->addAction(openCurrentGameAct_);
+    contextMenu_->addAction(toggleAppLocaleEnabledAct_);
   }
   if (hub_->isSignalTokenMode())
     contextMenu_->addAction(showGamePreferencesAct_);
@@ -7347,12 +7405,14 @@ MainWindow::updateContextMenu()
 
       //int l = Localizer::globalInstance()->language();
       int l = AcSettings::globalSettings()->language();
-      setAppLanguageToJapaneseAct_->setChecked(l == QLocale::Japanese);
-      //setAppLanguageToTraditionalChineseAct_->setChecked(l == Localizer::TraditionalChinese);
-      setAppLanguageToSimplifiedChineseAct_->setChecked(l == QLocale::Chinese);
+      setAppLanguageToJapaneseAct_->setChecked(l == Traits::Japanese);
+      setAppLanguageToTraditionalChineseAct_->setChecked(l == Traits::TraditionalChinese);
+      setAppLanguageToSimplifiedChineseAct_->setChecked(l == Traits::SimplifiedChinese);
 
       switch (l) {
-      case QLocale::Japanese: case QLocale::Taiwan: case QLocale::Chinese: // asian
+      case Traits::Japanese:
+      case Traits::TraditionalChinese:
+      case Traits::SimplifiedChinese:
         setAppLanguageToEnglishAct_->setChecked(false);
         break;
       default:
@@ -7392,6 +7452,7 @@ MainWindow::updateTranslatorMenu()
   toggleOcnTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Ocn));
   toggleRomajiTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Romaji));
   toggleSdlTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Sdl));
+  toggleSystranTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Systran));
   toggleNiftyTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Nifty));
   toggleInfoseekTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Infoseek));
 }
@@ -7538,7 +7599,8 @@ MainWindow::updateUserMenu()
   {
     setUserLanguageToEnglishAct_->setChecked(server_->user().language() == Traits::English);
     setUserLanguageToJapaneseAct_->setChecked(server_->user().language() == Traits::Japanese);
-    setUserLanguageToChineseAct_->setChecked(server_->user().language() == Traits::Chinese);
+    setUserLanguageToTraditionalChineseAct_->setChecked(server_->user().language() == Traits::TraditionalChinese);
+    setUserLanguageToSimplifiedChineseAct_->setChecked(server_->user().language() == Traits::SimplifiedChinese);
     setUserLanguageToKoreanAct_->setChecked(server_->user().language() == Traits::Korean);
     setUserLanguageToFrenchAct_->setChecked(server_->user().language() == Traits::French);
     setUserLanguageToGermanAct_->setChecked(server_->user().language() == Traits::German);
@@ -8617,7 +8679,10 @@ MainWindow::openProcessPath(const QString &path)
   else if (pid == QCoreApplication::applicationPid())
     emit warning(tr("cannot sync with myself"));
   else {
-    QtWin::createProcess(path);
+    if (isAppLocaleEnabled())
+      AppLocale::createProcess(path, LCID_JA_JP);
+    else
+      QtWin::createProcess(path);
     emit message(tr("told process to start") + QString(" (name = %1)").arg(processName));
     pid = QtWinnt::getProcessIdByName(processName);
   }
@@ -8713,18 +8778,18 @@ MainWindow::synchronizeProcess(const ProcessInfo &pi, bool async)
     DOUT("inetMutex unlocked");
   }
 
-  if (!g.hasDigest()) {
-    emit openProcessRequested();
-    DOUT("exit: unknown name");
-    return;
-  }
-
   if (g.hasHook() && !TextHook::globalInstance()->containsHook(pi.processId, g.hook())) {
     bool ok = TextHook::globalInstance()->addHook(pi.processId, g.hook());
     if (ok)
       emit message(tr("add text hook") + ": " + g.hook());
     else
       emit warn(tr("failed to add text hook") + ": " + g.hook());
+  }
+
+  if (!g.hasDigest()) {
+    emit openProcessRequested();
+    DOUT("exit: unknown name");
+    return;
   }
 
   // Detect encoding
@@ -9182,7 +9247,8 @@ MainWindow::setUserLanguage(int lang, bool async)
 
 void MainWindow::setUserLanguageToEnglish()     { setUserLanguage(Traits::English); }
 void MainWindow::setUserLanguageToJapanese()    { setUserLanguage(Traits::Japanese); }
-void MainWindow::setUserLanguageToChinese()     { setUserLanguage(Traits::Chinese); }
+void MainWindow::setUserLanguageToTraditionalChinese()     { setUserLanguage(Traits::TraditionalChinese); }
+void MainWindow::setUserLanguageToSimplifiedChinese()     { setUserLanguage(Traits::SimplifiedChinese); }
 void MainWindow::setUserLanguageToKorean()      { setUserLanguage(Traits::Korean); }
 void MainWindow::setUserLanguageToFrench()      { setUserLanguage(Traits::French); }
 void MainWindow::setUserLanguageToGerman()      { setUserLanguage(Traits::German); }
@@ -9225,7 +9291,7 @@ MainWindow::invalidateAnnotationLanguages()
     //if (toggleAnnotationLanguageToUnknownAct_->isChecked())     languages |= Traits::UnknownLanguageBit;
     if (toggleAnnotationLanguageToEnglishAct_->isChecked())     languages.insert(Traits::English);
     if (toggleAnnotationLanguageToJapaneseAct_->isChecked())    languages.insert(Traits::Japanese);
-    if (toggleAnnotationLanguageToChineseAct_->isChecked())     languages.insert(Traits::Chinese);
+    if (toggleAnnotationLanguageToChineseAct_->isChecked())     { languages.insert(Traits::SimplifiedChinese); languages.insert(Traits::TraditionalChinese); }
     if (toggleAnnotationLanguageToKoreanAct_->isChecked())      languages.insert(Traits::Korean);
     if (toggleAnnotationLanguageToFrenchAct_->isChecked())      languages.insert(Traits::French);
     if (toggleAnnotationLanguageToGermanAct_->isChecked())      languages.insert(Traits::German);
@@ -9248,20 +9314,20 @@ MainWindow::invalidateAnnotationLanguages()
 
 void
 MainWindow::setAppLanguageToEnglish()
-{ AcSettings::globalSettings()->setLanguage(QLocale::English); invalidateAppLanguage(); }
+{ AcSettings::globalSettings()->setLanguage(Traits::English); invalidateAppLanguage(); }
 
 void
 MainWindow::setAppLanguageToJapanese()
-{ AcSettings::globalSettings()->setLanguage(QLocale::Japanese); invalidateAppLanguage(); }
+{ AcSettings::globalSettings()->setLanguage(Traits::Japanese); invalidateAppLanguage(); }
 
 // TODO: Simplified Chinese and Traditional Chinese are not differed until qt 4.8
 void
 MainWindow::setAppLanguageToTraditionalChinese()
-{ AcSettings::globalSettings()->setLanguage(QLocale::Chinese, QLocale::TraditionalChineseScript); invalidateAppLanguage(); }
+{ AcSettings::globalSettings()->setLanguage(Traits::TraditionalChinese); invalidateAppLanguage(); }
 
 void
 MainWindow::setAppLanguageToSimplifiedChinese()
-{ AcSettings::globalSettings()->setLanguage(QLocale::Chinese, QLocale::SimplifiedChineseScript); invalidateAppLanguage(); }
+{ AcSettings::globalSettings()->setLanguage(Traits::SimplifiedChinese); invalidateAppLanguage(); }
 
 void
 MainWindow::invalidateAppLanguage()
@@ -9281,7 +9347,8 @@ MainWindow::languageToString(int lang)
   //case Traits::AnyLanguage:     return TR(T_ANYLANGUAGE);
   case Traits::English:         return TR(T_ENGLISH);
   case Traits::Japanese:        return TR(T_JAPANESE);
-  case Traits::Chinese:         return TR(T_CHINESE);
+  case Traits::TraditionalChinese:     return TR(T_CHINESE);
+  case Traits::SimplifiedChinese:      return TR(T_SIMPLIFIEDCHINESE);
   case Traits::Korean:          return TR(T_KOREAN);
   case Traits::French:          return TR(T_FRENCH);
   case Traits::German:          return TR(T_GERMAN);
@@ -9615,6 +9682,49 @@ MainWindow::addRecent(const QString &input)
   QTimer::singleShot(0, this, SLOT(updateRecentMenu()));
 }
 
+// - Game Text -
+
+bool
+MainWindow::isGameTextVisible() const
+{ return toggleGameTextVisibleAct_->isChecked(); }
+
+bool
+MainWindow::isAppLocaleEnabled() const
+{ return toggleAppLocaleEnabledAct_->isChecked(); }
+
+void
+MainWindow::showGameText(const QString &text, int role)
+{
+  if (!isGameTextVisible())
+    return;
+  if (text.isEmpty()) //|| !isTranslateEnabled()
+    return;
+  bool extra = role == TextThread::SupportRole;
+
+  QString prefix;
+  if (extra)
+    prefix = CORE_CMD_VIEW_FLOAT " ";
+
+  QString out;
+  enum { CharWidth = 40 };
+  int count = annotationView_->width() / CharWidth;
+  if (!count || text.size() < count)
+    out = mecab_->renderTextWithFurigana(text);
+  else {
+    int n = qCeil(text.size() / qreal(count));
+    for (int i = 0; i < n; i++) {
+      QString t = text.mid(i * count,
+                           i == n -1 ? -1 : count);
+      if (!t.isEmpty()) {
+        t = mecab_->renderTextWithFurigana(t);
+        out.append(t);
+      }
+    }
+  }
+
+  showSubtitle(out, Traits::Japanese, prefix);
+}
+
 // - Translate -
 
 bool
@@ -9649,18 +9759,13 @@ MainWindow::translate(const QString &text, int lang, bool extra)
 {
   //if (!server_->isConnected())
   //  return;
-  static const int script = AcSettings::globalSettings()->languageScript();
-  QString lcode = Translator::languageCode(Traits::localeLanguage(lang), script);
-  if (lcode.isEmpty()) {
-    lcode = Translator::languageCode(QLocale::English);
-    Q_ASSERT(!lcode.isEmpty());
-  }
-  (extra ? extraTranslator_ : translator_)->translate(text, lcode);
+  (extra ? extraTranslator_ : translator_)
+      ->translate(text, lang ? lang : Translator::English);
 }
 
 void
 MainWindow::showTraditionalChinese(const QString &input)
-{ showSubtitle(TextCodec::zhs2zht(input), Traits::Chinese); }
+{ showSubtitle(TextCodec::zhs2zht(input), Traits::TraditionalChinese); }
 
 // - Subtitle -
 
@@ -11863,11 +11968,18 @@ MainWindow::saveSettings()
   settings->setAudioChannelHistory(audioChannelHistory_);
   settings->setPlayPosHistory(playPosHistory_);
 
+#ifdef AC_ENABLE_GAME
+  settings->setGameTextVisible(isGameTextVisible());
+  settings->setAppLocaleEnabled(isAppLocaleEnabled());
+
+  gameLibrary_->save();
+#endif // AC_ENABLE_GAME
+
+  mediaLibrary_->save();
+
   settings->sync();
   ac->sync();
 
-  mediaLibrary_->save();
-  gameLibrary_->save();
   //DOUT("exit: inet mutex unlocked");
   DOUT("exit");
 }
@@ -11912,6 +12024,18 @@ MainWindow::toggleOcnTranslator(bool t)
     emit messageOnce(tr("OCN Honyaku On"));
   else
     emit messageOnce(tr("OCN Honyaku Off"));
+}
+
+void
+MainWindow::toggleSystranTranslator(bool t)
+{
+  translator_->setService(TranslatorManager::Systran, t);
+  if (!translator_->hasServices())
+    translator_->setServices(DEFAULT_TRANSLATORS);
+  if (t)
+    emit messageOnce(tr("SYSTRAN Translator On"));
+  else
+    emit messageOnce(tr("SYSTRAN Translator Off"));
 }
 
 void
