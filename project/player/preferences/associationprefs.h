@@ -11,7 +11,7 @@
 QT_FORWARD_DECLARE_CLASS(QCheckBox)
 QT_FORWARD_DECLARE_CLASS(QLineEdit)
 
-class WindowsRegistry;
+class Registry;
 class AssociationPreferencesTab : public AcPreferencesTab
 {
   Q_OBJECT
@@ -21,12 +21,12 @@ class AssociationPreferencesTab : public AcPreferencesTab
 
   QStringList supportedTypes_,
               supportedShells_;
-  WindowsRegistry *registry_;
+  Registry *registry_;
   QHash<QString, QCheckBox *> toggles_;
   QLineEdit *searchEdit_;
 
 public:
-  explicit AssociationPreferencesTab(WindowsRegistry *registry, QWidget *parent = nullptr)
+  explicit AssociationPreferencesTab(Registry *registry, QWidget *parent = nullptr)
     : Base(parent), registry_(registry) { init(); }
 
   explicit AssociationPreferencesTab(QWidget *parent = nullptr)

@@ -11,8 +11,6 @@
 #include <QtCore/QSet>
 #include <QtGui/QColor>
 
-#define SETTINGS_VERSION    "0.1.9.3"
-
 class Settings : public QSettings
 {
   Q_OBJECT
@@ -36,12 +34,6 @@ public:
 
   QString applicationFilePath() const;
   void setApplicationFilePath(const QString &path);
-
-  bool isGameTextVisible() const;
-  void setGameTextVisible(bool t);
-
-  bool isAppLocaleEnabled() const;
-  void setAppLocaleEnabled(bool t);
 
   bool isQueueEmpty() const; ///< If database queue is empty
   void setQueueEmpty(bool empty);
@@ -206,6 +198,23 @@ public:
   qreal annotationScale() const; void setAnnotationScale(qreal value);
   qreal annotationFullscreenScale() const; void setAnnotationFullscreenScale(qreal value);
   //qreal annotationRotation() const; void setAnnotationRotation(qreal value);
+
+  // - Game -
+
+  bool isAppLocaleEnabled() const;
+  void setAppLocaleEnabled(bool t);
+
+  bool isGameTextVisible() const;
+  void setGameTextVisible(bool t);
+
+  bool isGameTextColorful() const;
+  void setGameTextColorful(bool t);
+
+  bool isGameTextResizable() const;
+  void setGameTextResizable(bool t);
+
+  bool isAtlasEnabled() const;
+  void setAtlasEnabled(bool value);
 };
 
 #endif // SETTINGS_H

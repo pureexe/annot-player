@@ -38,6 +38,7 @@ namespace QtExt {
 } // namespace QtExt
 
 // Objects
+class Atlas;
 class AnnotationDatabase;
 class AnnotationDownloader;
 class AnnotationFilter;
@@ -200,8 +201,6 @@ public slots:
   void setTranslateEnabled(bool enabled);
   void translate(const QString &text, bool extra = false);
   void translate(const QString &text, int lang, bool extra = false);
-  void translateGameText(const QString &text, int role);
-  void showGameText(const QString &text, int role);
 
   void showTraditionalChinese(const QString &gbk);
 
@@ -223,10 +222,6 @@ public slots:
   void setSubtitleColor(int colorId);
 private:
   void uncheckSubtitleColorActions();
-
-protected:
-  bool isGameTextVisible() const;
-  bool isAppLocaleEnabled() const;
 
 public slots:
   void onFocusedWidgetChanged(QWidget *w_old, QWidget *w_new);
@@ -520,7 +515,6 @@ public slots:
   void notifyOnce(const QString &text);
   void warnOnce(const QString &text);
 
-
   void submitText(const QString &text, bool async = true);
   void showText(const QString &text, bool isSigned = false);
 
@@ -582,7 +576,6 @@ protected slots:
   void showSystranAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Systran); }
   void showNiftyAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Nifty); }
   void showInfoseekAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Infoseek); }
-
 
   // - Remote annotations -
 public slots:
@@ -817,26 +810,49 @@ public slots:
   void setWindowTrackingEnabled(bool t);
 
 #ifdef AC_ENABLE_GAME
-public slots:
+protected slots:
+  void translateGameText(const QString &text, int role);
+  void showGameText(const QString &text, int role);
   void showSyncGame(bool showProcess = true);
 
   void showGamePreferences();
 
   void openCurrentGame();
 
+protected:
+  void updateGameTextMenu();
+  bool isGameTextVisible() const;
+  bool isAppLocaleEnabled() const;
+
 private:
   SyncView *syncView_;
   MessageHandler *messageHandler_;
   ProcessFilter *processFilter_;
 
+  QMenu *gameTextMenu_;
   QAction *showSyncGameAct_,
           *showGamePreferencesAct_,
           //*toggleAutoOpenCurrentGameAct_,
           *openCurrentGameAct_;
-#endif // AC_ENABLE_GAME
-private:
   QAction *toggleGameTextVisibleAct_,
+          *toggleGameTextColorfulAct_,
+          *toggleGameTextResizableAct_,
           *toggleAppLocaleEnabledAct_;
+#endif // AC_ENABLE_GAME
+
+#ifdef WITH_WIN_ATLAS
+  // - ATLAS -
+protected slots:
+  void translateWithAtlas(const QString &text, int role);
+protected:
+  void showAtlasTranslation(const QString &text);
+  void showAtlasAdditionalTranslation(const QString &text);
+  bool isAtlasEnabled() const;
+private:
+  void createAtlas();
+  QAction *toggleAtlasEnabledAct_;
+  Atlas *atlas_;
+#endif // WITH_WIN_ATLAS
 
   // - Helpers -
 protected:

@@ -10,31 +10,31 @@
 #define LCID_ZH_TW  0x0404
 #define LCID_ZH_CN  0x0804
 
-#define LCID_EN_US  0x0409
+#define LCID_EN_US  0x0409  // 1033
 //#define LCID_EN LCID_EN_US
 
-#define LCID_JA_JP  0x0411
+#define LCID_JA_JP  0x0411  // 1041
 //#define LCID_JA LCID_JA_JP
 
-#define LCID_KO_KR  0x0412
+#define LCID_KO_KR  0x0412  // 1042
 //#define LCID_KO LCID_KO_KR
 
-#define LCID_DE_DE  0x0407
+#define LCID_DE_DE  0x0407  // 1031
 #define LCID_DE LCID_DE_DE
 
-#define LCID_IT_IT  0x0410
+#define LCID_IT_IT  0x0410  // 1040
 #define LCID_IT LCID_IT_IT
 
-#define LCID_RU_RU  0x0419
+#define LCID_RU_RU  0x0419  // 1049
 #define LCID_RU LCID_RU_RU
 
-#define LCID_FR_FR  0x040C
+#define LCID_FR_FR  0x040C  // 1036
 #define LCID_FR LCID_FR_FR
 
-#define LCID_PT_PT  0x0816
+#define LCID_PT_PT  0x0816  // 2070
 #define LCID_PT LCID_PT_PT
 
-#define LCID_ES_ES  0x0C0A
+#define LCID_ES_ES  0x0C0A  // 3082
 #define LCID_ES LCID_ES_ES
 
 inline const char *lcidToString(int lcid)

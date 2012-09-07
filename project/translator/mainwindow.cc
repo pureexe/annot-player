@@ -9,6 +9,7 @@
 #include "global.h"
 #include "rc.h"
 #include "project/common/acabout.h"
+#include "project/common/acsettings.h"
 #include "project/common/acpreferences.h"
 #include "project/common/acui.h"
 #include "project/common/acrc.h"
@@ -25,6 +26,9 @@
 #ifdef WITH_MODULE_MECABHIGHLIGHTER
 # include "module/mecabhighlighter/mecabhighlighter.h"
 #endif // WITH_MODULE_MECABHIGHLIGHTER
+#ifdef WITH_WIN_ATLAS
+# include "win/atlas/atlas.h"
+#endif // WITH_WIN_ATLAS
 #include <QtGui>
 #include <boost/foreach.hpp>
 
@@ -83,6 +87,9 @@ MainWindow::MainWindow(QWidget *parent)
   //createSearchEngines();
   createLayout();
   createActions();
+#ifdef WITH_WIN_ATLAS
+  createAtlas();
+#endif // WITH_WIN_ATLAS
 
   // - Translators -
 
@@ -145,6 +152,9 @@ MainWindow::MainWindow(QWidget *parent)
   infoseekButton_->setChecked(t & TranslatorManager::InfoseekBit);
   yahooButton_->setChecked(t & TranslatorManager::YahooBit);
   fresheyeButton_->setChecked(t & TranslatorManager::FresheyeBit);
+#ifdef WITH_WIN_ATLAS
+  atlasButton_->setChecked(Settings::globalSettings()->isAtlasEnabled());
+#endif // WITH_WIN_ATLAS
 
   autoButton_->setChecked(true);
   topButton_->setChecked(isWindowOnTop());
@@ -213,6 +223,9 @@ MainWindow::createLayout()
   sdlButton_ = ui->makeCheckBox(0, tr("SDL"), tr("SDL Translator") + " (en)", this, SLOT(updateTranslators()));
   systranButton_ = ui->makeCheckBox(0, tr("SYSTRAN"), tr("SYSTRAN Translator") + " (en)", this, SLOT(updateTranslators()));
   niftyButton_ = ui->makeCheckBox(0, tr("@nifty"), tr("@nifty honyaku") + " (en)", this, SLOT(updateTranslators()));
+#ifdef WITH_WIN_ATLAS
+  atlasButton_ = ui->makeCheckBox(0, tr("ATLAS"), tr("ATLAS Honyaku") + " (en)" " [" + tr("Offline") + "]", this, SLOT(updateTranslators()));
+#endif //WITH_WIN_ATLAS
 
   translateEdit_ = new TranslateEdit;
   connect(translateEdit_, SIGNAL(textChanged()), SLOT(autoTranslate()));
@@ -263,6 +276,10 @@ MainWindow::createLayout()
     translators->addWidget(exciteButton_);
     translators->addWidget(sdlButton_);
     translators->addWidget(systranButton_);
+#ifdef WITH_WIN_ATLAS
+    translators->addStretch();
+    translators->addWidget(atlasButton_);
+#endif // //WITH_WIN_ATLAS
 
     QSplitter *h = new QSplitter(Qt::Horizontal),
               *left = new QSplitter(Qt::Vertical),
@@ -606,6 +623,12 @@ MainWindow::translate(const QString &input)
     showTextTranslation(HTML_SS(+input+, color:gray));
     translatedTextChanged_ = false;
   }
+
+#ifdef WITH_WIN_ATLAS
+  if (isAtlasEnabled())
+    showAtlasTranslation(atlas_->translate(t));
+#endif // WITH_WIN_ATLAS
+
   //textTranslator_->translate(t, language_); // FIXME: inlining is not working under clang T_T
   for (int service = 0; service < TranslatorManager::ServiceCount; service++)
     if (textTranslator_->hasService(service))
@@ -671,9 +694,24 @@ MainWindow::saveSettings()
   settings->setWindowOnTop(isWindowOnTop());
   settings->setTranslationServices(textTranslator_->services());
   settings->sync();
+
+#ifdef WITH_WIN_ATLAS
+  settings->setAtlasEnabled(isAtlasEnabled());
+  AcSettings::globalSettings()->setAtlasLocation(atlas_->location());
+  AcSettings::globalSettings()->sync();
+#endif // WITH_WIN_ATLAS
 }
 
 // - Show Translations -
+
+void
+MainWindow::showAtlasTranslation(const QString &text)
+{
+  showTextTranslation(
+    "ATLAS: "
+    HTML_SS_OPEN(color:darkgoldenrod) + text + HTML_SS_CLOSE()
+  );
+}
 
 void
 MainWindow::showYahooTranslation(const QString &text)
@@ -837,5 +875,29 @@ MainWindow::highlightText(const QString &input)
   BOOST_FOREACH (TranslateBrowser *e, browsers_)
     e->highlightText(input);
 }
+
+// - Atlas Translator -
+
+#ifdef WITH_WIN_ATLAS
+
+bool
+MainWindow::isAtlasEnabled() const
+{ return atlasButton_->isChecked(); }
+
+void
+MainWindow::createAtlas()
+{
+  atlas_ = new Atlas(this);
+  QString location = AcSettings::globalSettings()->atlasLocation();
+  if (location.isEmpty() || !Atlas::isValidLocation(location))
+    location = Atlas::findLocation();
+
+  if (Atlas::isValidLocation(location)) {
+    atlas_->setLocation(location);
+    AcSettings::globalSettings()->setAtlasLocation(location);
+  }
+}
+
+#endif // WITH_WIN_ATLAS
 
 // EOF

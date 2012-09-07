@@ -1,7 +1,7 @@
-#ifndef WINDOWSREGISTRY_H
-#define WINDOWSREGISTRY_H
+#ifndef REGISTRY_H
+#define REGISTRY_H
 
-// windowsregistry.h
+// registry.h
 // 4/21/2012
 
 #include <QtCore/QObject>
@@ -9,11 +9,11 @@
 
 QT_FORWARD_DECLARE_CLASS(QSettings)
 
-class WindowsRegistry : public QObject
+class Registry : public QObject
 {
   Q_OBJECT
-  Q_DISABLE_COPY(WindowsRegistry)
-  typedef WindowsRegistry Self;
+  Q_DISABLE_COPY(Registry)
+  typedef Registry Self;
   typedef QObject Base;
 
   QSettings *classes_;
@@ -21,7 +21,7 @@ class WindowsRegistry : public QObject
 public:
   static Self *globalInstance();
 
-  explicit WindowsRegistry(QObject *parent = nullptr)
+  explicit Registry(QObject *parent = nullptr)
     : Base(parent), classes_(nullptr) { }
 
   void setClassesRoot(const QString &regpath);
@@ -82,4 +82,4 @@ protected:
   //void clearFileTypes();
 };
 
-#endif // WINDOWSREGISTRY_H
+#endif // REGISTRY_H

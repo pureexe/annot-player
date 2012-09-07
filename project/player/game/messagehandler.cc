@@ -34,7 +34,7 @@ namespace { enum { MESSAGE_CAPACITY = 4}; }
 // - Constructions -
 
 MessageHandler::MessageHandler(QObject *parent)
-  : Base(parent), active_(false), leadingSignature_(0)
+  : Base(parent), active_(false), leadingSignature_(0), hash_(0)
 { }
 
 void
@@ -99,7 +99,7 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
     return;
   }
 
-  lastHash_.clear();
+  context_.clear();
 
   if (data.isEmpty()) {
     DOUT("exit: skipping empty data");
@@ -115,6 +115,9 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
   QList<QByteArray> range;
   range.append(data);
 
+  qint64 h1 = Annotation::hash(range);
+  qint64 h4 = 0;
+
   QByteArray t;
   if (messages_.size() >= 2 && (t=messages_[1]) == data) {
     range.prepend(t);
@@ -126,6 +129,7 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
 
   } else if (data.length() < 10*2) {
     if (messages_.size() < 2) {
+      emit contextChanged(h1, h4);
       emit textChanged(text, TextThread::LeadingRole);
       DOUT("exit: insufficent messages to hash");
       return;
@@ -133,6 +137,7 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
     range.prepend(t = messages_[1]);
     if (t.length() < 7*2) {
       if (messages_.size() < 3) {
+        emit contextChanged(h1, h4);
         emit textChanged(text, TextThread::LeadingRole);
         DOUT("exit: insufficent messages to hash");
         return;
@@ -140,6 +145,7 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
       range.prepend(t = messages_[2]);
       if (t.length() < 4*2) {
         if (messages_.size() < 4) {
+          emit contextChanged(h1, h4);
           emit textChanged(text, TextThread::LeadingRole);
           DOUT("exit: insufficent messages to hash");
           return;
@@ -149,15 +155,16 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
     }
   }
 
-  qint64 h = lastHash_.hash = Annotation::hash(range);
-  int count = lastHash_.count = range.size();
-  Q_UNUSED(count)
+  h4 = range.size() == data.size() ? h1 :
+       Annotation::hash(range);
 
-  emit hashChanged(h);
+  context_.hash = h4;
+  context_.count = range.size();
 
+  emit contextChanged(h1, h4);
   emit textChanged(text, TextThread::LeadingRole);
 
-  DOUT("exit: hashCount =" << count << ", h =" << h);
+  DOUT("exit: hashCount =" << context_.count << ", h1 =" << h1 << ", h4 =" << h4);
 }
 
 // - Helpers -

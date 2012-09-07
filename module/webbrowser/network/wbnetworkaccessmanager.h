@@ -36,6 +36,7 @@ protected:
   static QUrl encodeDmmUrl(const QUrl &url);
 
   static QUrl encodeAb2Url(const QUrl &url);
+  static QUrl encodeAb3Url(const QUrl &url);
   static QUrl encodeAb2TryUrl(const QUrl &url);
   static QUrl encodeAkatsukiWorksUrl(const QUrl &url);
   static QUrl encodeWheelSoftUrl(const QUrl &url);

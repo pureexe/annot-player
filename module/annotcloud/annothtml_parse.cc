@@ -116,12 +116,13 @@ AnnotationHtmlParser::toHtml(const QString &text) const
 
   std::stack<std::pair<QString, ushort> > stack; // pair<QString, StringType>
 
-  if (text.startsWith(CORE_CMD_VERBATIM)) {
-    parsed = text.mid(QString(CORE_CMD_VERBATIM).size());
-    tags.prepend(CORE_CMD_VERBATIM);
-    DOUT("exit: parsed (verbatim) =" << parsed);
-    return RETURN(parsed.trimmed(), tags);
-  }
+  // FIXME: add support for verbatim
+  //if (text.startsWith(CORE_CMD_VERBATIM)) {
+  //  parsed = text.mid(QString(CORE_CMD_VERBATIM).size());
+  //  tags.prepend(CORE_CMD_VERBATIM);
+  //  DOUT("exit: parsed (verbatim) =" << parsed);
+  //  return RETURN(parsed.trimmed(), tags);
+  //}
   if (text.startsWith(CORE_CMD_V " ")) { // \verbatim alias
     parsed = text.mid(QString(CORE_CMD_V " ").size());
     tags.prepend(CORE_CMD_V);

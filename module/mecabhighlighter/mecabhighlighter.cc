@@ -10,7 +10,8 @@
 #include "module/debug/debug.h"
 //#include <QtCore/QDebug>
 
-enum { u8sz = 3 }; // bytes of single utf8 char
+//enum { u8sz = 3 }; // bytes of single utf8 char
+enum { CT_Verb = 2, CT_Noun = 8, CT_Modifier = 6, CT_Punct = 3, CT_Katagana = 7, CT_Latin = 5 };
 
 // - Properties -
 
@@ -68,17 +69,33 @@ MeCabHighlighter::highlightBlock(const QString &text)
       continue;
     }
     DOUT(node->char_type << node->lcAttr << node->rcAttr << QByteArray(node->surface, node->length) << node->feature);
-    enum { CT_Subject = 2, CT_Modifier = 6 };
     switch (node->char_type) {
-    case CT_Subject: sz = 14; alpha = 40; color = ++i%2 ? Qt::green : Qt::magenta; break; // noun or verb
-    case CT_Modifier: sz = 10; alpha = 20; color = ++j%2 ? Qt::red : Qt::cyan; break; // adj or adv
+    case CT_Noun:
+    case CT_Verb:
+    case CT_Katagana:
+      sz = 14;
+      alpha = 40;
+      color = ++i%2 ? Qt::green : Qt::magenta;
+      break;
+    case CT_Modifier:
+      sz = 10;
+      alpha = 20;
+      color = ++j%2 ? Qt::red : Qt::cyan;
+      break;
+    case CT_Punct:
+    case CT_Latin:
     default: continue;
     }
     color.setAlpha(alpha);
     fmt.setBackground(color);
     //fmt.setFontWeight(weight);
     fmt.setFontPointSize(sz);
-    setFormat((node->surface - input) / u8sz, node->length / u8sz, fmt);
+
+    //int start = (node->surface - input) / u8sz,
+    //    len = node->length / u8sz;
+    int start = QString::fromUtf8(input, node->surface - input).size(),
+        len = QString::fromUtf8(node->surface, node->length).size();
+    setFormat(start, len, fmt);
   }
   DOUT("exit");
 }

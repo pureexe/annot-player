@@ -102,6 +102,7 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
       return Base::createRequest(op, r, outgoingData); \
     }
     ELIF("akabeesoft2.com", encodeAb2Url)
+    ELIF("akabeesoft3.com", encodeAb3Url)
     ELIF("syangrila.com", encodeSyangrilaUrl)
     ELIF("akatsukiworks.com", encodeAkatsukiWorksUrl)
     ELIF("wheel-soft.com", encodeWheelSoftUrl)
@@ -183,6 +184,7 @@ WbNetworkAccessManager::encodeEroUrl(const QUrl &url)
   TRANSFORM("dmm", encodeDmmUrl)
 
   TRANSFORM("akabeesoft2", encodeAb2Url)
+  TRANSFORM("akabeesoft3", encodeAb3Url)
   TRANSFORM("akabeesoft2-try", encodeAb2TryUrl)
   TRANSFORM("akatsukiworks", encodeAkatsukiWorksUrl)
   TRANSFORM("wheel-soft", encodeWheelSoftUrl)

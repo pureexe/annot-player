@@ -19,11 +19,11 @@ class MessageHandler : public QObject
   typedef QObject Base;
 
 public:
-  struct Hash {
+  struct Context {
     qint64 hash;
     int count;
 
-    explicit Hash(qint64 h = 0, int c = 0)
+    explicit Context(qint64 h = 0, int c = 0)
       : hash(h), count(c) { }
 
     void clear() { hash = 0; count = 0; }
@@ -35,7 +35,7 @@ public:
 
 signals:
   void textChanged(const QString &text, int role);
-  void hashChanged(qint64 pos);
+  void contextChanged(qint64 h1, qint64 h4);
 
   void message(QString msg);
   void warning(QString msg);
@@ -55,14 +55,15 @@ public:
 
   //int messageCapacity() const { return messageCount_; }
 
-  const Hash &lastHash() const { return lastHash_; }
+  const Context &currentContext() const { return context_; }
+  qint64 currentHash() const { return hash_; }
 
 public slots:
   void setActive(bool active);
   void setThreads(const TextThreadList &l) { threads_ = l; updateSignatures(); }
   void setProcessInfo(const ProcessInfo &pi) { processInfo_ = pi; }
 
-  void clearMessages() { messages_.clear(); lastHash_.clear(); }
+  void clearMessages() { messages_.clear(); context_.clear(); hash_ = 0; }
   void clear() { clearMessages(); threads_.clear(); processInfo_.clear(); }
 
   // - Actions
@@ -90,7 +91,8 @@ private:
   //QList<TextMessage> messages_; // recent messages queue
   QVector<QByteArray> messages_; // recent messages queue
 
-  Hash lastHash_;
+  qint64 hash_;
+  Context context_;
 };
 
 #endif // MESSAGEHANDLER_H

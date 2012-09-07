@@ -39,7 +39,6 @@ typedef struct _MARGINS {
   int cyBottomHeight;
 } MARGINS, *PMARGINS;
 
-#define DWM_DLL "dwmapi"
 class DwmApi
 {
   QLibrary dwmLib_;
@@ -56,7 +55,7 @@ public:
   PtrDwmGetColorizationColor pDwmGetColorizationColor;
 
 public:
-  DwmApi() : dwmLib_(DWM_DLL)
+  DwmApi() : dwmLib_("dwmapi")
   {
     #define RESOLVE(_lib, _api) p##_api = static_cast<Ptr##_api>(_lib.resolve(#_api))
     RESOLVE(dwmLib_, DwmIsCompositionEnabled);
@@ -76,32 +75,40 @@ namespace dwmapi {
   DwmIsCompositionEnabled(__out BOOL* pfEnabled)
   {
     Q_ASSERT(api()->pDwmIsCompositionEnabled);
-    return !api()->pDwmIsCompositionEnabled ? S_FALSE :
-            api()->pDwmIsCompositionEnabled(pfEnabled);
+    if (!api()->pDwmIsCompositionEnabled)
+      return S_FALSE;
+    else
+      return api()->pDwmIsCompositionEnabled(pfEnabled);
   }
 
   inline HRESULT WINAPI
   DwmExtendFrameIntoClientArea(HWND hWnd, __in const MARGINS *pMarInset)
   {
     Q_ASSERT(api()->pDwmExtendFrameIntoClientArea);
-    return !api()->pDwmExtendFrameIntoClientArea ? S_FALSE :
-            api()->pDwmExtendFrameIntoClientArea(hWnd, pMarInset);
+    if (!api()->pDwmExtendFrameIntoClientArea)
+      return S_FALSE;
+    else
+      return api()->pDwmExtendFrameIntoClientArea(hWnd, pMarInset);
   }
 
   inline HRESULT WINAPI
   DwmEnableBlurBehindWindow(HWND hWnd, __in const DWM_BLURBEHIND *pBlurBehind)
   {
     Q_ASSERT(api()->pDwmEnableBlurBehindWindow);
-    return !api()->pDwmEnableBlurBehindWindow ? S_FALSE :
-            api()->pDwmEnableBlurBehindWindow(hWnd, pBlurBehind);
+    if (!api()->pDwmEnableBlurBehindWindow)
+      return S_FALSE;
+    else
+      return api()->pDwmEnableBlurBehindWindow(hWnd, pBlurBehind);
   }
 
   inline HRESULT WINAPI
   DwmGetColorizationColor(__out DWORD *pcrColorization, __out BOOL *pfOpaqueBlend)
   {
     Q_ASSERT(api()->pDwmGetColorizationColor);
-    return !api()->pDwmGetColorizationColor ? S_FALSE :
-            api()->pDwmGetColorizationColor(pcrColorization, pfOpaqueBlend);
+    if (!api()->pDwmGetColorizationColor)
+      return S_FALSE;
+    else
+      return api()->pDwmGetColorizationColor(pcrColorization, pfOpaqueBlend);
   }
 
 } // anonymous namespace dwmapi

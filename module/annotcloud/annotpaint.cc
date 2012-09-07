@@ -705,7 +705,7 @@ AnnotationPainter::saveHistogramAsFile(
     const QString &title, const QString &description) const
 {
   enum { CanvasWidth = 400, CanvasHeight = 200 };
-#ifdef WITH_QT_SVG
+#ifdef QT_SVG_LIB
   DOUT("enter: fileName =" << fileName);
 
   if (width <= 0)
@@ -740,7 +740,7 @@ AnnotationPainter::saveHistogramAsFile(
   Q_UNUSED(l) Q_UNUSED(sortBy)
   Q_UNUSED(title) Q_UNUSED(description)
   return false;
-#endif // WITH_QT_SVG
+#endif // QT_SVG_LIB
 }
 
 // EOF

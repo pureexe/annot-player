@@ -21,7 +21,7 @@ class GoogleTranslator : public Translator
   QNetworkAccessManager *nam_; // shared nam
   QWebPage *page_;
 
-  // - Constructions -
+  // - Construction -
 public:
   explicit GoogleTranslator(QObject *parent = nullptr)
     : Base(parent), nam_(nullptr), page_(nullptr)

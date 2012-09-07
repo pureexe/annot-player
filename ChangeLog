@@ -2,8 +2,18 @@ ChangeLog (UTF-8)
 Annot Stream
 Since 6/18/2011
 
+9/7/2012 6 FRI	annot-player	0.1.9.5
+        * Add ATLAS support for offline translation.
+        * Fix a bug when displaying manual subtitles.
+
+9/5/2012 WED	annot-player	0.1.9.4
+        * Fix a line-wrapping bug when rendering annotated Japanese text.
+        * Fix a bug when converting katagana to hiragana.
+        * Fix a bug when generating annotation analytics.
+          修正了无法显示弹幕统计图的bug。
+
 9/5/2012 WED	annot-player	0.1.9.3
-        * Integrate with MetCab.
+        * Integrate with MeCab.
           Able to show annotated galgame text with furigana.
           Hover-and-translate ability is not implemented yet.
         * If AppLocale is installed on your Windows, launch galgame using AppLocale with 0x0411 by default.

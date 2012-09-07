@@ -27,6 +27,7 @@
 #define SK_VERSION        "Version"
 #define SK_PATH           "Path"
 
+#define SK_ATLAS "Atlas"
 #define SK_ANNOTLANGUAGES "AnnotLanguages"
 #define SK_SHOWLIBRARY "ShowLibrary"
 #define SK_LIBRARYVIEW "LibraryView"
@@ -34,6 +35,8 @@
 #define SK_PREFERLOCALDB  "PreferLocalDatabase"
 #define SK_MENUBAR      "MenuBar"
 #define SK_SHOWGAMETEXT  "ShowGameText"
+#define SK_GAMETEXTCOLOR "GameTextColorful"
+#define SK_GAMETEXTRESIZE "GameTextResizable"
 #define SK_APPLOC   "AppLocale"
 #define SK_TRANSLATE    "Translate"
 #define SK_SUBTITLECOLOR "SubtitleColor"
@@ -269,6 +272,22 @@ Settings::isGameTextVisible() const
 void
 Settings::setGameTextVisible(bool t)
 { setValue(SK_SHOWGAMETEXT, t); }
+
+bool
+Settings::isGameTextColorful() const
+{ return value(SK_GAMETEXTCOLOR, true).toBool(); }
+
+void
+Settings::setGameTextColorful(bool t)
+{ setValue(SK_GAMETEXTCOLOR, t); }
+
+bool
+Settings::isGameTextResizable() const
+{ return value(SK_GAMETEXTRESIZE).toBool(); }
+
+void
+Settings::setGameTextResizable(bool t)
+{ setValue(SK_GAMETEXTRESIZE, t); }
 
 bool
 Settings::isAppLocaleEnabled() const
@@ -790,6 +809,15 @@ Settings::setTranslationServices(ulong value)
 ulong
 Settings::translationServices() const
 { return value(SK_TRANSLATOR).toUInt(); }
+
+bool
+Settings::isAtlasEnabled() const
+{ return value(SK_ATLAS).toBool(); }
+
+void
+Settings::setAtlasEnabled(bool value)
+{ setValue(SK_ATLAS, value); }
+
 
 // EOF
 

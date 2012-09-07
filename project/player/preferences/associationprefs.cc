@@ -4,7 +4,7 @@
 #include "associationprefs.h"
 #include "global.h"
 #include "tr.h"
-#include "windowsregistry.h"
+#include "registry.h"
 #include "module/player/player.h"
 #include "project/common/acss.h"
 #include "project/common/acui.h"
@@ -17,7 +17,7 @@ void
 AssociationPreferencesTab::init()
 {
   if (!registry_)
-    registry_ = WindowsRegistry::globalInstance();
+    registry_ = Registry::globalInstance();
   Q_ASSERT(registry_);
 
   supportedTypes_ = Player::supportedSuffices();

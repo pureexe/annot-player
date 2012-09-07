@@ -26,6 +26,7 @@ include($$ROOTDIR/module/translator/translator.pri)
 !mac: include($$ROOTDIR/module/metacall/metacall.pri)
 
 win32 {
+    include($$ROOTDIR/win/atlas/atlas.pri)
     include($$ROOTDIR/win/dwm/dwm.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
 }

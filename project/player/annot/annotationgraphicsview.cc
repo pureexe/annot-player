@@ -261,10 +261,7 @@ AnnotationGraphicsView::annotationsAtPos(qint64 pos) const
   static const AnnotationList null;
 
   auto p = hash_.find(pos);
-  if (p!= hash_.end())
-    return p.value();
-  else
-    return null;
+  return p == hash_.end() ? null : p.value();
   //if (annots_.contains(pos)) {
   //  QList<AnnotationGraphicsItem*> *l = annots_[pos];
   //  if (l && !l->empty())
@@ -812,6 +809,7 @@ AnnotationGraphicsView::itemsCount(int time) const
   //    ret = l->size();
   //}
   //return ret;
+
   return annotationsAtPos(time).size();
 }
 
@@ -919,6 +917,48 @@ AnnotationGraphicsView::sendMouseMoveEvent(QMouseEvent *event)
 }
 
 // - Message mode -
+
+void
+AnnotationGraphicsView::showAnnotationsInContext(qint64 h1, qint64 h4)
+{
+  DOUT("enter: h1 =" << h1 << ", h4 =" << h4);
+
+  emit annotationPosChanged(h1);
+
+  if (hub_->isSignalTokenMode()) {
+    emit removeSubtitlesRequested();
+    scheduler_->clearSubtitles();
+  } else {
+    //pos /= 1000;
+    //pos -= offset_;
+    Q_ASSERT(0);
+  }
+
+  //if (annots_.contains(pos)) {
+  //  DOUT("found annotations at pos =" << pos);
+  //  QList<AnnotationGraphicsItem*> *l = annots_[pos];
+  //  if (l && !l->empty())
+  //    foreach (AnnotationGraphicsItem *item, *l)
+  //     if (item && !isItemBlocked(item))
+  //       item->showMe();
+  //}
+  //
+  //foreach (Annotation a, l)
+  //  showAnnotation(a);
+  const AnnotationList &l1 = annotationsAtPos(h1);
+  if (!l1.isEmpty())
+    foreach (const Annotation &a, l1)
+      showAnnotation(a);
+
+  if (h4 && h4 != h1) {
+    const AnnotationList &l4 = annotationsAtPos(h4);
+    if (!l4.isEmpty())
+      foreach (const Annotation &a, l4)
+        showAnnotation(a);
+  }
+
+  DOUT("exit");
+}
 
 void
 AnnotationGraphicsView::showAnnotationsAtPos(qint64 pos)

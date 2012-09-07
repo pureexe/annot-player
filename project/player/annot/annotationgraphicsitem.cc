@@ -200,7 +200,7 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
   SignalHub *hub,
   AnnotationGraphicsView *view)
   : metaVisible_(false), avatarVisible_(false),
-    view_(view), data_(data), hub_(hub), style_(NoStyle), positionResolution_(0),
+    view_(view), data_(data), hub_(hub), wrap_(AutoWrap), style_(NoStyle), positionResolution_(0),
     removeLaterTimer_(nullptr),
     flyAni_(nullptr), flyOpacityAni_(nullptr), escapeAni_(nullptr), rushAni_(nullptr), appearOpacityAni_(nullptr), fadeAni_(nullptr),
     dragPos_(BAD_POSF), pressTime_(0)
@@ -425,25 +425,32 @@ AnnotationGraphicsItem::updateText()
       AnnotationSettings::globalSettings()->preferFloat() ? FloatStyle : DriftStyle;
 
   enum { MinWrapWidth = 300, MinWrapHeight = 50 };
+
   int textWidth = -1;
-  switch (style_) {
-  case DriftStyle:
-  case FloatStyle:
-  case FlyStyle:
-    break;
-  default:
-    {
-      int w = view_->width() * 4/5;
-      if (w > MinWrapWidth && view_->height() > MinWrapHeight)
-        textWidth = w;
-      textWidth /= view_->scale();
-    }
+  bool wrap = false;
+  switch (wrap_) {
+  case AlwaysWrap: wrap = true; break;
+  case AutoWrap:
+    switch (style_) {
+    case DriftStyle:
+    case FloatStyle:
+    case FlyStyle:
+      break;
+    default: wrap = true;
+    } break;
+  case NoWrap: default: ;
+  }
+  if (wrap) {
+    int w = view_->width() * 4/5;
+    if (w > MinWrapWidth && view_->height() > MinWrapHeight)
+      textWidth = w;
+    textWidth /= view_->scale();
   }
   setTextWidth(textWidth);
 
-  if (tags.contains(CORE_CMD_VERBATIM))
-    setPlainText(text_);
-  else if (isMetaVisible()) {
+  //if (tags.contains(CORE_CMD_VERBATIM))
+  //  setPlainText(text_);
+  if (isMetaVisible()) {
     if (suffix_.isEmpty())
       updateMeta();
     setText(prefix_ + text_ + suffix_);
@@ -679,14 +686,18 @@ AnnotationGraphicsItem::setTags(const QStringList &tags)
       case AnnotCloud::H_Fly: style_ = FlyStyle; break;
       case AnnotCloud::H_Top: style_ = TopStyle; break;
       case AnnotCloud::H_Bottom: style_ = BottomStyle; break;
-      //case AnnotCloud::H_Sub:
-      //case AnnotCloud::H_Subtitle: style_ = SubtitleStyle; break;
 
-      // Effect:
       case AnnotCloud::H_Sub:
       case AnnotCloud::H_Subtitle:
-      case AnnotCloud::H_Transp:
         break;
+
+      // Wrap:
+      case AnnotCloud::H_Wrap: wrap_= AlwaysWrap; break;
+      case AnnotCloud::H_NoWrap: wrap_ = NoWrap; break;
+        break;
+
+      // Effect:
+      //case AnnotCloud::H_Transp:
       //case AnnotCloud::H_Transparent: setEffect(TransparentEffect); break;
       //case AnnotCloud::H_Shadow: setEffect(ShadowEffect); break;
       //case AnnotCloud::H_Blur: setEffect(BlurEffect); break;
@@ -705,6 +716,8 @@ AnnotationGraphicsItem::setDefaultStyle()
 {
   style_ = NoStyle;
   setFlags(QGraphicsItem::ItemIsMovable); // Doesn't work when view_ is embedded in dock window orz
+
+  wrap_ = AutoWrap;
 
   //setToolTip(TR(T_TOOLTIP_ANNOTATIONITEM));
   setDefaultTextColor(ANNOTATION_COLOR_DEFAULT);

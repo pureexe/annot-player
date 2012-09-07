@@ -181,8 +181,7 @@ UrlDialog::normalizeUrl(const QString &url)
     ret.prepend('h');
   else if (!url.contains("http://", Qt::CaseInsensitive))
     ret.prepend("http://");
-
-  return MrlAnalysis::normalizeUrl(url);
+  return MrlAnalysis::normalizeUrl(ret);
 }
 
 void

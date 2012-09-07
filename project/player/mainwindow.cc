@@ -65,7 +65,7 @@
 #include "useranalyticsview.h"
 #include "global.h"
 #ifdef Q_OS_WIN
-# include "windowsregistry.h"
+# include "registry.h"
 #endif // Q_OS_WIN
 #ifdef AC_ENABLE_GAME
 # include "threadview.h"
@@ -115,6 +115,9 @@
 #include "module/annotcloud/annothtml.h"
 #include "module/annotcache/annotationcachemanager.h"
 #include "module/annotservice/annotserveragent.h"
+#ifdef WITH_WIN_ATLAS
+# include "win/atlas/atlas.h"
+#endif // WITH_WIN_ATLAS
 #ifdef WITH_MODULE_DOLL
 # include "module/doll/doll.h"
 #endif // WITH_MODULE_DOLL
@@ -198,8 +201,7 @@ enum { MiniConsoleTimeout = 6000, MainConsoleTimeout = 3000 };
 
 #define DEFAULT_TRANSLATORS \
 ( \
-  TranslatorManager::OcnBit | \
-  TranslatorManager::RomajiBit \
+  TranslatorManager::OcnBit \
 )
 
 // - Focus -
@@ -398,6 +400,9 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
 
   DOUT("createComponents");
   createComponents(unique);
+#ifdef WITH_WIN_ATLAS
+  createAtlas();
+#endif // WITH_WIN_ATLAS
 
   DOUT("createConnections");
   createConnections();
@@ -1316,9 +1321,10 @@ MainWindow::createConnections()
 
   //connect(recentThreadView_, SIGNAL(channelSelected(ulong,QString)), SLOT(updateChannel(ulong,QString)));
   //connect(recentThreadView_, SIGNAL(channelSelected(ulong,QString)), recentThreadView_, SLOT(hide()));
-  connect(messageHandler_, SIGNAL(hashChanged(qint64)), annotationView_, SLOT(showAnnotationsAtPos(qint64)));
+  connect(messageHandler_, SIGNAL(contextChanged(qint64,qint64)), annotationView_, SLOT(showAnnotationsInContext(qint64,qint64)));
   connect(messageHandler_, SIGNAL(textChanged(QString,int)), SLOT(translateGameText(QString,int)));
   connect(messageHandler_, SIGNAL(textChanged(QString,int)), SLOT(showGameText(QString,int)), Qt::QueuedConnection);
+  connect(messageHandler_, SIGNAL(textChanged(QString,int)), SLOT(translateWithAtlas(QString,int)), Qt::QueuedConnection);
 #endif // AC_ENABLE_GAME
   //connect(player_, SIGNAL(opening()), SLOT(backlogDialog()));
   // MRL resolver
@@ -1579,6 +1585,7 @@ MainWindow::createActions()
           SIGNAL(triggered(bool)), SLOT(setSubmit(bool)));
           toggleSubmitAct_->setCheckable(true);
 
+#ifdef AC_ENABLE_GAME
   toggleGameTextVisibleAct_ = new QAction(tr("Show Galgame Text"), this);
           toggleGameTextVisibleAct_->setCheckable(true);
           toggleGameTextVisibleAct_->setChecked(Settings::globalSettings()->isGameTextVisible());
@@ -1587,7 +1594,14 @@ MainWindow::createActions()
           toggleAppLocaleEnabledAct_->setCheckable(true);
           toggleAppLocaleEnabledAct_->setChecked(Settings::globalSettings()->isAppLocaleEnabled());
 
-#ifdef AC_ENABLE_GAME
+  toggleGameTextColorfulAct_ = new QAction(tr("Colorful"), this);
+          toggleGameTextColorfulAct_->setCheckable(true);
+          toggleGameTextColorfulAct_->setChecked(Settings::globalSettings()->isGameTextColorful());
+
+  toggleGameTextResizableAct_ = new QAction(tr("Resizable"), this);
+          toggleGameTextResizableAct_->setCheckable(true);
+          toggleGameTextResizableAct_->setChecked(Settings::globalSettings()->isGameTextResizable());
+
   connect(openCurrentGameAct_ = new QAction(tr("Sync with Running Galgame"), this),
           SIGNAL(triggered()), SLOT(openCurrentGame()));
 #endif // AC_ENABLE_GAME
@@ -1638,6 +1652,15 @@ MainWindow::createActions()
   connect(setUserLanguageToSimplifiedChineseAct_ = new QAction(QIcon(ACRC_IMAGE_SIMPLIFIED_CHINESE), TR(T_SIMPLIFIEDCHINESE), this),
           SIGNAL(triggered(bool)), SLOT(setUserLanguageToSimplifiedChinese()));
           setUserLanguageToSimplifiedChineseAct_->setCheckable(true);
+
+  connect(toggleTranslateAct_ = new QAction(tr("Show Online Translation"), this),
+          SIGNAL(triggered(bool)), SLOT(setTranslateEnabled(bool)));
+          toggleTranslateAct_->setCheckable(true);
+#ifdef WITH_WIN_ATLAS
+  toggleAtlasEnabledAct_ = new QAction(tr("Show Offline ATLAS Translation"), this);
+          toggleAtlasEnabledAct_->setCheckable(true);
+          toggleAtlasEnabledAct_->setChecked(Settings::globalSettings()->isAtlasEnabled());
+#endif // WITH_WIN_ATLAS
 
   // TODO clean up actions
   // *** CHECKPOINT ***
@@ -1731,7 +1754,6 @@ MainWindow::createActions()
   //MAKE_TOGGLE(toggleSiteAccountViewVisibleAct_, SITEACCOUNT, this, SLOT(setSiteAccountViewVisible(bool)))
   //MAKE_TOGGLE(toggleCommentViewVisibleAct_, COMMENTVIEW, this, SLOT(setCommentViewVisible(bool)))
   MAKE_ACTION(openHomePageAct_, HOMEPAGE, this, SLOT(openHomePage()))
-  MAKE_TOGGLE(toggleTranslateAct_, TRANSLATE,   this,           SLOT(setTranslateEnabled(bool)))
   MAKE_TOGGLE(togglePlayerLabelEnabled_, LABELPLAYER,   embeddedCanvas_,  SLOT(setEnabled(bool)))
   MAKE_TOGGLE(toggleEmbeddedPlayerOnTopAct_, EMBEDONTOP,   embeddedPlayer_,  SLOT(setOnTop(bool)))
   MAKE_ACTION(clearCacheAct_,   CLEARCACHE,     cache_,         SLOT(clear()))
@@ -2232,6 +2254,19 @@ MainWindow::createMenus()
     gameMenu_->addAction(showSyncGameAct_);
 #endif // AC_ENABLE_GAME
   }
+
+#ifdef AC_ENABLE_GAME
+  gameTextMenu_ = new QMenu(this); {
+    ui->setContextMenuStyle(gameTextMenu_, this);
+    gameTextMenu_->setTitle(tr("Galgame Text")  + " ...");
+    gameTextMenu_->setToolTip(tr("Galgame Text"));
+
+    gameTextMenu_->addAction(toggleGameTextVisibleAct_);
+    gameTextMenu_->addSeparator();
+    gameTextMenu_->addAction(toggleGameTextColorfulAct_);
+    gameTextMenu_->addAction(toggleGameTextResizableAct_);
+  }
+#endif // AC_ENABLE_GAME
 
   annotationLanguageMenu_ = new QMenu(this); {
     ui->setContextMenuStyle(annotationLanguageMenu_, true); // persistent = true
@@ -4680,7 +4715,7 @@ MainWindow::showAnnotationBrowser()
     connect(annotationView_, SIGNAL(annotationPosChanged(qint64)), annotationBrowser_, SLOT(setAnnotationPos(qint64)));
     connect(this, SIGNAL(userIdChanged(qint64)), annotationBrowser_, SLOT(setUserId(qint64)));
 #ifdef AC_ENABLE_GAME
-    connect(messageHandler_, SIGNAL(hashChanged(qint64)), annotationBrowser_, SLOT(setAnnotationPos(qint64)));
+    connect(messageHandler_, SIGNAL(contextChanged(qint64,qint64)), annotationBrowser_, SLOT(setAnnotationPos(qint64)));
 #endif // AC_ENABLE_GAME
 
     annotationBrowser_->setUserId(server_->user().id());
@@ -5825,67 +5860,72 @@ MainWindow::showTranslation(const QString &text, int service)
 {
   if (text.isEmpty())
     return;
-  int userLang = service == TranslatorManager::Romaji ? Traits::English : 0;
+  int userLang = service == TranslatorManager::Romaji ? Traits::English :
+                 server_->user().language();
   QString prefix;
+  if (Traits::isRomanLanguage(userLang))
+    prefix = CORE_CMD_LATEX_SMALL CORE_CMD_HTML_EM;
   switch (service) {
   case TranslatorManager::Romaji:
-    prefix = CORE_CMD_LATEX_SMALL CORE_CMD_HTML_EM " ";
+    if (prefix.isEmpty())
+      prefix = CORE_CMD_LATEX_SMALL CORE_CMD_HTML_EM " ";
     if (translator_->serviceCount() > 2)
       prefix.append("Romaji: ");
     break;
   case TranslatorManager::Ocn:
     //if (translator_->serviceCount() > 1)
     //  prefix = CORE_CMD_COLOR_YELLOW " ";
-    prefix = translator_->serviceCount() > 1 && !translator_->hasService(TranslatorManager::Romaji) ?
-      CORE_CMD_COLOR_YELLOW " OCN: " :
-      "";
+    if (translator_->serviceCount() > 1 && !translator_->hasService(TranslatorManager::Romaji))
+      prefix.append(CORE_CMD_COLOR_YELLOW " OCN: ");
     break;
   case TranslatorManager::Fresheye:
-    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
-      prefix = CORE_CMD_COLOR_BLUE " freshEYE: " :
-      CORE_CMD_COLOR_YELLOW " ";
-    break;
+    prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_BLUE " freshEYE: " :
+      CORE_CMD_COLOR_YELLOW " "
+    ); break;
   case TranslatorManager::Infoseek:
-    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+    prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
       CORE_CMD_COLOR_RED " Infoseek: "  :
-      CORE_CMD_COLOR_YELLOW " ";
-    break;
+      CORE_CMD_COLOR_YELLOW " "
+    ); break;
   case TranslatorManager::Yahoo:
-    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
-      CORE_CMD_COLOR_BLACK " Yahoo!: "  :
-      CORE_CMD_COLOR_YELLOW " ";
-    break;
+    prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_BLACK " Yahoo!: ":
+      CORE_CMD_COLOR_YELLOW " "
+    ); break;
   case TranslatorManager::Microsoft:
-    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+    prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
       CORE_CMD_COLOR_MAGENTA " Microsoft: "  :
-      CORE_CMD_COLOR_YELLOW " ";
-    break;
+      CORE_CMD_COLOR_YELLOW " "
+    ); break;
   case TranslatorManager::Google:
-    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
-      CORE_CMD_COLOR_PINK " Google: "  :
-      CORE_CMD_COLOR_YELLOW " ";
-    break;
+    prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_PINK " Google: " :
+      CORE_CMD_COLOR_YELLOW " "
+    ); break;
   case TranslatorManager::Nifty:
-    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
-      CORE_CMD_COLOR_ORANGE " @nifty: "  :
-      CORE_CMD_COLOR_YELLOW " ";
-    break;
+    prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_ORANGE " @nifty: " :
+      CORE_CMD_COLOR_YELLOW " "
+    ); break;
   case TranslatorManager::Excite:
-    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
-      CORE_CMD_COLOR_BROWN " Excite: "  :
-      CORE_CMD_COLOR_YELLOW " ";
-    break;
+    prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_BROWN " Excite: " :
+      CORE_CMD_COLOR_YELLOW " "
+    ); break;
   case TranslatorManager::Sdl:
-    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+    prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
       CORE_CMD_COLOR_CYAN " SDL: "  :
-      CORE_CMD_COLOR_YELLOW " ";
-    break;
+      CORE_CMD_COLOR_YELLOW " "
+    ); break;
   case TranslatorManager::Systran:
-    prefix = translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
-      CORE_CMD_COLOR_BLUE " SYSTRAN: "  :
-      CORE_CMD_COLOR_YELLOW " ";
-    break;
+    prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
+      CORE_CMD_COLOR_BLUE " SYSTRAN: " :
+      CORE_CMD_COLOR_YELLOW " "
+    ); break;
   }
+  if (!prefix.isEmpty() && !prefix.endsWith(' '))
+    prefix.append(' ');
   showSubtitle(text, userLang, prefix);
 }
 
@@ -6018,7 +6058,7 @@ MainWindow::submitText(const QString &text, bool async)
       !dataManager_->token().hasDigest() && !dataManager_->token().hasUrl() ||
       hub_->isMediaTokenMode() && !player_->hasMedia()
 #ifdef AC_ENABLE_GAME
-      || hub_->isSignalTokenMode() && !messageHandler_->lastHash().isValid()
+      || hub_->isSignalTokenMode() && !messageHandler_->currentHash()
 #endif // AC_ENABLE_GAME
      ) {
 
@@ -6048,6 +6088,14 @@ MainWindow::submitText(const QString &text, bool async)
     annot.setUserAnonymous(server_->user().isAnonymous());
     annot.setLanguage(server_->user().language());
     annot.setCreateTime(QDateTime::currentMSecsSinceEpoch() / 1000);
+
+    if (text.size() <= Traits::MAX_ANNOT_LENGTH)
+      annot.setText(text);
+    else {
+      annot.setText(text.left(Traits::MAX_ANNOT_LENGTH));
+      emit warning(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + annot.text());
+    }
+
     switch (hub_->tokenMode()) {
     case SignalHub::MediaTokenMode:
       annot.setPos(
@@ -6061,17 +6109,15 @@ MainWindow::submitText(const QString &text, bool async)
       break;
     case SignalHub::SignalTokenMode:
   #ifdef AC_ENABLE_GAME
-      annot.setPos(messageHandler_->lastHash().hash);
-      annot.setPosType(messageHandler_->lastHash().count);
+      if (annot.isSubtitle()) {
+        annot.setPos(messageHandler_->currentHash());
+        annot.setPosType(1);
+      } else {
+        annot.setPos(messageHandler_->currentContext().hash);
+        annot.setPosType(messageHandler_->currentContext().count);
+      }
   #endif // AC_ENABLE_GAME
       break;
-    }
-
-    if (text.size() <= Traits::MAX_ANNOT_LENGTH)
-      annot.setText(text);
-    else {
-      annot.setText(text.left(Traits::MAX_ANNOT_LENGTH));
-      emit warning(TR(T_WARNING_LONG_STRING_TRUNCATED) + ": " + annot.text());
     }
   }
 
@@ -7349,10 +7395,15 @@ MainWindow::updateContextMenu()
 #ifdef AC_ENABLE_GAME
   if (hub_->isSignalTokenMode()) {
     contextMenu_->addSeparator();
+    updateGameTextMenu();
+    contextMenu_->addMenu(gameTextMenu_);
+
     contextMenu_->addMenu(translatorMenu_);
     contextMenu_->addAction(toggleTranslateAct_);
+#ifdef WITH_WIN_ATLAS
+    contextMenu_->addAction(toggleAtlasEnabledAct_);
+#endif // WITH_WIN_ATLAS
     contextMenu_->addAction(toggleSubtitleOnTopAct_);
-    contextMenu_->addAction(toggleGameTextVisibleAct_);
     contextMenu_->addAction(showBacklogAct_);
   }
 
@@ -7569,6 +7620,9 @@ MainWindow::updateUserMenu()
     userMenu_->addMenu(translatorMenu_);
 #ifdef AC_ENABLE_GAME
     userMenu_->addAction(toggleTranslateAct_);
+#ifdef WITH_WIN_ATLAS
+    userMenu_->addAction(toggleAtlasEnabledAct_);
+#endif // WITH_WIN_ATLAS
     userMenu_->addAction(toggleSubtitleOnTopAct_);
 #endif // AC_ENABLE_GAME
 
@@ -9669,7 +9723,7 @@ MainWindow::addRecent(const QString &input)
   recentFiles_.prepend(path);
 #ifdef Q_OS_WIN
   if (!isRemoteMrl(path) &&
-      WindowsRegistry::globalInstance()->containsType(QFileInfo(path).suffix())) {
+      Registry::globalInstance()->containsType(QFileInfo(path).suffix())) {
     QString fileName = path;
     fileName.remove(QRegExp("^file://"));
     fileName.remove(QRegExp("^[/]+"));
@@ -9682,7 +9736,18 @@ MainWindow::addRecent(const QString &input)
   QTimer::singleShot(0, this, SLOT(updateRecentMenu()));
 }
 
+
+#ifdef AC_ENABLE_GAME
+
 // - Game Text -
+
+void
+MainWindow::updateGameTextMenu()
+{
+  bool t = isGameTextVisible();
+  toggleGameTextColorfulAct_->setEnabled(t);
+  toggleGameTextResizableAct_->setEnabled(t);
+}
 
 bool
 MainWindow::isGameTextVisible() const
@@ -9699,31 +9764,55 @@ MainWindow::showGameText(const QString &text, int role)
     return;
   if (text.isEmpty()) //|| !isTranslateEnabled()
     return;
-  bool extra = role == TextThread::SupportRole;
 
-  QString prefix;
-  if (extra)
-    prefix = CORE_CMD_VIEW_FLOAT " ";
-
-  QString out;
   enum { CharWidth = 40 };
-  int count = annotationView_->width() / CharWidth;
+  QString out;
+  bool colorful = toggleGameTextColorfulAct_->isChecked(),
+       resizable = toggleGameTextResizableAct_->isChecked();
+
+  //int charWidth = resizable ? 40 : 50;
+
+  ulong renderHints = 0;
+  if (colorful)
+    renderHints |= MeCabParser::ColorHint;
+  if (resizable)
+    renderHints |= MeCabParser::ResizeHint;
+
+  int count = annotationView_->width() / (AnnotationSettings::globalSettings()->scale() * CharWidth);
   if (!count || text.size() < count)
-    out = mecab_->renderTextWithFurigana(text);
+    out = mecab_->renderTextWithFurigana(text, renderHints);
   else {
     int n = qCeil(text.size() / qreal(count));
     for (int i = 0; i < n; i++) {
       QString t = text.mid(i * count,
                            i == n -1 ? -1 : count);
       if (!t.isEmpty()) {
-        t = mecab_->renderTextWithFurigana(t);
+        t = mecab_->renderTextWithFurigana(t, renderHints);
         out.append(t);
       }
     }
   }
 
-  showSubtitle(out, Traits::Japanese, prefix);
+  if (!out.isEmpty()) {
+    QString prefix = CORE_CMD_NOWRAP;
+    if (role == TextThread::SupportRole)
+      prefix.append(CORE_CMD_VIEW_FLOAT);
+    //if (!resizable)
+    //  prefix.append(CORE_CMD_LATEX_BIG);
+    showSubtitle(out, Traits::Japanese, prefix);
+  }
 }
+
+void
+MainWindow::translateGameText(const QString &text, int role)
+{
+  if (text.isEmpty() || !isTranslateEnabled() || !server_->isConnected())
+    return;
+  bool extra = role == TextThread::SupportRole;
+  translate(text, extra);
+}
+
+#endif // AC_ENABLE_GAME
 
 // - Translate -
 
@@ -9734,15 +9823,6 @@ MainWindow::isTranslateEnabled() const
 void
 MainWindow::setTranslateEnabled(bool enabled)
 { toggleTranslateAct_->setChecked(enabled); }
-
-void
-MainWindow::translateGameText(const QString &text, int role)
-{
-  if (text.isEmpty() || !isTranslateEnabled() || !server_->isConnected())
-    return;
-  bool extra = role == TextThread::SupportRole;
-  translate(text, extra);
-}
 
 void
 MainWindow::translate(const QString &text, bool extra)
@@ -11968,9 +12048,16 @@ MainWindow::saveSettings()
   settings->setAudioChannelHistory(audioChannelHistory_);
   settings->setPlayPosHistory(playPosHistory_);
 
+#ifdef WITH_WIN_ATLAS
+  ac->setAtlasLocation(atlas_->location());
+  settings->setAtlasEnabled(isAtlasEnabled());
+#endif // WITH_WIN_ATLAS
+
 #ifdef AC_ENABLE_GAME
-  settings->setGameTextVisible(isGameTextVisible());
   settings->setAppLocaleEnabled(isAppLocaleEnabled());
+  settings->setGameTextVisible(isGameTextVisible());
+  settings->setGameTextColorful(toggleGameTextColorfulAct_->isChecked());
+  settings->setGameTextResizable(toggleGameTextResizableAct_->isChecked());
 
   gameLibrary_->save();
 #endif // AC_ENABLE_GAME
@@ -12218,6 +12305,63 @@ MainWindow::showMainLibrary()
   if (mediaLibrary_->exists())
     libraryView_->show();
 }
+
+// - Atlas Translator -
+
+#ifdef WITH_WIN_ATLAS
+
+bool
+MainWindow::isAtlasEnabled() const
+{ return toggleAtlasEnabledAct_->isChecked(); }
+
+void
+MainWindow::createAtlas()
+{
+  atlas_ = new Atlas(this);
+  QString location = AcSettings::globalSettings()->atlasLocation();
+  if (location.isEmpty() || !Atlas::isValidLocation(location))
+    location = Atlas::findLocation();
+
+  if (Atlas::isValidLocation(location)) {
+    atlas_->setLocation(location);
+    AcSettings::globalSettings()->setAtlasLocation(location);
+  }
+}
+
+void
+MainWindow::showAtlasAdditionalTranslation(const QString &text)
+{
+  if (text.isEmpty())
+    return;
+  showAtlasTranslation(CORE_CMD_VIEW_FLOAT " " + text);
+}
+
+void
+MainWindow::showAtlasTranslation(const QString &text)
+{
+  if (text.isEmpty())
+    return;
+  QString prefix = CORE_CMD_LATEX_SMALL " ";
+  if (isTranslateEnabled() && translator_->services())
+    prefix.append("ATLAS: ");
+  showSubtitle(text, Traits::English, prefix);
+}
+
+void
+MainWindow::translateWithAtlas(const QString &text, int role)
+{
+  if (text.isEmpty() || !isAtlasEnabled())
+    return;
+  QString t = atlas_->translate(text);
+  if (!t.isEmpty()) {
+    bool extra = role == TextThread::SupportRole;
+    if (extra)
+      showAtlasAdditionalTranslation(t);
+    else
+      showAtlasTranslation(t);
+  }
+}
+#endif // WITH_WIN_ATLAS
 
 // EOF
 

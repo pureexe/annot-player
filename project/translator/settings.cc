@@ -25,6 +25,7 @@
 #define SK_DICT         "Dictionary"
 #define SK_TOP          "Top"
 #define SK_TRANSLATOR   "Translator"
+#define SK_ATLAS        "Atlas"
 
 // - Constructions -
 
@@ -86,5 +87,13 @@ Settings::setTranslationServices(ulong value)
 ulong
 Settings::translationServices() const
 { return value(SK_TRANSLATOR).toUInt(); }
+
+bool
+Settings::isAtlasEnabled() const
+{ return value(SK_ATLAS, true).toBool(); }
+
+void
+Settings::setAtlasEnabled(bool value)
+{ setValue(SK_ATLAS, value); }
 
 // EOF

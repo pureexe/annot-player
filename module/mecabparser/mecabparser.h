@@ -19,12 +19,18 @@ class MeCabParser : public QObject
   mutable MeCab::Tagger *tagger_;
 
 public:
+  enum RenderHint {
+    NoHint = 0,
+    ResizeHint = 1,
+    ColorHint = 1 << 1
+  };
+
   explicit MeCabParser(QObject *parent = nullptr)
     : Base(parent), tagger_(0) { }
   ~MeCabParser();
 
-  QString renderText(const QString &text);
-  QString renderTextWithFurigana(const QString &text);
+  //QString renderText(const QString &text);
+  QString renderTextWithFurigana(const QString &text, ulong hints = 0);
 
   // - Properties -
 protected:

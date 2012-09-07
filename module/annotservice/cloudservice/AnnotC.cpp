@@ -17,7 +17,7 @@ compiling, linking, and/or using OpenSSL is allowed.
 
 namespace Annot {
 
-SOAP_SOURCE_STAMP("@(#) AnnotC.cpp ver 2.8.10 2012-09-03 05:14:45 GMT")
+SOAP_SOURCE_STAMP("@(#) AnnotC.cpp ver 2.8.10 2012-09-07 07:02:31 GMT")
 
 
 #ifndef WITH_NOGLOBAL

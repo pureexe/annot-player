@@ -17,7 +17,7 @@
 #define ANNOTATION_SIZE_DEFAULT         20
 #define ANNOTATION_SIZE_MARGIN          2
 
-#define ANNOTATION_SIZE_TINY            "10"
+#define ANNOTATION_SIZE_TINY            "12"
 #define ANNOTATION_SIZE_SMALL           "18"
 #define ANNOTATION_SIZE_NORMAL          "25"
 #define ANNOTATION_SIZE_LARGE           "36"
@@ -31,8 +31,8 @@
 
 #define ANNOTATION_FONT_SIZE  18
 
-#define ANNOTATION_SCALE    0.8
-#define ANNOTATION_FULLSCREEN_SCALE 1.0
+#define ANNOTATION_SCALE    0.95
+#define ANNOTATION_FULLSCREEN_SCALE 1.2
 
 //#define ANNOTATION_OUTLINE_COLOR        QColor(50,100,100)
 #define ANNOTATION_OUTLINE_COLOR        QColor(45,95,95)

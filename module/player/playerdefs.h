@@ -51,6 +51,7 @@
     __VA_ARGS__ "ps" \
     __VA_ARGS__ "qt" \
     __VA_ARGS__ "ram" \
+    __VA_ARGS__ "rm" \
     __VA_ARGS__ "rmvb" \
     __VA_ARGS__ "tod" \
     __VA_ARGS__ "vro" \

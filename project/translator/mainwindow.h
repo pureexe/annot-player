@@ -26,6 +26,7 @@ class TrayIcon;
 class TranslateEdit;
 class TranslateBrowser;
 
+class Atlas;
 class Translator;
 class TranslatorManager;
 
@@ -138,6 +139,7 @@ protected slots:
   //void searchCurrentTitleWithWikiZh() { searchWithEngine(SearchEngineFactory::WikiZh, currentTitle()); }
 
 protected slots:
+  void showAtlasTranslation(const QString &text);
   void showExciteTranslation(const QString &text);
   void showGoogleTranslation(const QString &text);
   void showMicrosoftTranslation(const QString &text);
@@ -177,6 +179,13 @@ private:
   //QList<SearchEngine *> searchEngines_;
   QMenuBar *menuBar_;
   QMenu *contextMenu_;
+
+#ifdef WITH_WIN_ATLAS
+  void createAtlas();
+  bool isAtlasEnabled() const;
+  Atlas *atlas_;
+  QCheckBox *atlasButton_;
+#endif // WITH_WIN_ATLAS
 };
 
 #endif // MAINWINDOW_H

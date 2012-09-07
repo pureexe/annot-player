@@ -37,6 +37,7 @@ public slots:
 
 signals:
   void downloadsLocationChanged(const QString &path);
+  void atlasLocationChanged(const QString &path);
   void nicovideoAccountChanged(const QString &username, const QString &password);
   void bilibiliAccountChanged(const QString &username, const QString &password);
 
@@ -95,14 +96,20 @@ public:
   void setProxyPassword(const QString &password);
   QString proxyPassword() const;
 
+  // - Locations -
+
+  QString downloadsLocation() const;
+  void setDownloadsLocation(const QString &path);
+
+  QString atlasLocation() const;
+  void setAtlasLocation(const QString &path);
+
+  // - Actions -
+public:
   bool isAeroEnabled() const;
 public slots:
   void setAeroEnabled(bool t);
 
-  // - Locations -
-public:
-  QString downloadsLocation() const;
-  void setDownloadsLocation(const QString &path);
 };
 
 #endif // ACSETTINGS_H

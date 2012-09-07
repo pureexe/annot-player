@@ -13,7 +13,7 @@
 #include "module/translator/translatorsettings.h"
 #include "module/mecabsettings/mecabsettings.h"
 #ifdef Q_OS_WIN
-# include "windowsregistry.h"
+# include "registry.h"
 # include "module/player/player.h"
 #endif // Q_OS_WIN
 #ifdef WITH_WIN_TEXTHOOK
@@ -79,7 +79,7 @@ namespace { namespace detail {
   inline void registerAssociations()
   {
 #ifdef Q_OS_WIN
-    WindowsRegistry *reg = WindowsRegistry::globalInstance();
+    Registry *reg = Registry::globalInstance();
     //reg->registerTypes(Player::supportedAudioSuffices());
     reg->registerTypes(Player::supportedVideoSuffices());
     //reg.registerTypes(Player::supportedPictureSuffices());
@@ -98,7 +98,7 @@ namespace { namespace detail {
   inline void repairAssociations()
   {
 #ifdef Q_OS_WIN
-    WindowsRegistry *reg = WindowsRegistry::globalInstance();
+    Registry *reg = Registry::globalInstance();
     foreach (const QString &type, Player::supportedSuffices())
       if (reg->containsType(type))
         reg->registerType(type);
@@ -245,13 +245,17 @@ main(int argc, char *argv[])
 //    }
 //#endif // Q_OS_WIN
 
-    if (previousVersionNumber < AcVersion::toNumber(SETTINGS_VERSION)) {
+    if (previousVersionNumber < AcVersion::toNumber("0.1.9.4")) {
+      settings->setAnnotationScale(ANNOTATION_SCALE);
+      settings->setAnnotationFullscreenScale(ANNOTATION_FULLSCREEN_SCALE);
+      settings->setTranslationServices(TranslatorManager::OcnBit);
+    }
+    if (previousVersionNumber < AcVersion::toNumber("0.1.9.3")) {
       ac->setMenuThemeEnabled(false); // disable aero context menu effect, unless I combine qcolorization effect with my haloeffect
       ac->setThemeId(AcUi::CyanTheme);
 
       settings->setAnnotationLanguages(QSet<int>());
       settings->setAnnotationFilterEnabled(false);
-      settings->setTranslationServices(TranslatorManager::RomajiBit | TranslatorManager::OcnBit);
       settings->setAnnotationSpeedup(1.0);
 
       settings->setAnnotationFontFamily(QString());
@@ -265,8 +269,6 @@ main(int argc, char *argv[])
       settings->setWindowOnTop(false);
       settings->setMultipleWindowsEnabled(false);
       settings->setAutoSubmit(true);
-      settings->setAnnotationScale(ANNOTATION_SCALE);
-      settings->setAnnotationFullscreenScale(ANNOTATION_FULLSCREEN_SCALE);
       settings->setSubtitleOnTop(true);
       //settings->setPreferFloatAnnotation(true);
       settings->setAnnotationAvatarVisible(false);
@@ -294,9 +296,9 @@ main(int argc, char *argv[])
       settings->setBrightness(1.02*1.02);
 
 #ifdef Q_OS_WIN
-      WindowsRegistry::globalInstance()->unregisterRawType("DVD");
-      WindowsRegistry::globalInstance()->unregisterRawType("AudioCD");
-      WindowsRegistry::globalInstance()->registerShell("DVD");
+      Registry::globalInstance()->unregisterRawType("DVD");
+      Registry::globalInstance()->unregisterRawType("AudioCD");
+      Registry::globalInstance()->registerShell("DVD");
 #endif // Q__WS_WIN
       detail::registerAssociations();
       settings->setApplicationFilePath(QCoreApplication::applicationFilePath());
@@ -317,7 +319,8 @@ main(int argc, char *argv[])
 
   // Hashes
   //qDebug() << qHash(QString("hook"));
-  //qDebug() << qHash(QString("\\b"));
+  //qDehhbug() << qHash(QString("\\wrap"));
+  //qDebug() << qHash(QString("\\nowrap"));
   //qDebug() << qHash(QString("docomo"));
   //qDebug() << qHash(QString("ue"));
 

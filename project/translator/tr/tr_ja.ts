@@ -461,292 +461,307 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cc" line="80"/>
+        <location filename="../mainwindow.cc" line="84"/>
         <source>Annot Translator</source>
         <translation>翻訳ツール</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="177"/>
+        <location filename="../mainwindow.cc" line="187"/>
         <source>Translate</source>
         <translation>翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="180"/>
+        <location filename="../mainwindow.cc" line="190"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="180"/>
+        <location filename="../mainwindow.cc" line="190"/>
         <source>Automatically translate selected text</source>
         <translation>選択の文字を自動で翻訳する</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="181"/>
+        <location filename="../mainwindow.cc" line="191"/>
         <source>Clipboard</source>
         <translation>クリップボード</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="181"/>
+        <location filename="../mainwindow.cc" line="191"/>
         <source>Monitor and translate clipboard text</source>
         <translation>クリップボードを監視します</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="182"/>
+        <location filename="../mainwindow.cc" line="192"/>
         <source>Top</source>
         <translation>トップ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="182"/>
+        <location filename="../mainwindow.cc" line="192"/>
         <source>Window stays on top</source>
         <translation>常に手前に表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="184"/>
+        <location filename="../mainwindow.cc" line="194"/>
         <source>Language</source>
         <translation>言語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="185"/>
+        <location filename="../mainwindow.cc" line="195"/>
         <source>English</source>
         <translation>英語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="186"/>
+        <location filename="../mainwindow.cc" line="196"/>
         <source>Chinese</source>
         <translation>中国語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="187"/>
+        <location filename="../mainwindow.cc" line="197"/>
         <source>Simplified Chinese</source>
         <translation>中国語（簡体）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="188"/>
+        <location filename="../mainwindow.cc" line="198"/>
         <source>Korean</source>
         <translation>朝鮮語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="189"/>
+        <location filename="../mainwindow.cc" line="199"/>
         <source>French</source>
         <translation>フレンチ語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="190"/>
+        <location filename="../mainwindow.cc" line="200"/>
         <source>German</source>
         <translation>ドイツ語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="191"/>
+        <location filename="../mainwindow.cc" line="201"/>
         <source>Italian</source>
         <translation>イタリア語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="192"/>
+        <location filename="../mainwindow.cc" line="202"/>
         <source>Spanish</source>
         <translation>スペイン語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="193"/>
+        <location filename="../mainwindow.cc" line="203"/>
         <source>Portuguese</source>
         <translation>ポルトガル語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="194"/>
+        <location filename="../mainwindow.cc" line="204"/>
         <source>Russian</source>
         <translation>ルシア語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="195"/>
+        <location filename="../mainwindow.cc" line="205"/>
         <source>Japanese</source>
         <translation>日本語</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="203"/>
+        <location filename="../mainwindow.cc" line="213"/>
         <source>Kotobank</source>
         <translation>日本語辞書</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="203"/>
+        <location filename="../mainwindow.cc" line="213"/>
         <source>Kotobank Translator</source>
         <translation>コトバンク翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="204"/>
+        <location filename="../mainwindow.cc" line="214"/>
         <source>WWWJDIC</source>
         <translation>英語辞書</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="204"/>
+        <location filename="../mainwindow.cc" line="214"/>
         <source>WWWJDIC Translator</source>
         <translation>WWWJDIC翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="205"/>
+        <location filename="../mainwindow.cc" line="215"/>
         <source>Romaji</source>
         <translation>ローマ字</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="205"/>
+        <location filename="../mainwindow.cc" line="215"/>
         <source>Romaji Translator</source>
         <translation>ローマ字翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="206"/>
+        <location filename="../mainwindow.cc" line="216"/>
         <source>Microsoft</source>
         <translation>Microsoft</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="206"/>
+        <location filename="../mainwindow.cc" line="216"/>
         <source>Microsoft Translator</source>
         <translation>Microsoft翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="207"/>
+        <location filename="../mainwindow.cc" line="217"/>
         <source>Google</source>
         <translation>Google</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="207"/>
+        <location filename="../mainwindow.cc" line="217"/>
         <source>Google Translator</source>
         <translation>Google翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="209"/>
+        <location filename="../mainwindow.cc" line="219"/>
         <source>Yahoo!</source>
         <translation>Yahoo!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="209"/>
+        <location filename="../mainwindow.cc" line="219"/>
         <source>Yahoo! Honyaku</source>
         <translation>Yahoo!翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="210"/>
+        <location filename="../mainwindow.cc" line="220"/>
         <source>freshEYE</source>
         <translation>freshEYE</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="210"/>
+        <location filename="../mainwindow.cc" line="220"/>
         <source>freshEYE Honyaku</source>
         <translation>フレッシュアイ翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="211"/>
+        <location filename="../mainwindow.cc" line="221"/>
         <source>OCN</source>
         <translation>OCN</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="211"/>
+        <location filename="../mainwindow.cc" line="221"/>
         <source>OCN Honyaku</source>
         <translation>OCN翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="212"/>
+        <location filename="../mainwindow.cc" line="222"/>
         <source>Excite</source>
         <translation>エキサイト</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="212"/>
+        <location filename="../mainwindow.cc" line="222"/>
         <source>Excite Honyaku</source>
         <translation>エキサイト翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="213"/>
+        <location filename="../mainwindow.cc" line="223"/>
         <source>SDL</source>
         <translation>SDL</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="213"/>
+        <location filename="../mainwindow.cc" line="223"/>
         <source>SDL Translator</source>
         <translation>SDL翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="214"/>
+        <location filename="../mainwindow.cc" line="224"/>
         <source>SYSTRAN</source>
         <translation>SYSTRAN</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="214"/>
+        <location filename="../mainwindow.cc" line="224"/>
         <source>SYSTRAN Translator</source>
         <translation>SYSTRAN翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="215"/>
+        <location filename="../mainwindow.cc" line="225"/>
         <source>@nifty</source>
         <translation>@nifty</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="215"/>
+        <location filename="../mainwindow.cc" line="225"/>
         <source>@nifty honyaku</source>
         <translation>@nifty翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="208"/>
+        <location filename="../mainwindow.cc" line="218"/>
         <source>Infoseek</source>
         <translation>Infoseek</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="208"/>
+        <location filename="../mainwindow.cc" line="218"/>
         <source>Infoseek Honyaku</source>
         <translation>Infoseek翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="378"/>
+        <location filename="../mainwindow.cc" line="227"/>
+        <source>ATLAS</source>
+        <translation>ATLAS</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="227"/>
+        <source>ATLAS Honyaku</source>
+        <translation>ATLAS翻訳</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="227"/>
+        <source>Offline</source>
+        <translation>オフライン</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cc" line="395"/>
         <source>About</source>
         <translation>ソフトについて</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="380"/>
+        <location filename="../mainwindow.cc" line="397"/>
         <source>Preferences</source>
         <translation>偏好</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="386"/>
+        <location filename="../mainwindow.cc" line="403"/>
         <source>Hide</source>
         <translation>非表示</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="392"/>
+        <location filename="../mainwindow.cc" line="409"/>
         <source>Quit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="400"/>
+        <location filename="../mainwindow.cc" line="417"/>
         <source>&amp;File</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="410"/>
+        <location filename="../mainwindow.cc" line="427"/>
         <source>&amp;Quit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="419"/>
+        <location filename="../mainwindow.cc" line="436"/>
         <source>&amp;Settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="420"/>
+        <location filename="../mainwindow.cc" line="437"/>
         <source>&amp;Preferences</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="422"/>
+        <location filename="../mainwindow.cc" line="439"/>
         <source>&amp;Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="424"/>
+        <location filename="../mainwindow.cc" line="441"/>
         <source>&amp;About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="601"/>
+        <location filename="../mainwindow.cc" line="618"/>
         <source>translate</source>
         <translation>翻訳</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cc" line="821"/>
+        <location filename="../mainwindow.cc" line="859"/>
         <source>opening</source>
         <translation>開く</translation>
     </message>

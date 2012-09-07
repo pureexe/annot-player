@@ -5,18 +5,10 @@ http://db.tt/SrtkzxIJ
 http://qt-project.org/wiki/Category:Add-ons
 
 # Changes
-annot-player.ext
+annot-player.exe
 annot-dict.exe
-remove doc/zhs2zht.txt,zht2zhs.txt
-add table/*.txt
-libmecab.dll
-mecab/ipac
-
-README, CHANGES
-
----
-rebuild
-reupload all exe
+README
+Changes
 
 # key ideas
 - stream trial games, and sub trial games in chinese
@@ -48,17 +40,37 @@ work on streaming
   - in the future, use acipc to bypass license issue
 
 
-# 0.1.9.4
-- show curent annotated text when toggle showgametext
-- debug applocale on windows xp
+# 0.1.9.5
+- atlas to player
 
-- fix deploy system on mac os x
+- emit two hashcode when game text changed
+  show bothpos a
+  when submit sub, always set hash to 1 instead of 4
 
+# 0.1.9.6
+
+- change the subtitle hash
+
+- fix the windows registry misterious error
+
+- atlas
+  - add atlas translator, using signal/slot machanism
+  - cancel previous translation when new translation arrive
+-  translator/player
+  move translators to preferences rather than outside
+
+- focus edit after submit text
+
+- add link to download/install applocale and free atlas
+
+- show circle in red, show text translation on the right
   - show popup when hover using edict
     or even wwwjdic / kotobank
     mouse hovered text: key: qcursor:pos
     http://www.qtforum.org/article/31604/figure-out-which-character-the-mouse-is-hovering-over-in-a-qtextedit.html
     edict
+
+- add to preferences selection of translators easier
 
 - search engine
   - redesign searchengine mechanism, using a global search engine pool
@@ -68,21 +80,13 @@ work on streaming
   - library view and others, redesign
   - copy title / location, search title
 
-- able to show annotated  japanese annotation from nicovideo
-
 - create a better game semi-auto translator
   create a better gui for human translation with ocn suggestions, etc
   - translate using google
   - automatically generate transation for human
   - human edit the translation
 
-- what's the best wa for offline translation?
-investigate atlas, etc
-  check the translate.cs source code
-- atlas: http://software.fujitsu.com/jp/atlas/
-- LEC
-
-# 0.1.9.5
+- able to show annotated  japanese annotation from nicovideo
 
 - parse using yahoo, automatically popup translation for difficult word
  http://stackoverflow.com/questions/3254652/several-ways-of-placing-an-image-in-a-qtextedit
@@ -92,7 +96,6 @@ investigate atlas, etc
   http://cgi.geocities.jp/ydevnet/sample/jlp/sample2/ma_sample.php
 
 FIXME: XXX "/HW4@6E8F0!B5346E41" // tukumonotuki
-
 
 - grant/share edit permission for token
 - able to delete/edit guest by anyone

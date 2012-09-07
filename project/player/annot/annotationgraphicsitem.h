@@ -47,6 +47,8 @@ public:
   enum { AnnotationGraphicsItemType = UserType + 1 };
   enum Style { NoStyle = 0, DriftStyle, FloatStyle, FlyStyle, TopStyle, BottomStyle };
 
+  enum WrapPolicy { AutoWrap = 0, AlwaysWrap, NoWrap };
+
   static void warmUp(); ///< optional, caching fonts on first load
 
   //enum Effect { DefaultEffect = 0, TransparentEffect, ShadowEffect, BlurEffect, EffectCount };
@@ -222,6 +224,8 @@ private:
   QGraphicsScene *scene_;
   DataManager *data_;
   SignalHub *hub_;
+
+  WrapPolicy wrap_;
 
   Style style_;
   int positionResolution_;

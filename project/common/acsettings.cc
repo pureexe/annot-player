@@ -48,6 +48,7 @@
 #define SK_PROXY_PASS   "ProxyPassword"
 
 #define SK_LOCATION_DOWNLOADS   "DownloadsLocation"
+#define SK_LOCATION_ATLAS   "AtlasLocation"
 
 // - Constructions -
 
@@ -390,6 +391,20 @@ AcSettings::setDownloadsLocation(const QString &path)
     setValue(SK_LOCATION_DOWNLOADS, path);
     if (!disposed_)
       emit downloadsLocationChanged(path);
+  }
+}
+
+QString
+AcSettings::atlasLocation() const
+{ return value(SK_LOCATION_ATLAS).toString(); }
+
+void
+AcSettings::setAtlasLocation(const QString &path)
+{
+  if (path != downloadsLocation()) {
+    setValue(SK_LOCATION_ATLAS, path);
+    if (!disposed_)
+      emit atlasLocationChanged(path);
   }
 }
 

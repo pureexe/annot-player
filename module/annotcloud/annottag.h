@@ -56,6 +56,9 @@
 
 #define CORE_CMD_SIZE                   CORE_CMDSTR "size"      // \size{100}{anything}
 
+#define CORE_CMD_WRAP                   CORE_CMDSTR "wrap"
+#define CORE_CMD_NOWRAP                 CORE_CMDSTR "nowrap"
+
 // - HTML style -        -
 
 #define CORE_CMD_HTML_FONT              CORE_CMDSTR "font"      // \font[color:red]{anything}
@@ -196,6 +199,9 @@ namespace AnnotCloud {
     H_End =             404548,         // CORE_CMD_END
 
     H_Size =            6529285,        // CORE_CMD_SIZE
+
+    H_Wrap =            6547584,
+    H_NoWrap =          56027200,
 
     H_Color =           103441250,      // CORE_CMD_COLOR
     H_BackgroundColor = 19687172,       // CORE_CMD_COLOR_BACKGROUND

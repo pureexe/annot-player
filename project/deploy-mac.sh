@@ -268,7 +268,18 @@ cp -R "$APP_SRC"/module/luaresolver/lua/luascript/*/*.lua "$LUAPATH"/  || exit 1
 
 ## copy doc
 cp -R "$APP_SRC"/module/qtext/doc "$APP_MACOS"/ || exit 1
+
+## copy images
 cp -R "$APP_SRC"/module/qtext/images "$APP_MACOS"/ || exit 1
+
+## copy table
+cp -R "$APP_SRC"/module/textcodec/table "$APP_MACOS"/ || exit 1
+
+## copy mecab
+cp -R "$APP_SRC"/module/mecabsettings/etc "$APP_MACOS"/ || exit 1
+
+mkdir "$APP_MACOS"/dic
+cp -R /opt/local/mecab/dic/ipadic-utf8 "$APP_MACOS"/dic/ipadic || exit 1
 
 ## copy jsf
 cp -R "$APP_SRC"/module/annotcloud/jsf "$APP_MACOS"/ || exit 1

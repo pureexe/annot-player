@@ -325,6 +325,7 @@ public slots:
 
   // Message mode:
   void showAnnotationsAtPos(qint64 pos);
+  void showAnnotationsInContext(qint64 h1, qint64 h4);
 
   ///  Emit deletion signal if deleteAnnot is true
   void removeAnnotationWithId(qint64 id, bool deleteAnnot = false);

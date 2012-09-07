@@ -12,6 +12,9 @@
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString("M/d/yyyy ddd h:mm:ss")
 #define FORMAT_POS(_msecs)        ((_msecs) <= 0 ? QString() : QtExt::msecs2time(_msecs).toString())
 
+#define DEBUG "annothtml_thread"
+#include "module/debug/debug.h"
+
 // - Resources -
 
 #ifdef Q_OS_LINUX
@@ -134,6 +137,7 @@ QString
 AnnotCloud::
 AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title, bool ignorePos) const
 {
+  DOUT("enter: size =" << l.size() << ", ignorePos =" << ignorePos << ", title =" << title);
   QString ret = detail::rc_jsf_t();
   ret.replace(EL_TITLE, title);
 
@@ -193,6 +197,7 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title, bool
   }
 
   ret.replace(EL_H, h);
+  DOUT("exit");
   return ret;
 }
 

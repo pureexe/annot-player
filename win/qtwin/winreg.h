@@ -44,4 +44,20 @@
 
 #define REG_HKLM_SYSTEM             REG_HKLM "\\System"
 
+// FIXME: mysterious error!
+//#ifdef __cplusplus
+//#ifdef QT_CORE_LIB
+//#include <QtCore/QSettings>
+//
+//namespace WindowsRegistry {
+//
+//  inline QVariant
+//  value(const QString &path, const QString &key, const QVariant &defval = QVariant())
+//  { return QSettings(path, QSettings::NativeFormat).value(key, defval); }
+//
+//} // namespace WindowsRegistry
+//
+//#endif // QT_CORE_LIB
+//#endif // __cplusplus
+
 // EOF

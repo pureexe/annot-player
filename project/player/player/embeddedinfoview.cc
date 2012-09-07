@@ -271,9 +271,11 @@ EmbeddedInfoView::updateText()
         .arg(tr("user"))
     );
     bool newline = false;;
-    if (!qFuzzyCompare(AnnotationSettings::globalSettings()->scale(), 1)) {
-      QString scale = QString::number(AnnotationSettings::globalSettings()->scale(), 'f', 2);
-      t.append(tr("Scale") + ":" + scale + " ");
+    qreal scale = hub_->isFullScreenWindowMode() ? AnnotationSettings::globalSettings()->fullscreenScale()
+                                                 : AnnotationSettings::globalSettings()->scale();
+    if (!qFuzzyCompare(scale, 1)) {
+      QString s = QString::number(scale, 'f', 2);
+      t.append(tr("Scale") + ":" + s + " ");
       newline = true;
     }
     if (!qFuzzyCompare(AnnotationSettings::globalSettings()->speedup(), 1)) {

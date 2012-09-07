@@ -1,7 +1,7 @@
-// windowsregistry.cc
+// registry.cc
 // 4/21/2012
 
-#include "windowsregistry.h"
+#include "registry.h"
 #include "global.h"
 #include "tr.h"
 #ifdef Q_OS_WIN
@@ -13,13 +13,13 @@
 
 #define APPID   G_ORGANIZATION "." G_APPLICATION
 
-//#define DEBUG "windowsregistry"
+//#define DEBUG "registry"
 #include "module/debug/debug.h"
 
 // - Construction -
 
-WindowsRegistry*
-WindowsRegistry::globalInstance()
+Registry*
+Registry::globalInstance()
 {
   static Self g;
   g.setClassesRoot(REG_HKCU_CLASSES);
@@ -27,7 +27,7 @@ WindowsRegistry::globalInstance()
 }
 
 void
-WindowsRegistry::setClassesRoot(const QString &regpath)
+Registry::setClassesRoot(const QString &regpath)
 {
   if (classes_)
     delete classes_;
@@ -35,13 +35,13 @@ WindowsRegistry::setClassesRoot(const QString &regpath)
 }
 
 void
-WindowsRegistry::sync()
+Registry::sync()
 { if (classes_) classes_->sync(); }
 
 // - Raw Types -
 
 QString
-WindowsRegistry::aliasOf(const QString &t)
+Registry::aliasOf(const QString &t)
 {
   //QString alias = APPID + '.' + type;
   QString ret = t;
@@ -52,7 +52,7 @@ WindowsRegistry::aliasOf(const QString &t)
 }
 
 bool
-WindowsRegistry::containsRawType(const QString &type) const
+Registry::containsRawType(const QString &type) const
 {
   Q_ASSERT(isValid());
   DOUT("type =" << type);
@@ -67,7 +67,7 @@ WindowsRegistry::containsRawType(const QString &type) const
 }
 
 void
-WindowsRegistry::registerRawType(const QString &type)
+Registry::registerRawType(const QString &type)
 {
   Q_ASSERT(isValid());
   DOUT("type =" << type);
@@ -107,7 +107,7 @@ WindowsRegistry::registerRawType(const QString &type)
 }
 
 void
-WindowsRegistry::unregisterRawType(const QString &type)
+Registry::unregisterRawType(const QString &type)
 {
   Q_ASSERT(isValid());
   DOUT("type =" << type);
@@ -127,7 +127,7 @@ WindowsRegistry::unregisterRawType(const QString &type)
 // - Shells -
 
 bool
-WindowsRegistry::containsShell(const QString &type) const
+Registry::containsShell(const QString &type) const
 {
   Q_ASSERT(isValid());
   DOUT("type =" << type);
@@ -142,7 +142,7 @@ WindowsRegistry::containsShell(const QString &type) const
 }
 
 void
-WindowsRegistry::registerShell(const QString &type)
+Registry::registerShell(const QString &type)
 {
   Q_ASSERT(isValid());
   DOUT("type =" << type);
@@ -166,7 +166,7 @@ WindowsRegistry::registerShell(const QString &type)
 }
 
 void
-WindowsRegistry::unregisterShell(const QString &type)
+Registry::unregisterShell(const QString &type)
 {
   Q_ASSERT(isValid());
   DOUT("type =" << type);

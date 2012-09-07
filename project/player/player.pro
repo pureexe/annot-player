@@ -4,7 +4,7 @@
 DEFINES += PROJECT_PLAYER
 
 VERSION_MAJOR = 0.1.9.
-VERSION_MINOR = 3
+VERSION_MINOR = 5
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -52,13 +52,14 @@ include($$ROOTDIR/module/translator/translator.pri)
 !mac: include($$ROOTDIR/module/metacall/metacall.pri)
 win32 {
     include($$ROOTDIR/win/applocale/applocale.pri)
+    include($$ROOTDIR/win/atlas/atlas.pri)
     include($$ROOTDIR/win/dwm/dwm.pri)
     #include($$ROOTDIR/win/hook/hook.pri)
     include($$ROOTDIR/win/mousehook/mousehook.pri)
     include($$ROOTDIR/win/picker/picker.pri)
+    include($$ROOTDIR/win/texthook/texthook.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
     include($$ROOTDIR/win/qtwinnt/qtwinnt.pri)
-    include($$ROOTDIR/win/texthook/texthook.pri)
 }
 unix: {
     include($$ROOTDIR/unix/qtunix/qtunix.pri)
@@ -296,10 +297,10 @@ SOURCES += \
 
 win32 {
   HEADERS += \
-    windowsregistry.h \
+    registry.h \
     preferences/associationprefs.h
   SOURCES += \
-    windowsregistry.cc \
+    registry.cc \
     preferences/associationprefs.cc
 
   DEFINES += AC_ENABLE_GAME

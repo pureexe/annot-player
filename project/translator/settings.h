@@ -43,6 +43,9 @@ public:
 
   bool windowOnTop() const;
   void setWindowOnTop(bool value);
+
+  bool isAtlasEnabled() const;
+  void setAtlasEnabled(bool value);
 };
 
 #endif // SETTINGS_H
