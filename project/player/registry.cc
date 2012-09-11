@@ -5,9 +5,9 @@
 #include "global.h"
 #include "tr.h"
 #ifdef Q_OS_WIN
-# include "win/qtwin/winreg.h"
+# include "win/reg/regdefs.h"
 #else
-# error "Windows only"
+# error "require Windows"
 #endif // Q_OS_WIN
 #include <QtCore>
 

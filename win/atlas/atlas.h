@@ -10,6 +10,7 @@ QT_FORWARD_DECLARE_CLASS(QTextDecoder)
 QT_FORWARD_DECLARE_CLASS(QTextEncoder)
 
 #define ATLAS_DOWNLOAD_URL  "http://software.fujitsu.com/jp/atlas/downloads/trial/"
+
 class Atle;
 class Atlas : public QObject
 {

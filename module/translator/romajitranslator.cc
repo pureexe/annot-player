@@ -49,7 +49,7 @@ RomajiTranslator::translateUrl(const QString &text) const
 {
   QByteArray data = encodeText(text);
   q_toPercentEncoding(&data);
-  data.prepend(ROMAJI_API "?" ROMAJI_API_TEXT "=");
+  data.prepend(ROMAJI_API "?" ROMAJI_QUERY_TEXT "=");
   QString url = QString::fromAscii(data);
   DOUT("url =" << url);
   return url;

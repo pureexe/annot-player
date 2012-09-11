@@ -15,7 +15,7 @@
 #include "module/debug/debug.h"
 
 #ifndef PICKER_DLL_NAME
-# error "Please specify target DLL name."
+# error "require DLL name"
 #endif
 #define PICKER_MODULE_NAME        PICKER_DLL_NAME
 

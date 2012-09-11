@@ -8,13 +8,13 @@
 # include "module/stream/bufferedstreampipe.h"
 # include "module/stream/fileoutputstream.h"
 #else
-# error "stream module is required"
+# error "require module stream"
 #endif // WITH_MODULE_STREAM
 #ifdef WITH_MODULE_MEDIACODEC
 # include "module/mediacodec/mp4codec.h"
 # include "module/mediacodec/flvcodec.h"
 #else
-# error "mediacodec module is required"
+# error "require module mediacodec"
 #endif // WITH_MODULE_MEDIACODEC
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>

@@ -839,6 +839,7 @@ private:
           *toggleGameTextResizableAct_,
           *toggleAppLocaleEnabledAct_;
 #endif // AC_ENABLE_GAME
+  QAction *toggleTranslateSelectionAct_;
 
 #ifdef WITH_WIN_ATLAS
   // - ATLAS -

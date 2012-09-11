@@ -9,7 +9,7 @@
 #ifdef WITH_MODULE_MRLANALYSIS
 # include "module/mrlanalysis/mrlanalysis.h"
 #else
-# error "mrlanalysis module is required"
+# error "require module mrlanalysis"
 #endif // WITH_MODULE_MRLANALYSIS
 #include <QtCore/QDir>
 #include <QtCore/QEventLoop>

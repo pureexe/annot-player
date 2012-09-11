@@ -7,6 +7,10 @@
 #include <QtGui/QApplication>
 #include <QtGui/QWidgetList>
 
+#ifdef Q_OS_WIN
+struct _EXCEPTION_POINTERS;
+#endif // Q_OS_WIN
+
 class AcApplication : public QApplication
 {
   Q_OBJECT
@@ -14,6 +18,7 @@ class AcApplication : public QApplication
   typedef AcApplication Self;
   typedef QApplication Base;
 
+  static QString applicationFilePath_; // cached, invariant on Windows and Linux
   QList<QtMsgHandler> messageHandlers_;
   QString logFileName_,
           lockFileName_;
@@ -23,8 +28,11 @@ class AcApplication : public QApplication
 public:
   static Self *globalInstance() { return static_cast<Self *>(qApp); }
 
-  AcApplication(int &argc, char **argv);
-  AcApplication(int &argc, char **argv, bool gui);
+  AcApplication(int &argc, char **argv)
+    : Base(argc, argv) { init(); }
+  AcApplication(int &argc, char **argv, bool gui)
+    : Base(argc, argv, gui) { init(); }
+
   ~AcApplication();
 
 public slots:
@@ -61,14 +69,17 @@ public:
 
   // - Implementation -
 protected:
-  void ignoreWindowsExcetions()
 #ifdef Q_OS_WIN
-  ;
+  void ignoreWindowsExcetions();
+
+  // static LONG WINAPI exceptionFilter(PEXCEPTION_POINTERS e)
+  static long __stdcall exceptionFilter(_EXCEPTION_POINTERS *e);
 #else
-  { }
+  void ignoreWindowsExcetions() { }
 #endif // Q_OS_WIN
 
 private:
+  void init();
   static void messageHandler(QtMsgType type, const char *msg);
   static void loggedMessageHandler(QtMsgType type, const char *msg);
 };

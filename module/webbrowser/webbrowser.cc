@@ -128,11 +128,11 @@ WebBrowser::decodeUrl(const QUrl &url)
 {
   QUrl ret = url;
   QString host = ret.host();
-  if (host == ANNOT_HOST_IP)
+  if (host == CONFIG_ANNOT_IP)
     ret.setHost("annot.me");
-  else if (host == ANNOT_PROXY_DOMAIN && url.path().startsWith("/watch/"))
+  else if (host == CONFIG_PROXY_DOMAIN && url.path().startsWith("/watch/"))
     ret.setHost("www.nicovideo.jp");
-  else if (host == ANNOT_DOC_IP)
+  else if (host == CONFIG_ANNOT_DOC_IP)
     ret.setHost("doc.annot.me");
   //else if (host == "niconicohost")
   //  ret.setHost("nicovideo.jp");
@@ -154,9 +154,9 @@ WebBrowser::encodeUrl(const QString &url)
 {
   QUrl ret = url;
   if (!ret.host().compare("annot.me", Qt::CaseInsensitive))
-    ret.setHost(ANNOT_HOST_IP);
+    ret.setHost(CONFIG_ANNOT_IP);
   else if (!ret.host().compare("doc.annot.me", Qt::CaseInsensitive))
-    ret.setHost(ANNOT_DOC_IP);
+    ret.setHost(CONFIG_ANNOT_DOC_IP);
   return ret;
 }
 
@@ -528,8 +528,8 @@ void
 WebBrowser::addRecentUrl(const QString &url)
 {
   //DOUT("enter: url =" << url);
-  if (url.contains(ANNOT_HOST_IP) ||
-      url.contains(ANNOT_DOC_IP)) {
+  if (url.contains(CONFIG_ANNOT_IP) ||
+      url.contains(CONFIG_ANNOT_DOC_IP)) {
     //DOUT("exit: skip my hosts");
     return;
   }

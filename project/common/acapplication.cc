@@ -22,10 +22,14 @@ extern "C" {
 #define DEBUG "acapplication"
 #include "module/debug/debug.h"
 
+// - Static Fields -
+
+QString AcApplication::applicationFilePath_;
+
 // - Construction -
 
-AcApplication::AcApplication(int &argc, char **argv)
-  : Base(argc, argv)
+void
+AcApplication::init()
 {
   DOUT("enter");
 
@@ -36,13 +40,8 @@ AcApplication::AcApplication(int &argc, char **argv)
   ::srand(seed);
   ::qsrand(seed);
 
-  DOUT("exit");
-}
+  applicationFilePath_ = applicationFilePath();
 
-AcApplication::AcApplication(int &argc, char **argv, bool gui)
-  : Base(argc, argv, gui)
-{
-  DOUT("enter");
   DOUT("exit");
 }
 

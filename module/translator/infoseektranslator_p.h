@@ -15,9 +15,9 @@
 
 // sent=false, equiv=false to skip posting json
 #define INFOSEEK_API   "http://translation.infoseek.ne.jp/clsoap/translate?sent=false&equiv=false"
-#define INFOSEEK_KEY_AUTH  "key"
-#define INFOSEEK_KEY_LANG  "e"
-#define INFOSEEK_KEY_TEXT  "t"
+#define INFOSEEK_QUERY_AUTH  "key"
+#define INFOSEEK_QUERY_LANG  "e"
+#define INFOSEEK_QUERY_TEXT  "t"
 
 #define INFOSEEK_AREA_BEGIN "\"text\":\""
 #define INFOSEEK_AREA_END   "\"}]}"

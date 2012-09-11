@@ -2,7 +2,19 @@ ChangeLog (UTF-8)
 Annot Stream
 Since 6/18/2011
 
-9/7/2012 6 FRI	annot-player	0.1.9.5
+9/9/2012 SUN	annot-player	0.1.9.7
+        * Click to translate any word (parsed by MeCab) in displayed galgame text.
+          If you don't like this feature, turn it off from the context menu.
+        * Always focus on the input text edit after submitting subtitles.
+        * Fix a severe bug which prevents subtitles from being saved.
+        * Translator is simplified.
+
+9/7/2012 FRI	annot-player	0.1.9.6
+        * Update annotation resolver for bilibili.tv.
+          更新的B站弹幕的解析方法。
+          由于B站的更新，以前版本将无法解析弹幕。感谢蓝染。
+
+9/7/2012 FRI	annot-player	0.1.9.5
         * Add ATLAS support for offline translation.
         * Fix a bug when displaying manual subtitles.
 

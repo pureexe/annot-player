@@ -12,7 +12,7 @@
 #define AC_VERSION       "0.1.0.0"
 #define AC_EMAIL         "AnnotCloud@gmail.com"
 #define AC_LICENSE       "GNU GPL v3"
-#define AC_HOMEPAGE      "http://" ANNOT_HOST_IP
+#define AC_HOMEPAGE      "http://" CONFIG_ANNOT_IP
 #define AC_UPDATEPAGE    "http://code.google.com/p/annot-player"
 #define AC_DOWNLOADPAGE  "http://code.google.com/p/annot-player/downloads"
 

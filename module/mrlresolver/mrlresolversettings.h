@@ -47,7 +47,7 @@ public slots:
 public:
   Account nicovideoAccount() const
   {
-    return nicovideoAccount_.isBad() ? Account(NICOVIDEO_USERNAME, NICOVIDEO_PASSWORD)
+    return nicovideoAccount_.isBad() ? Account(CONFIG_NICOVIDEO_USERNAME, CONFIG_NICOVIDEO_PASSWORD)
                                      : nicovideoAccount_;
   }
 

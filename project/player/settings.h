@@ -68,6 +68,9 @@ public:
   bool isAutoPlayNext() const;
   void setAutoPlayNext(bool t);
 
+  bool translateSelection() const;
+  void setTranslateSelection(bool t);
+
   bool showLibrary() const;
   void setShowLibrary(bool t);
 

@@ -6,7 +6,7 @@
 # include "module/mediacodec/flvcodec.h"
 # include "module/mediacodec/mp4codec.h"
 #else
-# error "mediacodec module is required"
+# error "require module mediacodec"
 #endif // WITH_MODULE_MEDIACODEC
 #ifdef WITH_MODULE_MRLRESOLVER
 # include "module/mrlresolver/luamrlresolver.h"

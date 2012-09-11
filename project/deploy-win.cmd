@@ -177,7 +177,7 @@ cp -v "%SOURCE%"/module/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit
 cp -Rv "%SOURCE%"/module/qtext/doc . || exit /b 1
 
 :: etc
-cp -Rv "%SOURCE%"/module/mecabsettings/etc . || exit /b 1
+cp -Rv "%SOURCE%"/module/mecab/etc . || exit /b 1
 
 :: images
 cp -Rv "%SOURCE%"/module/qtext/images . || exit /b 1

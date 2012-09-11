@@ -4,27 +4,13 @@
 #include "atlas/atlas.h"
 #include "atlas/atle_p.h"
 #include "win/qtwin/qtwin.h"
-#include "win/qtwin/winreg.h"
+#include "win/reg/regdefs.h"
+#include "win/reg/regio.h"
 #include <QtCore/QFile>
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextEncoder>
 #include <QtCore/QTextDecoder>
-
-// FIXME: mysterious error!
-#ifdef __cplusplus
-#ifdef QT_CORE_LIB
 #include <QtCore/QSettings>
-
-namespace WindowsRegistry {
-
-  inline QVariant
-  value(const QString &path, const QString &key, const QVariant &defval = QVariant())
-  { return QSettings(path, QSettings::NativeFormat).value(key, defval); }
-
-} // namespace WindowsRegistry
-
-#endif // QT_CORE_LIB
-#endif // __cplusplus
 
 #define ATLE_REG_PATH   REG_HKLM_SOFTWARE "\\Fujitsu\\AtlEDict\\V14.0\\Env"
 #define ATLE_REG_KEY    "DENJI"
@@ -63,8 +49,9 @@ QString
 Atlas::findLocation()
 {
   QString ret = QtWin::getProgramFilesPath() + "/" "ATLAS V14";
+
   if (!isValidLocation(ret))
-    ret = WindowsRegistry::value(ATLE_REG_PATH, ATLE_REG_KEY).toString();
+    ret = RegIO::readValue(ATLE_REG_PATH, ATLE_REG_KEY).toString();
   DOUT("ret =" << ret);
   return ret;
 }

@@ -276,7 +276,7 @@ cp -R "$APP_SRC"/module/qtext/images "$APP_MACOS"/ || exit 1
 cp -R "$APP_SRC"/module/textcodec/table "$APP_MACOS"/ || exit 1
 
 ## copy mecab
-cp -R "$APP_SRC"/module/mecabsettings/etc "$APP_MACOS"/ || exit 1
+cp -R "$APP_SRC"/module/mecab/etc "$APP_MACOS"/ || exit 1
 
 mkdir "$APP_MACOS"/dic
 cp -R /opt/local/mecab/dic/ipadic-utf8 "$APP_MACOS"/dic/ipadic || exit 1

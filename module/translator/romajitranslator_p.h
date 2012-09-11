@@ -6,7 +6,7 @@
 
 // - Defines -
 #define ROMAJI_API      "http://romaji.org/"
-#define ROMAJI_API_TEXT "text"
+#define ROMAJI_QUERY_TEXT   "text"
 #define ROMAJI_ENCODING "SHIFT-JIS"
 
 #define ROMAJI_AREA_BEGIN "<!-- ROMAJI.ORG DISPLAY RESULT AREA -->"

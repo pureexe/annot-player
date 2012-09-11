@@ -10,12 +10,12 @@
 #ifdef WITH_MODULE_ANNOTCACHE
 # include "module/annotcache/annotationcachemanager.h"
 #else
-# error "annotcache module is required"
+# error "require module annotcache"
 #endif // WITH_MODULE_ANNOTCACHE
 #ifdef WITH_MODULE_MRLRESOLVER
 # include "module/mrlresolver/luamrlresolver.h"
 #else
-# error "mrlresolver module is required"
+# error "require module mrlresolver"
 #endif // WITH_MODULE_MRLRESOLVER
 #ifdef WITH_MODULE_MRLANALYSIS
 # include "module/mrlanalysis/mrlanalysis.h"

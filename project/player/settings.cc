@@ -30,6 +30,7 @@
 #define SK_ATLAS "Atlas"
 #define SK_ANNOTLANGUAGES "AnnotLanguages"
 #define SK_SHOWLIBRARY "ShowLibrary"
+#define SK_TRANSLATRSELECTION "TranslateSelection"
 #define SK_LIBRARYVIEW "LibraryView"
 #define SK_LIVE         "Live"
 #define SK_PREFERLOCALDB  "PreferLocalDatabase"
@@ -408,6 +409,14 @@ Settings::isAutoPlayNext() const
 void
 Settings::setAutoPlayNext(bool t)
 { setValue(SK_AUTOPLAYNEXT, t); }
+
+bool
+Settings::translateSelection() const
+{ return value(SK_TRANSLATRSELECTION, true).toBool(); }
+
+void
+Settings::setTranslateSelection(bool t)
+{ setValue(SK_TRANSLATRSELECTION, t); }
 
 bool
 Settings::showLibrary() const

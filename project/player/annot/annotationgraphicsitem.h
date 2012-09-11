@@ -84,6 +84,7 @@ public:
   //{ return Base::boundingRect().contains(point); }
 
   bool isSubtitle() const { return annot_.isSubtitle(); }
+  bool isAnnotated() const;
 
   QString summary() const;
 
@@ -137,19 +138,19 @@ protected slots:
   void searchWithGoogle();
   void searchWithBing();
 
-  void translate(int lang);
   void showTraditionalChinese();
-  void translateToEnglish();
-  void translateToJapanese();
-  void translateToTraditionalChinese();
-  void translateToSimplifiedChinese();
-  void translateToKorean();
-  void translateToFrench();
-  void translateToGerman();
-  void translateToItalian();
-  void translateToSpanish();
-  void translateToPortuguese();
-  void translateToRussian();
+  void translatePlainText();
+  //void translateToEnglish();
+  //void translateToJapanese();
+  //void translateToTraditionalChinese();
+  //void translateToSimplifiedChinese();
+  //void translateToKorean();
+  //void translateToFrench();
+  //void translateToGerman();
+  //void translateToItalian();
+  //void translateToSpanish();
+  //void translateToPortuguese();
+  //void translateToRussian();
 
   void fly();
   void stay();
@@ -169,6 +170,8 @@ protected slots:
   void setPositionResolution(int value) { positionResolution_ = value; }
 
 protected:
+  int charPositionAtGlobalPos(const QPoint &gp) const;
+
   bool isEditable() const;
   void fly(qreal fromX, qreal toX, qreal y, int msecs);
   void escapeTo(const QPointF &pos, int msecs);

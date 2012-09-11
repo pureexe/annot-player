@@ -13,7 +13,7 @@
 #ifdef WITH_MODULE_COMPRESS
 # include "module/compress/qgzip.h"
 #else
-# error "gzip is required to uncompress bilibili reply"
+# error "require module compress"
 #endif // WITH_MODULE_COMPRESS
 #include <QtCore/QByteArray>
 #include <QtCore/QStringList>

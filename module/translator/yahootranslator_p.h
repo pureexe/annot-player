@@ -10,8 +10,8 @@
 // See: http://ready.to/search/list/cs_trans.htm
 // [both=T]で原文と訳文の両方を出力します。[both=F]で訳文のみを出力します。
 #define YAHOO_API       "http://honyaku.yahoo.co.jp/transtext/?both=F"
-#define YAHOO_KEY_LANG  "eid"
-#define YAHOO_KEY_TEXT  "text"
+#define YAHOO_QUERY_LANG    "eid"
+#define YAHOO_QUERY_TEXT    "text"
 
 #define YAHOO_AREA_BEGIN "<textarea id=\"trn_textText\""
 #define YAHOO_AREA_BEGIN2 ">"

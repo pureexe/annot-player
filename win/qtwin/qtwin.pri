@@ -9,8 +9,7 @@ DEPENDPATH      += $$PWD
 
 HEADERS += \
     $$PWD/qtwin.h \
-    $$PWD/qtwinapi.h \
-    $$PWD/winreg.h
+    $$PWD/qtwinapi.h
 
 SOURCES += \
     $$PWD/qtwin.cc

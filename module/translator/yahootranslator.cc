@@ -53,8 +53,8 @@ QString
 YahooTranslator::translateUrl(const QString &text, const char *to, const char *from)
 {
   return YAHOO_API
-     "&" YAHOO_KEY_LANG "=CR-" + QString(from).append(to) +
-     "&" YAHOO_KEY_TEXT "=" + text;
+     "&" YAHOO_QUERY_LANG "=CR-" + QString(from).append(to) +
+     "&" YAHOO_QUERY_TEXT "=" + text;
 }
 
 QNetworkReply*

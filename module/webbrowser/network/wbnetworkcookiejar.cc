@@ -1,4 +1,4 @@
-#ifdef ANNOT_PROXY_DOMAIN
+#ifdef CONFIG_PROXY_DOMAIN
 
 // network/wbnetworkcookiejar.cc
 // 4/21/2012
@@ -14,7 +14,7 @@ WbNetworkCookieJar::toDomainUrl(const QUrl &url) const
 {
   if (url == domain())
     return Base::toDomainUrl(url);
-  else if (url.host() == ANNOT_PROXY_DOMAIN && url.path().startsWith("/nico/"))
+  else if (url.host() == CONFIG_PROXY_DOMAIN && url.path().startsWith("/nico/"))
     return decodeNicoUrl(url);
   else
     return Base::toDomainUrl(url);
@@ -23,7 +23,7 @@ WbNetworkCookieJar::toDomainUrl(const QUrl &url) const
 QUrl
 WbNetworkCookieJar::decodeNicoUrl(const QUrl &url) const
 {
-  Q_ASSERT(url.host() == ANNOT_PROXY_DOMAIN);
+  Q_ASSERT(url.host() == CONFIG_PROXY_DOMAIN);
 
   QRegExp rx("/nico/([a-z]+)(.*)", Qt::CaseInsensitive);
   if (!rx.exactMatch(url.path()))
@@ -44,4 +44,4 @@ WbNetworkCookieJar::decodeNicoUrl(const QUrl &url) const
   return ret;
 }
 
-#endif // ANNOT_PROXY_DOMAIN
+#endif // CONFIG_PROXY_DOMAIN

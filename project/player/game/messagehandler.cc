@@ -6,7 +6,7 @@
 #ifdef WITH_WIN_TEXTHOOK
 # include "win/texthook/texthook.h"
 #else
-# error "TextHook module is indispensible"
+# error "require module texthook"
 #endif // WITH_WIN_TEXTHOOK
 #include "module/annotcloud/annotation.h"
 #include "module/annotcloud/annottag.h"
@@ -115,7 +115,7 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
   QList<QByteArray> range;
   range.append(data);
 
-  qint64 h1 = Annotation::hash(range);
+  hash_ = Annotation::hash(range);
   qint64 h4 = 0;
 
   QByteArray t;
@@ -129,7 +129,7 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
 
   } else if (data.length() < 10*2) {
     if (messages_.size() < 2) {
-      emit contextChanged(h1, h4);
+      emit contextChanged(hash_, h4);
       emit textChanged(text, TextThread::LeadingRole);
       DOUT("exit: insufficent messages to hash");
       return;
@@ -137,7 +137,7 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
     range.prepend(t = messages_[1]);
     if (t.length() < 7*2) {
       if (messages_.size() < 3) {
-        emit contextChanged(h1, h4);
+        emit contextChanged(hash_, h4);
         emit textChanged(text, TextThread::LeadingRole);
         DOUT("exit: insufficent messages to hash");
         return;
@@ -145,7 +145,7 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
       range.prepend(t = messages_[2]);
       if (t.length() < 4*2) {
         if (messages_.size() < 4) {
-          emit contextChanged(h1, h4);
+          emit contextChanged(hash_, h4);
           emit textChanged(text, TextThread::LeadingRole);
           DOUT("exit: insufficent messages to hash");
           return;
@@ -155,16 +155,16 @@ MessageHandler::processMessage(const QByteArray &data, qint64 signature)
     }
   }
 
-  h4 = range.size() == data.size() ? h1 :
+  h4 = range.size() == data.size() ? hash_ :
        Annotation::hash(range);
 
   context_.hash = h4;
   context_.count = range.size();
 
-  emit contextChanged(h1, h4);
+  emit contextChanged(hash_, h4);
   emit textChanged(text, TextThread::LeadingRole);
 
-  DOUT("exit: hashCount =" << context_.count << ", h1 =" << h1 << ", h4 =" << h4);
+  DOUT("exit: hashCount =" << context_.count << ", hash =" << hash_ << ", h4 =" << h4);
 }
 
 // - Helpers -

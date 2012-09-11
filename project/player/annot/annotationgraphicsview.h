@@ -65,7 +65,8 @@ signals:
   void message(const QString &text);
   void warning(const QString &text);
   void searchRequested(int engine, const QString &key);
-  void translateRequested(const QString &text, int lang);
+  void translateWordRequested(const QString &word);
+  void translateTextRequested(const QString &text);
   void traditionalChineseRequested(const QString &text);
   void annotationSkipped();
   void itemCountLimitedChanged(bool t);
@@ -181,9 +182,11 @@ public:
   QRect globalRect() const;
   QPoint fromGlobal(const QPoint &globalPos) const;
 
-  void searchText(const QString &text, int engine);
-  void translateText(const QString &text, int lang);
   void showTraditionalChinese(const QString &text);
+  void searchText(const QString &text, int engine);
+  void translateText(const QString &text);
+  void translateWord(const QString &word)
+  { if (isTranslateWordEnabled()) emit translateWordRequested(word); }
 
 signals:
   void annotationAdded(const Annotation &annot);
@@ -230,7 +233,9 @@ public:
   bool isNearbyItemExpelled() const { return nearbyItemExpelled_; }
   bool isNearbyItemAttracted() const { return nearbyItemAttracted_; }
 
-  bool isItemMetaVisible() { return metaVisible_; }
+  bool isItemMetaVisible() const { return metaVisible_; }
+
+  bool isTranslateWordEnabled() const { return translateWordEnabled_; }
 
 public slots:
   void setItemMetaVisible(bool visible)
@@ -242,6 +247,8 @@ public slots:
 
   void setItemCountLimited(bool t)
   { emit itemCountLimitedChanged(itemCountLimited_ = t); }
+
+  void setTranslateWordEnabled(bool t) { translateWordEnabled_ = t; }
 
   void setScale(qreal value);
 
@@ -387,6 +394,7 @@ private:
   bool hoveredItemPaused_, hoveredItemResumed_, hoveredItemRemoved_,
        nearbyItemExpelled_, nearbyItemAttracted_;
   bool itemVisible_;
+  bool translateWordEnabled_;
   bool dragging_;
   int maxItemCount_;
 };

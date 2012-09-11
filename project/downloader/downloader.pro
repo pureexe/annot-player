@@ -44,14 +44,13 @@ mac {
     include($$ROOTDIR/mac/qtcocoa/qtcocoa.pri)
 }
 
-QT      += core gui network xml
-#CONFIG(static): QTPLUGIN += qsqlite
-
 win32 {
   #DEFINES += AC_ENABLE_GAME
   #DEFINES += AC_ENABLE_LAUNCHER
   DEFINES += AC_ENABLE_UPDATE
 }
+
+QT      += core gui network xml
 
 ## Sources
 

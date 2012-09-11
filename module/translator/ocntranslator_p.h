@@ -6,9 +6,9 @@
 
 // - Defines -
 #define OCN_API      "http://cgi01.ocn.ne.jp/cgi-bin/translation/index.cgi"
-#define OCN_KEY_LANG "langpair"
-#define OCN_KEY_TEXT "sourceText"
-#define OCN_KEY_AUTH "auth"
+#define OCN_QUERY_LANG  "langpair"
+#define OCN_QUERY_TEXT  "sourceText"
+#define OCN_QUERY_AUTH  "auth"
 
 // See: http://www.hongfire.com/forum/showthread.php/94395-Translation-Aggregator-v0-4-9/page114
 #define OCN_AUTH_API "http://cgi01.ocn.ne.jp/cgi-bin/translation/counter.cgi?prm=63676930312e6f636e2e6e652e6a70"

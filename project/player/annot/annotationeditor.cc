@@ -591,7 +591,7 @@ AnnotationEditor::save()
   fadeOut();
 
   QString t = text();
-  if (!t.isEmpty())
+  if (!t.isEmpty() && id_ >= 0)
     emit textSaved(t);
 }
 
@@ -820,29 +820,29 @@ AnnotationEditor::updateAlignment()
 void
 AnnotationEditor::updateCount()
 {
+  static QString longWarning = tr("Text is too long") + " >_<";
+  static QString idWarning = tr("Text cannot be saved") + " T_T";
   int cur = text().size();
   int max = G_ANNOTATION_MAXSIZE;
   countLabel_->setText(QString("%1/%2").arg(cur).arg(max));
 
   if (cur > max) {
-    QString warning = tr("Text is too long >_<");
-    countLabel_->setToolTip(warning);
-    if (saveButton_->isEnabled()) {
-      saveButton_->setEnabled(false);
-      saveButton_->setToolTip(warning);
-
-      saveShortcut_->setEnabled(false);
-    }
+    countLabel_->setToolTip(longWarning);
+    saveButton_->setToolTip(id_ >= 0 ? longWarning : idWarning);
+    saveButton_->setEnabled(false);
+    saveShortcut_->setEnabled(false);
   } else {
     countLabel_->setToolTip(TR(T_WORDCOUNT));
-    if (!saveButton_->isEnabled()) {
-      saveButton_->setEnabled(true);
+    if (id_ < 0) {
+      saveButton_->setToolTip(idWarning);
+      saveButton_->setEnabled(false);
+      saveShortcut_->setEnabled(false);
+    } else {
       saveButton_->setToolTip(TR(T_SAVE));
-
+      saveButton_->setEnabled(true);
       saveShortcut_->setEnabled(true);
     }
   }
-
 }
 
 // - Helpers -

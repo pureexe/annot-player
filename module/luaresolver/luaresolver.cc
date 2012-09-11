@@ -8,12 +8,12 @@
 # include "module/luatl/lua_defines.h"
 # include "module/luatl/lua_function.h"
 #else
-# error "luatl is required"
+# error "require module luatl"
 #endif // WITH_MODULE_LUATL
 #ifdef WITH_MODULE_DOWNLOAD
 # include "module/download/downloader.h"
 #else
-# error "download module is required"
+# error "require module download"
 #endif // WITH_MODULE_DOWNLOAD
 #include "module/qtext/networkcookie.h"
 #include "module/qtext/os.h"
@@ -43,11 +43,11 @@
 void
 LuaResolver::init()
 {
-#ifdef ANNOT_PROXY_DOMAIN
-  cookieJar_ = new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", ANNOT_PROXY_DOMAIN, this);
+#ifdef CONFIG_PROXY_DOMAIN
+  cookieJar_ = new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", CONFIG_PROXY_DOMAIN, this);
 #else
 # warning "nico alias domain is not defined"
-#endif // ANNOT_PROXY_DOMAIN
+#endif // CONFIG_PROXY_DOMAIN
 
 }
 

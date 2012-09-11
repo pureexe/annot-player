@@ -4,7 +4,7 @@
 #ifdef WITH_MODULE_MRLRESOLVER
 # include "module/mrlresolver/luamrlresolver.h"
 #else
-# error "mrlresolver module is required"
+# error "require module mrlresolver"
 #endif // WITH_MODULE_MRLRESOLVER
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>

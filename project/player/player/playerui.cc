@@ -787,6 +787,7 @@ PlayerUi::updatePreviousButton()
 void
 PlayerUi::postAnnotation()
 {
+  QTimer::singleShot(0, inputComboBox(), SLOT(setFocus()));
   QString text = inputComboBox()->currentText();
   if (text.isEmpty())
     return;

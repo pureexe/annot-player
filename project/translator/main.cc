@@ -10,7 +10,9 @@
 #include "project/common/acui.h"
 #include "module/translator/translatorsettings.h"
 #include "module/translator/translatormanager.h"
-#include "module/mecabsettings/mecabsettings.h"
+#ifdef WITH_MODULE_MECAB
+# include "module/mecab/mecabsettings.h"
+#endif // WITH_MODULE_MECAB
 #include <QtGui>
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkReply>
@@ -22,7 +24,7 @@
 # pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
 #endif // __GNUC__
 
-#define DEFAULT_SIZE    QSize(500, 400)
+#define DEFAULT_SIZE    QSize(300, 200) // minimal size
 
 enum { DEFAULT_TRANSLATORS = TranslatorManager::RomajiBit | TranslatorManager::OcnBit | TranslatorManager::FresheyeBit };
 
@@ -110,8 +112,10 @@ main(int argc, char *argv[])
   TranslatorSettings::globalSettings()->setCacheDirectory(G_PATH_CACHES);
   TranslatorSettings::globalSettings()->setCacheSize(20);
 
+#ifdef WITH_MODULE_MECAB
   // MeCab
   MeCabSettings::setMeCabRcFile(G_PATH_MECABRC);
+#endif // WITH_MODULE_MECAB
 
   // Set network proxy
   if (settings->isProxyEnabled()) {

@@ -21,9 +21,10 @@
 #define SK_RECENT       "Recent"
 #define SK_SIZE         "Size"
 
-#define SK_LANG         "LanguageIndex"
+#define SK_LANG         "Language"
 #define SK_DICT         "Dictionary"
 #define SK_TOP          "Top"
+#define SK_CLIPBOARD    "Clipboard"
 #define SK_TRANSLATOR   "Translator"
 #define SK_ATLAS        "Atlas"
 
@@ -57,11 +58,11 @@ Settings::setRecentSize(const QSize &value)
 { setValue(SK_SIZE, value); }
 
 int
-Settings::languageIndex() const
+Settings::language() const
 { return value(SK_LANG).toInt(); }
 
 void
-Settings::setLanguageIndex(int value)
+Settings::setLanguage(int value)
 { setValue(SK_LANG, value); }
 int
 
@@ -71,6 +72,14 @@ Settings::dictionary() const
 void
 Settings::setDictionary(int value)
 { setValue(SK_DICT, value); }
+
+bool
+Settings::monitorClipboard() const
+{ return value(SK_CLIPBOARD).toBool(); }
+
+void
+Settings::setMonitorClipboard(bool value)
+{ setValue(SK_CLIPBOARD, value); }
 
 bool
 Settings::windowOnTop() const

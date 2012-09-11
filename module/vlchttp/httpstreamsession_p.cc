@@ -10,13 +10,13 @@
 # include "module/stream/bufferedremotestream.h"
 # include "module/stream/securebufferedfifostream.h"
 #else
-# error "stream module is required"
+# error "require module stream"
 #endif // WITH_MODULE_STREAM
 #ifdef WITH_MODULE_MEDIACODEC
 # include "module/mediacodec/flvcodec.h"
 # include "module/mediacodec/flvmerge.h"
 #else
-# error "mediacodec module is required"
+# error "require module mediacodec"
 #endif // WITH_MODULE_MEDIACODEC
 #ifdef WITH_MODULE_MRLRESOLVER
 # include "module/mrlresolver/luamrlresolver.h"

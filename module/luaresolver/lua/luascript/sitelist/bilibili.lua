@@ -232,7 +232,8 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   local str_subxmlurl = "";
   --str_subxmlurl = "http://d.bilibili.us/"..str_id.."?r=968";
   --str_subxmlurl = "http://www.bilibili.tv/dm," .. str_id .. "?r=126";
-  str_subxmlurl = "http://comment.bilibili.tv/dm," .. str_id;
+  --str_subxmlurl = "http://comment.bilibili.tv/dm," .. str_id;
+  str_subxmlurl = "http://comment.bilibili.tv/" .. str_id .. ".xml";
 
   --realurls
   local int_realurlnum = 0;

@@ -14,7 +14,7 @@
 # define RC_IMAGE_NULL "file:///" + QCoreApplication::applicationDirPath() + "/images/null.png"
 #endif // Q_OS_LINUX
 
-#define PROXY_HOST  ANNOT_PROXY_DOMAIN
+#define PROXY_HOST  CONFIG_PROXY_DOMAIN
 
 namespace { namespace detail {
   const QString &rc_image_null()

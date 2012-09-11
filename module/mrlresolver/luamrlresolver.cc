@@ -7,17 +7,17 @@
 #ifdef WITH_MODULE_LUARESOLVER
 # include "module/luaresolver/luaresolver.h"
 #else
-# error "luaresolver module is required"
+# error "require module luaresolver"
 #endif // WITH_MODULE_LUARESOLVER
 #ifdef WITH_MODULE_MRLANALYSIS
 # include "module/mrlanalysis/mrlanalysis.h"
 #else
-# error "mrlanalysis module is required"
+# error "require module mrlanalysis"
 #endif // WITH_MODULE_MRLANALYSIS
 #ifdef WITH_MODULE_DOWNLOAD
 # include "module/download/download.h"
 #else
-# error "download module is required"
+# error "require module download"
 #endif // WITH_MODULE_MRLANALYSIS
 #include <QtNetwork/QNetworkCookieJar>
 #include <QtCore/QCoreApplication>

@@ -1,19 +1,19 @@
-# project-deploy.pro
+# project-dev.pro
 # 7/31/2011
 
 INCLUDEPATH += $$PWD
 
 TEMPLATE = subdirs
 SUBDIRS = \
-    browser \
-    downloader \
     player \
-    translator
-#   tester
+    translator 
+    #browser \
+    #downloader \
+    #tester
 
-win32:  SUBDIRS += \
-    launcher \
-    updater
+#win32:  SUBDIRS += \
+#    launcher \
+#    updater
 #mac:    SUBDIRS += live
 #unix:   SUBDIRS += x
 

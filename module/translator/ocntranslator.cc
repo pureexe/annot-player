@@ -49,9 +49,9 @@ QByteArray
 OcnTranslator::postData(const QString &text, const char *to, const char *from, const QByteArray &key)
 {
   QByteArray ret = QUrl::toPercentEncoding(text);
-  return ret.prepend("&" OCN_KEY_TEXT "=")
-     .prepend(key).prepend("&" OCN_KEY_AUTH "=")
-     .prepend(to).prepend(from).prepend(OCN_KEY_LANG "=");
+  return ret.prepend("&" OCN_QUERY_TEXT "=")
+     .prepend(key).prepend("&" OCN_QUERY_AUTH "=")
+     .prepend(to).prepend(from).prepend(OCN_QUERY_LANG "=");
 }
 
 QNetworkReply*

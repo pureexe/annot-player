@@ -289,7 +289,6 @@ AnnotationListView::updateAnnotationUserIdWithId(qint64 userId, qint64 id)
 void
 AnnotationListView::editAnnotation()
 {
-  // TODO: CHECKPOINT
   qint64 id = currentId();
   if (!id)
     return;

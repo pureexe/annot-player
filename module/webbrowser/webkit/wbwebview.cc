@@ -284,7 +284,7 @@ WbWebView::showLink(const QString &url, const QString &title, const QString &con
     emit message(QString());
   else {
     QString m = QUrl::fromPercentEncoding(url.toUtf8());
-    m.replace(ANNOT_HOST_IP, "annot.me");
+    m.replace(CONFIG_ANNOT_IP, "annot.me");
     QString t = content.isEmpty() ? title : content;
     t = t.simplified();
     if (!t.isEmpty())

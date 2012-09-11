@@ -1,0 +1,15 @@
+; mecabrc
+; 9/4/2012
+
+dicdir =  $(rcpath)/../dic/ipadic
+
+; userdic = /home/foo/bar/user.dic
+
+; output-format-type = wakati
+; input-buffer-size = 8192
+
+; node-format = %m\n
+; bos-format = %S\n
+; eos-format = EOS\n
+
+; EOF

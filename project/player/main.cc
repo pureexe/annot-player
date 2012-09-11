@@ -11,7 +11,7 @@
 #include "gamelibrary.h"
 #include "annotationgraphicsitem.h"
 #include "module/translator/translatorsettings.h"
-#include "module/mecabsettings/mecabsettings.h"
+#include "module/mecab/mecabsettings.h"
 #ifdef Q_OS_WIN
 # include "registry.h"
 # include "module/player/player.h"

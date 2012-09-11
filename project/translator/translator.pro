@@ -1,7 +1,7 @@
 # translator.pro
 # 8/13/2012
 
-VERSION = 0.1.0.3
+VERSION = 0.1.0.4
 
 DEFINES += PROJECT_TRANSLATOR
 
@@ -15,12 +15,12 @@ include($$ROOTDIR/module/animation/animation.pri)
 include($$ROOTDIR/module/crypt/crypt.pri)
 include($$ROOTDIR/module/download/download.pri)
 include($$ROOTDIR/module/imagefilter/imagefilter.pri)
-include($$ROOTDIR/module/mecabhighlighter/mecabhighlighter.pri)
-include($$ROOTDIR/module/mecabsettings/mecabsettings.pri)
+include($$ROOTDIR/module/mecab/mecab.pri)
 include($$ROOTDIR/module/mstypes/mstypes.pri)
 include($$ROOTDIR/module/qt/qt.pri)
 include($$ROOTDIR/module/qtext/qtext.pri)
 #include($$ROOTDIR/module/searchengine/searchengine.pri)
+include($$ROOTDIR/module/textcodec/textcodec.pri)
 include($$ROOTDIR/module/translator/translator.pri)
 
 !mac: include($$ROOTDIR/module/metacall/metacall.pri)
@@ -29,6 +29,7 @@ win32 {
     include($$ROOTDIR/win/atlas/atlas.pri)
     include($$ROOTDIR/win/dwm/dwm.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
+    include($$ROOTDIR/win/reg/reg.pri)
 }
 unix: {
     include($$ROOTDIR/unix/qtunix/qtunix.pri)
@@ -38,14 +39,13 @@ mac {
     include($$ROOTDIR/mac/qtcocoa/qtcocoa.pri)
 }
 
-QT      += core gui network xml
-#CONFIG(static): QTPLUGIN += qsqlite
-
 win32 {
   #DEFINES += AC_ENABLE_GAME
   #DEFINES += AC_ENABLE_LAUNCHER
   DEFINES += AC_ENABLE_UPDATE
 }
+
+QT      += core gui network webkit xml
 
 ## Sources
 
@@ -118,7 +118,7 @@ OTHER_FILES += $$TRANSLATIONS \
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop desktop-kde icon doc 
+    INSTALLS += target desktop desktop-kde icon doc
 
     target.path = $$BINDIR
 

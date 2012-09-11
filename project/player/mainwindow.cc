@@ -87,7 +87,7 @@
 #include "project/common/acui.h"
 #include "module/annotdb/annotdb.h"
 #include "module/annotdown/annotationdownloader.h"
-#include "module/mecabparser/mecabparser.h"
+#include "module/mecab/mecabparser.h"
 #include "module/player/player.h"
 #include "module/player/playerdefs.h"
 #include "module/annotcodec/annotationcodecmanager.h"
@@ -479,6 +479,7 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
   embeddedPlayer_->setOnTop(settings->isEmbeddedPlayerOnTop());
   //embeddedCanvas_->setEnabled(settings->isPlayerLabelEnabled());
 
+  annotationView_->setTranslateWordEnabled(settings->translateSelection());
   annotationView_->setItemCountLimited(settings->isAnnotationBandwidthLimited());
   annotationView_->setRenderHint(settings->annotationEffect());
 
@@ -1121,8 +1122,9 @@ MainWindow::createConnections()
   connect(annotationView_, SIGNAL(sizeChanged(QSize)), mainConsole_, SLOT(setAreaSize(QSize)));
 
   connect(annotationView_, SIGNAL(searchRequested(int,QString)), SLOT(searchWithEngine(int,QString)));
-  connect(annotationView_, SIGNAL(translateRequested(QString,int)), SLOT(translate(QString,int)));
   connect(annotationView_, SIGNAL(traditionalChineseRequested(QString)), SLOT(showTraditionalChinese(QString)));
+  connect(annotationView_, SIGNAL(translateTextRequested(QString)), SLOT(translateUsingTranslator(QString)));
+  connect(annotationView_, SIGNAL(translateWordRequested(QString)), SLOT(translateUsingTranslator(QString)));
 
   connect(annotationView_, SIGNAL(annotationTextSubmitted(QString)), SLOT(submitText(QString)));
 
@@ -1598,7 +1600,7 @@ MainWindow::createActions()
           toggleGameTextColorfulAct_->setCheckable(true);
           toggleGameTextColorfulAct_->setChecked(Settings::globalSettings()->isGameTextColorful());
 
-  toggleGameTextResizableAct_ = new QAction(tr("Resizable"), this);
+  toggleGameTextResizableAct_ = new QAction(tr("Resize"), this);
           toggleGameTextResizableAct_->setCheckable(true);
           toggleGameTextResizableAct_->setChecked(Settings::globalSettings()->isGameTextResizable());
 
@@ -1653,6 +1655,9 @@ MainWindow::createActions()
           SIGNAL(triggered(bool)), SLOT(setUserLanguageToSimplifiedChinese()));
           setUserLanguageToSimplifiedChineseAct_->setCheckable(true);
 
+  connect(toggleTranslateSelectionAct_ = new QAction(tr("Translate Clicked Game Text"), this),
+          SIGNAL(triggered(bool)), annotationView_, SLOT(setTranslateWordEnabled(bool)));
+          toggleTranslateSelectionAct_->setCheckable(true);
   connect(toggleTranslateAct_ = new QAction(tr("Show Online Translation"), this),
           SIGNAL(triggered(bool)), SLOT(setTranslateEnabled(bool)));
           toggleTranslateAct_->setCheckable(true);
@@ -2262,6 +2267,7 @@ MainWindow::createMenus()
     gameTextMenu_->setToolTip(tr("Galgame Text"));
 
     gameTextMenu_->addAction(toggleGameTextVisibleAct_);
+    gameTextMenu_->addAction(toggleTranslateSelectionAct_);
     gameTextMenu_->addSeparator();
     gameTextMenu_->addAction(toggleGameTextColorfulAct_);
     gameTextMenu_->addAction(toggleGameTextResizableAct_);
@@ -5976,7 +5982,10 @@ MainWindow::showSubtitle(const QString &input, int userLang, const QString &pref
   //}
   if (userLang)
     annot.setLanguage(userLang);
-  text.prepend(CORE_CMD_SUB " ");
+  if (text.startsWith(CORE_CMDCH))
+    text.prepend(CORE_CMD_SUB);
+  else
+    text.prepend(CORE_CMD_SUB " ");
   annot.setText(text)    ;
   annotationView_->showAnnotation(annot, false); // showMeta = false
 }
@@ -7375,6 +7384,7 @@ MainWindow::updateContextMenu()
       annotationMenu_->addAction(showBacklogAct_);
 
       annotationMenu_->addAction(showAnnotationAnalyticsAct_);
+      showAnnotationAnalyticsAct_->setEnabled(dataManager_->hasAnnotations());
 
       annotationMenu_->addSeparator();
 
@@ -7403,6 +7413,7 @@ MainWindow::updateContextMenu()
 #ifdef WITH_WIN_ATLAS
     contextMenu_->addAction(toggleAtlasEnabledAct_);
 #endif // WITH_WIN_ATLAS
+
     contextMenu_->addAction(toggleSubtitleOnTopAct_);
     contextMenu_->addAction(showBacklogAct_);
   }
@@ -7602,7 +7613,7 @@ MainWindow::updateMenuTheme()
 void
 MainWindow::updateUserMenu()
 {
-  //userMenu_->clear();
+  userMenu_->clear();
   if (!server_->isAuthorized())
     return;
 
@@ -7612,32 +7623,35 @@ MainWindow::updateUserMenu()
 
   // Menu
 
-  if (userMenu_->isEmpty()) {
-    userMenu_->addAction(toggleUserAnonymousAct_);
-    userMenu_->addMenu(userLanguageMenu_);
+  //if (userMenu_->isEmpty()) {
 
-    userMenu_->addSeparator();
-    userMenu_->addMenu(translatorMenu_);
+    if (hub_->isSignalTokenMode() && !hub_->isStopped()) {
+      userMenu_->addAction(showGamePreferencesAct_);
+      showGamePreferencesAct_->setEnabled(hub_->isSignalTokenMode() && dataManager_->token().hasDigest());
+
+      userMenu_->addMenu(gameTextMenu_);
+      updateGameTextMenu();
+
+      userMenu_->addMenu(translatorMenu_);
 #ifdef AC_ENABLE_GAME
-    userMenu_->addAction(toggleTranslateAct_);
+      userMenu_->addAction(toggleTranslateAct_);
 #ifdef WITH_WIN_ATLAS
-    userMenu_->addAction(toggleAtlasEnabledAct_);
+      userMenu_->addAction(toggleAtlasEnabledAct_);
 #endif // WITH_WIN_ATLAS
-    userMenu_->addAction(toggleSubtitleOnTopAct_);
+      userMenu_->addAction(showBacklogAct_);
+      userMenu_->addAction(showAnnotationAnalyticsAct_);
+      showAnnotationAnalyticsAct_->setEnabled(dataManager_->hasAnnotations());
 #endif // AC_ENABLE_GAME
+      userMenu_->addSeparator();
+    }
 
-    userMenu_->addSeparator();
+    userMenu_->addMenu(userLanguageMenu_);
+    userMenu_->addAction(toggleUserAnonymousAct_);
     userMenu_->addAction(showUserAct_);
     userMenu_->addAction(logoutAct_);
-  }
-
-#ifdef AC_ENABLE_GAME
-  showGamePreferencesAct_->setVisible(hub_->isSignalTokenMode());
-#endif // AC_ENABLE_GAME
+  //}
 
   updateTranslatorMenu();
-
-  toggleSubtitleOnTopAct_->setChecked(AnnotationSettings::globalSettings()->isSubtitleOnTop());
 
   //if (ALPHA) {
   //  if (server_->isConnected())
@@ -9747,6 +9761,9 @@ MainWindow::updateGameTextMenu()
   bool t = isGameTextVisible();
   toggleGameTextColorfulAct_->setEnabled(t);
   toggleGameTextResizableAct_->setEnabled(t);
+
+  toggleTranslateSelectionAct_->setEnabled(t);
+  toggleTranslateSelectionAct_->setChecked(annotationView_->isTranslateWordEnabled());
 }
 
 bool
@@ -9780,14 +9797,14 @@ MainWindow::showGameText(const QString &text, int role)
 
   int count = annotationView_->width() / (AnnotationSettings::globalSettings()->scale() * CharWidth);
   if (!count || text.size() < count)
-    out = mecab_->renderTextWithFurigana(text, renderHints);
+    out = mecab_->renderText(text, renderHints);
   else {
     int n = qCeil(text.size() / qreal(count));
     for (int i = 0; i < n; i++) {
       QString t = text.mid(i * count,
                            i == n -1 ? -1 : count);
       if (!t.isEmpty()) {
-        t = mecab_->renderTextWithFurigana(t, renderHints);
+        t = mecab_->renderText(t, renderHints);
         out.append(t);
       }
     }
@@ -11994,6 +12011,7 @@ MainWindow::saveSettings()
   settings->setLibraryView(libraryView_->viewIndex());
   settings->setAnnotationBandwidthLimited(annotationView_->isItemCountLimited());
   settings->setAnnotationEffect(annotationView_->renderHint());
+  settings->setTranslateSelection(annotationView_->isTranslateWordEnabled());
   settings->setAnnotationScale(annotationSettings->scale());
   settings->setAnnotationFullscreenScale(annotationSettings->fullscreenScale());
   settings->setAnnotationOpacityFactor(annotationSettings->opacityFactor());
@@ -12218,8 +12236,19 @@ MainWindow::showTranslator()
 void
 MainWindow::translateUsingTranslator(const QString &text)
 {
-  if (!text.isEmpty())
-    translatorDelegate_->translate(text);
+  enum { cooldown = 500 }; // half a second
+  if (!text.isEmpty()) {
+    static qint64 lastTime = 0;
+    static QString lastText;
+    qint64 now = QDateTime::currentMSecsSinceEpoch();
+    if (now < lastTime + cooldown && text == lastText)
+      lastTime = now;
+    else {
+      lastTime = now;
+      lastText = text;
+      translatorDelegate_->translate(text);
+    }
+  }
 }
 
 // - Library -

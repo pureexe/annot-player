@@ -27,7 +27,7 @@ enum { ALPHA = 0 };
 //#define G_HOMEPAGE      "http://annot.me"
 //#define G_HOMEPAGE      "http://annotcloud.com"
 #define G_HOMEPAGE      AC_HOMEPAGE
-#define G_WIKIPAGE      "http://" ANNOT_DOC_IP "/w"
+#define G_WIKIPAGE      "http://" CONFIG_ANNOT_DOC_IP "/w"
 #define G_WIKIPAGE_FAQ  G_WIKIPAGE "/index.php?title=Manual:FAQ"
 #define G_UPDATEPAGE    AC_UPDATEPAGE
 #define G_DOWNLOADPAGE  AC_DOWNLOADPAGE

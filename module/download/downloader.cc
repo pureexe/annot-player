@@ -14,7 +14,7 @@
 
 namespace { namespace detail {
   inline QString filterHost(const QString &host)
-  { return host == ANNOT_PROXY_DOMAIN ? QString() : host; }
+  { return host == CONFIG_PROXY_DOMAIN ? QString() : host; }
 } } // anonymous detail
 
 // - Construction -

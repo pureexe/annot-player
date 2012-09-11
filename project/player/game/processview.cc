@@ -11,7 +11,7 @@
 #ifdef WITH_WIN_TEXTHOOK
 # include "win/texthook/texthook.h"
 #else
-# error "TextHook is indispensible"
+# error "require module texthook"
 #endif // WITH_WIN_TEXTHOOK
 #include "project/common/acfilteredtableview.h"
 #include "project/common/acui.h"

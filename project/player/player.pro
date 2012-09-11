@@ -4,7 +4,7 @@
 DEFINES += PROJECT_PLAYER
 
 VERSION_MAJOR = 0.1.9.
-VERSION_MINOR = 5
+VERSION_MINOR = 7
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -36,8 +36,7 @@ include($$ROOTDIR/module/imagefilter/imagefilter.pri)
 include($$ROOTDIR/module/ioutil/ioutil.pri)
 include($$ROOTDIR/module/magnifier/magnifier.pri)
 include($$ROOTDIR/module/mediacodec/mediacodec.pri)
-include($$ROOTDIR/module/mecabparser/mecabparser.pri)
-include($$ROOTDIR/module/mecabsettings/mecabsettings.pri)
+include($$ROOTDIR/module/mecab/mecab.pri)
 include($$ROOTDIR/module/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/module/mstypes/mstypes.pri)
 include($$ROOTDIR/module/nicoutil/nicoutil.pri)
@@ -48,6 +47,7 @@ include($$ROOTDIR/module/searchengine/searchengine.pri)
 include($$ROOTDIR/module/stream/stream.pri)
 include($$ROOTDIR/module/textcodec/textcodec.pri)
 include($$ROOTDIR/module/translator/translator.pri)
+#include($$ROOTDIR/module/yahoojlp/yahoojlp.pri)
 
 !mac: include($$ROOTDIR/module/metacall/metacall.pri)
 win32 {
@@ -57,6 +57,8 @@ win32 {
     #include($$ROOTDIR/win/hook/hook.pri)
     include($$ROOTDIR/win/mousehook/mousehook.pri)
     include($$ROOTDIR/win/picker/picker.pri)
+    include($$ROOTDIR/win/reg/reg.pri)
+    include($$ROOTDIR/win/texthook/texthook.pri)
     include($$ROOTDIR/win/texthook/texthook.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
     include($$ROOTDIR/win/qtwinnt/qtwinnt.pri)

@@ -64,9 +64,9 @@ MicrosoftTranslator::translateUrl(const QString &text, int to, int from)
 #define QUOTE(_str) QString("'%1'").arg(_str)
   QUrl ret(AZURE_API);
   if (from)
-    ret.addQueryItem(AZURE_API_FROM, QUOTE(lcode(from)));
-  ret.addQueryItem(AZURE_API_TO, QUOTE(lcode(to)));
-  ret.addEncodedQueryItem(AZURE_API_TEXT, QUrl::toPercentEncoding(QUOTE(text)));
+    ret.addQueryItem(AZURE_QUERY_FROM, QUOTE(lcode(from)));
+  ret.addQueryItem(AZURE_QUERY_TO, QUOTE(lcode(to)));
+  ret.addEncodedQueryItem(AZURE_QUERY_TEXT, QUrl::toPercentEncoding(QUOTE(text)));
 #undef QUOTE
   return ret;
 }

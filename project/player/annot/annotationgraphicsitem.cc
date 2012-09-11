@@ -222,7 +222,6 @@ AnnotationGraphicsItem::AnnotationGraphicsItem(
 
   setGraphicsEffect(effect_ = new AnnotationGraphicsEffect);
 
-  Q_ASSERT(document());
   QTextOption opt = document()->defaultTextOption();
   opt.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
   opt.setAlignment(Qt::AlignCenter);
@@ -245,7 +244,7 @@ const QString&
 AnnotationGraphicsItem::plainText() const
 {
   if (plainText_.isEmpty() && !text_.isEmpty())
-    plainText_ = QtExt::htmlToPlainText(text_).simplified();
+    plainText_ = document()->toPlainText().simplified(); //QtExt::htmlToPlainText(text_).simplified();
   return plainText_;
 }
 
@@ -301,7 +300,7 @@ void
 AnnotationGraphicsItem::updateOutlineColor()
 {
   setOutlineColor(
-    isOwner() ? QColor(ANNOTATION_OUTLINE_COLOR_SELF) :
+    //isOwner() ? QColor(ANNOTATION_OUTLINE_COLOR_SELF) :
     isSubtitle() ? AnnotationSettings::globalSettings()->subtitleColor() :
     AnnotationSettings::globalSettings()->outlineColor()
   );
@@ -416,7 +415,8 @@ AnnotationGraphicsItem::updateText()
 
   QStringList tags;
   boost::tie(text_, tags) = ANNOT_PARSE_CODE(text);
-  plainText_.clear();
+  if (!plainText_.isEmpty())
+    plainText_.clear();
   setTags(tags);
 
   if (!style_)
@@ -1016,8 +1016,8 @@ AnnotationGraphicsItem::showMe()
     fly();
     break;
   case FloatStyle:
-    if (!AnnotationSettings::globalSettings()->preferFloat() ||
-        isOwner())
+    if (!AnnotationSettings::globalSettings()->preferFloat())
+        //isOwner())
       fly();
     else {
       enum { msecs = FloatStayTime }; //stayTime();
@@ -1351,10 +1351,9 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
 
   QMenu *m = new QMenu(view_);
   QMenu *searchMenu = new QMenu(tr("Search"), view_);
-  QMenu *translateMenu = new QMenu(tr("Translate"), view_);
+  //QMenu *translateMenu = new QMenu(tr("Translate"), view_);
   AcUi::globalInstance()->setContextMenuStyle(m, false); // persistent = false
   AcUi::globalInstance()->setContextMenuStyle(searchMenu, false); // persistent = false
-  AcUi::globalInstance()->setContextMenuStyle(translateMenu, false); // persistent = false
 
   if (!hub_->isLiveTokenMode()) {
     QAction *a = m->addAction(tr("Edit"), this, SLOT(edit()));
@@ -1373,23 +1372,23 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
   searchMenu->addAction(QIcon(WBRC_IMAGE_BING), "Bing", this, SLOT(searchWithBing()));
   m->addMenu(searchMenu);
 
-  translateMenu->addAction(QIcon(ACRC_IMAGE_ENGLISH), TR(T_ENGLISH), this, SLOT(translateToEnglish()));
-  translateMenu->addSeparator();
-  translateMenu->addAction(QIcon(ACRC_IMAGE_JAPANESE), TR(T_JAPANESE), this, SLOT(translateToJapanese()));
-  translateMenu->addSeparator();
-  translateMenu->addAction(QIcon(ACRC_IMAGE_TRADITIONAL_CHINESE), TR(T_CHINESE), this, SLOT(translateToTraditionalChinese()));
-  translateMenu->addAction(QIcon(ACRC_IMAGE_SIMPLIFIED_CHINESE), TR(T_SIMPLIFIEDCHINESE), this, SLOT(translateToSimplifiedChinese()));
-  translateMenu->addSeparator();
-  translateMenu->addAction(QIcon(ACRC_IMAGE_KOREAN), TR(T_KOREAN), this, SLOT(translateToKorean()));
-  translateMenu->addSeparator();
-  translateMenu->addAction(QIcon(ACRC_IMAGE_FRENCH), TR(T_FRENCH), this, SLOT(translateToFrench()));
-  translateMenu->addAction(QIcon(ACRC_IMAGE_GERMAN), TR(T_GERMAN), this, SLOT(translateToGerman()));
-  translateMenu->addAction(QIcon(ACRC_IMAGE_ITALIAN), TR(T_ITALIAN), this, SLOT(translateToItalian()));
-  translateMenu->addAction(QIcon(ACRC_IMAGE_SPANISH), TR(T_SPANISH), this, SLOT(translateToSpanish()));
-  translateMenu->addAction(QIcon(ACRC_IMAGE_PORTUGUESE), TR(T_PORTUGUESE), this, SLOT(translateToPortuguese()));
-  translateMenu->addAction(QIcon(ACRC_IMAGE_RUSSIAN), TR(T_RUSSIAN), this, SLOT(translateToRussian()));
+  //translateMenu->addAction(QIcon(ACRC_IMAGE_ENGLISH), TR(T_ENGLISH), this, SLOT(translateToEnglish()));
+  //translateMenu->addSeparator();
+  //translateMenu->addAction(QIcon(ACRC_IMAGE_JAPANESE), TR(T_JAPANESE), this, SLOT(translateToJapanese()));
+  //translateMenu->addSeparator();
+  //translateMenu->addAction(QIcon(ACRC_IMAGE_TRADITIONAL_CHINESE), TR(T_CHINESE), this, SLOT(translateToTraditionalChinese()));
+  //translateMenu->addAction(QIcon(ACRC_IMAGE_SIMPLIFIED_CHINESE), TR(T_SIMPLIFIEDCHINESE), this, SLOT(translateToSimplifiedChinese()));
+  //translateMenu->addSeparator();
+  //translateMenu->addAction(QIcon(ACRC_IMAGE_KOREAN), TR(T_KOREAN), this, SLOT(translateToKorean()));
+  //translateMenu->addSeparator();
+  //translateMenu->addAction(QIcon(ACRC_IMAGE_FRENCH), TR(T_FRENCH), this, SLOT(translateToFrench()));
+  //translateMenu->addAction(QIcon(ACRC_IMAGE_GERMAN), TR(T_GERMAN), this, SLOT(translateToGerman()));
+  //translateMenu->addAction(QIcon(ACRC_IMAGE_ITALIAN), TR(T_ITALIAN), this, SLOT(translateToItalian()));
+  //translateMenu->addAction(QIcon(ACRC_IMAGE_SPANISH), TR(T_SPANISH), this, SLOT(translateToSpanish()));
+  //translateMenu->addAction(QIcon(ACRC_IMAGE_PORTUGUESE), TR(T_PORTUGUESE), this, SLOT(translateToPortuguese()));
+  //translateMenu->addAction(QIcon(ACRC_IMAGE_RUSSIAN), TR(T_RUSSIAN), this, SLOT(translateToRussian()));
 
-  m->addMenu(translateMenu);
+  m->addAction(tr("Translate"), this, SLOT(translatePlainText()));
 
     if (annot_.language() == Traits::SimplifiedChinese &&
       !AnnotationSettings::globalSettings()->preferTraditionalChinese())
@@ -1405,8 +1404,8 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
       m->addAction(TR(T_BLESS), this, SLOT(blessMe()));
       m->addAction(TR(T_CURSE), this, SLOT(curseMe()));
     }
-    m->addAction(TR(T_BLOCK), this, SLOT(blockMe()));
     if (annot_.hasUserAlias()) {
+      m->addAction(TR(T_BLOCK), this, SLOT(blockMe()));
       m->addSeparator();
       m->addAction(TR(T_MENUTEXT_BLOCKUSER) + ": " + annot_.userAlias(), this, SLOT(blockUser()));
     }
@@ -1415,7 +1414,7 @@ AnnotationGraphicsItem::contextMenuEvent(QContextMenuEvent *event)
   m->exec(event->globalPos());
   delete m;
   delete searchMenu;
-  delete translateMenu;
+  //delete translateMenu;
   event->accept();
 
   //if (!paused)
@@ -1489,6 +1488,32 @@ AnnotationGraphicsItem::mouseReleaseEvent(QMouseEvent *event)
   //if (dragPaused_ && isPaused() &&
   //    dragPos_ == event->globalPos() -  scenePos().toPoint())
   //  resume();
+
+  if (hub_->isSignalTokenMode() && isSubtitle() && isAnnotated()) {
+    int pos = charPositionAtGlobalPos(event->globalPos());
+    QTextCursor tc = textCursor();
+    tc.setPosition(pos);
+    tc.select(QTextCursor::WordUnderCursor);
+    if (tc.hasSelection()) {
+      QString t = tc.selectedText().trimmed();
+      if (!t.isEmpty()) {
+        view_->translateWord(t);
+
+        QTextCharFormat fmt;
+        //fmt.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+        //fmt.setUnderlineColor(Qt::red);
+        //fmt.setTextOutline(QPen(Qt::red));
+        fmt.setFontUnderline(true);
+        tc.mergeCharFormat(fmt);
+        //QTextCharFormat fmt = tc.charFormat();
+        //QFont font = fmt.font();
+        //font.setPointSizeF(font.pointSizeF() * 1.3);
+        //font.setUnderline(true);
+        //fmt.setFont(font);
+        //tc.setCharFormat(fmt);
+      }
+    }
+  }
 
  if (pressTime_ && pressTime_ + HoldTimeOut > QDateTime::currentMSecsSinceEpoch() &&
      isPaused())
@@ -1568,7 +1593,7 @@ AnnotationGraphicsItem::edit()
   }
 
   view_->editor()->setText(annot_.text());
-  view_->editor()->setId(annot_.id());
+  view_->editor()->setId(isAnnotated() ? qint64(-1) : annot_.id());
   view_->editor()->show();
 }
 
@@ -1783,11 +1808,11 @@ AnnotationGraphicsItem::searchWithGoogle()
 { searchWithEngine(SearchEngineFactory::Google); }
 
 void
-AnnotationGraphicsItem::translate(int lang)
+AnnotationGraphicsItem::translatePlainText()
 {
   QString t = plainText();
   if (!t.isEmpty())
-    view_->translateText(t, lang);
+    view_->translateText(t);
 }
 
 void
@@ -1798,48 +1823,67 @@ AnnotationGraphicsItem::showTraditionalChinese()
     view_->showTraditionalChinese(t);
 }
 
-void
-AnnotationGraphicsItem::translateToEnglish()
-{ translate(Translator::English); }
+//void
+//AnnotationGraphicsItem::translateToEnglish()
+//{ translate(Translator::English); }
+//
+//void
+//AnnotationGraphicsItem::translateToJapanese()
+//{ translate(Translator::Japanese); }
+//
+//void
+//AnnotationGraphicsItem::translateToTraditionalChinese()
+//{ translate(Translator::TraditionalChinese); }
+//
+//void
+//AnnotationGraphicsItem::translateToSimplifiedChinese()
+//{ translate(Translator::SimplifiedChinese); }
+//
+//void
+//AnnotationGraphicsItem::translateToKorean()
+//{ translate(Translator::Korean); }
+//
+//void
+//AnnotationGraphicsItem::translateToFrench()
+//{ translate(Translator::French); }
+//
+//void
+//AnnotationGraphicsItem::translateToGerman()
+//{ translate(Translator::German); }
+//
+//void
+//AnnotationGraphicsItem::translateToItalian()
+//{ translate(Translator::Italian); }
+//
+//void
+//AnnotationGraphicsItem::translateToSpanish()
+//{ translate(Translator::Spanish); }
+//
+//void
+//AnnotationGraphicsItem::translateToPortuguese()
+//{ translate(Translator::Portuguese); }
+//
+//void
+//AnnotationGraphicsItem::translateToRussian()
+//{ translate(Translator::Russian); }
 
-void
-AnnotationGraphicsItem::translateToJapanese()
-{ translate(Translator::Japanese); }
+// - Annotated Japanese -
 
-void
-AnnotationGraphicsItem::translateToTraditionalChinese()
-{ translate(Translator::TraditionalChinese); }
+bool
+AnnotationGraphicsItem::isAnnotated() const
+{ return annot_.text().contains(HTML_TABLE_CLOSE()); }
 
-void
-AnnotationGraphicsItem::translateToSimplifiedChinese()
-{ translate(Translator::SimplifiedChinese); }
 
-void
-AnnotationGraphicsItem::translateToKorean()
-{ translate(Translator::Korean); }
-
-void
-AnnotationGraphicsItem::translateToFrench()
-{ translate(Translator::French); }
-
-void
-AnnotationGraphicsItem::translateToGerman()
-{ translate(Translator::German); }
-
-void
-AnnotationGraphicsItem::translateToItalian()
-{ translate(Translator::Italian); }
-
-void
-AnnotationGraphicsItem::translateToSpanish()
-{ translate(Translator::Spanish); }
-
-void
-AnnotationGraphicsItem::translateToPortuguese()
-{ translate(Translator::Portuguese); }
-
-void
-AnnotationGraphicsItem::translateToRussian()
-{ translate(Translator::Russian); }
+int
+AnnotationGraphicsItem::charPositionAtGlobalPos(const QPoint &gp) const
+{
+  // See: http://www.qtforum.org/article/31604/figure-out-which-character-the-mouse-is-hovering-over-in-a-qtextedit.html
+  Q_ASSERT(document());
+  QPointF fp = pos();
+  return 1 + document()->documentLayout()->hitTest(
+    view_->mapFromGlobal(gp) - QPoint(fp.x(), fp.y()),
+    Qt::FuzzyHit
+  );
+}
 
 // EOF

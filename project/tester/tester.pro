@@ -23,8 +23,6 @@ include($$ROOTDIR/module/download/download.pri)
 #    include($$ROOTDIR/mac/qtmac/qtmac.pri)
 #}
 
-QT      += core gui
-
 ## Sources
 
 TEMPLATE      = app

@@ -11,7 +11,7 @@
 #include "module/debug/debug.h"
 
 #ifndef MOUSEHOOK_DLL_NAME
-# error "Please specify target DLL name."
+# error "require DLL name"
 #endif
 #define MOUSEHOOK_MODULE_NAME        MOUSEHOOK_DLL_NAME
 

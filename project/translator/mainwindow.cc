@@ -23,9 +23,9 @@
 #include "module/translator/translatormanager.h"
 #include "module/translator/jdictranslator.h"
 #include "module/translator/kotobanktranslator.h"
-#ifdef WITH_MODULE_MECABHIGHLIGHTER
-# include "module/mecabhighlighter/mecabhighlighter.h"
-#endif // WITH_MODULE_MECABHIGHLIGHTER
+#ifdef WITH_MODULE_MECAB
+# include "module/mecab/mecabhighlighter.h"
+#endif // WITH_MODULE_MECAB
 #ifdef WITH_WIN_ATLAS
 # include "win/atlas/atlas.h"
 #endif // WITH_WIN_ATLAS
@@ -79,14 +79,19 @@ enum { DEFAULT_TRANSLATORS = TranslatorManager::RomajiBit | TranslatorManager::O
 MainWindow::MainWindow(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), language_(0), disposed_(false), translatedTextChanged_(true)
 {
+
   //if (Settings::globalSettings()->windowOnTop())
   //  setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
   setWindowTitle(tr("Annot Translator"));
   setWindowIcon(QIcon(RC_IMAGE_APP));
 
+  language_ = Settings::globalSettings()->language();
+  if (!language_)
+    language_ = Translator::English;
+
   //createSearchEngines();
-  createLayout();
   createActions();
+  createLayout();
 #ifdef WITH_WIN_ATLAS
   createAtlas();
 #endif // WITH_WIN_ATLAS
@@ -135,30 +140,31 @@ MainWindow::MainWindow(QWidget *parent)
 
   // - Post status -
 
-  (Settings::globalSettings()->dictionary() == Kotobank ? kotobankButton_ : jdicButton_)
+  (Settings::globalSettings()->dictionary() == Kotobank ? kotobankAct_ : jdicAct_)
     ->setChecked(true);
 
   ulong t = Settings::globalSettings()->translationServices();
   if (!t)
     t = DEFAULT_TRANSLATORS;
-  romajiButton_->setChecked(t & TranslatorManager::RomajiBit);
-  microsoftButton_->setChecked(t & TranslatorManager::MicrosoftBit);
-  googleButton_->setChecked(t & TranslatorManager::GoogleBit);
-  ocnButton_->setChecked(t & TranslatorManager::OcnBit);
-  exciteButton_->setChecked(t & TranslatorManager::ExciteBit);
-  sdlButton_->setChecked(t & TranslatorManager::SdlBit);
-  systranButton_->setChecked(t & TranslatorManager::SystranBit);
-  niftyButton_->setChecked(t & TranslatorManager::NiftyBit);
-  infoseekButton_->setChecked(t & TranslatorManager::InfoseekBit);
-  yahooButton_->setChecked(t & TranslatorManager::YahooBit);
-  fresheyeButton_->setChecked(t & TranslatorManager::FresheyeBit);
-#ifdef WITH_WIN_ATLAS
-  atlasButton_->setChecked(Settings::globalSettings()->isAtlasEnabled());
-#endif // WITH_WIN_ATLAS
+  romajiAct_->setChecked(t & TranslatorManager::RomajiBit);
+  microsoftAct_->setChecked(t & TranslatorManager::MicrosoftBit);
+  googleAct_->setChecked(t & TranslatorManager::GoogleBit);
+  ocnAct_->setChecked(t & TranslatorManager::OcnBit);
+  exciteAct_->setChecked(t & TranslatorManager::ExciteBit);
+  sdlAct_->setChecked(t & TranslatorManager::SdlBit);
+  systranAct_->setChecked(t & TranslatorManager::SystranBit);
+  niftyAct_->setChecked(t & TranslatorManager::NiftyBit);
+  infoseekAct_->setChecked(t & TranslatorManager::InfoseekBit);
+  yahooAct_->setChecked(t & TranslatorManager::YahooBit);
+  fresheyeAct_->setChecked(t & TranslatorManager::FresheyeBit);
 
-  autoButton_->setChecked(true);
-  topButton_->setChecked(isWindowOnTop());
-  //clipboardButton_->setChecked(true);
+  autoAct_->setChecked(true);
+  topAct_->setChecked(isWindowOnTop());
+  clipboardAct_->setChecked(Settings::globalSettings()->monitorClipboard());
+
+#ifdef WITH_WIN_ATLAS
+  atlasAct_->setChecked(Settings::globalSettings()->isAtlasEnabled());
+#endif // WITH_WIN_ATLAS
 
   updateLanguage();
   updateTranslators();
@@ -187,53 +193,35 @@ MainWindow::createLayout()
   translateButton_ = ui->makeToolButton(AcUi::PushHint | AcUi::HighlightHint, tr("Translate"), this, SLOT(translate()));
   //new QShortcut(QKeySequence("CTRL+S"), this, SLOT(translate()));
 
-  autoButton_ = ui->makeToolButton(AcUi::CheckHint, tr("Auto"), tr("Automatically translate selected text"));
-  clipboardButton_ = ui->makeToolButton(AcUi::CheckHint, tr("Clipboard"), tr("Monitor and translate clipboard text"), this, SLOT(translateClipboard()));
-  topButton_ = ui->makeToolButton(AcUi::CheckHint, tr("Top"), tr("Window stays on top"), this, SLOT(setWindowOnTop(bool)));
+  menuButton_ = ui->makeToolButton(AcUi::PushHint, tr("Menu"), this, SLOT(showMenu()));
+  menuButton_->setMenu(contextMenu_);
 
-  languageCombo_ = ui->makeComboBox(AcUi::ReadOnlyHint, QString(), tr("Language")); {
-    languageCombo_->addItem(QIcon(ACRC_IMAGE_ENGLISH), tr("English"));
-    languageCombo_->addItem(QIcon(ACRC_IMAGE_TRADITIONAL_CHINESE), tr("Chinese")); // Chinese = Traditional Chinese, fack ccp
-    languageCombo_->addItem(QIcon(ACRC_IMAGE_SIMPLIFIED_CHINESE), tr("Simplified Chinese"));
-    languageCombo_->addItem(QIcon(ACRC_IMAGE_KOREAN), tr("Korean"));
-    languageCombo_->addItem(QIcon(ACRC_IMAGE_FRENCH), tr("French"));
-    languageCombo_->addItem(QIcon(ACRC_IMAGE_GERMAN), tr("German"));
-    languageCombo_->addItem(QIcon(ACRC_IMAGE_ITALIAN), tr("Italian"));
-    languageCombo_->addItem(QIcon(ACRC_IMAGE_SPANISH), tr("Spanish"));
-    languageCombo_->addItem(QIcon(ACRC_IMAGE_PORTUGUESE), tr("Portuguese"));
-    languageCombo_->addItem(QIcon(ACRC_IMAGE_RUSSIAN), tr("Russian"));
-    languageCombo_->addItem(QIcon(ACRC_IMAGE_JAPANESE), tr("Japanese"));
-  }
-  int lang = Settings::globalSettings()->languageIndex();
-  lang = qBound(0, lang, languageCombo_->count());
-  languageCombo_->setCurrentIndex(lang);
-  connect(languageCombo_, SIGNAL(activated(int)), SLOT(updateLanguage()));
-  connect(languageCombo_, SIGNAL(activated(int)), SLOT(translate()));
-
-  kotobankButton_ = ui->makeRadioButton(0, tr("Kotobank"), tr("Kotobank Translator") + " (ja)", this, SLOT(updateTranslators()));
-  jdicButton_ = ui->makeRadioButton(0, tr("WWWJDIC"), tr("WWWJDIC Translator") + " (en)", this, SLOT(updateTranslators()));
-  romajiButton_ = ui->makeCheckBox(0, tr("Romaji"), tr("Romaji Translator"), this, SLOT(updateTranslators()));
-  microsoftButton_ = ui->makeCheckBox(0, tr("Microsoft"), tr("Microsoft Translator"), this, SLOT(updateTranslators()));
-  googleButton_ = ui->makeCheckBox(0, tr("Google"), tr("Google Translator"), this, SLOT(updateTranslators()));
-  infoseekButton_ = ui->makeCheckBox(0, tr("Infoseek"), tr("Infoseek Honyaku"), this, SLOT(updateTranslators()));
-  yahooButton_ = ui->makeCheckBox(0, tr("Yahoo!"), tr("Yahoo! Honyaku"), this, SLOT(updateTranslators()));
-  fresheyeButton_ = ui->makeCheckBox(0, tr("freshEYE"), tr("freshEYE Honyaku") + " (en,zh)", this, SLOT(updateTranslators()));
-  ocnButton_ = ui->makeCheckBox(0, tr("OCN"), tr("OCN Honyaku") + " (en,zh,ko)", this, SLOT(updateTranslators()));
-  exciteButton_ = ui->makeCheckBox(0, tr("Excite"), tr("Excite Honyaku") + " (en)", this, SLOT(updateTranslators()));
-  sdlButton_ = ui->makeCheckBox(0, tr("SDL"), tr("SDL Translator") + " (en)", this, SLOT(updateTranslators()));
-  systranButton_ = ui->makeCheckBox(0, tr("SYSTRAN"), tr("SYSTRAN Translator") + " (en)", this, SLOT(updateTranslators()));
-  niftyButton_ = ui->makeCheckBox(0, tr("@nifty"), tr("@nifty honyaku") + " (en)", this, SLOT(updateTranslators()));
-#ifdef WITH_WIN_ATLAS
-  atlasButton_ = ui->makeCheckBox(0, tr("ATLAS"), tr("ATLAS Honyaku") + " (en)" " [" + tr("Offline") + "]", this, SLOT(updateTranslators()));
-#endif //WITH_WIN_ATLAS
+  //languageCombo_ = ui->makeComboBox(AcUi::ReadOnlyHint, QString(), tr("Language")); {
+  //  languageCombo_->addItem(QIcon(ACRC_IMAGE_ENGLISH), tr("English"));
+  //  languageCombo_->addItem(QIcon(ACRC_IMAGE_TRADITIONAL_CHINESE), tr("Chinese")); // Chinese = Traditional Chinese, fack ccp
+  //  languageCombo_->addItem(QIcon(ACRC_IMAGE_SIMPLIFIED_CHINESE), tr("Simplified Chinese"));
+  //  languageCombo_->addItem(QIcon(ACRC_IMAGE_KOREAN), tr("Korean"));
+  //  languageCombo_->addItem(QIcon(ACRC_IMAGE_FRENCH), tr("French"));
+  //  languageCombo_->addItem(QIcon(ACRC_IMAGE_GERMAN), tr("German"));
+  //  languageCombo_->addItem(QIcon(ACRC_IMAGE_ITALIAN), tr("Italian"));
+  //  languageCombo_->addItem(QIcon(ACRC_IMAGE_SPANISH), tr("Spanish"));
+  //  languageCombo_->addItem(QIcon(ACRC_IMAGE_PORTUGUESE), tr("Portuguese"));
+  //  languageCombo_->addItem(QIcon(ACRC_IMAGE_RUSSIAN), tr("Russian"));
+  //  languageCombo_->addItem(QIcon(ACRC_IMAGE_JAPANESE), tr("Japanese"));
+  //}
+  //int lang = Settings::globalSettings()->languageIndex();
+  //lang = qBound(0, lang, languageCombo_->count());
+  //languageCombo_->setCurrentIndex(lang);
+  //connect(languageCombo_, SIGNAL(activated(int)), SLOT(updateLanguage()));
+  //connect(languageCombo_, SIGNAL(activated(int)), SLOT(translate()));
 
   translateEdit_ = new TranslateEdit;
   connect(translateEdit_, SIGNAL(textChanged()), SLOT(autoTranslate()));
   connect(translateEdit_, SIGNAL(selectedTextChanged(QString)), SLOT(highlightText(QString)));
   connect(translateEdit_, SIGNAL(selectedTextChanged(QString)), SLOT(autoTranslate(QString)));
-#ifdef WITH_MODULE_MECABHIGHLIGHTER
+#ifdef WITH_MODULE_MECAB
   new MeCabHighlighter(translateEdit_);
-#endif // WITH_MODULE_MECABHIGHLIGHTER
+#endif // WITH_MODULE_MECAB
 
   for (size_t i = 0; i < sizeof(browsers_)/sizeof(*browsers_); i++) {
     QTextBrowser *b = browsers_[i] = new TranslateBrowser;
@@ -250,36 +238,13 @@ MainWindow::createLayout()
 
   // Layout
   QVBoxLayout *rows = new QVBoxLayout; {
-    QHBoxLayout *options = new QHBoxLayout,
-                *translators = new QHBoxLayout;
-    rows->addLayout(translators);
-    rows->addLayout(options);
+    QHBoxLayout *header = new QHBoxLayout;
+    rows->addLayout(header);
 
-    options->addWidget(translateButton_);
-    options->addWidget(languageCombo_);
-    options->addStretch();
-    options->addWidget(autoButton_);
-    options->addWidget(clipboardButton_);
-    options->addWidget(topButton_);
-
-    translators->addWidget(kotobankButton_);
-    translators->addWidget(jdicButton_);
-    translators->addStretch();
-    translators->addWidget(romajiButton_);
-    translators->addWidget(ocnButton_);
-    translators->addWidget(fresheyeButton_);
-    translators->addWidget(infoseekButton_);
-    translators->addWidget(yahooButton_);
-    translators->addWidget(googleButton_);
-    translators->addWidget(microsoftButton_);
-    translators->addWidget(niftyButton_);
-    translators->addWidget(exciteButton_);
-    translators->addWidget(sdlButton_);
-    translators->addWidget(systranButton_);
-#ifdef WITH_WIN_ATLAS
-    translators->addStretch();
-    translators->addWidget(atlasButton_);
-#endif // //WITH_WIN_ATLAS
+    header->addWidget(translateButton_);
+    //header->addWidget(languageCombo_);
+    header->addStretch();
+    header->addWidget(menuButton_);
 
     QSplitter *h = new QSplitter(Qt::Horizontal),
               *left = new QSplitter(Qt::Vertical),
@@ -302,8 +267,7 @@ MainWindow::createLayout()
     int patch = 0;
     if (!AcUi::isAeroAvailable())
       patch = 9;
-    options->setContentsMargins(0, 0, 0, 0);
-    translators->setContentsMargins(9, 0, 0, 0);
+    header->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(patch, patch, patch, patch);
     setContentsMargins(0, 0, 0, 0);
   } setCentralWidget(new LayoutWidget(rows, this));
@@ -370,42 +334,108 @@ MainWindow::createActions()
 //
   //}
 
+  QMenu *settingsMenu = m = new QMenu(tr("Settings") + " ...", this); {
+    clipboardAct_ = m->addAction(tr("Monitor Clipboard"));
+    clipboardAct_->setCheckable(true);
+
+    autoAct_ = m->addAction(tr("Auto Translate Selected Text"));
+    autoAct_->setCheckable(true);
+
+    topAct_ = m->addAction(tr("Window Stays On Top"), this, SLOT(toggleWindowOnTop()));
+    topAct_->setCheckable(true);
+  }
+
+  QMenu *wordMenu = m = new QMenu(tr("Word Translators") + " ...", this); {
+    kotobankAct_ = m->addAction(tr("Kotobank") + " (ja)", this, SLOT(setWordTranslatorToKotobank()));
+    kotobankAct_->setCheckable(true);
+
+    jdicAct_ = m->addAction(tr("WWWJDIC") + " (en)", this, SLOT(setWordTranslatorToJdic()));
+    jdicAct_->setCheckable(true);
+  }
+
+  QMenu *textMenu = m = new QMenu(tr("Text Translators") + " ...", this); {
+    romajiAct_ = m->addAction(tr("Romaji"), this, SLOT(updateTranslators()));
+    romajiAct_->setCheckable(true);
+    m->addSeparator();
+
+    ocnAct_ = m->addAction(tr("OCN") + " (en,zh,ko)", this, SLOT(updateTranslators()));
+    ocnAct_->setCheckable(true);
+    fresheyeAct_ = m->addAction(tr("freshEYE") + " (en,zh)", this, SLOT(updateTranslators()));
+    fresheyeAct_->setCheckable(true);
+
+    m->addSeparator();
+    infoseekAct_ = m->addAction(tr("Infoseek"), this, SLOT(updateTranslators()));
+    infoseekAct_->setCheckable(true);
+    yahooAct_ = m->addAction(tr("Yahoo!"), this, SLOT(updateTranslators()));
+    yahooAct_->setCheckable(true);
+    microsoftAct_ = m->addAction(tr("Microsoft"), this, SLOT(updateTranslators()));
+    microsoftAct_->setCheckable(true);
+    googleAct_ = m->addAction(tr("Google"), this, SLOT(updateTranslators()));
+    googleAct_->setCheckable(true);
+
+    m->addSeparator();
+    niftyAct_ = m->addAction(tr("@nifty") + " (en)", this, SLOT(updateTranslators()));
+    niftyAct_->setCheckable(true);
+    exciteAct_ = m->addAction(tr("Excite") + " (en)", this, SLOT(updateTranslators()));
+    exciteAct_->setCheckable(true);
+    sdlAct_ = m->addAction(tr("SDL") + " (en)", this, SLOT(updateTranslators()));
+    sdlAct_->setCheckable(true);
+    systranAct_ = m->addAction(tr("SYSTRAN") + " (en)", this, SLOT(updateTranslators()));
+    systranAct_->setCheckable(true);
+  }
+
+  QMenu *languageMenu = m = new QMenu(tr("Language"), this); {
+    AcUi::globalInstance()->setContextMenuStyle(m, true); // persistent = true
+
+    englishAct_ = m->addAction(tr("English"), this, SLOT(setLanguageToEnglish()));
+    englishAct_->setCheckable(true);
+    m->addSeparator();
+    traditionalChineseAct_ = m->addAction(tr("Chinese"), this, SLOT(setLanguageToTraditionalChinese()));
+    traditionalChineseAct_->setCheckable(true);
+    simplifiedChineseAct_ = m->addAction(tr("Simplfied Chinese"), this, SLOT(setLanguageToSimplifiedChinese()));
+    simplifiedChineseAct_->setCheckable(true);
+    m->addSeparator();
+    koreanAct_ = m->addAction(tr("Korean"), this, SLOT(setLanguageToKorean()));
+    koreanAct_->setCheckable(true);
+    m->addSeparator();
+    frenchAct_ = m->addAction(tr("French"), this, SLOT(setLanguageToFrench()));
+    frenchAct_->setCheckable(true);
+    germanAct_ = m->addAction(tr("German"), this, SLOT(setLanguageToGerman()));
+    germanAct_->setCheckable(true);
+    italianAct_ = m->addAction(tr("Italian"), this, SLOT(setLanguageToItalian()));
+    italianAct_->setCheckable(true);
+    spanishAct_ = m->addAction(tr("Spanish"), this, SLOT(setLanguageToSpanish()));
+    spanishAct_->setCheckable(true);
+    portugueseAct_ = m->addAction(tr("Portuguese"), this, SLOT(setLanguageToPortuguese()));
+    portugueseAct_->setCheckable(true);
+    russianAct_ = m->addAction(tr("Russian"), this, SLOT(setLanguageToRussian()));
+    russianAct_->setCheckable(true);
+    m->addSeparator();
+    japaneseAct_ = m->addAction(tr("Japanese"), this, SLOT(setLanguageToJapanese()));
+    japaneseAct_->setCheckable(true);
+
+  }
+
   // Create menus
   m = contextMenu_ = new QMenu(this); {
     AcUi::globalInstance()->setContextMenuStyle(m, true); // persistent = true
-  //  m->addMenu(copyMenu_);
-  //  m->addSeparator();
-  //  m->addAction(startAct_);
-  //  m->addAction(openDirectoryAct_);
-  //  m->addAction(playAct_);
-  //  m->addAction(browseAct_);
-  //  m->addSeparator();
-  //  m->addAction(stopAct_);
-  //  m->addAction(restartAct_);
-  //  m->addAction(removeAct_);
-  //  m->addSeparator();
-  //  m->addAction(startAllAct_);
-  //  m->addAction(stopAllAct_);
-  //  m->addAction(removeAllAct_);
-  //  m->addSeparator();
-  //#ifndef Q_OS_MAC
-  //  m->addAction(menuBarAct_);
-  //  m->addAction(tr("Preferences"), this, SLOT(preferences()), QKeySequence("CTRL+,"));
-  //#endif // Q_OS_MAC
+
+    atlasAct_ = m->addMenu(wordMenu);
+    atlasAct_ = m->addMenu(textMenu);
+#ifdef WITH_WIN_ATLAS
+    atlasAct_ = m->addAction(tr("ATLAS Offline Translator"));
+#endif //WITH_WIN_ATLAS
+    m->addSeparator();
+#ifndef Q_OS_MAC
+    m->addAction(tr("Preferences"), this, SLOT(showPreferences()), QKeySequence("ALT+O"));
+#endif // Q_OS_WIN
+    m->addMenu(settingsMenu);
+    m->addMenu(languageMenu);
+    m->addSeparator();
+#ifndef Q_OS_MAC
+    m->addAction(tr("Hide"), this, SLOT(fadeOut()), QKeySequence("CTRL+H"));
+#endif // Q_OS_WIN
     m->addAction(tr("About"), this, SLOT(showAbout()));
-
-    m->addAction(tr("Preferences"), this, SLOT(showPreferences())
-#ifdef Q_OS_WIN
-      , QKeySequence("ALT+O")
-#endif // Q_OS_WIN
-    );
-
-    m->addAction(tr("Hide"), this, SLOT(fadeOut())
-#ifdef Q_OS_WIN
-      , QKeySequence("CTRL+H")
-#endif // Q_OS_WIN
-    );
-
     m->addAction(tr("Quit"), this, SLOT(quit()));
   }
 
@@ -456,45 +486,67 @@ MainWindow::currentDictionary() const
          DictionaryCount;
 }
 
-// See: http://msdn.microsoft.com/en-us/library/hh456380.aspx
-// Must be consistent with Translator::languageCode
+void MainWindow::setLanguageToEnglish() { language_ = Translator::English; updateLanguage(); }
+void MainWindow::setLanguageToJapanese() { language_ = Translator::Japanese; updateLanguage(); }
+void MainWindow::setLanguageToTraditionalChinese() { language_ = Translator::TraditionalChinese; updateLanguage(); }
+void MainWindow::setLanguageToSimplifiedChinese() { language_ = Translator::SimplifiedChinese; updateLanguage(); }
+void MainWindow::setLanguageToKorean() { language_ = Translator::Korean; updateLanguage(); }
+void MainWindow::setLanguageToFrench() { language_ = Translator::French; updateLanguage(); }
+void MainWindow::setLanguageToGerman() { language_ = Translator::German; updateLanguage(); }
+void MainWindow::setLanguageToItalian() { language_ = Translator::Italian; updateLanguage(); }
+void MainWindow::setLanguageToSpanish() { language_ = Translator::Spanish; updateLanguage(); }
+void MainWindow::setLanguageToPortuguese() { language_ = Translator::Portuguese; updateLanguage(); }
+void MainWindow::setLanguageToRussian() { language_ = Translator::Russian; updateLanguage(); }
+
 void
 MainWindow::updateLanguage()
 {
-  switch (languageCombo_->currentIndex()) {
-  case English: language_ = Translator::English; break;
-  case TraditionalChinese: language_  = Translator::TraditionalChinese; break;
-  case SimplifiedChinese: language_  = Translator::SimplifiedChinese; break;
-  case Korean:  language_ = Translator::Korean; break;
-  case French:  language_ = Translator::French; break;
-  case German:  language_ = Translator::German; break;
-  case Italian: language_ = Translator::Italian; break;
-  case Spanish: language_ = Translator::Spanish; break;
-  case Portuguese: language_ = Translator::Portuguese; break;
-  case Russian: language_ = Translator::Russian; break;
-  case Japanese:language_ = Translator::Japanese; break;
-
-  default: Q_ASSERT(0); language_ = Translator::English;
-  }
+  englishAct_->setChecked(language_ == Translator::English);
+  japaneseAct_->setChecked(language_ == Translator::Japanese);
+  traditionalChineseAct_->setChecked(language_ == Translator::TraditionalChinese);
+  simplifiedChineseAct_->setChecked(language_ == Translator::SimplifiedChinese);
+  koreanAct_->setChecked(language_ == Translator::Korean);
+  frenchAct_->setChecked(language_ == Translator::French);
+  germanAct_->setChecked(language_ == Translator::German);
+  italianAct_->setChecked(language_ == Translator::Italian);
+  spanishAct_->setChecked(language_ == Translator::Spanish);
+  portugueseAct_->setChecked(language_ == Translator::Portuguese);
+  russianAct_->setChecked(language_ == Translator::Russian);
 }
 
 void
 MainWindow::updateTranslators()
 {
-  kotobankTranslator_->setEnabled(kotobankButton_->isChecked());
-  jdicTranslator_->setEnabled(jdicButton_->isChecked());
+  kotobankTranslator_->setEnabled(kotobankAct_->isChecked());
+  jdicTranslator_->setEnabled(jdicAct_->isChecked());
 
-  textTranslator_->setService(TranslatorManager::Romaji, romajiButton_->isChecked());
-  textTranslator_->setService(TranslatorManager::Google, googleButton_->isChecked());
-  textTranslator_->setService(TranslatorManager::Microsoft, microsoftButton_->isChecked());
-  textTranslator_->setService(TranslatorManager::Ocn, ocnButton_->isChecked());
-  textTranslator_->setService(TranslatorManager::Excite, exciteButton_->isChecked());
-  textTranslator_->setService(TranslatorManager::Sdl, sdlButton_->isChecked());
-  textTranslator_->setService(TranslatorManager::Systran, systranButton_->isChecked());
-  textTranslator_->setService(TranslatorManager::Nifty, niftyButton_->isChecked());
-  textTranslator_->setService(TranslatorManager::Infoseek, infoseekButton_->isChecked());
-  textTranslator_->setService(TranslatorManager::Yahoo, yahooButton_->isChecked());
-  textTranslator_->setService(TranslatorManager::Fresheye, fresheyeButton_->isChecked());
+  textTranslator_->setService(TranslatorManager::Romaji, romajiAct_->isChecked());
+  textTranslator_->setService(TranslatorManager::Google, googleAct_->isChecked());
+  textTranslator_->setService(TranslatorManager::Microsoft, microsoftAct_->isChecked());
+  textTranslator_->setService(TranslatorManager::Ocn, ocnAct_->isChecked());
+  textTranslator_->setService(TranslatorManager::Excite, exciteAct_->isChecked());
+  textTranslator_->setService(TranslatorManager::Sdl, sdlAct_->isChecked());
+  textTranslator_->setService(TranslatorManager::Systran, systranAct_->isChecked());
+  textTranslator_->setService(TranslatorManager::Nifty, niftyAct_->isChecked());
+  textTranslator_->setService(TranslatorManager::Infoseek, infoseekAct_->isChecked());
+  textTranslator_->setService(TranslatorManager::Yahoo, yahooAct_->isChecked());
+  textTranslator_->setService(TranslatorManager::Fresheye, fresheyeAct_->isChecked());
+}
+
+void
+MainWindow::setWordTranslatorToKotobank()
+{
+  kotobankAct_->setChecked(true);
+  jdicAct_->setChecked(false);
+  updateTranslators();
+}
+
+void
+MainWindow::setWordTranslatorToJdic()
+{
+  kotobankAct_->setChecked(false);
+  jdicAct_->setChecked(true);
+  updateTranslators();
 }
 
 // - Events -
@@ -508,14 +560,26 @@ MainWindow::setVisible(bool visible)
 }
 
 void
+MainWindow::updateContextMenu()
+{ topAct_->setChecked(isWindowOnTop());  }
+
+void
 MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
   Q_ASSERT(event);
   //updateActions();
   //if (copyMenu_->isEnabled())
   //  updateCopyMenu();
+  updateContextMenu();
   contextMenu_->exec(event->globalPos());
   event->accept();
+}
+
+void
+MainWindow::showMenu()
+{
+  updateContextMenu();
+  menuButton_->showMenu();
 }
 
 void
@@ -570,7 +634,7 @@ MainWindow::keyPressEvent(QKeyEvent *e)
 void
 MainWindow::translateClipboard()
 {
-  if (!clipboardButton_->isChecked())
+  if (!clipboardAct_->isChecked())
     return;
   QString text = QApplication::clipboard()->text().trimmed();
   if (!text.isEmpty())
@@ -596,11 +660,11 @@ MainWindow::showTranslate(const QStringList &l)
 
 void
 MainWindow::autoTranslate()
-{ if (autoButton_->isChecked()) translate(); }
+{ if (autoAct_->isChecked()) translate(); }
 
 void
 MainWindow::autoTranslate(const QString &text)
-{ if (autoButton_->isChecked()) translate(text); }
+{ if (autoAct_->isChecked()) translate(text); }
 
 void
 MainWindow::translate()
@@ -667,6 +731,7 @@ void
 MainWindow::quit()
 {
   disposed_ = true;
+  //DOUT("size =" << size());
   fadeOut();
   QTimer::singleShot(fadeAnimation()->duration(), this, SLOT(close()));
 }
@@ -689,10 +754,11 @@ MainWindow::saveSettings()
 {
   Settings *settings = Settings::globalSettings();
   //settings->setRecentSize(size());
-  settings->setLanguageIndex(languageCombo_->currentIndex());
+  settings->setLanguage(language_);
   settings->setDictionary(currentDictionary());
   settings->setWindowOnTop(isWindowOnTop());
   settings->setTranslationServices(textTranslator_->services());
+  settings->setMonitorClipboard(clipboardAct_->isChecked());
   settings->sync();
 
 #ifdef WITH_WIN_ATLAS
@@ -869,9 +935,9 @@ MainWindow::highlightText(const QString &input)
   if (t.isEmpty())
     return;
 
-#ifndef WITH_MODULE_MECABHIGHLIGHTER
+#ifndef WITH_MODULE_MECAB
   translateEdit_->highlightText(input);
-#endif // WITH_MODULE_MECABHIGHLIGHTER
+#endif // WITH_MODULE_MECAB
   BOOST_FOREACH (TranslateBrowser *e, browsers_)
     e->highlightText(input);
 }
@@ -882,7 +948,7 @@ MainWindow::highlightText(const QString &input)
 
 bool
 MainWindow::isAtlasEnabled() const
-{ return atlasButton_->isChecked(); }
+{ return atlasAct_->isChecked(); }
 
 void
 MainWindow::createAtlas()

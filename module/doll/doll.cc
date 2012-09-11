@@ -6,7 +6,7 @@
 #ifdef WITH_MODULE_AIML
 # include "module/aiml/aimlbot.h"
 #else
-# error "aiml is required"
+# error "require module aiml"
 #endif // WITH_MODULE_AIML
 
 #include <QtCore>

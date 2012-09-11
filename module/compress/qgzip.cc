@@ -5,7 +5,7 @@
 #ifdef WITH_GZIP
 # include <zlib.h>
 #else
-# error "gzip is required"
+# error "require lib gzip"
 #endif // WITH_GZIP
 
 //#define DEBUG "qgzip"

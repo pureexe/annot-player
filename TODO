@@ -5,10 +5,6 @@ http://db.tt/SrtkzxIJ
 http://qt-project.org/wiki/Category:Add-ons
 
 # Changes
-annot-player.exe
-annot-dict.exe
-README
-Changes
 
 # key ideas
 - stream trial games, and sub trial games in chinese
@@ -39,38 +35,23 @@ work on streaming
   http://www.codeproject.com/Articles/43586/File-System-Filter-Driver-Tutorial
   - in the future, use acipc to bypass license issue
 
+########
 
-# 0.1.9.5
-- atlas to player
+work on manual
 
-- emit two hashcode when game text changed
-  show bothpos a
-  when submit sub, always set hash to 1 instead of 4
+work on SNS system
+- work on permission
+- fame, score, and award
 
-# 0.1.9.6
+# 0.1.9.8
+- remove dependence on ip!!!!!!!
+  both from database and the webservice protocol
 
-- change the subtitle hash
+- grant/share edit permission for token
+- able to delete/edit guest by anyone
 
-- fix the windows registry misterious error
-
-- atlas
-  - add atlas translator, using signal/slot machanism
-  - cancel previous translation when new translation arrive
--  translator/player
-  move translators to preferences rather than outside
-
-- focus edit after submit text
-
-- add link to download/install applocale and free atlas
-
-- show circle in red, show text translation on the right
-  - show popup when hover using edict
-    or even wwwjdic / kotobank
-    mouse hovered text: key: qcursor:pos
-    http://www.qtforum.org/article/31604/figure-out-which-character-the-mouse-is-hovering-over-in-a-qtextedit.html
-    edict
-
-- add to preferences selection of translators easier
+- add edict for offline translation, take place of wwwjdic, see chiitrans2/edict.cs
+  - make it as instant popup when click
 
 - search engine
   - redesign searchengine mechanism, using a global search engine pool
@@ -80,25 +61,31 @@ work on streaming
   - library view and others, redesign
   - copy title / location, search title
 
+# 0.1.9.9
+- fixme: isannotated, doubleclick, singleclick, confliction
+
+rebuild on mac
+
+- able to show annotated  japanese annotation from nicovideo
+- shared pre-filter, post-filter, and term dictionary
+
+- generate a list of the entire translation
+  - save game scenario text as well!!!!!???
+
 - create a better game semi-auto translator
   create a better gui for human translation with ocn suggestions, etc
   - translate using google
   - automatically generate transation for human
   - human edit the translation
 
-- able to show annotated  japanese annotation from nicovideo
+# 0.1.9.10
+- add link to download/install applocale and free atlas
 
-- parse using yahoo, automatically popup translation for difficult word
- http://stackoverflow.com/questions/3254652/several-ways-of-placing-an-image-in-a-qtextedit
-  - yahoo api to show furigana
-  http://d.hatena.ne.jp/mitaina/20090908/1252416034
-  http://developer.yahoo.co.jp/webapi/jlp/furigana/v1/furigana.html
-  http://cgi.geocities.jp/ydevnet/sample/jlp/sample2/ma_sample.php
+- atlas
+  - add standalone atlas translator, using signal/slot machanism
+  - cancel previous translation when new translation arrive
 
 FIXME: XXX "/HW4@6E8F0!B5346E41" // tukumonotuki
-
-- grant/share edit permission for token
-- able to delete/edit guest by anyone
 
 - try curl or hack qnetworkaccessmanager
   - improve ocn translation speed using curl

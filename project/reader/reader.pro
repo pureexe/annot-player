@@ -12,8 +12,6 @@ win32 {
     include($$ROOTDIR/win/dwm/dwm.pri)
 }
 
-QT      += core gui webkit network
-
 ## Sources
 
 TARGET      = reader

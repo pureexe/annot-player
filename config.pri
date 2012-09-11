@@ -273,15 +273,23 @@ DEFINES += VERSION=\\\"$$VERSION\\\"
 
 ## Domains and accounts
 
-DEFINES += NICOVIDEO_USERNAME=\\\"oedivocin@gmail.com\\\" \
-           NICOVIDEO_PASSWORD=\\\"nicovideo.jp\\\"
-DEFINES += BILIBILI_USERNAME=\\\"oedivocin@gmail.com\\\" \
-           BILIBILI_PASSWORD=\\\"nicovideo.jp\\\"
+DEFINES += CONFIG_NICOVIDEO_USERNAME=\\\"oedivocin@gmail.com\\\" \
+           CONFIG_NICOVIDEO_PASSWORD=\\\"nicovideo.jp\\\"
+DEFINES += CONFIG_BILIBILI_USERNAME=\\\"oedivocin@gmail.com\\\" \
+           CONFIG_BILIBILI_PASSWORD=\\\"nicovideo.jp\\\"
 
 #DEFINES += ANNOT_PROXY_DOMAIN=\\\"sakuradite.com\\\"
-DEFINES += ANNOT_PROXY_DOMAIN=\\\"210.175.52.140\\\"
-DEFINES += ANNOT_HOST_IP=\\\"210.175.54.32\\\" \
-           ANNOT_DOC_IP=\\\"210.175.52.140\\\"
+DEFINES += CONFIG_PROXY_DOMAIN=\\\"210.175.52.140\\\"
+DEFINES += CONFIG_ANNOT_IP=\\\"210.175.54.32\\\" \
+           CONFIG_ANNOT_DOC_IP=\\\"210.175.52.140\\\"
+
+## IDs
+
+# Azure Market Key: https://datamarket.azure.com/account/datasets
+DEFINES += CONFIG_AZURE_ID=\\\"tuSmXew4CSnnGaX0vZyYdNLCrlInvAUepCX6p5l5THc=\\\"
+
+# Yahoo!JAPAN AppID: https://e.developer.yahoo.co.jp/dashboard/
+DEFINES += CONFIG_YAHOO_ID=\\\"mRr.UCWxg65ZTZTR_Mz0OTtj3sJ7xa5K66ZOGp55cgJsIDDeaB6e1LDY1NpEZ_AfZA--\\\"
 
 # EOF
 

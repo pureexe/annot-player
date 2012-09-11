@@ -47,9 +47,9 @@ QString
 InfoseekTranslator::translateUrl(const QString &text, const char *to, const char *from)
 {
   return INFOSEEK_API
-     "&" INFOSEEK_KEY_AUTH "=" INFOSEEK_AUTH_USER "+" INFOSEEK_AUTH_KEY
-     "&" INFOSEEK_KEY_LANG "=" + QString(from).append(to) +
-     "&" INFOSEEK_KEY_TEXT "=" + text;
+     "&" INFOSEEK_QUERY_AUTH "=" INFOSEEK_AUTH_USER "+" INFOSEEK_AUTH_KEY
+     "&" INFOSEEK_QUERY_LANG "=" + QString(from).append(to) +
+     "&" INFOSEEK_QUERY_TEXT "=" + text;
 }
 
 QNetworkReply*

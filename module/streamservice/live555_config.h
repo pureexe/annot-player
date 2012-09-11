@@ -9,7 +9,7 @@
 #endif // _MSC_VER
 
 #ifndef WITH_MODULE_STREAM
-# error "stream module is required"
+# error "require module stream"
 #endif // WITH_MODULE_STREAM
 
 #endif // LIVE555CONFIG_H

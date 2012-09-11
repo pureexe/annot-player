@@ -12,7 +12,6 @@
 QT_BEGIN_NAMESPACE
 class QRadioButton;
 class QCheckBox;
-class QComboBox;
 class QMenu;
 class QMenuBar;
 class QToolButton;
@@ -37,20 +36,20 @@ class MainWindow : public AcMainWindow
   typedef MainWindow Self;
   typedef AcMainWindow Base;
 
-  enum Language {
-    English = 0,
-    TraditionalChinese,
-    SimplifiedChinese,
-    Korean,
-    French,
-    German,
-    Italian,
-    Spanish,
-    Portuguese,
-    Russian,
-    Japanese,
-    LanguageCount
-  };
+  //enum Language {
+  //  English = 0,
+  //  TraditionalChinese,
+  //  SimplifiedChinese,
+  //  Korean,
+  //  French,
+  //  German,
+  //  Italian,
+  //  Spanish,
+  //  Portuguese,
+  //  Russian,
+  //  Japanese,
+  //  LanguageCount
+  //};
 
   enum Dictionary {
     Wwwjdic = 0,
@@ -72,15 +71,7 @@ class MainWindow : public AcMainWindow
   TranslatorManager *textTranslator_;
 
   TranslateEdit *translateEdit_;
-  QToolButton *translateButton_;
-
-  QComboBox *languageCombo_;
-
-  QToolButton *autoButton_, *clipboardButton_, *topButton_;
-  QCheckBox *romajiButton_, *yahooButton_, *microsoftButton_, *googleButton_,
-            *exciteButton_, *ocnButton_, *fresheyeButton_, *sdlButton_,
-            *niftyButton_, *infoseekButton_, *systranButton_;
-  QRadioButton *kotobankButton_, *jdicButton_;
+  QToolButton *translateButton_, *menuButton_;
 
   int language_;
 
@@ -91,6 +82,21 @@ public:
 protected slots:
   void updateTranslators();
   void updateLanguage();
+
+  void setWordTranslatorToJdic();
+  void setWordTranslatorToKotobank();
+
+  void setLanguageToEnglish();
+  void setLanguageToJapanese();
+  void setLanguageToTraditionalChinese();
+  void setLanguageToSimplifiedChinese();
+  void setLanguageToKorean();
+  void setLanguageToFrench();
+  void setLanguageToGerman();
+  void setLanguageToItalian();
+  void setLanguageToSpanish();
+  void setLanguageToPortuguese();
+  void setLanguageToRussian();
 
 protected:
   Dictionary currentDictionary() const;
@@ -103,6 +109,7 @@ protected:
   void closeEvent(QCloseEvent *event);
   void keyPressEvent(QKeyEvent *event);
 
+  void updateContextMenu();
   // - Actions -
 
 public slots:
@@ -110,6 +117,8 @@ public slots:
   void showTranslate(const QString &text);
   void showTranslate(const QStringList &l);
 protected slots:
+  void toggleWindowOnTop() { setWindowOnTop(!isWindowOnTop()); }
+
   void translate();
   void translate(const QString &text);
   void saveSettings();
@@ -119,6 +128,7 @@ protected slots:
   void autoTranslate();
   void autoTranslate(const QString &text);
 
+  void showMenu();
   void refresh();
   void quit();
   void showPreferences();
@@ -180,11 +190,27 @@ private:
   QMenuBar *menuBar_;
   QMenu *contextMenu_;
 
+  QAction *autoAct_, *clipboardAct_, *topAct_;
+  QAction *romajiAct_, *yahooAct_, *microsoftAct_, *googleAct_,
+          *exciteAct_, *ocnAct_, *fresheyeAct_, *sdlAct_,
+          *niftyAct_, *infoseekAct_, *systranAct_;
+  QAction *kotobankAct_, *jdicAct_;
+
+  QAction *englishAct_, *japaneseAct_,
+          *traditionalChineseAct_, *simplifiedChineseAct_,
+          *koreanAct_,
+          *frenchAct_,
+          *germanAct_,
+          *italianAct_,
+          *spanishAct_,
+          *portugueseAct_,
+          *russianAct_;
+
 #ifdef WITH_WIN_ATLAS
   void createAtlas();
   bool isAtlasEnabled() const;
   Atlas *atlas_;
-  QCheckBox *atlasButton_;
+  QAction *atlasAct_;
 #endif // WITH_WIN_ATLAS
 };
 

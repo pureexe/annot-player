@@ -32,14 +32,17 @@ public:
   void setRecentSize(const QSize &size);
   void clearRecentSize();
 
-  int languageIndex() const;
-  void setLanguageIndex(int index);
+  int language() const;
+  void setLanguage(int codepage);
 
   int dictionary() const;
   void setDictionary(int index);
 
   ulong translationServices() const;
   void setTranslationServices(ulong mask);
+
+  bool monitorClipboard() const;
+  void setMonitorClipboard(bool value);
 
   bool windowOnTop() const;
   void setWindowOnTop(bool value);

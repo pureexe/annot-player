@@ -17,11 +17,11 @@
 //MrlResolverManager::makeNetworkAccessManager()
 //{
 //  QNetworkAccessManager *ret = new QNetworkAccessManager;
-//#ifdef ANNOT_PROXY_DOMAIN
-//  ret->setCookieJar(new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", ANNOT_PROXY_DOMAIN, ret));
+//#ifdef CONFIG_PROXY_DOMAIN
+//  ret->setCookieJar(new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", CONFIG_PROXY_DOMAIN, ret));
 //#else
 //# warning "nico alias domain is not defined"
-//#endif // ANNOT_PROXY_DOMAIN
+//#endif // CONFIG_PROXY_DOMAIN
 //  return ret;
 //}
 

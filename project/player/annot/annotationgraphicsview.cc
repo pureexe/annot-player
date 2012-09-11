@@ -59,7 +59,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
     scale_(-1), // invalid
     rotation_(0),
     hoveredItemPaused_(false), hoveredItemResumed_(false), hoveredItemRemoved_(false), nearbyItemExpelled_(false), nearbyItemAttracted_(false),
-    itemVisible_(true), dragging_(false), maxItemCount_(ReservedItemCount)
+    itemVisible_(true), translateWordEnabled_(true), dragging_(false), maxItemCount_(ReservedItemCount)
 {
   Q_ASSERT(hub_);
   Q_ASSERT(player_);
@@ -1238,10 +1238,10 @@ AnnotationGraphicsView::searchText(const QString &text, int engine)
 }
 
 void
-AnnotationGraphicsView::translateText(const QString &text, int lang)
+AnnotationGraphicsView::translateText(const QString &text)
 {
   emit message(tr("translate") + ": " + HTML_SS_OPEN(color:orange) + text + HTML_SS_CLOSE());
-  emit translateRequested(text, lang);
+  emit translateTextRequested(text);
 }
 
 void
