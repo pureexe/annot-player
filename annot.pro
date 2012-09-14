@@ -4,8 +4,8 @@
 TEMPLATE = subdirs
 
 SUBDIRS = \
-    project
-    #module
+    src
+    #lib
 win32:  SUBDIRS += win
 #unix:   SUBDIRS += unix
 #mac:    SUBDIRS += mac

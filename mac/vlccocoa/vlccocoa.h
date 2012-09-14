@@ -5,9 +5,9 @@
 // 7/30/2011
 
 #ifdef WITH_MAC_QTCOCOA
-# include "qtcocoa/qtcocoa.h"
+# include "mac/qtcocoa/qtcocoa.h"
 #else
-# error "require module qtcocoa"
+# error "require lib qtcocoa"
 #endif // WITH_MAC_QTCOCOA
 #include <QtCore/QPoint>
 #include <QtCore/QRect>

@@ -1,7 +1,7 @@
-# annot.pri
+# config.pri
 # 9/3/2011
 
-## Config
+## Locations
 
 ROOTDIR = $$PWD
 BUILDDIR = $$ROOTDIR/../annot-build-desktop
@@ -246,6 +246,12 @@ CONFIG(noqt) {
   LIBS   -= -lQtCore -lQtGui
 }
 
+CONFIG(nogui) {
+  QT     -= gui
+  LIBS   -= -lQtGui
+  mac: CONFIG -= app_bundle
+}
+
 CONFIG(nocrt) {
   win32 {
     QMAKE_CFLAGS                -= -MD -MDd
@@ -265,7 +271,7 @@ CODECFORTR = UTF-8
 
 ## Debug
 
-include($$ROOTDIR/module/debug/debug.pri)
+#include($$ROOTDIR/lib/debug/debug.pri)
 
 ## Deploy
 

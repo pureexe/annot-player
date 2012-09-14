@@ -5,7 +5,7 @@
 #include <qt_windows.h>
 
 //#define DEBUG "wmtimer"
-#include "module/debug/debug.h"
+#include "lib/debug/debug.h"
 
 namespace { namespace detail {
   VOID CALLBACK TimerProc(

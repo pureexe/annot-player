@@ -6,7 +6,7 @@
 #include <string>
 
 //#define DEBUG "ith"
-#include "module/debug/debug.h"
+#include "lib/debug/debug.h"
 
 // - Implementation Details -
 

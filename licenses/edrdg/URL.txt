@@ -1,0 +1,2 @@
+http://www.csse.monash.edu.au/~jwb/edict_doc.html
+http://ftp.monash.edu.au/pub/nihongo/edict.gz

@@ -8,7 +8,7 @@
 #include <qt_windows.h>
 
 #define DEBUG "mousehook"
-#include "module/debug/debug.h"
+#include "lib/debug/debug.h"
 
 #ifndef MOUSEHOOK_DLL_NAME
 # error "require DLL name"

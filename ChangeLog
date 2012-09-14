@@ -2,6 +2,11 @@ ChangeLog (UTF-8)
 Annot Stream
 Since 6/18/2011
 
+9/?/2012 SUN	annot-player	0.1.9.8
+        * Annotation rendering improved.
+          Subtitles will be first filled in ghostwhite, then outlined in black, then blurred in magenta,
+          then rendered with arbitary background, then shadowed in black, and finally made transparent.
+
 9/9/2012 SUN	annot-player	0.1.9.7
         * Click to translate any word (parsed by MeCab) in displayed galgame text.
           If you don't like this feature, turn it off from the context menu.

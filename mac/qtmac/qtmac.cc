@@ -19,7 +19,7 @@
 #include <paths.h>
 
 #define DEBUG "qtmac"
-#include "module/debug/debug.h"
+#include "lib/debug/debug.h"
 
 // - Environment -
 

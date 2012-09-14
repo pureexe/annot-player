@@ -5,6 +5,9 @@ http://db.tt/SrtkzxIJ
 http://qt-project.org/wiki/Category:Add-ons
 
 # Changes
+annot-player,annot-dict
+dict/edict.txt
+Changes,Readme
 
 # key ideas
 - stream trial games, and sub trial games in chinese
@@ -40,18 +43,22 @@ work on streaming
 work on manual
 
 work on SNS system
-- work on permission
 - fame, score, and award
+- work on permission
+  -keep track of all modifications to subtitle
+  - onlly allow invited person to annotate
+
 
 # 0.1.9.8
-- remove dependence on ip!!!!!!!
-  both from database and the webservice protocol
-
-- grant/share edit permission for token
-- able to delete/edit guest by anyone
 
 - add edict for offline translation, take place of wwwjdic, see chiitrans2/edict.cs
   - make it as instant popup when click
+  - single click to show offline popup from ejdict
+
+- move lib/xt here
+
+- force show contribution of subtitle submitter
+  - enable user to say thanks
 
 - search engine
   - redesign searchengine mechanism, using a global search engine pool
@@ -62,7 +69,10 @@ work on SNS system
   - copy title / location, search title
 
 # 0.1.9.9
-- fixme: isannotated, doubleclick, singleclick, confliction
+
+- grant/share edit permission for token
+- able to delete/edit guest by anyone
+
 
 rebuild on mac
 

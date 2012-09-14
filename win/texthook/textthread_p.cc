@@ -7,7 +7,7 @@
 #include <QtCore>
 
 //#define DEBUG "textthread_p"
-#include "module/debug/debug.h"
+#include "lib/debug/debug.h"
 
 // - Properties
 

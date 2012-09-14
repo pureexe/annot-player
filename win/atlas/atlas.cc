@@ -16,7 +16,7 @@
 #define ATLE_REG_KEY    "DENJI"
 
 #define DEBUG "atlas"
-#include "module/debug/debug.h"
+#include "lib/debug/debug.h"
 
 // - Construction -
 

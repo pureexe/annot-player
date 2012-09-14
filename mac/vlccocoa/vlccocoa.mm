@@ -1,16 +1,16 @@
 // vlccocoa.mm
 // 7/30/2011
 //
-// Assume that global NSAutoreleasePool is already defined in qtcocoa module.
+// Assume that global NSAutoreleasePool is already defined in qtcocoa lib.
 
 #include "vlccocoa/vlccocoa.h"
 #import "vlccocoa/VLCOpenGLVoutView_public.h"
 #import "VLCKit/VLCKit.h"
-#include "module/vlccore/video.h"
+#include "lib/vlccore/video.h"
 //#include <objc/runtime.h>
 
 //#define DEBUG "qtvlc"
-#include "module/debug/debug.h"
+#include "lib/debug/debug.h"
 
 // - Type cast -
 
