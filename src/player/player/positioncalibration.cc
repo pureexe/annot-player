@@ -4,11 +4,11 @@
 #include "positioncalibration.h"
 #include "signalhub.h"
 #include "lib/player/player.h"
-#include "lib/qtext/datetime.h"
+#include "qtx/qxdatetime.h"
 #include <QtGui>
 
 //#define DEBUG "positioncalibration"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 enum { CanvasHeight = 11, // Exactly the same as LabelHeight
        MarginLeft = 10, MarginTop = 0 };
@@ -129,7 +129,7 @@ PositionCalibration::paintCoordinate(QPainter &painter, const QRect &view)
     int labelWidth = width / labelCount;
     for (int i = 0; i < labelCount; i++) {
       qint64 msecs = i * Stride * metric;
-      QTime t = QtExt::msecs2time(msecs);
+      QTime t = qxTimeFromMsec(msecs);
       QString label = msecs >= 3600 * 1000 ? t.toString("h:mm:ss")
                                            : t.toString("m:ss");
       int x = MarginSize + i * labelWidth,

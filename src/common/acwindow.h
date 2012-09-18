@@ -4,7 +4,7 @@
 // acwindow.h
 // 5/5/2012
 
-#include "lib/qtext/draggablewidget.h"
+#include "qtx/qxdraggablewidget.h"
 #include <QtCore/QList>
 
 #define AC_WINDOW_FLAGS ( \
@@ -19,7 +19,7 @@
 class AcTextView;
 class FadeAnimation;
 class RippleImageFilter;
-typedef QtExt::DraggableWidget AcWindowBase;
+typedef QxDraggableWidget AcWindowBase;
 class AcWindow : public AcWindowBase
 {
   Q_OBJECT

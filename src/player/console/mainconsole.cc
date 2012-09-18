@@ -6,11 +6,11 @@
 #include "rc.h"
 #include "global.h"
 #include "src/common/acui.h"
-#include "lib/qtext/ss.h"
+#include "htmlutil/sstags.h"
 #include <QtGui>
 
 #define DEBUG "mainconsole"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 enum { LineHeight = 9 };
 

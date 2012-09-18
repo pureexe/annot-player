@@ -113,6 +113,15 @@ enum { ALPHA = 0 };
 # define G_PATH_PROFILE        QDir::homePath() + "/.annot/player"
 #endif // Q_OS_WIN
 
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+# define G_PATH_DICT        QCoreApplication::applicationDirPath() + "/" "dict"
+#else
+# define G_PATH_DICT        G_PATH_PROFILE "/" "dict"
+#endif // Q_OS_
+
+#define G_PATH_EDICT   G_PATH_DICT "/" "edictu"
+#define G_PATH_EDICT2  G_PATH_DICT "/" "edict2u"
+
 #ifdef Q_OS_WIN
 # define G_PATH_LOGS   QCoreApplication::applicationDirPath() + "/.."
 # define G_PATH_DEBUG  G_PATH_LOGS "/" "Debug Player.txt"
@@ -151,11 +160,11 @@ enum { ALPHA = 0 };
 #define ANNOT_REDUCE_HTML(_html) AnnotCloud::AnnotationHtmlParser::globalInstance()->reduceHtml(_html)
 
 // - Hook -
-#ifdef WITH_WIN_HOOK
-  #define HOOK          WindowsHookManager::globalInstance()
-#else
-  #define HOOK          #error "Hook is not used"
-#endif // WITH_WIN_HOOK
+//#ifdef WITH_WIN_HOOK
+//# define HOOK          WindowsHookManager::globalInstance()
+//#else
+//# define HOOK          #error "Hook is not used"
+//#endif // WITH_WIN_HOOK
 
 // - QTH -
 //#ifdef WITH_WIN_QTH

@@ -3,7 +3,6 @@
 
 DEFINES += WITH_MAC_QTCOCOA
 
-INCLUDEPATH     += $$PWD/..
 DEPENDPATH      += $$PWD
 
 HEADERS         += $$PWD/qtcocoa.h

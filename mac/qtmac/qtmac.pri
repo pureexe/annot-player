@@ -3,7 +3,6 @@
 
 DEFINES += WITH_MAC_QTMAC
 
-INCLUDEPATH     += $$PWD/..
 DEPENDPATH      += $$PWD
 
 HEADERS += $$PWD/qtmac.h

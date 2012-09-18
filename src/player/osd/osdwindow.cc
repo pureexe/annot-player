@@ -2,14 +2,14 @@
 // 7/12/2011
 
 #include "osdwindow.h"
-#include "lib/qtext/eventforwarder.h"
+#include "qtx/qxeventforwarder.h"
 #ifdef Q_OS_LINUX
-# include "unix/qtx/qtx.h"
+# include "unix/qtx11/qtx11.h"
 #endif // Q_OS_LINUX
 #include <QtGui>
 
 //#define DEBUG "osdwindow"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Constructions -
 
@@ -89,7 +89,7 @@ OsdWindow::resizeEvent(QResizeEvent *event)
 {
   Base::resizeEvent(event);
 #ifdef Q_OS_LINUX
-  QtX::zeroWindowInputShape(winId());
+  QtX11::zeroWindowInputShape(winId());
 #endif // Q_OS_LINUX
 }
 

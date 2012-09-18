@@ -8,8 +8,8 @@
 #include "signalhub.h"
 #include "src/common/acfilteredtableview.h"
 #include "src/common/acui.h"
-#include "lib/qtext/datetime.h"
-#include "lib/qtext/layoutwidget.h"
+#include "qtx/qxdatetime.h"
+#include "qtx/qxlayoutwidget.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
@@ -120,7 +120,7 @@ AnnotationListView::createLayout()
     rows->setContentsMargins(9, 9, 9, 9);
     setContentsMargins(0, 0, 0, 0);
 
-  } setCentralWidget(new LayoutWidget(rows, this));
+  } setCentralWidget(new QxLayoutWidget(rows, this));
 }
 
 void
@@ -455,7 +455,7 @@ AnnotationListView::setNow(bool t)
   QString s;
   if (t) {
     s = hub_->isMediaTokenMode() ?
-      QtExt::msecs2time(annotationPos_).toString() :
+      qxTimeFromMsec(annotationPos_).toString() :
       QString::number(annotationPos_);
     s = '^' + s + '$';
   }

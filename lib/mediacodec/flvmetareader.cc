@@ -7,7 +7,7 @@
 #include "lib/stream/datainputstream.h"
 
 //#define DEBUG "flvmetareader"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define CHECK_OK        if (!ok) return false
 
@@ -379,7 +379,7 @@ FlvMetaReader::updateScriptTagDoubleValue(quint8 *data, const QString &var) cons
   if (update) {
     DOUT(var << "=" << value);
     quint8 bytes[size];
-    Bitwise::BigEndian::getBytes(bytes, value);
+    QxBitwise::BigEndian::getBytes(bytes, value);
     qMemCopy(data, bytes, size);
   }
   return update;

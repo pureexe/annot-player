@@ -14,7 +14,7 @@
 #endif // USE_MAC_CARBON
 
 //#define DEBUG "qtcocoa"
-//#include "lib/debug/debug.h"
+//#include "qtx/qxdebug.h"
 
 // - Type cast -
 

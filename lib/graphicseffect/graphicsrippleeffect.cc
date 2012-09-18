@@ -7,7 +7,7 @@
 #include <QtGui/QImage>
 
 #define DEBUG "graphicsrippleeffect"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

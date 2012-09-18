@@ -11,7 +11,7 @@
 #include <QtGui>
 
 //#define DEBUG "pickdialog"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define PICKER  WindowPicker::globalInstance()
 

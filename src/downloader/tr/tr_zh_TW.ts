@@ -474,7 +474,7 @@
 <context>
     <name>AcPreferences</name>
     <message>
-        <location filename="../../common/acpreferences.cc" line="52"/>
+        <location filename="../../common/acpreferences.cc" line="51"/>
         <source>Preferences</source>
         <translation>偏好</translation>
     </message>
@@ -1118,7 +1118,7 @@
     </message>
 </context>
 <context>
-    <name>QtExt::WebDialog</name>
+    <name>QxWebDialog</name>
     <message>
         <source>Clip the page</source>
         <translation type="obsolete">保存頁面</translation>
@@ -1165,13 +1165,13 @@
     </message>
 </context>
 <context>
-    <name>QtExt::WebView</name>
+    <name>QxWebView</name>
     <message>
         <source>Clip the page</source>
         <translation type="obsolete">保存頁面</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="104"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="103"/>
         <source>Save the web page as image to disk and clipboard</source>
         <translation>保存頁面為圖片並复制到剪貼板</translation>
     </message>
@@ -1188,82 +1188,82 @@
         <translation type="obsolete">正常尺寸</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="103"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="102"/>
         <source>Clip the Page</source>
         <translation>保存頁面</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="111"/>
-        <location filename="../../../lib/qtext/webview.cc" line="112"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="110"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="111"/>
         <source>Zoom In</source>
         <translation>擴大</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="119"/>
-        <location filename="../../../lib/qtext/webview.cc" line="120"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="118"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="119"/>
         <source>Zoom Out</source>
         <translation>縮小</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="127"/>
-        <location filename="../../../lib/qtext/webview.cc" line="128"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="126"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="127"/>
         <source>Actual Size</source>
         <translation>原始尺寸</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="135"/>
-        <location filename="../../../lib/qtext/webview.cc" line="136"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="134"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="135"/>
         <source>Clear Highlight</source>
         <translation>取消加亮</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="140"/>
-        <location filename="../../../lib/qtext/webview.cc" line="141"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="139"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="140"/>
         <source>Open in System Default Browser</source>
         <translation>用系統默認瀏覽器打開</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="233"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="229"/>
         <source>Unnamed</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="272"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="267"/>
         <source>opening</source>
         <translation>正在打開</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="296"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="290"/>
         <source>clipping</source>
         <translation>保存中</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="320"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="314"/>
         <source>saved</source>
         <translation>已保存</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="322"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="316"/>
         <source>unable to save</source>
         <translation>保存失敗</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="342"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="335"/>
         <source>failed to download %1</source>
         <translation>下載失敗：%1</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="346"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="339"/>
         <source>download is not allowed</source>
         <translation>無法下載</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="365"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="357"/>
         <source>History</source>
         <translation>歷史</translation>
     </message>
     <message>
-        <location filename="../../../lib/qtext/webview.cc" line="382"/>
+        <location filename="../../../lib/qtx/qxwebview.cc" line="374"/>
         <source>Blank</source>
         <translation>空白</translation>
     </message>
@@ -1415,27 +1415,27 @@
 <context>
     <name>TaskDialog</name>
     <message>
-        <location filename="../taskdialog.cc" line="31"/>
+        <location filename="../taskdialog.cc" line="27"/>
         <source>Add download URLs</source>
         <translation>添加下載鏈接</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="50"/>
+        <location filename="../taskdialog.cc" line="46"/>
         <source>http://www.nicovideo.jp/watch/sm12159572</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="51"/>
+        <location filename="../taskdialog.cc" line="47"/>
         <source>Click to paste the URL example</source>
         <translation>粘貼鏈接</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="54"/>
+        <location filename="../taskdialog.cc" line="50"/>
         <source>Example</source>
         <translation>例子</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="57"/>
+        <location filename="../taskdialog.cc" line="53"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
@@ -1448,32 +1448,32 @@
         <translation type="obsolete">減少</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="64"/>
+        <location filename="../taskdialog.cc" line="60"/>
         <source>Paste</source>
         <translation>粘貼</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="66"/>
+        <location filename="../taskdialog.cc" line="62"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="68"/>
+        <location filename="../taskdialog.cc" line="64"/>
         <source>Annot Only</source>
         <translation>彈幕Only</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="68"/>
+        <location filename="../taskdialog.cc" line="64"/>
         <source>Download annotation only</source>
         <translation>僅下載彈幕，不下載動畫</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="114"/>
+        <location filename="../taskdialog.cc" line="110"/>
         <source>duplicated</source>
         <translation>鏈接重复</translation>
     </message>
     <message>
-        <location filename="../taskdialog.cc" line="145"/>
+        <location filename="../taskdialog.cc" line="141"/>
         <source>invalid URLs</source>
         <translation>無效的鏈接</translation>
     </message>

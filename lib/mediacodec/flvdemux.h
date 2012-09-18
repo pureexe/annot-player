@@ -7,7 +7,7 @@
 // See: FLVExtractCl/Library/FLVFile.cs
 // http://moitah.net/
 
-#include "lib/qtext/stoppable.h"
+#include "qtx/qxstoppable.h"
 #include "lib/stream/inputstream.h"
 #include "lib/stream/outputstream.h"
 #include <QtCore/QObject>
@@ -17,7 +17,7 @@
 class MediaToc;
 class MediaWriter;
 
-class FlvDemux : public QObject, public StoppableTask
+class FlvDemux : public QObject, public QxStoppableTask
 {
   Q_OBJECT
   Q_DISABLE_COPY(FlvDemux)
@@ -104,7 +104,7 @@ protected:
   //FractionUInt32 calculateTrueFrameRate() const;
 };
 
-class FlvListDemux : public QObject, public StoppableTask
+class FlvListDemux : public QObject, public QxStoppableTask
 {
   Q_OBJECT
   Q_DISABLE_COPY(FlvListDemux)

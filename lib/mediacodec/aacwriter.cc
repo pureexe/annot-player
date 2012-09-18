@@ -3,12 +3,12 @@
 
 #include "lib/mediacodec/mediawriter.h"
 #include "lib/mediacodec/mediatoc.h"
-#include "lib/qtext/bitwise.h"
+#include "qtx/qxbitwise.h"
 
 #define DEBUG "aacwriter"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
-namespace Bitwise { using namespace BigEndian; }
+namespace QxBitwise { using namespace BigEndian; }
 
 // - AAC -
 
@@ -22,11 +22,11 @@ AacWriter::writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHead
     if (chunk.size() < 3) return;
 
     const quint8 *p = (const quint8 *)chunk.data();
-    quint64 bits = quint64(Bitwise::toUInt16(p, 1)) << 48;
+    quint64 bits = quint64(QxBitwise::toUInt16(p, 1)) << 48;
 
-    _aacProfile = Bitwise::read(bits, 5) - 1;
-    _sampleRateIndex = Bitwise::read(bits, 4);
-    _channelConfig = Bitwise::read(bits, 4);
+    _aacProfile = QxBitwise::read(bits, 5) - 1;
+    _sampleRateIndex = QxBitwise::read(bits, 4);
+    _channelConfig = QxBitwise::read(bits, 4);
 
     if ((_aacProfile < 0) || (_aacProfile > 3)) {
        DOUT("Unsupported AAC profile.");
@@ -49,24 +49,24 @@ AacWriter::writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHead
     if (toc_)
       toc_->append(out_->availableSize(), timestamp);
 
-    Bitwise::write(bits, 12, 0xFFF);
-    Bitwise::write(bits,  1, 0);
-    Bitwise::write(bits,  2, 0);
-    Bitwise::write(bits,  1, 1);
-    Bitwise::write(bits,  2, _aacProfile);
-    Bitwise::write(bits,  4, _sampleRateIndex);
-    Bitwise::write(bits,  1, 0);
-    Bitwise::write(bits,  3, _channelConfig);
-    Bitwise::write(bits,  1, 0);
-    Bitwise::write(bits,  1, 0);
-    Bitwise::write(bits,  1, 0);
-    Bitwise::write(bits,  1, 0);
-    Bitwise::write(bits, 13, 7 + dataSize);
-    Bitwise::write(bits, 11, 0x7FF);
-    Bitwise::write(bits,  2, 0);
+    QxBitwise::write(bits, 12, 0xFFF);
+    QxBitwise::write(bits,  1, 0);
+    QxBitwise::write(bits,  2, 0);
+    QxBitwise::write(bits,  1, 1);
+    QxBitwise::write(bits,  2, _aacProfile);
+    QxBitwise::write(bits,  4, _sampleRateIndex);
+    QxBitwise::write(bits,  1, 0);
+    QxBitwise::write(bits,  3, _channelConfig);
+    QxBitwise::write(bits,  1, 0);
+    QxBitwise::write(bits,  1, 0);
+    QxBitwise::write(bits,  1, 0);
+    QxBitwise::write(bits,  1, 0);
+    QxBitwise::write(bits, 13, 7 + dataSize);
+    QxBitwise::write(bits, 11, 0x7FF);
+    QxBitwise::write(bits,  2, 0);
 
     quint8 bytes[8];
-    Bitwise::getBytes(bytes, bits);
+    QxBitwise::getBytes(bytes, bits);
     out_->write(bytes + 1, 7);
     out_->write(chunk.data() + 1, dataSize);
   }

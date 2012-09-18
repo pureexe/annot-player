@@ -6,7 +6,7 @@
 
 #include "lib/mecab/mecabparser.h"
 #include "lib/annotcloud/annottag.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 #ifdef WITH_LIB_TEXTCODEC
 # include "lib/textcodec/textcodec.h"
 #else
@@ -20,7 +20,7 @@
 #include <mecab.h>
 
 //#define DEBUG "mecabparser"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 #include <QtCore/QDebug>
 
 //enum { u8sz = 3 }; // bytes of single utf8 char
@@ -55,6 +55,11 @@ MeCabParser::renderText(const QString &text, ulong hints)
   DOUT("enter: hints =" << hints << ", text =" << text);
 
   MeCab::Tagger *t = tagger();
+  Q_ASSERT(t);
+  if (!t) {
+    DOUT("exit: ERROR: failed to create mecab tagger");
+    return ret;
+  }
 
   //QByteArray ba = toShiftJIS(text);
   QByteArray ba = text.toUtf8();

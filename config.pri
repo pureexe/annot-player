@@ -15,7 +15,10 @@ mac:    DESTDIR_TARGET  = $$BUILDDIR/release.mac
 
 LIBS            += -L$$DESTDIR
 mac:  LIBS      += -F$$DESTDIR
+
 INCLUDEPATH     += $$ROOTDIR
+INCLUDEPATH     += $$ROOTDIR/lib
+
 win32:  INCLUDEPATH     += $$ROOTDIR/win
 unix:   INCLUDEPATH     += $$ROOTDIR/unix
 mac:    INCLUDEPATH     += $$ROOTDIR/mac
@@ -90,10 +93,10 @@ DEFINES += \
 ## External libraries
 
 win32 {
-    DEV_HOME            = c:/dev
-    #DEV_HOME            = B:/Developer
+    #DEV_HOME            = c:/dev
+    DEV_HOME            = B:/Developer
     QT_HOME             = c:/qt/current
-    QT_SRC              = $$QT_HOME/src
+    QT_SRC              = c:/qt
     #VLC_HOME            = "c:/Program Files/VideoLAN/VLC/sdk"
     VLC_HOME            = $$DEV_HOME/vlc
     VLC_SRC             = $$VLC_HOME/src
@@ -106,7 +109,7 @@ win32 {
     POPPLER_HOME        = $$DEV_HOME/poppler
     BOOST_HOME          = $$DEV_HOME/boost
     GSOAP_HOME          = $$DEV_HOME/gsoap
-    GSOAP_SRC           = $$DEV_HOME/gsoap/src/gsoap
+    GSOAP_SRC           = $$DEV_HOME/gsoap/src
     ZLIB_HOME           = $$DEV_HOME/zlib
     LUA_HOME            = $$DEV_HOME/lua
     FREETYPE_HOME       = $$DEV_HOME/freetype
@@ -163,7 +166,7 @@ mac {
     #QT_HOME             = /opt/local/share/qt4
     QT_HOME             = ${HOME}/opt/qt
     #QT_SRC              = /Developer/QtSDK/QtSources/4.7.4/src
-    QT_SRC              = ${HOME}/opt/src/qt/src
+    QT_SRC              = ${HOME}/opt/src
     #VLC_HOME            = ${HOME}/opt/vlc
     VLC_HOME            = /Applications/VLC.app/Contents/MacOS
     VLC_SRC             = ${HOME}/opt/src
@@ -186,6 +189,8 @@ mac {
     #LUA_VERSION = 52
     LUA_VERSION =
 }
+
+INCLUDEPATH     += $$QT_SRC/qt/src
 
 INCLUDEPATH     += $$VLC_HOME/include
 INCLUDEPATH     += $$VLC_HOME/include/vlc/plugins

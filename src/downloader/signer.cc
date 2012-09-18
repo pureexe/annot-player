@@ -13,7 +13,7 @@
 using namespace AnnotCloud;
 
 #define DEBUG "signer"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

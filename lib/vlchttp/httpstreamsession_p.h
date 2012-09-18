@@ -40,7 +40,7 @@ class HttpStreamSession : public VlcHttpSession
 
   QString fileName_;
 
-  StoppableTask *progressTask_;
+  QxStoppableTask *progressTask_;
 
   //struct Progress
   //{

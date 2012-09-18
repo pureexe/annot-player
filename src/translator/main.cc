@@ -18,7 +18,7 @@
 #include <QtNetwork/QNetworkReply>
 
 #define DEBUG "main"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef __GNUC__
 # pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
@@ -115,6 +115,7 @@ main(int argc, char *argv[])
 #ifdef WITH_LIB_MECAB
   // MeCab
   MeCabSettings::setMeCabRcFile(G_PATH_MECABRC);
+  //DOUT("mecabrc =" << MeCabSettings::getMeCabRcFile());
 #endif // WITH_LIB_MECAB
 
   // Set network proxy
@@ -153,12 +154,6 @@ main(int argc, char *argv[])
   }
 
   QTimer::singleShot(0, &w, SLOT(translateClipboard()));
-
-  //Edict::Dictionary *d = new Edict::Dictionary;
-  //d->addFile("c:\\Users\\jichi\\Desktop\\a.txt");
-  //foreach (Edict::Item *p, d->query(QString::fromWCharArray(L"‚¨"))) {
-  //  qDebug()<<11111<<p->entry;
-  //}
 
   DOUT("exit: exec");
   return a.exec();

@@ -5,9 +5,11 @@ http://db.tt/SrtkzxIJ
 http://qt-project.org/wiki/Category:Add-ons
 
 # Changes
-annot-player,annot-dict
-dict/edict.txt
-Changes,Readme
+windows 7: rebuild all binaries (dll&exe)
+annot-*.exe
+texthook.dll, mousehook.dll, picker.dll
+remove old dict/*.txt
+rename table/*.txt
 
 # key ideas
 - stream trial games, and sub trial games in chinese
@@ -40,7 +42,7 @@ work on streaming
 
 ########
 
-work on manual
+xwiki, and add manual/blog
 
 work on SNS system
 - fame, score, and award
@@ -48,19 +50,11 @@ work on SNS system
   -keep track of all modifications to subtitle
   - onlly allow invited person to annotate
 
-
 # 0.1.9.8
 
-- add edict for offline translation, take place of wwwjdic, see chiitrans2/edict.cs
-  - make it as instant popup when click
-  - single click to show offline popup from ejdict
+- mac fixme: translator's dicpath in mecabetc is not recognized
 
-- move lib/xt here
-
-- force show contribution of subtitle submitter
-  - enable user to say thanks
-
-- search engine
+- mac: search engine
   - redesign searchengine mechanism, using a global search engine pool
     rather then create for each of them
   - consider integrate search engine from translator
@@ -68,16 +62,38 @@ work on SNS system
   - library view and others, redesign
   - copy title / location, search title
 
-# 0.1.9.9
+- windows 7
+  - mklink change doc frmo qtext to webkit
+  - mklink qtext=>qtx
+  - update qt src position
+  - rename edict2u.txt to edictu
+  - remove "txt" on textcodec/table
 
-- grant/share edit permission for token
-- able to delete/edit guest by anyone
+- winxp: fixme: crash on exit
 
+# 0.1.10
 
-rebuild on mac
+split game & video exe
+redesign gui
 
-- able to show annotated  japanese annotation from nicovideo
-- shared pre-filter, post-filter, and term dictionary
+vide: player
+game: reader?
+
+static annotator for galgame like:
+http://www.loushao.net/lao/note.php?action=index&sid=243#img_height
+
+redesign interface
+
+##########
+
+figure out if it is possible to get the position of game text of standard functions as well
+need to rebuild ihf.dll myself
+
+continue work on galgame stream on virtual machine
+
+####################
+
+# 0.1.10.1
 
 - generate a list of the entire translation
   - save game scenario text as well!!!!!???
@@ -87,6 +103,20 @@ rebuild on mac
   - translate using google
   - automatically generate transation for human
   - human edit the translation
+
+switch from edict to edict2u
+
+- force show contribution of subtitle submitter
+  - enable user to say thanks
+
+- grant/share edit permission for token
+- able to delete/edit guest by anyone
+
+
+rebuild on mac
+
+- able to show annotated  japanese annotation from nicovideo
+- shared pre-filter, post-filter, and term dictionary
 
 # 0.1.9.10
 - add link to download/install applocale and free atlas

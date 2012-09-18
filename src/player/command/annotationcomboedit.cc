@@ -9,7 +9,7 @@
 #include <QtGui>
 
 #define DEBUG "annotationcomboedit"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Constructions -
 

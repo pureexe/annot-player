@@ -9,7 +9,7 @@
 #include <QtCore>
 
 #define DEBUG "adtsaudiostreamsource"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 namespace { // anonymous
   unsigned const samplingFrequencyTable[16] = {

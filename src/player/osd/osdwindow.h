@@ -6,7 +6,7 @@
 
 #include <QtGui/QWidget>
 
-namespace QtExt { class EventForwarder; }
+class QxEventForwarder;
 
 ///  Provide an Osd layer
 class OsdWindow : public QWidget
@@ -16,13 +16,13 @@ class OsdWindow : public QWidget
   typedef OsdWindow Self;
   typedef QWidget Base;
 
-  QtExt::EventForwarder *forwarder_;
+  QxEventForwarder *forwarder_;
 
 public:
   explicit OsdWindow(QWidget *parent = nullptr);
 
   //QObject *eventForwarder() const { return forward; }
-  void setEventForwarder(QtExt::EventForwarder *forwarder) { forwarder_ = forwarder; }
+  void setEventForwarder(QxEventForwarder *forwarder) { forwarder_ = forwarder; }
 
   bool isWindowOnTop() const;
 public slots:

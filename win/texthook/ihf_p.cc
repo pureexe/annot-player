@@ -12,7 +12,7 @@
 //#define ITH_MUTEX_NAME  L"ITH_MAIN_RUNNING"
 
 //#define DEBUG "ihf"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

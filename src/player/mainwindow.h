@@ -31,11 +31,9 @@ class QTimer;
 class QUrl;
 QT_END_NAMESPACE
 
-namespace QtExt {
-  class CountdownTimer;
-  class MouseRubberBand;
-  class CircularRubberBand;
-} // namespace QtExt
+class QxCountdownTimer;
+class QxMouseRubberBand;
+class QxCircularRubberBand;
 
 // Objects
 class Atlas;
@@ -839,6 +837,7 @@ private:
           *toggleGameTextResizableAct_,
           *toggleAppLocaleEnabledAct_;
 #endif // AC_ENABLE_GAME
+private:
   QAction *toggleTranslateSelectionAct_;
 
 #ifdef WITH_WIN_ATLAS
@@ -985,8 +984,8 @@ private:
 
   QList<SearchEngine *> searchEngines_;
 
-  QtExt::CountdownTimer *loadSubtitlesTimer_;
-  QtExt::CountdownTimer *resumePlayTimer_,
+  QxCountdownTimer *loadSubtitlesTimer_;
+  QxCountdownTimer *resumePlayTimer_,
                         *resumeSubtitleTimer_,
                         *resumeAudioTrackTimer_,
                         *resumeAudioChannelTimer_,
@@ -1055,11 +1054,11 @@ private:
   UserAnalyticsView *userAnalyticsView_;
   AnnotationFilter *annotationFilter_;
 
-  QtExt::MouseRubberBand *pauseRubberBand_,
-                         *resumeRubberBand_,
-                         *removeRubberBand_;
-  QtExt::CircularRubberBand *attractRubberBand_,
-                            *expelRubberBand_;
+  QxMouseRubberBand *pauseRubberBand_,
+                    *resumeRubberBand_,
+                    *removeRubberBand_;
+  QxCircularRubberBand *attractRubberBand_,
+                       *expelRubberBand_;
 
   //NetworkProxyDialog *networkProxyDialog_;
   //SiteAccountView *siteAccountView_;

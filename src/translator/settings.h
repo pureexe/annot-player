@@ -49,6 +49,9 @@ public:
 
   bool isAtlasEnabled() const;
   void setAtlasEnabled(bool value);
+
+  bool isEdictEnabled() const;
+  void setEdictEnabled(bool value);
 };
 
 #endif // SETTINGS_H

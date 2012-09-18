@@ -10,6 +10,10 @@
 
 //#define AC_LANG(ch1, ch2)   (int(ch1) << 8 | (ch2))
 
+#ifdef _MSC_VER
+# pragma warning (disable:4800) // C4800: forcing value to bool 'true' or 'false', performance warning
+#endif // _MSC_VER
+
 namespace AnnotCloud {
 
   // TODO: Use template classes rather than a shared namespace

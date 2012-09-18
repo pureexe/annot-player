@@ -13,8 +13,8 @@
 // 11/26/2011
 
 #include "lib/player/player.h"
-//#include "lib/qtext/textcodec.h"
-#include "lib/qtext/countdowntimer.h"
+//#include "qtx/qxtextcodec.h"
+#include "qtx/qxcountdowntimer.h"
 #ifdef WITH_LIB_VLCHTTP
 # include "lib/vlchttp/httpplugin.h"
 #endif // WITH_LIB_VLCHTTP
@@ -366,13 +366,13 @@ namespace { namespace detail {
 
   class mp_trackers
   {
-    QtExt::CountdownTimer *voutCountdown_;
+    QxCountdownTimer *voutCountdown_;
   public:
     mp_trackers() : voutCountdown_(nullptr) { }
 
   public:
-    QtExt::CountdownTimer *voutCountdown() const { return voutCountdown_; }
-    void setVoutCountdown(QtExt::CountdownTimer *timer) { voutCountdown_ = timer; }
+    QxCountdownTimer *voutCountdown() const { return voutCountdown_; }
+    void setVoutCountdown(QxCountdownTimer *timer) { voutCountdown_ = timer; }
   };
 
   /*

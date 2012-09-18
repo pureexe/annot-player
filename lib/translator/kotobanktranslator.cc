@@ -10,7 +10,7 @@
 #include <QtNetwork/QNetworkRequest>
 
 //#define DEBUG "kotobanktranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Properties -
 

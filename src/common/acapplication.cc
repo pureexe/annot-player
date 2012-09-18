@@ -20,7 +20,7 @@ extern "C" {
 #include <cstdlib>
 
 #define DEBUG "acapplication"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Static Fields -
 

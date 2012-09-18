@@ -117,7 +117,7 @@ AnnotationBrowser::createLayout()
     rows->setContentsMargins(9, 9, 9, 9);
     setContentsMargins(0, 0, 0, 0);
 
-  } setCentralWidget(new LayoutWidget(rows, this));
+  } setCentralWidget(new QxLayoutWidget(rows, this));
 
   // Set initial states
 
@@ -254,7 +254,7 @@ void
 AnnotationBrowser::addAnnotation(const Annotation &a)
 {
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate)
-#define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs).toString()
+#define FORMAT_POS(_msecs)        qxTimeFromMsec(_msecs).toString()
 #define FORMAT_LANGUAGE(_lang)    languageToString(_lang)
 #define FORMAT_FLAGS(_flags)      annotationFlagsToStringList(_flags)
 #define FORMAT_STATUS(_status)    annotationStatusToString(_status)
@@ -620,7 +620,7 @@ AnnotationBrowser::setNow(bool t)
   QString s;
   if (t) {
     s = hub_->isMediaTokenMode() ?
-      QtExt::msecs2time(annotationPos_).toString() :
+      qxTimeFromMsec(annotationPos_).toString() :
       QString::number(annotationPos_);
     s = '^' + s + '$';
   }

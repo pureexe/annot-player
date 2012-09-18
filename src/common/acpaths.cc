@@ -17,7 +17,7 @@
 #include <QtGui/QDesktopServices>
 
 #define DEBUG "acpath"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef Q_OS_MAC
 # define REZ_ICON_VIDEO  QCoreApplication::applicationDirPath() + "/../Resources/" "video.IconRez"

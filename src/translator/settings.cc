@@ -27,6 +27,7 @@
 #define SK_CLIPBOARD    "Clipboard"
 #define SK_TRANSLATOR   "Translator"
 #define SK_ATLAS        "Atlas"
+#define SK_EDICT        "Edict"
 
 // - Constructions -
 
@@ -104,5 +105,13 @@ Settings::isAtlasEnabled() const
 void
 Settings::setAtlasEnabled(bool value)
 { setValue(SK_ATLAS, value); }
+
+bool
+Settings::isEdictEnabled() const
+{ return value(SK_EDICT, true).toBool(); }
+
+void
+Settings::setEdictEnabled(bool value)
+{ setValue(SK_EDICT, value); }
 
 // EOF

@@ -13,7 +13,7 @@
 #include <ctime>
 
 //#define DEBUG "ocntranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Properties -
 

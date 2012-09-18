@@ -9,7 +9,7 @@
 #include "positionslider.h"
 #include "lib/annotservice/annotserveragent.h"
 #include "lib/player/player.h"
-#include "lib/qtext/datetime.h"
+#include "qtx/qxdatetime.h"
 #include "lib/annotcloud/annotation.h"
 #ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
@@ -505,8 +505,8 @@ PlayerUi::updatePositionSliderToolTip()
     qint64 current_msecs = player_->time();
     qint64 left_msecs = total_msecs - current_msecs;
 
-    QTime current = QtExt::msecs2time(current_msecs),
-          left = QtExt::msecs2time(left_msecs);
+    QTime current = qxTimeFromMsec(current_msecs),
+          left = qxTimeFromMsec(left_msecs);
 
     tip = current.toString() + " / -" + left.toString();
     if (total_msecs) {
@@ -556,12 +556,12 @@ PlayerUi::updatePositionButton()
     qint64 current_msecs = player_->time(),
            total_msecs = player_->mediaLength();
     //qint64 left_msecs = total_msecs - current_msecs;
-    //QTime left = QtExt::msecs2time(left_msecs),
+    //QTime left = qxTimeFromMsec(left_msecs),
 
-    QString current = QtExt::msecs2time(current_msecs).toString();
+    QString current = qxTimeFromMsec(current_msecs).toString();
     QString t = current;
     if (total_msecs) {
-      QString total = QtExt::msecs2time(total_msecs).toString();
+      QString total = qxTimeFromMsec(total_msecs).toString();
       t.append(" / ").append(total);
     }
 

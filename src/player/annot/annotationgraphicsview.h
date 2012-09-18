@@ -5,7 +5,7 @@
 // 7/14/2011
 
 #include "lib/annotcloud/annotation.h"
-#include "lib/qtext/eventforwarder.h"
+#include "qtx/qxeventforwarder.h"
 #include <QtCore/QHash>
 #include <QtCore/QList>
 #include <QtGui/QGraphicsView>
@@ -23,7 +23,7 @@ class SignalHub;
 class VideoView;
 
 ///  An interactive shadow view.
-class AnnotationGraphicsView : public QGraphicsView, public QtExt::EventForwarder
+class AnnotationGraphicsView : public QGraphicsView, public QxEventForwarder
 {
   Q_OBJECT
   Q_DISABLE_COPY(AnnotationGraphicsView)

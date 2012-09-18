@@ -14,7 +14,6 @@ DEFINES += VERSION_MAJOR=\\\"$$VERSION_MAJOR\\\" \
 include(../../config.pri)
 include(tr/tr.pri)
 include($$ROOTDIR/src/common/common.pri)
-include($$ROOTDIR/lib/debug/debug.pri)
 
 ## Libraries
 
@@ -29,9 +28,11 @@ include($$ROOTDIR/lib/blockiodevice/blockiodevice.pri)
 include($$ROOTDIR/lib/compress/compress.pri)
 include($$ROOTDIR/lib/crypt/crypt.pri)
 include($$ROOTDIR/lib/download/download.pri)
+#include($$ROOTDIR/lib/edrdg/edrdg.pri)
 include($$ROOTDIR/lib/eventlistener/eventlistener.pri)
 include($$ROOTDIR/lib/graphicseffect/graphicseffect.pri)
 include($$ROOTDIR/lib/gsoap/gsoap.pri)       # would static linking cause license conflicts?
+include($$ROOTDIR/lib/htmlutil/htmlutil.pri)
 include($$ROOTDIR/lib/imagefilter/imagefilter.pri)
 include($$ROOTDIR/lib/ioutil/ioutil.pri)
 include($$ROOTDIR/lib/magnifier/magnifier.pri)
@@ -42,7 +43,7 @@ include($$ROOTDIR/lib/mstypes/mstypes.pri)
 include($$ROOTDIR/lib/nicoutil/nicoutil.pri)
 include($$ROOTDIR/lib/player/player.pri)
 include($$ROOTDIR/lib/qt/qt.pri)
-include($$ROOTDIR/lib/qtext/qtext.pri)
+include($$ROOTDIR/lib/qtx/qtx.pri)
 include($$ROOTDIR/lib/searchengine/searchengine.pri)
 include($$ROOTDIR/lib/stream/stream.pri)
 include($$ROOTDIR/lib/textcodec/textcodec.pri)
@@ -67,7 +68,7 @@ unix: {
     include($$ROOTDIR/unix/qtunix/qtunix.pri)
 }
 unix:!mac {
-    include($$ROOTDIR/unix/qtx/qtx.pri)
+    include($$ROOTDIR/unix/qtx11/qtx11.pri)
 }
 mac {
     include($$ROOTDIR/mac/qtmac/qtmac.pri)
@@ -373,7 +374,7 @@ mac {
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop desktop-kde icon lua doc jsf avatar image table
+    INSTALLS += target desktop desktop-kde icon lua jsf avatar image table #doc
 
     target.path = $$BINDIR
 
@@ -393,9 +394,9 @@ unix:!mac {
     lua.path = $$LUADIR
     lua.files = $$LUA_FILES
 
-    DOCDIR = $$DATADIR/annot/player/doc
-    doc.path = $$DOCDIR
-    doc.files = $$DOC_FILES
+    #DOCDIR = $$DATADIR/annot/player/doc
+    #doc.path = $$DOCDIR
+    #doc.files = $$DOC_FILES
 
     TABLEDIR = $$DATADIR/annot/player/table
     doc.path = $$TABLEDIR

@@ -5,7 +5,7 @@
 #include <QtCore/QFile>
 
 //#define DEBUG "datainputstream"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 bool
 DataInputStream::writeFile(const QString &path)

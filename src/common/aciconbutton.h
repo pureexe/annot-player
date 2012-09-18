@@ -4,12 +4,13 @@
 // aciconbutton.h
 // 5/16/2012
 
-#include "lib/qtext/toolbutton.h"
+#include "qtx/qxtoolbutton.h"
 
 QT_FORWARD_DECLARE_CLASS(QPropertyAnimation)
 QT_FORWARD_DECLARE_CLASS(QTimer)
 
-class AcIconButton : public QtExt::ToolButton
+typedef QxToolButton AcIconButtonBase;
+class AcIconButton : public AcIconButtonBase
 {
   Q_OBJECT
   Q_PROPERTY(int radius READ radius WRITE setRadius)
@@ -17,7 +18,7 @@ class AcIconButton : public QtExt::ToolButton
   Q_PROPERTY(int maximumRadius READ maximumRadius WRITE setMaximumRadius)
   Q_DISABLE_COPY(AcIconButton)
   typedef AcIconButton Self;
-  typedef ToolButton Base;
+  typedef AcIconButtonBase Base;
 
   int radius_, minimumRadius_, maximumRadius_;
   QPropertyAnimation *radiusAni_;

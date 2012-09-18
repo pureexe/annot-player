@@ -4,7 +4,7 @@
 #include <QtCore>
 
 //#define DEBUG "annotationcachemanager"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Header -
 

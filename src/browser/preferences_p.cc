@@ -3,7 +3,7 @@
 
 #include "preferences_p.h"
 #include "src/common/acui.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
 

@@ -4,7 +4,7 @@
 
 #include "lib/pixmapfilter/pixmaphalofilter.h"
 #include "lib/imagefilter/filters.h"
-#include <gui/painting/qpaintengineex_p.h>
+#include <qt/src/gui/painting/qpaintengineex_p.h>
 #include <QtGui>
 
 // - Construction -

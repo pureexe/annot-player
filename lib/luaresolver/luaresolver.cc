@@ -15,8 +15,8 @@
 #else
 # error "require lib download"
 #endif // WITH_LIB_DOWNLOAD
-#include "lib/qtext/networkcookie.h"
-#include "lib/qtext/os.h"
+#include "qtx/qxnetworkcookie.h"
+#include "qtx/qxos.h"
 #ifdef Q_OS_WIN
 # include <QtCore/QCoreApplication>
 # include <QtCore/QFileInfo>
@@ -30,7 +30,7 @@
 #define _qs(_cstr)      QString::fromLocal8Bit(_cstr)
 
 #define DEBUG "luaresolver"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef __GNUC__
 # define NOINLINE      __attribute__((noinline))
@@ -44,7 +44,7 @@ void
 LuaResolver::init()
 {
 #ifdef CONFIG_PROXY_DOMAIN
-  cookieJar_ = new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", CONFIG_PROXY_DOMAIN, this);
+  cookieJar_ = new QxNetworkCookieJarWithDomainAlias(".nicovideo.jp", CONFIG_PROXY_DOMAIN, this);
 #else
 # warning "nico alias domain is not defined"
 #endif // CONFIG_PROXY_DOMAIN
@@ -319,7 +319,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
       // Must be consistent with resolve function in LuaResolver
       boost::function<int (std::string, std::string)>
           call = lua_function<int>(L, callee);
-      QString dlfile = QtExt::mktemp();
+      QString dlfile = qxMktemp();
 #ifdef Q_OS_WIN
       // FIXME: Because liblua 5.1 cannot handle Chinese characters in path,
       dlfile = QFileInfo(dlfile).fileName();
@@ -359,7 +359,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
       if (!lua_isnil(L, -1)) {
         *suburl = _qs(lua_tostring(L, -1));
 #ifdef Q_OS_WIN
-        // FIXME: must be consist with QtExt::mktemp.
+        // FIXME: must be consist with qxMktemp.
         // Remove me after liblua support Asian Characters.
         suburl->replace(QRegExp("^file://"), "file:///" + QCoreApplication::applicationDirPath());
 #endif // Q_OS_WIN

@@ -6,9 +6,9 @@
 
 #include "lib/stream/inputstream.h"
 #include "lib/stream/outputstream.h"
-#include "lib/qtext/stoppable.h"
+#include "qtx/qxstoppable.h"
 
-class StreamPipe : public StoppableTask
+class StreamPipe : public QxStoppableTask
 {
   InputStream *in_;
   OutputStream *out_;
@@ -27,7 +27,7 @@ protected:
 
 };
 
-class StreamListPipe : public StoppableTask
+class StreamListPipe : public QxStoppableTask
 {
 public:
   virtual void setOutputStream(OutputStream *out) = 0;

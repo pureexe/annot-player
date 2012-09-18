@@ -4,7 +4,7 @@
 // graphicseffect_p.h
 // 5/3/2012
 
-#include <gui/effects/qgraphicseffect_p.h>
+#include <qt/src/gui/effects/qgraphicseffect_p.h>
 
 //typedef QGraphicsEffectPrivate GraphicsEffectPrivate;
 

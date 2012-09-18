@@ -12,7 +12,7 @@
 #include <QtCore/QDir>
 
 #define DEBUG "application"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Constructions -
 

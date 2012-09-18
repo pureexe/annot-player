@@ -8,7 +8,7 @@
 #include <QtGui/QCheckBox>
 
 #define DEBUG "buttongrid"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

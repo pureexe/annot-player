@@ -22,7 +22,7 @@
 #endif // __GNUC__
 
 //#define DEBUG "annotdb"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 using namespace AnnotCloud;
 

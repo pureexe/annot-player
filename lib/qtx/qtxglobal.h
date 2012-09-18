@@ -1,0 +1,27 @@
+#ifndef QTXGLOBAL_H
+#define QTXGLOBAL_H
+
+// qtxglobal.h
+// 9/15/2012
+
+// Redefine QTX_BEGIN_NAMESPACE/QTX_END_NAMESPACE to turn on custom namespace
+#ifndef QTX_BEGIN_NAMESPACE
+# define QTX_BEGIN_NAMESPACE
+#endif // QTX_BEGIN_NAMESPACE
+#ifndef QTX_END_NAMESPACE
+# define QTX_END_NAMESPACE
+#endif // QTX_END_NAMESPACE
+
+#define QTX_FORWARD_DECLARE_CLASS(name)     QTX_BEGIN_NAMESPACE class name;  QTX_END_NAMESPACE
+#define QTX_FORWARD_DECLARE_STRUCT(name)    QTX_BEGIN_NAMESPACE struct name; QTX_END_NAMESPACE
+
+QTX_BEGIN_NAMESPACE
+namespace Qtx {
+
+} // Qtx
+QTX_END_NAMESPACE
+
+#define QTX_OFFSCREEN_POS   QPoint(-1, -1)
+#define QTX_OFFSCREEN_POSF  QPointF(-1, -1)
+
+#endif // QTXGLOBAL_H

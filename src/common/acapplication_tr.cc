@@ -13,7 +13,7 @@
 #include <QtCore/QTranslator>
 
 #define DEBUG "acapplication_tr"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // i18n
 namespace { namespace detail {

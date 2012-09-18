@@ -9,7 +9,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 
 //#define DEBUG "niftytranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Properties -
 

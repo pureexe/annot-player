@@ -10,7 +10,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 
 //#define DEBUG "infoseektranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Properties -
 

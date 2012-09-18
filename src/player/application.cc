@@ -13,7 +13,7 @@
 #include <QtCore/QProcess>
 
 #define DEBUG "application"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

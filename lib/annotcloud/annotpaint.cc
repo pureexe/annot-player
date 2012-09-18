@@ -2,7 +2,7 @@
 // 4/6/2012
 
 #include "lib/annotcloud/annotpaint.h"
-#include "lib/qtext/datetime.h"
+#include "qtx/qxdatetime.h"
 #include <QtCore/QDateTime>
 #include <QtCore/QHash>
 #include <QtCore/QMultiMap>
@@ -17,7 +17,7 @@
 #include <utility>
 
 #define DEBUG "annotpaint"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef __GNUC__
 # pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
@@ -197,7 +197,7 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
     int labelWidth = width / labelCount;
     for (int i = 0; i < labelCount; i++) {
       qint64 msecs = i * Stride * metric;
-      QTime t = QtExt::msecs2time(msecs);
+      QTime t = qxTimeFromMsec(msecs);
       QString label = msecs >= 3600 * 1000 ? t.toString("h:mm:ss")
                                            : t.toString("m:ss");
       int x = view.x() + MarginSize + i * labelWidth;
@@ -251,7 +251,7 @@ AnnotationPainter::paintHistogramByPos(QPainter &p, const AnnotationList &l, con
       y = view.y() + histHeight - y;
 
       qint64 msecs = peak.x() * metric;
-      QTime t = QtExt::msecs2time(msecs);
+      QTime t = qxTimeFromMsec(msecs);
       QString pos = msecs >= 3600 * 1000 ? t.toString("h:mm:ss")
                                          : t.toString("m:ss");
       QString label = QString("<%1%,%2")
@@ -614,7 +614,7 @@ AnnotationPainter::paintHistogramByUserId(QPainter &p, const AnnotationList &l, 
   int labelY = view.y() + height - LabelHeight;
   int i = 0;
   auto mp = m.constEnd();
-  while (mp != m.constBegin()) { // foreach (int key, QtExt::revertList(m.keys()))
+  while (mp != m.constBegin()) { // foreach (int key, qxRevertList(m.keys()))
     int key = *--mp;
     { // Histogram
       int x = i,

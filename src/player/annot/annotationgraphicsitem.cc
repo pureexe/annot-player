@@ -19,8 +19,8 @@
 #include "lib/translator/translator.h"
 #include "lib/searchengine/searchenginefactory.h"
 #include "lib/searchengine/searchenginerc.h"
-#include "lib/qtext/filesystem.h"
-#include "lib/qtext/htmltag.h"
+#include "qtx/qxfs.h"
+#include "htmlutil/htmltags.h"
 #include "lib/textcodec/textcodec.h"
 #include <QtGui>
 #include <boost/tuple/tuple.hpp>
@@ -44,7 +44,7 @@
 enum { HoldTimeOut = 1000 }; // in msecs
 
 //#define DEBUG "annotationgraphicsitem"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 using namespace AnnotCloud;
 
@@ -245,7 +245,7 @@ const QString&
 AnnotationGraphicsItem::plainText() const
 {
   if (plainText_.isEmpty() && !text_.isEmpty())
-    plainText_ = document()->toPlainText().simplified(); //QtExt::htmlToPlainText(text_).simplified();
+    plainText_ = document()->toPlainText().simplified(); //QxhtmlToPlainText(text_).simplified();
   return plainText_;
 }
 

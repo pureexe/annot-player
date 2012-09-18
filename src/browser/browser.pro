@@ -7,7 +7,6 @@ DEFINES += SRC_BROWSER
 
 include(../../config.pri)
 include($$ROOTDIR/src/common/common.pri)
-include($$ROOTDIR/lib/debug/debug.pri)
 
 # Enforce 32bit on Mac until apple releases 64bit version of QuickTime Plugin
 mac: CONFIG -= x86_64
@@ -21,6 +20,7 @@ include($$ROOTDIR/lib/annotdown/annotdown.pri)
 include($$ROOTDIR/lib/compress/compress.pri)
 include($$ROOTDIR/lib/crypt/crypt.pri)
 include($$ROOTDIR/lib/download/download.pri)
+include($$ROOTDIR/lib/htmlutil/htmlutil.pri)
 #include($$ROOTDIR/lib/imagefilter/imagefilter.pri)
 #include($$ROOTDIR/lib/magnifier/magnifier.pri)
 include($$ROOTDIR/lib/mousegesture/mousegesture.pri)
@@ -28,7 +28,7 @@ include($$ROOTDIR/lib/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/lib/mstypes/mstypes.pri)
 include($$ROOTDIR/lib/nicoutil/nicoutil.pri)
 include($$ROOTDIR/lib/qt/qt.pri)
-include($$ROOTDIR/lib/qtext/qtext.pri)
+include($$ROOTDIR/lib/qtx/qtx.pri)
 include($$ROOTDIR/lib/webbrowser/webbrowser.pri)
 
 !mac: include($$ROOTDIR/lib/metacall/metacall.pri)

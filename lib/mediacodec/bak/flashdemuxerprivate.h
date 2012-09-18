@@ -16,7 +16,7 @@
 #include <QtCore/QDataStream>
 
 //#define DEBUG "flashdemuxerprivate"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 namespace BitHelper
 {

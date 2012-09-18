@@ -20,7 +20,7 @@
 #endif // _MSC_VER
 
 #define DEBUG "mp4box"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Helper -
 namespace { namespace detail {

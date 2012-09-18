@@ -4,7 +4,7 @@
 #include "mainconsole.h"
 #include "miniconsole.h"
 #include "consoledialog.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 
 enum { LEFT_LENGTH = 100, RIGHT_LENGTH = 0 };
 

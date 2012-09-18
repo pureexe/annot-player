@@ -3,8 +3,8 @@
 
 #include "textedittabview.h"
 #include "textview.h"
-#include "lib/qtext/toolbutton.h"
-#include "lib/qtext/toolbuttonwithid.h"
+#include "qtx/qxtoolbutton.h"
+#include "qtx/qxtoolbuttonwithid.h"
 #include <QtGui>
 
 // - Constructions -

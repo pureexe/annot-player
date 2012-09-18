@@ -8,7 +8,7 @@
 #include "src/common/acss.h"
 #include "src/common/acui.h"
 #include "lib/player/player.h"
-#include "lib/qtext/namedcheckbox.h"
+#include "qtx/qxnamedcheckbox.h"
 #include <QtGui>
 
 // - Construction -
@@ -51,7 +51,7 @@ AssociationPreferencesTab::createLayout()
   count = 0;
   foreach (const QString &suffix, Player::supportedPlaylistSuffices()) {
     enum { Row = 7 };
-    QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
+    QxNamedCheckBox *toggle = new QxNamedCheckBox(suffix);
     toggle->setToolTip(suffix);
     toggle->setStyleSheet(ACSS_CHECKBOX);
     connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleType(bool,QString)));
@@ -63,7 +63,7 @@ AssociationPreferencesTab::createLayout()
   }
   foreach (const QString &suffix, Player::supportedAudioSuffices()) {
     enum { Row = 7 };
-    QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
+    QxNamedCheckBox *toggle = new QxNamedCheckBox(suffix);
     toggle->setToolTip(suffix);
     toggle->setStyleSheet(ACSS_CHECKBOX);
     connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleType(bool,QString)));
@@ -79,7 +79,7 @@ AssociationPreferencesTab::createLayout()
   //count = 0;
   //foreach (const QString &suffix, QStringList() G_FORMAT_PROGRAM(<<)) {
   //  enum { Row = 7 };
-  //  QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
+  //  QxNamedCheckBox *toggle = new QxNamedCheckBox(suffix);
   //  toggle->setToolTip(suffix);
   //  toggle->setStyleSheet(ACSS_CHECKBOX);
   //  connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleType(bool,QString)));
@@ -95,7 +95,7 @@ AssociationPreferencesTab::createLayout()
   count = 0;
   foreach (const QString &suffix, QStringList() G_FORMAT_ANNOTATION(<<)) {
     enum { Row = 7 };
-    QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
+    QxNamedCheckBox *toggle = new QxNamedCheckBox(suffix);
     toggle->setToolTip(suffix);
     toggle->setStyleSheet(ACSS_CHECKBOX);
     connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleType(bool,QString)));
@@ -111,7 +111,7 @@ AssociationPreferencesTab::createLayout()
   count = 0;
   foreach (const QString &suffix, QStringList() G_FORMAT_DEVICE(<<)) {
     enum { Row = 7 };
-    QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
+    QxNamedCheckBox *toggle = new QxNamedCheckBox(suffix);
     toggle->setToolTip(suffix);
     toggle->setStyleSheet(ACSS_CHECKBOX);
     connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleShell(bool,QString)));
@@ -127,7 +127,7 @@ AssociationPreferencesTab::createLayout()
   count = 0;
   foreach (const QString &suffix, QStringList() G_FORMAT_PREVIEW(<<)) {
     enum { Row = 7 };
-    QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix);
+    QxNamedCheckBox *toggle = new QxNamedCheckBox(suffix);
     toggle->setToolTip(suffix);
     toggle->setStyleSheet(ACSS_CHECKBOX);
     connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleShell(bool,QString)));
@@ -144,7 +144,7 @@ AssociationPreferencesTab::createLayout()
   count = 0; \
   foreach (const QString &suffix, Player::supported##_Group##Suffices()) { \
     enum { Row = 7 }; \
-    QtExt::NamedCheckBox *toggle = new QtExt::NamedCheckBox(suffix); \
+    QxNamedCheckBox *toggle = new QxNamedCheckBox(suffix); \
     toggle->setToolTip(suffix); \
     toggle->setStyleSheet(ACSS_CHECKBOX); \
     connect(toggle, SIGNAL(toggledWithName(bool,QString)), SLOT(toggleType(bool,QString))); \

@@ -6,13 +6,13 @@
 #include "signalhub.h"
 #include "annotationsettings.h"
 #include "lib/player/player.h"
-#include "lib/qtext/datetime.h"
+#include "qtx/qxdatetime.h"
 #include <QtGui>
 #include <boost/foreach.hpp>
 #include <list>
 
 //#define DEBUG "embeddedcanvas"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 using namespace AnnotCloud;
 
@@ -351,7 +351,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
       y = view.y() + histHeight - y;
 
       qint64 msecs = peak.x() * metric;
-      QTime t = QtExt::msecs2time(msecs);
+      QTime t = qxTimeFromMsec(msecs);
       QString pos = msecs >= 3600 * 1000 ? t.toString("h:mm:ss")
                                          : t.toString("m:ss");
       QString value = QString("<%1%,").arg(QString::number(peak.y()*100/maxY));
@@ -406,7 +406,7 @@ EmbeddedCanvas::paintHistogram(QPainter &painter, const QRect &view, const Annot
     int labelWidth = width / labelCount;
     for (int i = 0; i < labelCount; i++) {
       qint64 msecs = i * Stride * metric;
-      QTime t = QtExt::msecs2time(msecs);
+      QTime t = qxTimeFromMsec(msecs);
       QString label = msecs >= 3600 * 1000 ? t.toString("h:mm:ss")
                                            : t.toString("m:ss");
       int x = MarginSize + i * labelWidth,
@@ -555,7 +555,7 @@ EmbeddedCanvas::paintCoordinate(QPainter &painter, const QRect &view)
     int labelWidth = width / labelCount;
     for (int i = 0; i < labelCount; i++) {
       qint64 msecs = i * Stride * metric;
-      QTime t = QtExt::msecs2time(msecs);
+      QTime t = qxTimeFromMsec(msecs);
       QString label = msecs >= 3600 * 1000 ? t.toString("h:mm:ss")
                                            : t.toString("m:ss");
       int x = MarginSize + i * labelWidth,

@@ -13,7 +13,7 @@
 #include "lib/player/player.h"
 #include "lib/player/playerdefs.h"
 #include "lib/player/player_p.h"
-//#include "lib/qtext/os.h"
+//#include "qtx/qxos.h"
 #ifdef WITH_LIB_VLCCORE
 # include "lib/vlccore/video.h"
 # include "lib/vlccore/sound.h"
@@ -49,7 +49,7 @@
 //#include <vlc/lib/media_list.c>
 
 //#define DEBUG "player"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Settings -
 
@@ -802,7 +802,7 @@ Player::closeMedia()
 
     //enum { timeout = 1000 };
     //qDebug() << "Player::closeMedia: enter sleep: timeout =" << timeout;
-    //QtExt::sleep(timeout);
+    //Qxsleep(timeout);
     //qDebug() << "Player::closeMedia: leave sleep";
     //DOUT("processEvent: enter");
     //qDebug() << "player::closeEvent:eventloop:enter";
@@ -1608,10 +1608,10 @@ Player::setMouseEventEnabled(bool enabled)
 void
 Player::startVoutTimer()
 {
-  QtExt::CountdownTimer *timer = d_->voutCountdown();
+  QxCountdownTimer *timer = d_->voutCountdown();
   if (!timer) {
     d_->setVoutCountdown(
-      timer = new QtExt::CountdownTimer(this)
+      timer = new QxCountdownTimer(this)
     );
     timer->setInterval(VOUT_TIMEOUT);
     connect(timer, SIGNAL(timeout()), SLOT(updateVout()));

@@ -8,7 +8,7 @@
 #include <QtNetwork/QNetworkRequest>
 
 //#define DEBUG "bufferedremotestream"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

@@ -122,7 +122,6 @@ cd ../..
 
 cd "$BROWSER_APP"/Contents/MacOS || exit 1
 ln -s ../../../"$APP_MACOS"/lua || exit 1
-ln -s ../../../"$APP_MACOS"/doc || exit 1
 ln -s ../../../"$APP_MACOS"/images || exit 1
 ln -s ../../../"$APP_MACOS"/jsf || exit 1
 ln -s ../../../"$APP_MACOS"/translations || exit 1
@@ -130,13 +129,14 @@ cd ../../..
 
 cd "$DOWNLOADER_APP"/Contents/MacOS || exit 1
 ln -s ../../../"$APP_MACOS"/lua || exit 1
-ln -s ../../../"$APP_MACOS"/doc || exit 1
 ln -s ../../../"$APP_MACOS"/jsf || exit 1
 ln -s ../../../"$APP_MACOS"/translations || exit 1
 cd ../../..
 
 cd "$TRANSLATOR_APP"/Contents/MacOS || exit 1
-ln -s ../../../"$APP_MACOS"/doc || exit 1
+ln -s ../../../"$APP_MACOS"/dic || exit 1
+ln -s ../../../"$APP_MACOS"/dict || exit 1
+ln -s ../../../"$APP_MACOS"/etc || exit 1
 ln -s ../../../"$APP_MACOS"/jsf || exit 1
 ln -s ../../../"$APP_MACOS"/translations || exit 1
 cd ../../..
@@ -267,10 +267,10 @@ cp -R "$APP_SRC"/lib/luaresolver/lua/luascript/*.lua "$LUAPATH"/  || exit 1
 cp -R "$APP_SRC"/lib/luaresolver/lua/luascript/*/*.lua "$LUAPATH"/  || exit 1
 
 ## copy doc
-cp -R "$APP_SRC"/lib/qtext/doc "$APP_MACOS"/ || exit 1
+cp -R "$APP_SRC"/lib/webbrowser/doc "$BROWSER_MACOS"/ || exit 1
 
 ## copy images
-cp -R "$APP_SRC"/lib/qtext/images "$APP_MACOS"/ || exit 1
+cp -R "$APP_SRC"/lib/qtx/images "$APP_MACOS"/ || exit 1
 
 ## copy table
 cp -R "$APP_SRC"/lib/textcodec/table "$APP_MACOS"/ || exit 1
@@ -280,6 +280,9 @@ cp -R "$APP_SRC"/lib/mecab/etc "$APP_MACOS"/ || exit 1
 
 mkdir "$APP_MACOS"/dic
 cp -R /opt/local/mecab/dic/ipadic-utf8 "$APP_MACOS"/dic/ipadic || exit 1
+
+mkdir "$APP_MACOS"/dict
+cp ~/opt/edict/dict/edict2u "$APP_MACOS"/dict/ || exit 1
 
 ## copy jsf
 cp -R "$APP_SRC"/lib/annotcloud/jsf "$APP_MACOS"/ || exit 1

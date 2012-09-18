@@ -4,7 +4,7 @@
 #include "lib/vlchttp/httpsession_p.h"
 
 //#define DEBUG "httpsession"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 bool
 VlcHttpSession::isMultiMediaMimeType(const QString &contentType)

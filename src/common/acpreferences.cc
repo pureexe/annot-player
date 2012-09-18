@@ -9,7 +9,6 @@
 #include "src/common/acsettings.h"
 #include "src/common/actabview.h"
 #include "src/common/acprotocol.h"
-#include "lib/qtext/layoutwidget.h"
 #include <QtGui>
 
 #define WINDOW_FLAGS_BASE \
@@ -105,7 +104,7 @@ AcPreferences::createLayout()
   //  footer->setContentsMargins(0, 0, 0, 0);
   //  rows->setContentsMargins(9, patch, 9, 9);
   //  setContentsMargins(0, 0, 0, 0);
-  //} setCentralWidget(new LayoutWidget(rows, this));
+  //} setCentralWidget(new QxLayoutWidget(rows, this));
 }
 
 // - Properties -

@@ -4,7 +4,7 @@ include(../../config.pri)
 
 DEFINES += WITH_LIB_GSOAP
 
-INCLUDEPATH += $$GSOAP_SRC
+INCLUDEPATH += $$GSOAP_SRC/gsoap
 
 INCLUDEPATH += $$PWD
 DEPENDPATH  += $$PWD

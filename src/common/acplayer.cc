@@ -8,7 +8,7 @@
 #define APP_ID          AC_PLAYER_ID
 
 #define DEBUG "acplayer"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Server -
 

@@ -4,7 +4,7 @@
 #include "annotationlistmodel.h"
 #include "tr.h"
 #include "signalhub.h"
-#include "lib/qtext/datetime.h"
+#include "qtx/qxdatetime.h"
 #include "lib/annotcloud/traits.h"
 #include <QtCore/QModelIndex>
 
@@ -41,7 +41,7 @@ void
 AnnotationListModel::addAnnotation(const Annotation &a)
 {
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate)
-#define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs).toString()
+#define FORMAT_POS(_msecs)        qxTimeFromMsec(_msecs).toString()
 #define FORMAT_LANGUAGE(_lang)    languageToString(_lang)
 #define FORMAT_FLAGS(_flags)      annotationFlagsToStringList(_flags)
 #define FORMAT_STATUS(_status)    annotationStatusToString(_status)

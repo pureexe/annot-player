@@ -3,13 +3,13 @@
 
 #include "translateedit.h"
 #include "src/common/acss.h"
-#include "lib/qtext/texthighlighter.h"
+#include "qtx/qxtexthighlighter.h"
 #include <QtGui/QAction>
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QMenu>
 
 //#define DEBUG "translateedit"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Constructions -
 
@@ -21,7 +21,7 @@ TranslateEdit::TranslateEdit(QWidget *parent)
 
   setStyleSheet(ACSS_TEXTEDIT);
 
-  highlighter_ = new QtExt::TextHighlighter(this);
+  highlighter_ = new QxTextHighlighter(this);
 
   translateAct_ = new QAction(tr("Translate"), this);
   connect(translateAct_, SIGNAL(triggered()), SLOT(invalidateSelectedText()));

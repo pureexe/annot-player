@@ -4,7 +4,7 @@
 #include "src/common/acsettings.h"
 #include "src/common/acglobal.h"
 #include "src/common/acui.h"
-#include "lib/qtext/algorithm.h"
+//#include "qtx/qxalgorithm.h"
 #include "lib/mstypes/lcid.h"
 #ifdef WITH_LIB_CRYPT
 # include "lib/crypt/crypt.h"

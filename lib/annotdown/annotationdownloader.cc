@@ -2,8 +2,8 @@
 // 7/6/2012
 
 #include "lib/annotdown/annotationdownloader.h"
-#include "lib/qtext/network.h"
-#include "lib/qtext/filesystem.h"
+#include "qtx/qxnetwork.h"
+#include "qtx/qxfs.h"
 #ifdef WITH_LIB_COMPRESS
 # include "lib/compress/qgzip.h"
 #endif // WITH_LIB_COMPRESS
@@ -28,7 +28,7 @@
 #include <QtNetwork/QNetworkRequest>
 
 //#define DEBUG "annotationdownloader"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define RequestUrlAttribute   QNetworkRequest::UserMax
 #define RequestTitleAttribute QNetworkRequest::User
@@ -54,7 +54,7 @@ AnnotationDownloader::hashFileName(const QString &refurl, const QString &title)
   if (ret.isEmpty())
     return ret;
   if (!title.isEmpty())
-    ret.prepend('.').prepend(QtExt::escapeFileName(title));
+    ret.prepend('.').prepend(qxEscapeFileName(title));
   return ret;
 }
 
@@ -92,7 +92,7 @@ AnnotationDownloader::download(const QString &url, const QString &refurl, const 
   emit message(tr("downloading") + ": " + title + " | " + url);
 
   QNetworkReply *reply = nam_->get(QNetworkRequest(url));
-  auto p = QtExt::PublicNetworkReply::fromReply(reply);
+  auto p = QxPublicNetworkReply::fromReply(reply);
   p->setAttribute(RequestUrlAttribute, refurl);
   p->setAttribute(RequestTitleAttribute, title);
   DOUT("exit");
@@ -176,7 +176,7 @@ AnnotationDownloader::saveData(const QByteArray &data, const QString &refurl, co
   if (AnnotationCacheManager::globalInstance()->saveData(data, refurl)) {
     QString cache = AnnotationCacheManager::globalInstance()->findFile(refurl);
     if (!cache.isEmpty()) {
-      QtExt::trashOrRemoveFile(fileName);
+      qxTrashOrRemoveFile(fileName);
       if (QFile::copy(cache, fileName)) {
         emit fileSaved(fileName);
         emit message(tr("file saved") + ": " + fileName);

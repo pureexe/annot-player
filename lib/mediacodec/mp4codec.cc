@@ -10,7 +10,7 @@
 #include <cstring>
 
 #define DEBUG "mp4codec"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // See: http://www.jqueryphp.com/how-to-get-flv-file-duration/2009/08/
 bool

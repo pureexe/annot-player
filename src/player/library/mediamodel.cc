@@ -12,7 +12,7 @@
 #include <QtCore/QModelIndex>
 
 #define DEBUG "mediamodel"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define FORMAT_SIZE(_sz) \
 ( \

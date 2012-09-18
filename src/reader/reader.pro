@@ -2,7 +2,6 @@
 # 2011-06-18T21:54:19
 
 include (../../config.pri)
-include($$ROOTDIR/lib/debug/debug.pri)
 
 ## Libraries
 include($$ROOTDIR/core/core.pri)

@@ -23,7 +23,7 @@
 #endif // WITH_LIB_BLOCKIODEVICE
 
 #define DEBUG "ioutil"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 bool
 IOUtil::isAudioCD(const QString &input)

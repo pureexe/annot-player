@@ -11,7 +11,7 @@
 #include <utility>
 
 #define DEBUG "metacallfilter"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef __GNUC__
 # pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses

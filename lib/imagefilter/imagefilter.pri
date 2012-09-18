@@ -25,6 +25,6 @@ SOURCES += \
     $$PWD/rippleimagefilter.cc
 
 QT      += core gui
-INCLUDEPATH     += $$QT_SRC
+#INCLUDEPATH     += $$QT_SRC
 
 # EOF

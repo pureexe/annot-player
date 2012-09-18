@@ -2,7 +2,7 @@
 // 1/1/2012
 
 #include "src/common/actextview.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 #include <QtGui>
 
 namespace { namespace detail {

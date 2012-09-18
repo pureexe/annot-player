@@ -8,7 +8,7 @@
 #include "lib/stream/datainputstream.h"
 
 //#define DEBUG "flvmerge"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 #include <QtCore/QDebug>
 
 #ifdef __GNUC__
@@ -241,7 +241,7 @@ FlvMerge::readTag(InputStream *in, bool writeHeader)
   }
   if (timestamp != newTimestamp) {
     quint8 ts[4];
-    Bitwise::BigEndian::getBytes(ts, newTimestamp << 8);
+    QxBitwise::BigEndian::getBytes(ts, newTimestamp << 8);
     ts[3] = newTimestamp >> 24;
     qMemCopy(tagData.data() + TimestampOffset, ts, 4);
   }
@@ -451,7 +451,7 @@ FlvMerge::updateScriptTagDoubleValue(quint8 *data, const QString &var) const
     DOUT(var << "=" << value);
     quint8 bytes[size] = { };
     if (!zero)
-      Bitwise::BigEndian::getBytes(bytes, value);
+      QxBitwise::BigEndian::getBytes(bytes, value);
     qMemCopy(data, bytes, size);
   }
   return update;

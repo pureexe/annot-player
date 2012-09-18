@@ -3,7 +3,7 @@
 
 #include "sleepdialog.h"
 #include "tr.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 #ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
 #elif defined(Q_OS_MAC)
@@ -14,7 +14,7 @@
 #include <QtGui>
 
 #define DEBUG "sleepdialog"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 SleepDialog::SleepDialog(QWidget *parent)
   : Base(parent)

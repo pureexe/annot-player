@@ -8,7 +8,7 @@
 #include "tr.h"
 #include "src/common/acui.h"
 #include "src/common/acprotocol.h"
-#include "lib/qtext/layoutwidget.h"
+#include "qtx/qxlayoutwidget.h"
 #include <QtGui>
 
 // - Constructions -
@@ -80,7 +80,7 @@ SyncView::createLayout()
     header->setContentsMargins(0, 0, 0, 0);
     center->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(0, 0, 0, 0);
-  } setCentralWidget(new LayoutWidget(rows, this));
+  } setCentralWidget(new QxLayoutWidget(rows, this));
 
   connect(threadView_, SIGNAL(threadsSelected(TextThreadList)), SLOT(select(TextThreadList)));
 

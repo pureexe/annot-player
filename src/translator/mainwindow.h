@@ -29,6 +29,8 @@ class Atlas;
 class Translator;
 class TranslatorManager;
 
+namespace Edict2 { class Dictionary; }
+
 class MainWindow : public AcMainWindow
 {
   Q_OBJECT
@@ -164,6 +166,7 @@ protected slots:
 
   void showKotobankTranslation(const QString &text);
   void showJdicTranslation(const QString &text);
+  void showEdictTranslation(const QString &text);
 
   void showDictTranslation(const QString &text);
   void showTextTranslation(const QString &text);
@@ -207,11 +210,22 @@ private:
           *russianAct_;
 
 #ifdef WITH_WIN_ATLAS
+private:
   void createAtlas();
   bool isAtlasEnabled() const;
   Atlas *atlas_;
   QAction *atlasAct_;
 #endif // WITH_WIN_ATLAS
+
+#ifdef WITH_LIB_EDRDG
+protected slots:
+  QString queryEdict(const QString &text);
+private:
+  void createEdict();
+  bool isEdictEnabled() const;
+  Edict2::Dictionary *edict_;
+  QAction *edictAct_;
+#endif // WITH_LIB_EDRDG
 };
 
 #endif // MAINWINDOW_H

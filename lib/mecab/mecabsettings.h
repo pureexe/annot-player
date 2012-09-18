@@ -9,6 +9,7 @@
 namespace MeCabSettings
 {
   void setMeCabRcFile(const QString &path);
+  QString getMeCabRcFile() ;
 } // namespace MeCabSettings
 
 #endif // MECABSETTINGS_H

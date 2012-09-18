@@ -5,7 +5,7 @@
 #include "src/common/acui.h"
 #include "src/common/acpaths.h"
 #include "src/common/acsettings.h"
-#include "lib/qtext/ss.h"
+#include "htmlutil/sstags.h"
 #include <QtGui>
 
 // - Locations -

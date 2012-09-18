@@ -3,7 +3,7 @@
 
 #include "lib/translator/jdictranslator.h"
 #include "lib/translator/jdictranslator_p.h"
-#include "lib/qtext/bytearray.h"
+#include "qtx/qxbytearray.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QRegExp>
 #include <QtCore/QTextCodec>
@@ -13,7 +13,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 
 //#define DEBUG "jdictranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

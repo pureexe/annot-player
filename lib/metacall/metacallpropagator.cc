@@ -4,7 +4,7 @@
 #include "lib/metacall/metacallfilter.h"
 
 #define DEBUG "metacallpropagator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

@@ -5,7 +5,7 @@
 #include <QtCore>
 
 //#define DEBUG "signalhub"
-//#include "lib/debug/debug.h"
+//#include "qtx/qxdebug.h"
 
 // - Constructions -
 SignalHub::SignalHub(Player *player, QObject *parent)

@@ -4,12 +4,12 @@
 // accomboedit.h
 // 7/16/2011
 
-#include "lib/qtext/combobox.h"
+#include "qtx/qxcombobox.h"
 #include <QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QAction)
 
-typedef QtExt::ComboBox ComboEditBase;
+typedef QxComboBox ComboEditBase;
 class AcComboEdit : public ComboEditBase
 {
   Q_OBJECT

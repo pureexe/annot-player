@@ -10,7 +10,7 @@
 #include <QtCore/QFileInfo>
 
 #define DEBUG "aclocalizer"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Properties -
 

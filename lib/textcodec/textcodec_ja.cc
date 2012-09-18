@@ -8,7 +8,7 @@
 #include <map>
 
 //#define DEBUG "textcodec"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef Q_OS_LINUX
 # ifndef TABLEDIR
@@ -19,7 +19,7 @@
 # define RC_PREFIX   QCoreApplication::applicationDirPath() + "/table/"
 #endif // Q_OS_LINUX
 
-#define RC_TABLE    RC_PREFIX "hirakata.txt"
+#define RC_TABLE    RC_PREFIX "hirakata"
 
 // - Converters -
 

@@ -6,7 +6,7 @@
 #include "datamanager.h"
 #include "tr.h"
 #include "src/common/acui.h"
-#include "lib/qtext/ss.h"
+#include "htmlutil/sstags.h"
 #include "lib/annotcloud/traits.h"
 #include "lib/annotcloud/alias.h"
 #include "lib/mrlanalysis/mrlanalysis.h"

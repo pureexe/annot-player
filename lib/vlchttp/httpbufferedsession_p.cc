@@ -11,8 +11,8 @@
 #ifdef WITH_LIB_MRLRESOLVER
 # include "lib/mrlresolver/luamrlresolver.h"
 #endif // WITH_LIB_LUARESOLVER
-#include "lib/qtext/filesystem.h"
-#include "lib/qtext/os.h"
+#include "qtx/qxfs.h"
+#include "qtx/qxos.h"
 #include <QtCore>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkCookieJar>
@@ -20,7 +20,7 @@
 #include <QtNetwork/QNetworkRequest>
 
 #define DEBUG "httpbufferedsession"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 
 enum { StopTimeout = 1000 }; // 1 second
@@ -30,7 +30,7 @@ enum { MaxTotalDownloadRetries = 3 };
 enum { MaxIndividualDownloadRetries = 3 };
 
 namespace { namespace detail {
-  QtExt::SleepTimer sleep;
+  QxSleepTimer sleep;
 } } // anonymous detail
 
 // - Construction -
@@ -78,7 +78,7 @@ HttpBufferedSession::updateFileName()
 {
   bool mp4 = contentType_.contains("mp4", Qt::CaseInsensitive);
   QString suf = mp4 ? ".mp4" : ".flv";
-  fileName_ = cacheDirectory() + QDir::separator() + QtExt::escapeFileName(mediaTitle()) + suf;
+  fileName_ = cacheDirectory() + QDir::separator() + qxEscapeFileName(mediaTitle()) + suf;
 }
 
 // - Actions -
@@ -102,7 +102,7 @@ HttpBufferedSession::save()
 
   //for (int i = 2; QFile::exists(fileName_); i++)
   //  fileName_ = fi.absolutePath() + QDir::separator() + fi.completeBaseName() + " " + QString::number(i) + "." + fi.suffix();
-  QtExt::trashOrRemoveFile(fileName_);
+  qxTrashOrRemoveFile(fileName_);
 
   QFile file(fileName_);
   if (!file.open(QIODevice::WriteOnly)) {
@@ -117,7 +117,7 @@ HttpBufferedSession::save()
   file.close();
 
   if (!FlvCodec::isFlvFile(fileName_) && !Mp4Codec::isMp4File(fileName_)) {
-    QtExt::trashOrRemoveFile(fileName_);
+    qxTrashOrRemoveFile(fileName_);
     emit errorMessage(tr("download failed") + ": " + fileName_);
     DOUT("exit: failed to write to file:" << fileName_);
     return;
@@ -156,7 +156,7 @@ HttpBufferedSession::stop()
   if (!isStopped()) {
     setState(Stopped);
     detail::sleep.stop();
-    QtExt::sleep(StopTimeout);
+    qxSleep(StopTimeout);
   } else
     detail::sleep.stop();
   //quit();
@@ -401,7 +401,7 @@ HttpBufferedSession::read(char *data, qint64 maxSize)
     emit buffering();
     readyReadCond_.wait(&m_);
     //if (isRunning())
-    //  QtExt::sleep(BufferingInterval);
+    //  qxSleep(BufferingInterval);
   }
 
   qint64 ret = qMin(maxSize, buffer_.size() - pos_);

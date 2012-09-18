@@ -5,7 +5,7 @@
 #include <QtCore/QRegExp>
 
 //#define DEBUG "mrlanalysis"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 QString
 MrlAnalysis::normalizeUrl(const QString &url)

@@ -7,7 +7,7 @@
 #include <QtCore>
 
 #define DEBUG "streamservice"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

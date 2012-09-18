@@ -24,15 +24,15 @@
 #else
 # error "mrlresolver lib is required"
 #endif // WITH_LIB_MRLRESOLVER
-#include "lib/qtext/network.h"
-#include "lib/qtext/filesystem.h"
+#include "qtx/qxnetwork.h"
+#include "qtx/qxfs.h"
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkCookieJar>
 
 #define DEBUG "mrldownloadtask_m"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 enum { MaxDownloadRetries = 10, MinDownloadRetries = 2 };
 enum { MaxIndividualDownloadRetries = 5 };
@@ -132,7 +132,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
       const QUrl url = urls[count];
       //if (stopped_) {
       //  stop();
-      //  foreach (InputStream *in, QtExt::revertList(ins)) { // revert list so that nam will be deleted later
+      //  foreach (InputStream *in, QxrevertList(ins)) { // revert list so that nam will be deleted later
       //    RemoteStream *p = dynamic_cast<RemoteStream *>(in);
       //    p->stop();
       //    p->deleteLater();
@@ -147,9 +147,9 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
       ok = false;
       for (int i = 0; i < MaxIndividualDownloadRetries && !ok && !stopped_; i++) {
         RemoteStream *in = new BufferedRemoteStream(nullptr);
-        if (!nam || count % QtExt::MaxConcurrentNetworkRequestCount == namCount) {
+        if (!nam || count % QxNetwork::MaxConcurrentNetworkRequestCount == namCount) {
           if (!nam)
-            namCount = count % QtExt::MaxConcurrentNetworkRequestCount;
+            namCount = count % QxNetwork::MaxConcurrentNetworkRequestCount;
           nam = new QNetworkAccessManager(in);
           if (jar) {
             nam->setCookieJar(jar);
@@ -160,7 +160,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
         in->setNetworkAccessManager(nam);
         connect(this, SIGNAL(stopped()), in, SLOT(stop()));
 
-        QtExt::ProgressWithId *p = new QtExt::ProgressWithId((long)in, in);
+        QxProgressWithId *p = new QxProgressWithId((long)in, in);
         connect(in, SIGNAL(progress(qint64,qint64)), p, SLOT(trigger(qint64,qint64)));
         connect(p, SIGNAL(progress(qint64,qint64,long)), SLOT(updateProgressWithId(qint64,qint64,long)));
 
@@ -253,7 +253,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
   QString suf = ".flv";
 
   FileOutputStream out;
-  QString name = QtExt::escapeFileName(title);
+  QString name = qxEscapeFileName(title);
   QString tmpFile = downloadPath() + QDir::separator() + "_" + name + suf;
   for (int i = 2; QFile::exists(tmpFile); i++)
     tmpFile = downloadPath() + QDir::separator() + "_" + name + " " + QString::number(i) + suf;
@@ -321,7 +321,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
       DOUT("cookie jar deleted");
     }
     //nam->deleteLater();
-    QtExt::trashOrRemoveFile(fileName());
+    qxTrashOrRemoveFile(fileName());
     quit();
     return;
   }
@@ -345,7 +345,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     QString fileName = downloadPath() + QDir::separator() + name + suf;
     //for (int i = 2; QFile::exists(fileName); i++)
     //  fileName = downloadPath() + QDir::separator() + name + " " + QString::number(i) + suf;
-    QtExt::trashOrRemoveFile(fileName);
+    qxTrashOrRemoveFile(fileName);
     ok =  QFile::rename(tmpFile, fileName);
     if (ok)
       setFileName(fileName);
@@ -356,7 +356,7 @@ MrlDownloadTask::downloadMultipleMedia(const MediaInfo &mi, QNetworkCookieJar *j
     emit progress(size, size);
     emit finished(this);
   } else {
-    QtExt::trashOrRemoveFile(tmpFile);
+    qxTrashOrRemoveFile(tmpFile);
     if (!isStopped())
       setState(Error);;
     emit errorMessage(tr("download incomplete") + ": " + tmpFile);

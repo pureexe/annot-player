@@ -11,7 +11,7 @@
 using namespace AnnotCloud;
 
 #define DEBUG "dataserver"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Constructions -
 

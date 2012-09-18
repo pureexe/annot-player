@@ -15,14 +15,14 @@
 #endif // Q_OS_WIN
 #include "src/common/acui.h"
 #include "src/common/aciconbutton.h"
-#include "lib/qtext/overlaylayout.h"
-#include "lib/qtext/toolbutton.h"
-#include "lib/qtext/withsizehint.h"
+#include "qtx/qxoverlaylayout.h"
+#include "qtx/qxtoolbutton.h"
+#include "qtx/qxwithsizehint.h"
 #include <QtCore>
 #include <QtGui>
 
 #define DEBUG "embeddedplayerui"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 enum { INPUTLINE_MINWIDTH = 400, INPUTLINE_MINHEIGHT = 25 };
 enum { VolumeSliderMaximumWidth = 100 };
@@ -165,10 +165,10 @@ EmbeddedPlayerUi::createLayout()
   }
 
   auto
-  w = dynamic_cast<QtExt::WithSizeHint *>(inputComboBox());
+  w = dynamic_cast<QxWithSizeHint *>(inputComboBox());
   Q_ASSERT(w);
   w->setSizeHint(QSize(INPUTLINE_MINWIDTH, INPUTLINE_MINHEIGHT));
-  w = dynamic_cast<QtExt::WithSizeHint *>(prefixComboBox());
+  w = dynamic_cast<QxWithSizeHint *>(prefixComboBox());
   Q_ASSERT(w);
   w->setSizeHint(QSize(G_PREFIXLINE_MAXWIDTH, INPUTLINE_MINHEIGHT));
 
@@ -210,7 +210,7 @@ EmbeddedPlayerUi::createLayout()
     row->addWidget(userButton());
     row->addWidget(prefixComboBox());
 
-    OverlayLayout *input = new OverlayLayout;
+    QxOverlayLayout *input = new QxOverlayLayout;
     input->addWidget(inputComboBox());
     input->addWidget(inputCountButton(), Qt::AlignRight);
     input->setContentsMargins(0, 0, 0, 0);

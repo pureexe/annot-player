@@ -9,7 +9,7 @@
 #include <QtCore/QRegExp>
 
 #define DEBUG "medialibrary"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

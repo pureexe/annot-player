@@ -7,7 +7,7 @@
 #include <QtCore>
 
 //#define DEBUG "annotationcodecmanager"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 using namespace AnnotCloud;
 

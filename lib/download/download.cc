@@ -6,7 +6,7 @@
 #include <QtNetwork/QNetworkRequest>
 
 #define DEBUG "download"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 bool
 dlget(const QString &path, const QNetworkRequest &req,

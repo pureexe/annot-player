@@ -9,7 +9,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 
 //#define DEBUG "excitetranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Properties -
 

@@ -8,7 +8,7 @@
 #include <boost/foreach.hpp>
 
 //#define DEBUG "mousegesturefilter"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 //#ifdef __GNUC__
 //# pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses

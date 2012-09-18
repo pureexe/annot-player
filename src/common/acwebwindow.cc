@@ -4,7 +4,7 @@
 #include "src/common/acwebwindow.h"
 #include "src/common/acui.h"
 #include "src/common/acprotocol.h"
-#include "lib/qtext/webview.h"
+#include "qtx/qxwebview.h"
 #include <QtCore/QEvent>
 #include <QtGui/QShortcut>
 #include <QtNetwork/QNetworkAccessManager>
@@ -13,7 +13,7 @@
 #include <QtWebKit/QWebView>
 
 #define DEBUG "acwebwindow"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 
@@ -23,7 +23,7 @@ AcWebWindow::AcWebWindow(QWidget *parent, Qt::WindowFlags f)
   AcUi::globalInstance()->setWindowStyle(this);
   setWindowOpacity(1.0);
 
-  QtExt::WebView *w = new QtExt::WebView(this);
+  QxWebView *w = new QxWebView(this);
   AC_CONNECT_MESSAGES(w, this, Qt::AutoConnection);
   setCentralWidget(w);
 

@@ -3,12 +3,12 @@
 
 #include "lib/translator/networktranslator.h"
 #include "lib/translator/translatorsettings.h"
-#include "lib/qtext/network.h"
+#include "qtx/qxnetwork.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 
 //#define DEBUG "networktranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Properties -
 
@@ -64,7 +64,7 @@ NetworkTranslator::doTranslate(const QString &text, int to, int from)
 
   if (TranslatorSettings::globalSettings()->isCacheEnabled() &&
       text.size() <= TranslatorSettings::globalSettings()->cacheSize())
-    QtExt::PublicNetworkReply::fromReply(reply_)
+    QxPublicNetworkReply::fromReply(reply_)
         ->setAttribute(REQ_TEXT_ATTR, text);
   DOUT("exit");
 }

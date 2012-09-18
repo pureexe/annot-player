@@ -4,8 +4,7 @@ unix {
 
 TEMPLATE = subdirs
 include(qtunix/qtunix.pri)
-include(qtx/qtx.pri)
-#SUBDIRS += qtx
+include(qtx11/qtx11.pri)
 
 }
 # EOF

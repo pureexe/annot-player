@@ -6,7 +6,7 @@
 #include <QtCore>
 
 //#define DEBUG "wbnetworkaccessmanager"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef Q_OS_LINUX
 # define RC_IMAGE_NULL IMAGEDIR "/null.png"

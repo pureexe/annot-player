@@ -10,7 +10,7 @@
 #include <QtXml/QXmlStreamWriter>
 
 //#define DEBUG "media"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 namespace { // anonymous
   struct init_ { init_() {

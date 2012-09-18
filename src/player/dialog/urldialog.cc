@@ -7,10 +7,10 @@
 #include "src/common/accomboedit.h"
 #include "src/common/acsettings.h"
 #include "lib/mrlanalysis/mrlanalysis.h"
-#include "lib/qtext/overlaylayout.h"
-#include "lib/qtext/layoutwidget.h"
-#include "lib/qtext/ss.h"
-#include "lib/qtext/string.h"
+#include "qtx/qxoverlaylayout.h"
+#include "qtx/qxlayoutwidget.h"
+#include "htmlutil/sstags.h"
+#include "qtx/qxstring.h"
 #include <QtGui>
 
 #ifdef Q_OS_MAC
@@ -70,7 +70,7 @@ UrlDialog::createLayout()
     QHBoxLayout *header = new QHBoxLayout,
                 *footer = new QHBoxLayout;
     QLayout *inc = new QVBoxLayout;
-    OverlayLayout *body = new OverlayLayout;
+    QxOverlayLayout *body = new QxOverlayLayout;
 
     rows->addLayout(header);
     rows->addLayout(body);
@@ -92,7 +92,7 @@ UrlDialog::createLayout()
 
     rows->setContentsMargins(4, 4, 4, 4);
     setContentsMargins(0, 0, 0, 0);
-  } setCentralWidget(new LayoutWidget(rows, this));
+  } setCentralWidget(new QxLayoutWidget(rows, this));
 
   setStyleSheet(styleSheet() +
     SS_BEGIN(QToolButton)
@@ -155,7 +155,7 @@ UrlDialog::increase()
   if (t.endsWith("/"))
     t.append("index_2.html");
   else
-    t = QtExt::increaseString(t);
+    t = qxIncreaseString(t);
   setText(t);
 }
 
@@ -165,7 +165,7 @@ UrlDialog::decrease()
   QString t = text().trimmed();
   if (t.isEmpty())
     return;
-  t = QtExt::decreaseString(t);
+  t = qxDecreaseString(t);
   t.replace("/index_1.html", "/")
    .replace("/index_0.html", "/");
   setText(t);

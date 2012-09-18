@@ -7,19 +7,19 @@ DEFINES += SRC_TRANSLATOR
 
 include(../../config.pri)
 include($$ROOTDIR/src/common/common.pri)
-include($$ROOTDIR/lib/debug/debug.pri)
 
 ## Libraries
 
 include($$ROOTDIR/lib/animation/animation.pri)
 include($$ROOTDIR/lib/crypt/crypt.pri)
-#include($$ROOTDIR/lib/edrdg/edrdg.pri)
+include($$ROOTDIR/lib/edrdg/edrdg.pri)
 include($$ROOTDIR/lib/download/download.pri)
+include($$ROOTDIR/lib/htmlutil/htmlutil.pri)
 include($$ROOTDIR/lib/imagefilter/imagefilter.pri)
 include($$ROOTDIR/lib/mecab/mecab.pri)
 include($$ROOTDIR/lib/mstypes/mstypes.pri)
 include($$ROOTDIR/lib/qt/qt.pri)
-include($$ROOTDIR/lib/qtext/qtext.pri)
+include($$ROOTDIR/lib/qtx/qtx.pri)
 #include($$ROOTDIR/lib/searchengine/searchengine.pri)
 include($$ROOTDIR/lib/textcodec/textcodec.pri)
 include($$ROOTDIR/lib/translator/translator.pri)
@@ -119,7 +119,7 @@ OTHER_FILES += $$TRANSLATIONS \
 # Deployment
 
 unix:!mac {
-    INSTALLS += target desktop desktop-kde icon doc
+    INSTALLS += target desktop desktop-kde icon
 
     target.path = $$BINDIR
 
@@ -134,10 +134,6 @@ unix:!mac {
 
     icon.path = $$DATADIR/icons/hicolor/256x256/apps
     icon.files += $${TARGET}.png
-
-    DOCDIR = $$DATADIR/annot/dict/doc
-    doc.path = $$DOCDIR
-    doc.files = $$DOC_FILES
 }
 
 # EOF

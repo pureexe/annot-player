@@ -10,7 +10,7 @@
 #include <QtCore/QDir>
 
 #define DEBUG "mrldownloadtask"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 enum { MaxDownloadRetries = 5 };
 

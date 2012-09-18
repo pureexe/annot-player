@@ -4,7 +4,7 @@
 // magnifier.h
 // 5/11/2012
 
-#include "lib/qtext/draggablewidget.h"
+#include "qtx/qxdraggablewidget.h"
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
 
@@ -15,13 +15,13 @@ QT_FORWARD_DECLARE_CLASS(QAction)
 class ImageFilter;
 class FadeAnimation;
 class RippleImageFilter;
-class Magnifier : public QtExt::DraggableWidget
+class Magnifier : public QxDraggableWidget
 {
   Q_OBJECT
   Q_PROPERTY(qreal windowOpacity READ windowOpacity WRITE setWindowOpacity)
   Q_DISABLE_COPY(Magnifier)
   typedef Magnifier Self;
-  typedef QtExt::DraggableWidget Base;
+  typedef QxDraggableWidget Base;
 
   const QWidget *w_;
   QPoint center_;

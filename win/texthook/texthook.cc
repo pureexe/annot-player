@@ -7,7 +7,7 @@
 #include <QtCore>
 
 #define DEBUG "texthook"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Properties -
 

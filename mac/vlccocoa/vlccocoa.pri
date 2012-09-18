@@ -13,7 +13,6 @@ include(../../config.pri)
 #include($$ROOTDIR/mac/VLCKit/VLCKit_shared.pri)
 include($$ROOTDIR/mac/VLCKit/VLCKit_static.pri)
 
-INCLUDEPATH     += $$PWD/..
 DEPENDPATH      += $$PWD
 
 HEADERS         +=  $$PWD/vlccocoa.h

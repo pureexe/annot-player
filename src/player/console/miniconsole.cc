@@ -6,12 +6,12 @@
 #include "rc.h"
 #include "global.h"
 #include "src/common/acui.h"
-#include "lib/qtext/ss.h"
+#include "htmlutil/sstags.h"
 #include "lib/animation/fadeanimation.h"
 #include <QtGui>
 
 #define DEBUG "miniconsole"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define WINDOW_OPACITY 0.95
 

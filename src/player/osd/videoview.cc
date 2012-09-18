@@ -181,7 +181,7 @@ VideoView::setViewMouseMovePos(const QPoint &globalPos)
 #ifdef WITH_WIN_HOOK
 
 //#define DEBUG "videoview"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // This function is re-entrant, and \var tries is not synchornized
 void

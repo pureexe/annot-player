@@ -4,7 +4,7 @@
 // downloadtask.h
 // 2/20/2012
 
-#include "lib/qtext/stoppable.h"
+#include "qtx/qxstoppable.h"
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QThread>
@@ -31,7 +31,7 @@ public:
 };
 typedef QList<DownloadTaskInfo> DownloadTaskInfoList;
 
-class DownloadTask : public QThread, public Stoppable
+class DownloadTask : public QThread, public QxStoppable
 {
   Q_OBJECT
   Q_DISABLE_COPY(DownloadTask)

@@ -3,9 +3,9 @@
 
 #include "lib/yahoojlp/yahoojlpparser.h"
 #include "lib/yahoojlp/yahoojlpapis_p.h"
-#include "lib/qtext/network.h"
+#include "qtx/qxnetwork.h"
 #include "lib/annotcloud/annottag.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 #include <QtCore/QHash>
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkAccessManager>
@@ -17,7 +17,7 @@
 #include <QtGui/QTextCharFormat>
 
 #define DEBUG "yahoojlpparser"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 //#include <QtCore/QDebug>
 
 #define RenderHintsAttribute    QNetworkRequest::UserMax
@@ -52,7 +52,7 @@ YahooJlpParser::renderText(const QString &text, ulong hints)
 
   reply_ = createReply(text);
   if (hints)
-    QtExt::PublicNetworkReply::fromReply(reply_)
+    QxPublicNetworkReply::fromReply(reply_)
       ->setAttribute(RenderHintsAttribute, uint(hints));
   DOUT("exit");
 }

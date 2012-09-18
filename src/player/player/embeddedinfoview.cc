@@ -10,15 +10,15 @@
 #include "annotationsettings.h"
 #include "lib/annotcloud/alias.h"
 #include "lib/player/player.h"
-#include "lib/qtext/datetime.h"
-#include "lib/qtext/htmltag.h"
-#include "lib/qtext/ss.h"
+#include "qtx/qxdatetime.h"
+#include "htmlutil/htmltags.h"
+#include "htmlutil/sstags.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
 
 //#define DEBUG "embeddedinfoview"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef __clang__
 # pragma clang diagnostic ignored "-Wlogical-op-parentheses" // '&&' within '||'
@@ -332,8 +332,8 @@ EmbeddedInfoView::updateText()
     QDateTime utc = QDateTime::currentDateTimeUtc();
     QDateTime local = utc.toLocalTime();
     int currentTimeZone = utc.secsTo(local) / 3600;
-    bool showJapanTime = currentTimeZone != QtExt::JapanTimeZone,
-         showChinaTime = currentTimeZone != QtExt::ChinaTimeZone && lang == QLocale::Chinese;
+    bool showJapanTime = currentTimeZone != QxDateTime::JapanTimeZone,
+         showChinaTime = currentTimeZone != QxDateTime::ChinaTimeZone && lang == QLocale::Chinese;
     static const QString fmt = "h:mm";
     t.append(
       tr("Local") + ": "
@@ -343,13 +343,13 @@ EmbeddedInfoView::updateText()
       HTML_SS_CLOSE()
     );
     if (showJapanTime) {
-      QTime jst = utc.time().addSecs(3600 * QtExt::JapanTimeZone);
+      QTime jst = utc.time().addSecs(3600 * QxDateTime::JapanTimeZone);
       t.append(QString(" %1:%2")
         .arg(tr("Japan")).arg(jst.toString(fmt))
       );
     }
     if (showChinaTime) {
-      QTime cst = utc.time().addSecs(3600 * QtExt::ChinaTimeZone);
+      QTime cst = utc.time().addSecs(3600 * QxDateTime::ChinaTimeZone);
       t.append(QString(" %1:%2")
         .arg(tr("China")).arg(cst.toString(fmt))
       );
@@ -408,7 +408,7 @@ EmbeddedInfoView::timeToString(qint64 secs)
       ret = QString::number(days) + tr(" day");
   } else {
     qint64 msecs = earlier.msecsTo(now);
-    QTime t = QtExt::msecs2time(msecs);
+    QTime t = qxTimeFromMsec(msecs);
     if (t.hour() > 0)
       ret = QString::number(t.hour()) + tr(" hr.");
     else if (t.minute() > 0)

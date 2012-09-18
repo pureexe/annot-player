@@ -5,12 +5,12 @@
 #include "datamanager.h"
 #include "tr.h"
 #include "src/common/acui.h"
-#include "lib/qtext/htmltag.h"
-#include "lib/qtext/datetime.h"
+#include "htmlutil/htmltags.h"
+#include "qtx/qxdatetime.h"
 #include <QtGui>
 
 #define DEBUG "annotationcountdialog"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 //#define INPUTLINEEDIT_MAXWIDTH         100
 

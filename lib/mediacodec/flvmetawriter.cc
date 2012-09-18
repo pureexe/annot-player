@@ -5,7 +5,7 @@
 #include "lib/stream/datainputstream.h"
 
 #define DEBUG "flvmetawriter"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Writer -
 

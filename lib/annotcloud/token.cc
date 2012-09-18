@@ -11,7 +11,7 @@
 #include <QtCore/QStringList>
 
 #define DEBUG "lib/annotcloud::token"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define DIGEST(_bytes)  Crypt::md5(_bytes)
 enum { DIGEST_SIZE = 10 * 1024 * 1024 }; // 10 MB

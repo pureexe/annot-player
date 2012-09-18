@@ -6,7 +6,7 @@
 #include "tr.h"
 #include "global.h"
 #include "src/common/acui.h"
-#include "lib/qtext/layoutwidget.h"
+#include "qtx/qxlayoutwidget.h"
 #include <QtGui>
 
 // - Construction -
@@ -54,7 +54,7 @@ GameView::createLayout()
 
     grid->setContentsMargins(9, 9, 9, 9);
     setContentsMargins(0, 0, 0, 0);
-  } setCentralWidget(new LayoutWidget(grid, this));
+  } setCentralWidget(new QxLayoutWidget(grid, this));
 }
 
 // - Properties -

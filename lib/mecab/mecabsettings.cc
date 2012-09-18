@@ -6,12 +6,18 @@
 #include <QtCore/QDir>
 
 //#define DEBUG "mecabsettings"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Properties -
 
+#define ENV_MECABRC "MECABRC"
+
 void
 MeCabSettings::setMeCabRcFile(const QString &path)
-{ qputenv("MECABRC", QDir::toNativeSeparators(path).toLocal8Bit()); }
+{ qputenv(ENV_MECABRC, QDir::toNativeSeparators(path).toLocal8Bit()); }
+
+QString
+MeCabSettings::getMeCabRcFile()
+{ return qgetenv(ENV_MECABRC); }
 
 // EOF

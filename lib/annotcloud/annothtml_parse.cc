@@ -6,12 +6,12 @@
 
 #include "lib/annotcloud/annothtml.h"
 #include "lib/annotcloud/annottag.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 #include <boost/tuple/tuple.hpp>
 #include <stack>
 
 //#define DEBUG "annothtmlparse"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define MAX_REPEAT_COUNT        10
 
@@ -29,7 +29,7 @@ AnnotationHtmlParser::parseLeadingTag(const QString &text)
 
   // TODO: use while
   //int index = 0;
-  //foreach (QChar c, text)
+  //foreach (const QChar &c, text)
   //  if (isSeparator(c))
   //    break;
   //  else

@@ -12,7 +12,7 @@
 #include <qt_windows.h>
 
 #define DEBUG "picker"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifndef PICKER_DLL_NAME
 # error "require DLL name"

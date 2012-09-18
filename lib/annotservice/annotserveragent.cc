@@ -8,7 +8,7 @@
 #include <QtCore/QMutexLocker>
 
 //#define DEBUG "annotserveragent"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 using namespace AnnotCloud;
 

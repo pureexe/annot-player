@@ -35,6 +35,9 @@ set MECAB_HOME=/Volumes/win/dev/mecab
 set MECAB_DLL=libmecab.dll
 set MECAB_DATA=dic
 
+set EDICT_HOME=/Volumes/win/dev/edrdg
+set EDICT_DICT=edict2u
+
 set CYGWIN_HOME=
 set CYGWIN_VERSION=cygwin1
 set CYGWIN_EXES=lftp.exe,chmod.exe
@@ -174,13 +177,17 @@ cp -v "%SOURCE%"/lib/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit /b 1
 cp -v "%SOURCE%"/lib/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit /b 1
 
 :: doc
-cp -Rv "%SOURCE%"/lib/qtext/doc . || exit /b 1
+cp -Rv "%SOURCE%"/lib/webbrowser/doc . || exit /b 1
 
 :: etc
 cp -Rv "%SOURCE%"/lib/mecab/etc . || exit /b 1
 
+:: edict
+mkdir dict
+cp -v "%EDICT_HOME%/dict/"%EDICT_DICT% dict/ || exit /b 1
+
 :: images
-cp -Rv "%SOURCE%"/lib/qtext/images . || exit /b 1
+cp -Rv "%SOURCE%"/lib/qtx/images . || exit /b 1
 
 :: table
 cp -Rv "%SOURCE%"/lib/textcodec/table . || exit /b 1

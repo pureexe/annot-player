@@ -8,7 +8,7 @@
 #define APP_ID          AC_TRANSLATOR_ID
 
 #define DEBUG "actranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Server -
 

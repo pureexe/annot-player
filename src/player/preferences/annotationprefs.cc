@@ -7,10 +7,10 @@
 #include "tr.h"
 #include "src/common/acss.h"
 #include "src/common/acui.h"
-#include "lib/qtext/doublespinbox.h"
-#include "lib/qtext/spinbox.h"
-#include "lib/qtext/fontcombobox.h"
-#include "lib/qtext/toolbutton.h"
+#include "qtx/qxdoublespinbox.h"
+#include "qtx/qxspinbox.h"
+#include "qtx/qxfontcombobox.h"
+#include "qtx/qxtoolbutton.h"
 #include <QtGui>
 
 enum { FONTEDIT_WIDTH = 100 };
@@ -40,7 +40,7 @@ AnnotationPreferencesTab::createLayout()
 {
   AcUi *ui = AcUi::globalInstance();
 
-  annotColorButton_ = new QtExt::ToolButton; {
+  annotColorButton_ = new QxToolButton; {
     annotColorButton_->setStyleSheet(SS_TRANSPARENT);
     annotColorButton_->setToolTip(tr("Annotation Color"));
   }
@@ -49,7 +49,7 @@ AnnotationPreferencesTab::createLayout()
   QLabel *annotColorLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_ANNOTATION), tr("Halo Color"), annotColorButton_);
   QToolButton *annotColorReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetAnnotationColor()));
 
-  subtitleColorButton_ = new QtExt::ToolButton; {
+  subtitleColorButton_ = new QxToolButton; {
     subtitleColorButton_->setStyleSheet(SS_TRANSPARENT);
     subtitleColorButton_->setToolTip(tr("Subtitle Color"));
   }
@@ -58,14 +58,14 @@ AnnotationPreferencesTab::createLayout()
   QLabel *subtitleColorLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_SUBTITLE), tr("Halo Color"), subtitleColorButton_);
   QToolButton *subtitleColorReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetSubtitleColor()));
 
-  highlightColorButton_ = new QtExt::ToolButton; {
+  highlightColorButton_ = new QxToolButton; {
     highlightColorButton_->setStyleSheet(SS_TRANSPARENT);
     highlightColorButton_->setToolTip(tr("Highlight Color"));
   } connect(highlightColorButton_, SIGNAL(clicked()), SLOT(promptHighlightColor()));
   QLabel *highlightColorLabel = ui->makeLabel(AcUi::BuddyHint, tr("Highlight"), tr("Halo Color"), highlightColorButton_);
   QToolButton *highlightColorReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetHighlightColor()));
 
-  fontEdit_ = new QtExt::FontComboBox; {
+  fontEdit_ = new QxFontComboBox; {
     fontEdit_->setStyleSheet(ACSS_COMBOBOX);
     fontEdit_->setFixedWidth(FONTEDIT_WIDTH);
     fontEdit_->setToolTip(tr("Font Family"));
@@ -73,7 +73,7 @@ AnnotationPreferencesTab::createLayout()
   QLabel *fontLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_DEFAULT), tr("Font Family"), fontEdit_);
   QToolButton *fontReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetFont()));
 
-  japaneseFontEdit_ = new QtExt::FontComboBox; {
+  japaneseFontEdit_ = new QxFontComboBox; {
     japaneseFontEdit_->setStyleSheet(ACSS_COMBOBOX);
     japaneseFontEdit_->setFixedWidth(FONTEDIT_WIDTH);
     japaneseFontEdit_->setToolTip(tr("Font Family"));
@@ -81,7 +81,7 @@ AnnotationPreferencesTab::createLayout()
   QLabel *japaneseFontLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_JAPANESE), tr("Font Family"), japaneseFontEdit_);
   QToolButton *japaneseFontReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetJapaneseFont()));
 
-  chineseFontEdit_ = new QtExt::FontComboBox; {
+  chineseFontEdit_ = new QxFontComboBox; {
     chineseFontEdit_->setStyleSheet(ACSS_COMBOBOX);
     chineseFontEdit_->setFixedWidth(FONTEDIT_WIDTH);
     chineseFontEdit_->setToolTip(tr("Font Family"));
@@ -89,7 +89,7 @@ AnnotationPreferencesTab::createLayout()
   QLabel *chineseFontLabel = ui->makeLabel(AcUi::BuddyHint, TR(T_CHINESE), tr("Font Family"), chineseFontEdit_);
   QToolButton *chineseFontReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetChineseFont()));
 
-  offsetEdit_ = new QtExt::SpinBox; {
+  offsetEdit_ = new QxSpinBox; {
     enum { TimeRange = 3600 * 3 }; // 3 houre
     offsetEdit_->setSuffix(tr(" sec."));
     offsetEdit_->setMaximum(TimeRange);
@@ -101,7 +101,7 @@ AnnotationPreferencesTab::createLayout()
   QLabel *offsetLabel = ui->makeLabel(AcUi::BuddyHint, tr("Delay Time"), tr("Delay time"), offsetEdit_);
   QToolButton *offsetReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetOffset()));
 
-  opacityEdit_ = new QtExt::SpinBox; {
+  opacityEdit_ = new QxSpinBox; {
     enum { Min = 50, Max = 100 };
     opacityEdit_->setSuffix(" %");
     opacityEdit_->setMaximum(Max);
@@ -114,7 +114,7 @@ AnnotationPreferencesTab::createLayout()
   QToolButton *opacityReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetOpacity()));
 
 #ifdef AC_ENABLE_GAME
-  backgroundOpacityEdit_ = new QtExt::SpinBox; {
+  backgroundOpacityEdit_ = new QxSpinBox; {
     enum { Min = 0, Max = 80 };
     backgroundOpacityEdit_->setSuffix(" %");
     backgroundOpacityEdit_->setMaximum(Max);
@@ -127,7 +127,7 @@ AnnotationPreferencesTab::createLayout()
   QToolButton *backgroundOpacityReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetBackgroundOpacity()));
 #endif // AC_ENABLE_GAME
 
-  speedEdit_ = new QtExt::DoubleSpinBox; {
+  speedEdit_ = new QxDoubleSpinBox; {
     Q_ASSERT(MinSpeed);
     speedEdit_->setPrefix("x ");
     speedEdit_->setMaximum(1.0 * SPEED_FACTOR);
@@ -140,7 +140,7 @@ AnnotationPreferencesTab::createLayout()
   QLabel *speedLabel = ui->makeLabel(AcUi::BuddyHint, tr("Moving Speed"), tr("Moving speed, the larger the faster"), speedEdit_);
   QToolButton *speedReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetSpeed()));
 
-  scaleEdit_ = new QtExt::DoubleSpinBox; {
+  scaleEdit_ = new QxDoubleSpinBox; {
     //enum { MinSize = SCALE_FACTOR/10, MaxSize = SCALE_FACTOR*10 };
     scaleEdit_->setPrefix("x ");
     scaleEdit_->setMaximum(1.0 * SCALE_FACTOR);
@@ -153,7 +153,7 @@ AnnotationPreferencesTab::createLayout()
   QLabel *scaleLabel = ui->makeLabel(AcUi::BuddyHint, tr("Normal Size"), tr("Annotation size"), scaleEdit_);
   QToolButton *scaleReset = ui->makeToolButton(AcUi::PushHint, TR(T_DEFAULT), this, SLOT(resetScale()));
 
-  fullscreenScaleEdit_ = new QtExt::DoubleSpinBox; {
+  fullscreenScaleEdit_ = new QxDoubleSpinBox; {
     //enum { MinSize = SCALE_FACTOR/10, MaxSize = SCALE_FACTOR*10 };
     fullscreenScaleEdit_->setPrefix("x ");
     fullscreenScaleEdit_->setMaximum(1.0 * SCALE_FACTOR);

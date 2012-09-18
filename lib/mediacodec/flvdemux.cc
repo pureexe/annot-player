@@ -6,7 +6,7 @@
 #include "lib/mediacodec/mediawriter.h"
 
 #define DEBUG "flvdemux"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 //struct FractionUInt32
 //{

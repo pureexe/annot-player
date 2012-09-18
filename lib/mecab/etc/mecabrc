@@ -1,7 +1,8 @@
 ; mecabrc
 ; 9/4/2012
 
-dicdir =  $(rcpath)/../dic/ipadic
+;dicdir =  $(rcpath)/../dic/ipadic -- not working on Mac OS X
+dicdir =  dic/ipadic
 
 ; userdic = /home/foo/bar/user.dic
 

@@ -5,7 +5,7 @@
 #include <QtGui>
 
 //#define DEBUG "mediathumbnail"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

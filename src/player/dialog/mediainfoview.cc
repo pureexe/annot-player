@@ -7,11 +7,11 @@
 #include "tr.h"
 #include "src/common/actextview.h"
 #include "lib/player/player.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 #include <QtGui>
 
 #define DEBUG "mediainfoview"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 MediaInfoView::MediaInfoView(Player *player, DataManager *data, SignalHub *hub, QWidget *parent)
   : Base(parent), player_(player), data_(data), hub_(hub)

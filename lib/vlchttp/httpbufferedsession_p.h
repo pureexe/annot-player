@@ -5,7 +5,7 @@
 // 2/21/2012
 
 #include "lib/vlchttp/httpsession_p.h"
-#include "lib/qtext/stoppable.h"
+#include "qtx/qxstoppable.h"
 #include <QtCore/QWaitCondition>
 #include <QtCore/QMutex>
 #include <QtCore/QUrl>

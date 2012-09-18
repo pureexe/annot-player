@@ -4,7 +4,7 @@
 // webbrowser.h
 // 7/10/2011
 
-#include "lib/qtext/draggablemainwindow.h"
+#include "qtx/qxdraggablemainwindow.h"
 #include <QtCore/QList>
 #include <QtCore/QUrl>
 #include <QtGui/QWidgetList>
@@ -26,7 +26,7 @@ class SearchEngine;
 class MouseGesture;
 class MouseGestureFilter;
 
-typedef QtExt::DraggableMainWindow WebBrowserBase;
+typedef QxDraggableMainWindow WebBrowserBase;
 class WebBrowser : public WebBrowserBase
 {
   Q_OBJECT

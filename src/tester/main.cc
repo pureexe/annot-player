@@ -7,7 +7,7 @@
 #include <ctime>
 
 #define DEBUG "main"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Main -
 

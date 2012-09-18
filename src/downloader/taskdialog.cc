@@ -5,17 +5,13 @@
 #include "src/common/acui.h"
 #include "src/common/actextview.h"
 #include "lib/mrlanalysis/mrlanalysis.h"
-#include "lib/qtext/string.h"
+#include "qtx/qxstring.h"
+#include "qtx/qxalgorithm.h"
 #include <QtGui>
-
-#ifdef __clang__
-# pragma clang diagnostic ignored "-Wunused-parameter" // in boost algorithm
-#endif // __clang__
-#include <boost/range/algorithm.hpp>
 #include <boost/foreach.hpp>
 
 #define DEBUG "taskdialog"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef Q_OS_MAC
 # define K_CTRL        "cmd"
@@ -137,7 +133,7 @@ TaskDialog::add()
   bool annotOnly = annotOnlyButton_->isChecked();
   if (!urls.isEmpty()) {
     QStringList ret;
-    BOOST_FOREACH (const QString &url, boost::unique(urls))
+    BOOST_FOREACH (const QString &url, qxUniqueList(urls))
       ret.append(formatUrl(url));
     DOUT("urls =" << ret);
     emit urlsAdded(ret, annotOnly);
@@ -180,7 +176,7 @@ TaskDialog::increase()
     if (url.endsWith('/'))
       url.append("index_1.html");
   }
-  url = QtExt::increaseString(url);
+  url = qxIncreaseString(url);
 
   if (url != prevUrl)
     addText(url);
@@ -203,7 +199,7 @@ TaskDialog::decrease()
   //      url.endsWith("/index_1.html"))
   //    return;
   //}
-  //url = QtExt::decreaseString(url);
+  //url = qxDecreaseString(url);
 //
   //if (ac) {
   //  url.replace(QRegExp("/index_1.html$"), "/")

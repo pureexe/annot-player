@@ -10,7 +10,7 @@
 #endif // WITH_LIB_ANNOTCACHE
 #include "lib/annotcloud/annottag.h"
 #include "lib/annotcloud/traits.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
 #include <QtNetwork/QNetworkReply>
@@ -21,7 +21,7 @@
 #include <climits>
 
 //#define DEBUG "nicovideocodec"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 using namespace AnnotCloud;
 
@@ -143,7 +143,7 @@ NicovideoCodec::parseDocument(const QByteArray &data)
 
 QString
 NicovideoCodec::parseText(const QString &text)
-{ return text.isEmpty() ? text : ::html_escape(text.trimmed()); }
+{ return text.isEmpty() ? text : ::htmlEscape(text.trimmed()); }
 
 // See: http://nicowiki.com/elsecom.html
 QString

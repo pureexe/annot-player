@@ -7,7 +7,7 @@
 #include "textmessage.h"
 #include "processinfo.h"
 #include "textthread.h"
-#include "lib/qtext/dialog.h"
+#include "qtx/qxdialog.h"
 #include <QtCore/QList>
 #include <QtCore/QVector>
 
@@ -22,12 +22,12 @@ class RadioButtonGrid;
 class MessageHandler;
 class HookDialog;
 
-class ThreadView : public QtExt::Dialog
+class ThreadView : public QxDialog
 {
   Q_OBJECT
   Q_DISABLE_COPY(ThreadView)
   typedef ThreadView Self;
-  typedef QtExt::Dialog Base;
+  typedef QxDialog Base;
 
   //enum HookIndex {
   //  HI_AllHooks = 0,

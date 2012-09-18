@@ -4,14 +4,14 @@
 // acmainwindow.h
 // 2/17/2012
 
-#include "lib/qtext/draggablemainwindow.h"
+#include "qtx/qxdraggablemainwindow.h"
 
 QT_FORWARD_DECLARE_CLASS(QTimer)
 
 class FadeAnimation;
 class RippleImageFilter;
 
-typedef QtExt::DraggableMainWindow AcMainWindowBase;
+typedef QxDraggableMainWindow AcMainWindowBase;
 class AcMainWindow : public AcMainWindowBase
 {
   Q_OBJECT

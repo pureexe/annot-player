@@ -4,13 +4,13 @@
 #include "translatebrowser.h"
 #include "src/common/acss.h"
 #include "src/common/acrc.h"
-#include "lib/qtext/texthighlighter.h"
+#include "qtx/qxtexthighlighter.h"
 #include <QtGui/QAction>
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QMenu>
 
 //#define DEBUG "translatebrowser"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Constructions -
 
@@ -21,7 +21,7 @@ TranslateBrowser::TranslateBrowser(QWidget *parent)
   setReadOnly(true);
   setOpenLinks(false);
 
-  highlighter_ = new QtExt::TextHighlighter(this);
+  highlighter_ = new QxTextHighlighter(this);
 
   translateAct_ = new QAction(tr("Translate"), this);
   connect(translateAct_, SIGNAL(triggered()), SLOT(invalidateSelectedText()));

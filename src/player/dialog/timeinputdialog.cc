@@ -6,11 +6,11 @@
 #include "global.h"
 #include "src/common/acui.h"
 #include "src/common/actimeedit.h"
-#include "lib/qtext/datetime.h"
+#include "qtx/qxdatetime.h"
 #include <QtGui>
 
 #define DEBUG "timeinputdialog"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 enum { EDIT_MAXWIDTH = 50 };
 enum { BAD_TIME = -1 };
@@ -76,7 +76,7 @@ TimeInputDialog::time() const
 void
 TimeInputDialog::setTime(qint64 msecs)
 {
-  QTime t = QtExt::msecs2time(msecs);
+  QTime t = qxTimeFromMsec(msecs);
   if (!t.isValid())
     return;
   timeEdit_->setTime(t);

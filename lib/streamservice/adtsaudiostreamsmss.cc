@@ -10,7 +10,7 @@
 #define ASSERT(_var)
 
 //#define DEBUG "adtsaudiostreamsmss"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // See: http://www.live555.com/liveMedia/faq.html
 // See: vlc/modules/demux/live555.cpp

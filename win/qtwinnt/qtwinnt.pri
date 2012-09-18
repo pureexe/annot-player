@@ -3,7 +3,6 @@
 
 DEFINES += WITH_WIN_QTWINNT
 
-INCLUDEPATH     += $$PWD/..
 INCLUDEPATH     += $$PWD
 DEPENDPATH      += $$PWD
 

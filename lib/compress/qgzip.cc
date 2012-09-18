@@ -9,7 +9,7 @@
 #endif // WITH_GZIP
 
 //#define DEBUG "qgzip"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // See: http://zlib.net/zpipe.c
 // See: http://www.qtcentre.org/threads/30031-qUncompress-data-from-gzip

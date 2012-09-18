@@ -9,7 +9,7 @@
 #include <QtNetwork/QNetworkReply>
 
 //#define DEBUG "systrantranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 QString
 SystranTranslator::name() const
@@ -20,7 +20,7 @@ SystranTranslator::createReply(const QString &text)
 {
   QNetworkRequest req(QString(SYSTRAN_API));
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-  QString t = QString(text).replace('\\n', ' ');
+  QString t = QString(text).replace('\n', ' ');
   return networkAccessManager()->post(req, t.toUtf8());
 }
 

@@ -6,13 +6,13 @@
 #include "game.h"
 #include "src/common/acui.h"
 #include "src/common/accomboedit.h"
-#include "lib/qtext/ss.h"
-#include "lib/qtext/layoutwidget.h"
+#include "htmlutil/sstags.h"
+#include "qtx/qxlayoutwidget.h"
 #include "win/texthook/texthook.h"
 #include <QtGui>
 
 #define DEBUG "hookdialog"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Constructions -
 
@@ -81,7 +81,7 @@ HookDialog::createLayout()
 
     rows->setContentsMargins(4, 4, 4, 4);
     setContentsMargins(0, 0, 0, 0);
-  } setCentralWidget(new LayoutWidget(rows, this));
+  } setCentralWidget(new QxLayoutWidget(rows, this));
 
   setStyleSheet(styleSheet() +
     SS_BEGIN(QToolButton)

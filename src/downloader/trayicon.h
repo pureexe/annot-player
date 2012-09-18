@@ -4,13 +4,13 @@
 // trayicon.h
 // 10/27/2011
 
-#include "lib/qtext/systemtrayicon.h"
+#include "qtx/qxsystemtrayicon.h"
 
 QT_FORWARD_DECLARE_CLASS(QAction)
 
 class MainWindow;
 
-typedef QtExt::SystemTrayIcon TrayIconBase;
+typedef QxSystemTrayIcon TrayIconBase;
 class TrayIcon : public TrayIconBase
 {
   Q_OBJECT

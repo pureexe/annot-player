@@ -17,7 +17,7 @@
 #include <boost/tuple/tuple.hpp>
 
 #define DEBUG "main"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef __GNUC__
 # pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses

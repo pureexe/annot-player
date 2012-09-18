@@ -5,7 +5,7 @@
 #include "annotationgraphicsitem.h"
 
 #define DEBUG "annotationgraphicsitempool"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Actions -
 

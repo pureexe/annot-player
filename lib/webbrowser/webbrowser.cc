@@ -12,14 +12,14 @@
 #include "lib/searchengine/searchenginefactory.h"
 #include "lib/mousegesture/mousegesture.h"
 #include "lib/mousegesture/mousegesturefilter.h"
-#include "lib/qtext/filesystem.h"
-#include "lib/qtext/algorithm.h"
+#include "qtx/qxfs.h"
+#include "qtx/qxalgorithm.h"
 #include <QtGui>
 #include <QtNetwork/QNetworkDiskCache>
 #include <QtWebKit/QWebHistory>
 
 #define DEBUG "webbrowser"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef __GNUC__
 # pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
@@ -212,7 +212,7 @@ WebBrowser::setupUi()
 
   ui->addressEdit->setDefaultItems(homePages_);
 
-  ui->searchEdit->setEngines(QtExt::subList(searchEngines_, SearchEngineFactory::VisibleEngineCount));
+  ui->searchEdit->setEngines(qxSubList(searchEngines_, SearchEngineFactory::VisibleEngineCount));
 
   // Set up connections
   connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
@@ -786,7 +786,7 @@ WebBrowser::newTab(QWebView *view, int index, bool focus)
 
   auto wbview = qobject_cast<WbWebView *>(view);
   if (wbview) {
-    wbview->setSearchEngines(QtExt::subList(searchEngines_, SearchEngineFactory::VisibleEngineCount));
+    wbview->setSearchEngines(qxSubList(searchEngines_, SearchEngineFactory::VisibleEngineCount));
     wbview->setSearchEngine(searchEngine_);
 
     connect(wbview, SIGNAL(message(QString)), SLOT(showMessage(QString)));
@@ -1091,7 +1091,7 @@ WebBrowser::download(const QNetworkRequest &req)
 
   QString path = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
   QString fileName = QFileInfo(req.url().toString()).fileName();
-  fileName = QtExt::escapeFileName(fileName);
+  fileName = qxEscapeFileName(fileName);
 
   path += QDir::separator() + fileName;
   bool ok = ::dlget(path, req, true, retries, this); // async = true

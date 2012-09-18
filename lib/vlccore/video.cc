@@ -11,7 +11,7 @@
 #include <cassert>
 
 //#define DEBUG "vlccore::video"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifndef MODULE_STRING
 # define MODULE_STRING "main"  // needed by VLC

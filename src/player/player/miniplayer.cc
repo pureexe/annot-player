@@ -7,7 +7,7 @@
 #include "positionslider.h"
 #include "src/common/acui.h"
 #include "lib/player/player.h"
-#include "lib/qtext/overlaylayout.h"
+#include "qtx/qxoverlaylayout.h"
 #ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
@@ -101,7 +101,7 @@ MiniPlayerUi::createLayout()
     row2->addWidget(userButton());
     row2->addWidget(prefixComboBox());
 
-    OverlayLayout *input = new OverlayLayout;
+    QxOverlayLayout *input = new QxOverlayLayout;
     input->addWidget(inputComboBox());
     input->addWidget(inputCountButton(), Qt::AlignRight);
     row2->addLayout(input);

@@ -6,7 +6,7 @@
 
 #include "module/qtext/webdialog.h"
 
-typedef QtExt::WebDialog CommentViewBase;
+typedef QxWebDialog CommentViewBase;
 
 class CommentView: public CommentViewBase
 {

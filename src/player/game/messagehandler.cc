@@ -13,7 +13,7 @@
 #include <QtCore>
 
 //#define DEBUG "messagehandler"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 using namespace AnnotCloud;
 

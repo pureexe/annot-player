@@ -16,7 +16,7 @@
 #define G_EMAIL         AC_EMAIL
 #define G_LICENSE       AC_LICENSE
 
-// - Path -
+// - Locations -
 
 #ifdef Q_OS_WIN
 # define G_PATH_PROFILE        QtWin::getAppDataPath() + "/" "me.annot.translator"
@@ -55,5 +55,14 @@
 #endif // Q_OS_
 
 #define G_PATH_MECABRC  G_PATH_ETC "/mecabrc"
+
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+# define G_PATH_DICT        QCoreApplication::applicationDirPath() + "/" "dict"
+#else
+# define G_PATH_DICT        G_PATH_PROFILE "/" "dict"
+#endif // Q_OS_
+
+#define G_PATH_EDICT   G_PATH_DICT "/" "edictu"
+#define G_PATH_EDICT2  G_PATH_DICT "/" "edict2u"
 
 #endif // GLOBAL_H

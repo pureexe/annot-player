@@ -12,7 +12,7 @@
 #include "src/common/achorizontalslider.h"
 #include "src/common/acui.h"
 #include "src/common/aciconbutton.h"
-#include "lib/qtext/toolbutton.h"
+#include "qtx/qxtoolbutton.h"
 #include <QtGui>
 
 //#define ACSS_TOOLBUTTON_TEXT_(_weight, _style, _dec, _normal, _hover, _pressed, _checked, _checked_hover, _disabled)
@@ -119,7 +119,7 @@ PlayerPanel::volumeSlider()
   PlayerPanel::_button() \
   { \
     if (!_button##_) { \
-      _button##_ = new QtExt::ToolButton(this); \
+      _button##_ = new QxToolButton(this); \
       _button##_->setStyleSheet(SS_TOOLBUTTON_##_styleid); \
       _button##_->setToolTip(TR(T_TOOLTIP_##_styleid)); \
     } return _button##_; \

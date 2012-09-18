@@ -15,7 +15,8 @@
 #include "application.h"
 #include "src/common/acss.h"
 #include "lib/player/player.h"
-#include "lib/qtext/htmltag.h"
+#include "qtx/qxalgorithm.h"
+#include "htmlutil/htmltags.h"
 #ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
@@ -23,10 +24,6 @@
 # include "win/mousehook/mousehook.h"
 #endif // WITH_WIN_MOUSEHOOK
 #include <QtGui>
-#ifdef __clang__
-# pragma clang diagnostic ignored "-Wunused-parameter" // in boost algorithm
-#endif // __clang__
-#include <boost/range/algorithm.hpp>
 #include <climits>
 
 #ifdef __GNUC__
@@ -34,7 +31,7 @@
 #endif // __GNUC__
 
 //#define DEBUG "annotationgraphicsview"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 using namespace AnnotCloud;
 
@@ -554,10 +551,8 @@ AnnotationGraphicsView::pauseItems(const QRect &rect, Qt::ItemSelectionMode mode
       uids.append(uid);
   }
 
-  if (!uids.isEmpty()) {
-    boost::unique(uids);
-    emit selectedUserIds(uids);
-  }
+  if (!uids.isEmpty())
+    emit selectedUserIds(qxUniqueList(uids));
 }
 
 void
@@ -587,10 +582,8 @@ AnnotationGraphicsView::pauseItems(const QPoint &pos)
     if (uid)
       uids.append(uid);
   }
-  if (!uids.isEmpty()) {
-    boost::unique(uids);
-    emit selectedUserIds(uids);
-  }
+  if (!uids.isEmpty())
+    emit selectedUserIds(qxUniqueList(uids));
 }
 
 void

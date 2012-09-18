@@ -9,7 +9,7 @@
 #include <QtCore/QMutexLocker>
 
 //#define DEBUG "annotserverproxy"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 using namespace AnnotCloud;
 using namespace CLOUD_SERVICE_NAMESPACE;

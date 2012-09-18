@@ -17,7 +17,7 @@
 #include <QtCore/QTimer>
 
 #define DEBUG "acmainwindow"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define SS_STATUSBAR_(_color, _weight) \
   SS_BEGIN(QStatusBar) \

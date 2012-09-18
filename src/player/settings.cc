@@ -4,14 +4,10 @@
 #include "settings.h"
 #include "global.h"
 #include "annotationsettings.h"
+#include "qtx/qxalgorithm.h"
 #include <QtCore>
-#ifdef __clang__
-# pragma clang diagnostic ignored "-Wunused-parameter" // in boost algorithm
-#endif // __clang__
-#include <boost/range/algorithm.hpp>
-
 #define DEBUG "settings"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Settings keys -
 
@@ -484,7 +480,7 @@ Settings::recentFiles() const
   //r = value(SK_RECENT(9)).toString(); if (!r.isEmpty()) ret.append(r);
 
   if (!ret.isEmpty())
-    boost::unique(ret);
+    qxStableUniqueList(ret);
   return ret;
 }
 

@@ -8,7 +8,7 @@
 #include <string>
 
 #define DEBUG "qtwinnt"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Process Queries -
 

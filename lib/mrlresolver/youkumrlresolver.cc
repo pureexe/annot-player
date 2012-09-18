@@ -14,7 +14,7 @@
 #include <cstdlib>
 
 //#define DEBUG "youkumrlresolver"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // See: jd/plugins/hoster/YoukuCom.java
 // See: jd/plugins/decrypter/YkCm.java
@@ -62,7 +62,7 @@ YoukuMrlResolver::resolveMedia(const QString &href)
   DOUT("url =" << url);
   nam_->get(QNetworkRequest(url));
   //QNetworkReply *reply = networkAccessManager()->get(QNetworkRequest(url));
-  //connect(new QtExt::NetworkReplyFinished(reply), SIGNAL(finished(QNetworkReply*)), SLOT(resolveMedia(QNetworkReply*)));
+  //connect(new QxNetworkReplyFinished(reply), SIGNAL(finished(QNetworkReply*)), SLOT(resolveMedia(QNetworkReply*)));
   return true;
 }
 

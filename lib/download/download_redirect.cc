@@ -7,7 +7,7 @@
 #include <QtCore/QtCore>
 
 #define DEBUG "download_redirect"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 QUrl
 dlredirect(const QUrl &url, int retries)

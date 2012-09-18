@@ -3,16 +3,16 @@
 
 #include "lib/translator/microsofttranslator.h"
 #include "lib/translator/microsofttranslator_p.h"
-#ifdef WITH_LIB_QTEXT
-# include "lib/qtext/network.h"
-#endif // WITH_LIB_QTEXT
+#ifdef WITH_LIB_QTX
+# include "qtx/qxnetwork.h"
+#endif // WITH_LIB_QTX
 #include <QtNetwork/QAuthenticator>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 
 //#define DEBUG "microsofttranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 
@@ -75,9 +75,9 @@ QNetworkRequest
 MicrosoftTranslator::translateRequest(const QUrl &url)
 {
   QNetworkRequest ret(url);
-#ifdef WITH_LIB_QTEXT
-  QtExt::setNetworkRequestAuthentificationHeader(&ret, AZURE_AUTH_USERNAME, AZURE_AUTH_PASSWORD);
-#endif // WITH_LIB_QTEXT
+#ifdef WITH_LIB_QTX
+  QxNetwork::setNetworkRequestAuthentificationHeader(&ret, AZURE_AUTH_USERNAME, AZURE_AUTH_PASSWORD);
+#endif // WITH_LIB_QTX
   return ret;
 }
 

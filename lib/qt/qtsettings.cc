@@ -2,7 +2,7 @@
 // 6/23/2012
 
 #include "lib/qt/qtsettings.h"
-#include <corelib/animation/qabstractanimation_p.h>
+#include <qt/src/corelib/animation/qabstractanimation_p.h>
 
 #ifndef DEFAULT_TIMING_INTERVAL
 # define DEFAULT_TIMING_INTERVAL   16  // see qabstractanimation.cpp

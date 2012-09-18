@@ -4,17 +4,17 @@
 // httpsession_p.h
 // 2/21/2012
 
-#include "lib/qtext/stoppable.h"
+#include "qtx/qxstoppable.h"
 #include <QtCore/QString>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
 
-class VlcHttpSession : public StoppableThread
+class VlcHttpSession : public QxStoppableThread
 {
   Q_OBJECT
   Q_DISABLE_COPY(VlcHttpSession)
   typedef VlcHttpSession Self;
-  typedef StoppableThread Base;
+  typedef QxStoppableThread Base;
 
 protected:
   enum State { Error = -1, Stopped = 0, Running, Finished };

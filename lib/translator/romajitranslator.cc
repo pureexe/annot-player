@@ -3,7 +3,7 @@
 
 #include "lib/translator/romajitranslator.h"
 #include "lib/translator/romajitranslator_p.h"
-#include "lib/qtext/bytearray.h"
+#include "qtx/qxbytearray.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextDecoder>
@@ -13,7 +13,7 @@
 #include <QtNetwork/QNetworkReply>
 
 //#define DEBUG "romajitranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

@@ -10,7 +10,7 @@
 #include <QtNetwork/QNetworkRequest>
 
 //#define DEBUG "downloader"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 namespace { namespace detail {
   inline QString filterHost(const QString &host)

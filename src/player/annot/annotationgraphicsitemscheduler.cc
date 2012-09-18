@@ -7,7 +7,7 @@
 #include <QtCore>
 
 //#define DEBUG "annotationgraphicsitemscheduler"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef __clang__
 # pragma clang diagnostic ignored "-Wlogical-op-parentheses" // '&&' within '||'

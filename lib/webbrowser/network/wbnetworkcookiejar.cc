@@ -7,7 +7,7 @@
 #include <QtCore/QRegExp>
 
 #define DEBUG "wbnetworkcookiejar"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 QUrl
 WbNetworkCookieJar::toDomainUrl(const QUrl &url) const

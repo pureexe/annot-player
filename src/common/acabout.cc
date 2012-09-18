@@ -5,7 +5,7 @@
 #include "src/common/acglobal.h"
 #include "src/common/acui.h"
 #include "src/common/acupdater.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 #include <QtGui>
 
 #define WINDOW_FLAGS_BASE \

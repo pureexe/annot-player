@@ -8,8 +8,8 @@
 #endif // WITH_LIB_ANNOTCACHE
 #include "lib/annotcloud/annottag.h"
 #include "lib/annotcloud/traits.h"
-#include "lib/qtext/htmltag.h"
-#include "lib/qtext/network.h"
+#include "htmlutil/htmltags.h"
+#include "qtx/qxnetwork.h"
 #ifdef WITH_LIB_COMPRESS
 # include "lib/compress/qgzip.h"
 #else
@@ -26,7 +26,7 @@
 #define RequestUrlAttribute QNetworkRequest::UserMax
 
 //#define DEBUG "bilibilicodec"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 using namespace AnnotCloud;
 
@@ -53,7 +53,7 @@ BilibiliCodec::fetch(const QString &url, const QString &originalUrl)
   Q_ASSERT(match(url));
   DOUT("enter: url =" << url);
   QNetworkReply *reply = nam_->get(QNetworkRequest(url));
-  QtExt::PublicNetworkReply::fromReply(reply)
+  QxPublicNetworkReply::fromReply(reply)
       ->setAttribute(RequestUrlAttribute, originalUrl);
   DOUT("exit");
 }
@@ -150,7 +150,7 @@ BilibiliCodec::parseDocument(const QByteArray &data)
 QString
 BilibiliCodec::parseText(const QString &text)
 {
-  return text.isEmpty() ? text : ::html_escape(text)
+  return text.isEmpty() ? text : ::htmlEscape(text)
     .replace("/n", "\n ")
     .trimmed();
 }

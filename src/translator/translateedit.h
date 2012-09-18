@@ -8,7 +8,7 @@
 
 QT_FORWARD_DECLARE_CLASS(QMenu)
 
-namespace QtExt { class TextHighlighter; }
+class QxTextHighlighter;
 
 class TranslateEdit : public QTextEdit
 {
@@ -20,7 +20,7 @@ class TranslateEdit : public QTextEdit
   QString selectedText_;
 
   QMenu *contextMenu;
-  QtExt::TextHighlighter *highlighter_;
+  QxTextHighlighter *highlighter_;
 
   QAction *translateAct_,
           *clearAct_;

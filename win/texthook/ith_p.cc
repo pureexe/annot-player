@@ -6,7 +6,7 @@
 #include <string>
 
 //#define DEBUG "ith"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Implementation Details -
 

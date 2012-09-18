@@ -6,11 +6,12 @@ DEFINES += WITH_LIB_EDRDG
 DEPENDPATH += $$PWD
 
 HEADERS += \
-    $$PWD/edict_p.h \
-    $$PWD/edict.h
+    $$PWD/edict2_p.h \
+    $$PWD/edict2.h
 
 SOURCES += \
-    $$PWD/edict.cc
+    $$PWD/edict2_p.cc \
+    $$PWD/edict2.cc
 
 QT += core
 

@@ -12,13 +12,13 @@
 #include "lib/stream/filestream.h"
 #include "lib/stream/inputstream.h"
 #include "lib/stream/outputstream.h"
-#include "lib/qtext/stoppable.h"
+#include "qtx/qxstoppable.h"
 #include <QtAlgorithms>
 #include <QtCore/QStringList>
 #include <QtCore/QThreadPool>
 
 #define DEBUG "flvcodec"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Task -
 
@@ -89,7 +89,7 @@ void
 FlvCodec::stop()
 {
   if (!tasks_.isEmpty())
-    foreach (Stoppable *t, tasks_)
+    foreach (QxStoppable *t, tasks_)
       t->stop();
 }
 
@@ -135,7 +135,7 @@ FlvCodec::getLastTimestamp(InputStream *input)
   int count = input->read(data + 1, 3);
   if (count != 3)
     return 0;
-  pos = size - (qint64)Bitwise::BigEndian::toUInt32((quint8*)data);
+  pos = size - (qint64)QxBitwise::BigEndian::toUInt32((quint8*)data);
   if (pos < 0 || pos >= size)
     return 0;
   if (!input->seek(pos))
@@ -143,7 +143,7 @@ FlvCodec::getLastTimestamp(InputStream *input)
   count = input->read(data + 1, 3);
   if (count != 3)
     return 0;
-  return Bitwise::BigEndian::toUInt32((quint8*)data);
+  return QxBitwise::BigEndian::toUInt32((quint8*)data);
 }
 
 qint64
@@ -156,11 +156,11 @@ FlvCodec::getLastTimestamp(const QByteArray &input)
   char data[4];
   data[0] = 0;
   qMemCopy(data + 1, input.data() + pos, 3);
-  pos = size - (qint64)Bitwise::BigEndian::toUInt32((quint8*)data);
+  pos = size - (qint64)QxBitwise::BigEndian::toUInt32((quint8*)data);
   if (pos < 0 || pos >= size)
     return 0;
   qMemCopy(data + 1, input.data() + pos, 3);
-  return Bitwise::BigEndian::toUInt32((quint8*)data);
+  return QxBitwise::BigEndian::toUInt32((quint8*)data);
 }
 
 void

@@ -3,13 +3,13 @@
 
 // gui/wbcomboedit.h
 // 3/31/2012
-#include "lib/qtext/combobox.h"
+#include "qtx/qxcombobox.h"
 #include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QAction)
 QT_FORWARD_DECLARE_CLASS(QMenu)
 
-typedef QtExt::ComboBox WbComboEditBase;
+typedef QxComboBox WbComboEditBase;
 
 class WbComboEdit : public WbComboEditBase
 {

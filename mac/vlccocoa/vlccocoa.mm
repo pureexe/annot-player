@@ -10,7 +10,7 @@
 //#include <objc/runtime.h>
 
 //#define DEBUG "qtvlc"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Type cast -
 

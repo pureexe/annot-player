@@ -3,8 +3,8 @@
 
 #include "mainplayer.h"
 #include "positionslider.h"
-#include "lib/qtext/ss.h"
-#include "lib/qtext/overlaylayout.h"
+#include "htmlutil/sstags.h"
+#include "qtx/qxoverlaylayout.h"
 #include <QtGui>
 
 //#define VOLUMN_SLIDE_MAX_WIDTH 30
@@ -57,7 +57,7 @@ MainPlayerUi::createLayout()
     row2->addWidget(userButton());
     row2->addWidget(prefixComboBox());
 
-    OverlayLayout *input = new OverlayLayout;
+    QxOverlayLayout *input = new QxOverlayLayout;
     input->addWidget(inputComboBox());
     input->addWidget(inputCountButton(), Qt::AlignRight);
     row2->addLayout(input);

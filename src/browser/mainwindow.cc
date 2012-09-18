@@ -23,9 +23,9 @@
 #include "lib/download/downloader.h"
 #include "lib/mousegesture/mousegesture.h"
 #include "lib/annotdown/annotationdownloader.h"
-#include "lib/qtext/algorithm.h"
-#include "lib/qtext/networkcookie.h"
-#include "lib/qtext/webview.h"
+#include "qtx/qxalgorithm.h"
+#include "qtx/qxnetworkcookie.h"
+#include "qtx/qxwebview.h"
 #ifdef WITH_LIB_MAGNIFIER
 # include "lib/magnifier/magnifier.h"
 #endif // WITH_LIB_MAGNIFIER
@@ -34,15 +34,10 @@
 #endif // Q_OS_WIN
 #include <QtGui>
 #include <QtWebKit>
-
-#ifdef __clang__
-# pragma clang diagnostic ignored "-Wunused-parameter" // in boost algorithm
-#endif // __clang__
-#include <boost/range/algorithm.hpp>
 #include <boost/tuple/tuple.hpp>
 
 #define DEBUG "mainwindow"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef __GNUC__
 # pragma GCC diagnostic ignored "-Wparentheses" // suggest parentheses
@@ -499,7 +494,7 @@ MainWindow::saveRecentTabs()
       if (!t.isEmpty() && t != WB_BLANK_PAGE)
         urls.append(t);
     }
-    boost::unique(urls);
+    qxStableUniqueList(urls);
     Settings::globalSettings()->setRecentTabs(urls);
   } else
     Settings::globalSettings()->clearRecentTabs();
@@ -521,8 +516,8 @@ MainWindow::closeEvent(QCloseEvent *event)
   // Save settings
   saveRecentTabs();
   Settings *settings = Settings::globalSettings();
-  settings->setClosedUrls(QtExt::skipEmpty(closedUrls()), ClosedUrlsLimit);
-  settings->setRecentUrls(QtExt::skipEmpty(recentUrls()), RecentUrlsLimit);
+  settings->setClosedUrls(qxSkipEmpty(closedUrls()), ClosedUrlsLimit);
+  settings->setRecentUrls(qxSkipEmpty(recentUrls()), RecentUrlsLimit);
   settings->setRecentSearches(recentSearches(), RecentSearchLimit);
   settings->setRecentTabIndex(tabIndex());
   if (isFullScreen())
@@ -656,7 +651,7 @@ MainWindow::downloadAnnotationUrl(const QString &address)
 void
 MainWindow::loadCookieJar()
 {
-  bool ok = QtExt::readCookiesfromFile(cookieJar(), G_PATH_COOKIE);
+  bool ok = QxNetwork::readCookiesfromFile(cookieJar(), G_PATH_COOKIE);
   Q_UNUSED(ok)
   DOUT("ok =" << ok);
 }
@@ -664,7 +659,7 @@ MainWindow::loadCookieJar()
 void
 MainWindow::saveCookieJar()
 {
-  bool ok = QtExt::writeCookiesToFile(cookieJar(), G_PATH_COOKIE);
+  bool ok = QxNetwork::writeCookiesToFile(cookieJar(), G_PATH_COOKIE);
   Q_UNUSED(ok)
   DOUT("ok =" << ok);
 }
@@ -694,7 +689,7 @@ MainWindow::isValidWindowSize(const QSize &size) const
 void
 MainWindow::clip()
 {
-  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QxWebView *>(tabWidget());
   if (w)
     w->clip();
 }
@@ -702,7 +697,7 @@ MainWindow::clip()
 void
 MainWindow::reload()
 {
-  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QxWebView *>(tabWidget());
   if (w)
     w->reload();
 }
@@ -710,7 +705,7 @@ MainWindow::reload()
 void
 MainWindow::stop()
 {
-  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QxWebView *>(tabWidget());
   if (w)
     w->stop();
 }
@@ -718,7 +713,7 @@ MainWindow::stop()
 void
 MainWindow::zoomIn()
 {
-  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QxWebView *>(tabWidget());
   if (w)
     w->zoomIn();
 }
@@ -726,7 +721,7 @@ MainWindow::zoomIn()
 void
 MainWindow::zoomOut()
 {
-  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QxWebView *>(tabWidget());
   if (w)
     w->zoomOut();
 }
@@ -734,7 +729,7 @@ MainWindow::zoomOut()
 void
 MainWindow::zoomReset()
 {
-  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QxWebView *>(tabWidget());
   if (w)
     w->zoomReset();
 }
@@ -753,7 +748,7 @@ MainWindow::inspect()
 void
 MainWindow::scrollTop()
 {
-  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QxWebView *>(tabWidget());
   if (w)
     w->scrollTop();
 }
@@ -761,7 +756,7 @@ MainWindow::scrollTop()
 void
 MainWindow::scrollBottom()
 {
-  auto w = qobject_cast<QtExt::WebView *>(tabWidget());
+  auto w = qobject_cast<QxWebView *>(tabWidget());
   if (w)
     w->scrollBottom();
 }

@@ -12,7 +12,7 @@
 //#include <QtWebKit/QWebSettings>
 
 //#define DEBUG "googletranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

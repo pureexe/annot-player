@@ -8,14 +8,14 @@
 #include "signalhub.h"
 #include "application.h"
 #include "src/common/acui.h"
-#include "lib/qtext/htmltag.h"
-#include "lib/qtext/datetime.h"
+#include "htmlutil/htmltags.h"
+#include "qtx/qxdatetime.h"
 #include "lib/player/player.h"
 #include <QtCore>
 #include <QtGui/QApplication>
 
 #define DEBUG "eventlogger"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 EventLogger::EventLogger(MainWindow *logger, Player *player, SignalHub *hub, QObject *parent)
   : Base(parent), logger_(logger), player_(player), hub_(hub), logCount_(0)
@@ -76,7 +76,7 @@ EventLogger::logUntilPlaying()
     logger_->notify(tr("caching media or fonts ... this could take up to 10min on first launch, don't panic!"));
   else {
     int msecs = logCount_ * G_LOGGER_PLAYING_WAITER_TIMEOUT;
-    QTime t = QtExt::msecs2time(msecs);
+    QTime t = qxTimeFromMsec(msecs);
     QString s = QString("%1 / %2").arg(t.toString("m:ss"));
     if (logCount_ < 100) // 5sec * 100 < 10:0min = 60sec * 10
         s = s.arg("10:00");
@@ -235,8 +235,8 @@ EventLogger::logSeeked(qint64 msecs)
 {
   if (player_->isValid()) {
     qint64 len = player_->mediaLength();
-    QTime t = QtExt::msecs2time(msecs);
-    QTime l = QtExt::msecs2time(len);
+    QTime t = qxTimeFromMsec(msecs);
+    QTime l = qxTimeFromMsec(len);
     QString msg = QString(HTML_SS_OPEN(color:orange) "%2" HTML_SS_CLOSE() " / %3")
         .arg(t.toString())
         .arg(l.toString());
@@ -251,7 +251,7 @@ EventLogger::logSeeked(qint64 msecs)
 void
 EventLogger::logAudioDelayChanged(qint64 msecs)
 {
-  QTime t = QtExt::msecs2time(msecs);
+  QTime t = qxTimeFromMsec(msecs);
   QString msg = QString("%1: " HTML_SS_OPEN(color:orange) "%2" HTML_SS_CLOSE())
       .arg(tr("Audio Delay Time"))
       .arg(t.toString("m:ss"));

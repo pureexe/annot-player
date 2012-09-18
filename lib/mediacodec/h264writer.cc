@@ -3,12 +3,12 @@
 
 #include "lib/mediacodec/mediawriter.h"
 #include "lib/mediacodec/mediatoc.h"
-#include "lib/qtext/bitwise.h"
+#include "qtx/qxbitwise.h"
 
 #define DEBUG "h264writer"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
-namespace Bitwise { using namespace BigEndian; }
+namespace QxBitwise { using namespace BigEndian; }
 
 void
 RawH264Writer::writeFrame(const QByteArray &chunk, quint32 timestamp, bool writeHeader)
@@ -44,7 +44,7 @@ RawH264Writer::writeFrame(const QByteArray &chunk, quint32 timestamp, bool write
       else break;
 
       const quint8 *p = (const quint8 *)chunk.data();
-      int len = Bitwise::toUInt16(p, offset);
+      int len = QxBitwise::toUInt16(p, offset);
         offset += 2;
       if (offset + len > chunk.size()) break;
       out_->write(StartCode, StartCodeSize);
@@ -63,8 +63,8 @@ RawH264Writer::writeFrame(const QByteArray &chunk, quint32 timestamp, bool write
     const quint8 *p = (const quint8 *)chunk.constData();
     while (offset <= chunk.size() - nalLengthSize_) {
       int len = nalLengthSize_ == 2 ?
-        (int)Bitwise::toUInt16(p, offset) :
-        (int)Bitwise::toUInt32(p, offset);
+        (int)QxBitwise::toUInt16(p, offset) :
+        (int)QxBitwise::toUInt32(p, offset);
       offset += nalLengthSize_;
       if (offset + len > chunk.size()) break;
       out_->write(StartCode, StartCodeSize);

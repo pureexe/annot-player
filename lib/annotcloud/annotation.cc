@@ -3,10 +3,9 @@
 
 #include "lib/annotcloud/annotation.h"
 #include "lib/crypt/crypt.h"
-#include "lib/qtext/hash.h"
+#include "qtx/qxhash.h"
 
 using namespace AnnotCloud;
-using namespace QtExt;
 
 // - Meta type -
 
@@ -44,7 +43,7 @@ qint64
 AnnotCloud::
 Annotation::hash(const QByteArray &input)
 {
-  quint64 ret = Hash::djb2(input.constData());
+  quint64 ret = QxHash::djb2(input.constData());
   return qint64(ret);
 }
 
@@ -52,7 +51,7 @@ qint64
 AnnotCloud::
 Annotation::rehash(const QByteArray &input, qint64 h)
 {
-  quint64 ret = Hash::djb2(input.constData(), quint64(h));
+  quint64 ret = QxHash::djb2(input.constData(), quint64(h));
   return qint64(ret);
 }
 

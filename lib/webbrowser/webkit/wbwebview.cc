@@ -2,10 +2,10 @@
 // 1/27/2012
 #include "webkit/wbwebview.h"
 #include "global/wbrc.h"
-#include "project/common/acrc.h"
+#include "src/common/acrc.h"
 #include "lib/searchengine/searchenginefactory.h"
 #include "lib/mrlanalysis/mrlanalysis.h"
-#include "lib/qtext/actionwithid.h"
+#include "qtx/qxactionwithid.h"
 #include <QtGui>
 
 #ifdef __GNUC__
@@ -126,7 +126,7 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
   if (!selection.isEmpty() && hasSearchEngines()) {
     searchMenu = new QMenu(tr("Search") + " ...");
     for (int engine = 0; engine < searchEngines_.size(); engine++) {
-      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, searchMenu);
+      QxActionWithId *a = new QxActionWithId(engine, searchMenu);
       SearchEngine *e = searchEngines_[engine];
       //a->setText(tr("Search with %1").arg(e->name()));
       a->setText(e->name());
@@ -147,7 +147,7 @@ WbWebView::contextMenuEvent(QContextMenuEvent *event)
 
     int engine = SearchEngineFactory::Qt;
     if (engine >= searchEngines_.size() && selection.startsWith('Q') && !selection.contains(' ')) {
-      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, m);
+      QxActionWithId *a = new QxActionWithId(engine, m);
       static SearchEngine *e = nullptr;
       if (!e)
         e = SearchEngineFactory::globalInstance()->create(engine);

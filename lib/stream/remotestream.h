@@ -5,14 +5,14 @@
 // 2/15/2012
 
 #include "lib/stream/inputstream.h"
-#include "lib/qtext/stoppable.h"
+#include "qtx/qxstoppable.h"
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
 #include <QtNetwork/QNetworkRequest>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 
-class RemoteStream : public QObject, public InputStream, public StoppableTask
+class RemoteStream : public QObject, public InputStream, public QxStoppableTask
 {
   Q_OBJECT
   Q_DISABLE_COPY(RemoteStream)

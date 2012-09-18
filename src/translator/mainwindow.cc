@@ -16,9 +16,9 @@
 #include "src/common/acss.h"
 #include "src/common/acbrowser.h"
 #include "src/common/actranslator.h"
-#include "lib/qtext/htmltag.h"
-#include "lib/qtext/ss.h"
-#include "lib/qtext/layoutwidget.h"
+#include "htmlutil/htmltags.h"
+#include "htmlutil/sstags.h"
+#include "qtx/qxlayoutwidget.h"
 #include "lib/animation/fadeanimation.h"
 #include "lib/translator/translatormanager.h"
 #include "lib/translator/jdictranslator.h"
@@ -26,6 +26,9 @@
 #ifdef WITH_LIB_MECAB
 # include "lib/mecab/mecabhighlighter.h"
 #endif // WITH_LIB_MECAB
+#ifdef WITH_LIB_EDRDG
+# include "lib/edrdg/edict2.h"
+#endif // WITH_LIB_EDRDG
 #ifdef WITH_WIN_ATLAS
 # include "win/atlas/atlas.h"
 #endif // WITH_WIN_ATLAS
@@ -33,9 +36,38 @@
 #include <boost/foreach.hpp>
 
 #define DEBUG "mainwindow"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 enum { DEFAULT_TRANSLATORS = TranslatorManager::RomajiBit | TranslatorManager::OcnBit | TranslatorManager::FresheyeBit };
+
+// Note:
+// CSS margin can have:
+//   one value such as 10px to specify an equal margin on every side
+//   two values, such as 10px 5px, to specify the top/bottom (first value) and right/left (second value) margin
+//   three values, such as 10px 5px 2px, to specify the top (first value), right/left (second value) and bottom (third value) margin
+//   four values, such as 10px 5px 2px 1px to specify the top, right, bottom and left margins respectively
+
+
+#define EDICT_CSS \
+  HTML_CSS_OPEN() \
+    SS_BEGIN(div.item) \
+      SS_MARGIN(0.5em 0.5em 0.2em 0.5em) \
+      SS_BACKGROUND_COLOR(rgba(173,216,230,64)) \
+    SS_END \
+    SS_BEGIN(span.entries) \
+      SS_BACKGROUND_COLOR(rgba(144,238,144,64)) \
+      SS_FONT_SIZE(12pt) \
+    SS_END \
+    SS_BEGIN(span.readings) \
+      SS_BACKGROUND_COLOR(rgba(144,238,144,64)) \
+      SS_FONT_SIZE(8pt) \
+    SS_END \
+    SS_BEGIN(div.details) \
+      SS_MARGIN(0.2em 0) \
+      SS_BACKGROUND_COLOR(rgba(173,216,230,64)) \
+      SS_FONT_SIZE(10pt) \
+    SS_END \
+  HTML_CSS_CLOSE()
 
 #define JDIC_CSS \
   HTML_CSS_OPEN() \
@@ -95,6 +127,9 @@ MainWindow::MainWindow(QWidget *parent)
 #ifdef WITH_WIN_ATLAS
   createAtlas();
 #endif // WITH_WIN_ATLAS
+#ifdef WITH_LIB_EDRDG
+  createEdict();
+#endif // WITH_LIB_EDRDG
 
   // - Translators -
 
@@ -165,6 +200,10 @@ MainWindow::MainWindow(QWidget *parent)
 #ifdef WITH_WIN_ATLAS
   atlasAct_->setChecked(Settings::globalSettings()->isAtlasEnabled());
 #endif // WITH_WIN_ATLAS
+
+#ifdef WITH_LIB_EDRDG
+  edictAct_->setChecked(Settings::globalSettings()->isEdictEnabled());
+#endif // WITH_LIB_EDRDG
 
   updateLanguage();
   updateTranslators();
@@ -270,7 +309,7 @@ MainWindow::createLayout()
     header->setContentsMargins(0, 0, 0, 0);
     rows->setContentsMargins(patch, patch, patch, patch);
     setContentsMargins(0, 0, 0, 0);
-  } setCentralWidget(new LayoutWidget(rows, this));
+  } setCentralWidget(new QxLayoutWidget(rows, this));
 
   //QDockWidget *dock = new QDockWidget(tr("Dictionary"), this);
   //addDockWidget(Qt::BottomDockWidgetArea, dock);
@@ -345,7 +384,7 @@ MainWindow::createActions()
     topAct_->setCheckable(true);
   }
 
-  QMenu *wordMenu = m = new QMenu(tr("Word Translators") + " ...", this); {
+  QMenu *wordMenu = m = new QMenu(tr("Dictionaries") + " ...", this); {
     kotobankAct_ = m->addAction(tr("Kotobank") + " (ja)", this, SLOT(setWordTranslatorToKotobank()));
     kotobankAct_->setCheckable(true);
 
@@ -353,7 +392,7 @@ MainWindow::createActions()
     jdicAct_->setCheckable(true);
   }
 
-  QMenu *textMenu = m = new QMenu(tr("Text Translators") + " ...", this); {
+  QMenu *textMenu = m = new QMenu(tr("Translators") + " ...", this); {
     romajiAct_ = m->addAction(tr("Romaji"), this, SLOT(updateTranslators()));
     romajiAct_->setCheckable(true);
     m->addSeparator();
@@ -422,10 +461,14 @@ MainWindow::createActions()
 
     m->addMenu(wordMenu);
     m->addMenu(textMenu);
+#ifdef WITH_LIB_EDRDG
+    edictAct_ = m->addAction(tr("EDICT Offline Dictionary"));
+    edictAct_->setCheckable(true);
+#endif // WITH_LIB_EDRDG
 #ifdef WITH_WIN_ATLAS
     atlasAct_ = m->addAction(tr("ATLAS Offline Translator"));
     atlasAct_->setCheckable(true);
-#endif //WITH_WIN_ATLAS
+#endif // WITH_WIN_ATLAS
     m->addSeparator();
 #ifndef Q_OS_MAC
     m->addAction(tr("Preferences"), this, SLOT(showPreferences()), QKeySequence("ALT+O"));
@@ -699,8 +742,15 @@ MainWindow::translate(const QString &input)
     if (textTranslator_->hasService(service))
       textTranslator_->doTranslate(service, t, language_);
 
-  jdicTranslator_->translate(t, language_);
-  kotobankTranslator_->translate(t, language_);
+#ifdef WITH_LIB_EDRDG
+  if (isEdictEnabled())
+    showEdictTranslation(queryEdict(t));
+  else
+#endif // WITH_LIB_EDRDG
+  {
+    jdicTranslator_->translate(t, language_);
+    kotobankTranslator_->translate(t, language_);
+  }
 }
 
 void
@@ -760,13 +810,17 @@ MainWindow::saveSettings()
   settings->setWindowOnTop(isWindowOnTop());
   settings->setTranslationServices(textTranslator_->services());
   settings->setMonitorClipboard(clipboardAct_->isChecked());
-  settings->sync();
 
+#ifdef WITH_LIB_EDRDG
+  settings->setEdictEnabled(isEdictEnabled());
+#endif // WITH_WIN_ATLAS
 #ifdef WITH_WIN_ATLAS
   settings->setAtlasEnabled(isAtlasEnabled());
   AcSettings::globalSettings()->setAtlasLocation(atlas_->location());
   AcSettings::globalSettings()->sync();
 #endif // WITH_WIN_ATLAS
+
+  settings->sync();
 }
 
 // - Show Translations -
@@ -888,6 +942,10 @@ MainWindow::showJdicTranslation(const QString &text)
 { showDictTranslation(JDIC_CSS + text); }
 
 void
+MainWindow::showEdictTranslation(const QString &text)
+{ showDictTranslation(EDICT_CSS + text); }
+
+void
 MainWindow::showDictTranslation(const QString &text)
 {
   int j = -1;
@@ -966,5 +1024,79 @@ MainWindow::createAtlas()
 }
 
 #endif // WITH_WIN_ATLAS
+
+#ifdef WITH_LIB_EDRDG
+
+// - EDICT -
+
+QString
+MainWindow::queryEdict(const QString &text)
+{
+  enum { Limit = 10 };
+  if (edict_->isEmpty()) {
+    edict_->addFile(G_PATH_EDICT);
+    if (edict_->isEmpty())
+      return HTML_SS(+ tr("ERROR: EDICT is missing") +, color:red);
+  }
+  Edict2::ItemList results = edict_->query(text, Limit);
+  if (results.isEmpty())
+   return HTML_SS(+ tr("Not found in EDICT") +": " + text +, color:red);
+
+  QString ret;
+  foreach (const Edict2::Item *item, results) {
+    QString t;
+
+    t.append("<span class='entries'>");
+    bool first = true;
+    foreach (const QString &e, item->entries) {
+      if (first) {
+        first = false;
+        t.append(e);
+      } else
+        t.append(", ").append(e);
+    }
+    t.append(HTML_SPAN_CLOSE());
+
+    if (!item->readings.isEmpty()) {
+      t.append("<span class='readings'>" " [");
+      first = true;
+      foreach (const QString &r, item->readings) {
+        if (first) {
+          first = false;
+          t.append(r);
+        } else
+          t.append(", ").append(r);
+      }
+      t.append("]" HTML_SPAN_CLOSE());
+    }
+
+    t.append("<div class='details'>");
+    foreach (const QString &d, item->details)
+      t.append("<div class='detail'>")
+       .append(d)
+       .append(HTML_DIV_CLOSE());
+    t.append(HTML_DIV_CLOSE());
+
+    ret.append("<div class='item'>")
+       .append(t)
+       .append(HTML_DIV_CLOSE());
+  }
+
+  return ret;
+}
+
+bool
+MainWindow::isEdictEnabled() const
+{ return edictAct_->isChecked(); }
+
+void
+MainWindow::createEdict()
+{
+  edict_ = new Edict2::Dictionary;
+  if (Settings::globalSettings()->isEdictEnabled())
+    edict_->addFile(G_PATH_EDICT2);
+}
+
+#endif // WITH_LIB_EDRDG
 
 // EOF

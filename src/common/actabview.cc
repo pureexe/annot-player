@@ -4,9 +4,8 @@
 #include "src/common/actabview.h"
 #include "src/common/acss.h"
 #include "src/common/acui.h"
-#include "lib/qtext/toolbutton.h"
-#include "lib/qtext/toolbuttonwithid.h"
-#include "lib/qtext/compactstackedlayout.h"
+#include "qtx/qxtoolbuttonwithid.h"
+#include "qtx/qxcompactstackedlayout.h"
 #include <QtGui>
 
 #ifdef Q_OS_MAC
@@ -19,12 +18,12 @@
 
 void
 AcTabView::initializeLayout()
-{ stackLayout_ = new CompactStackedLayout; }
+{ stackLayout_ = new QxCompactStackedLayout; }
 
 void
 AcTabView::finalizeLayout()
 {
-  //QToolButton *clearButton = new QtExt::ToolButton; {
+  //QToolButton *clearButton = new QxToolButton; {
   //  clearButton->setStyleSheet(ACSS_TOOLBUTTON_TEXT);
   //  clearButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
   //  clearButton->setText(QString("[ %1 ]").arg(TR(T_CLEAR)));
@@ -78,7 +77,7 @@ void
 AcTabView::addTab(QWidget *tab)
 {
   QString tabName = tab->windowTitle();
-  QtExt::ToolButtonWithId *tabButton = new QtExt::ToolButtonWithId(tabCount_); {
+  QxToolButtonWithId *tabButton = new QxToolButtonWithId(tabCount_); {
     tabButton->setStyleSheet(ACSS_TOOLBUTTON_TEXT_TAB);
     tabButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
     tabButton->setText(QString("- %1 -").arg(tabName));

@@ -4,7 +4,7 @@
 // flvmeta.h
 // 3/16/2012
 
-#include "lib/qtext/stoppable.h"
+#include "qtx/qxstoppable.h"
 #include "lib/stream/inputstream.h"
 #include "lib/stream/outputstream.h"
 #include "lib/stream/inputoutputstream.h"
@@ -52,7 +52,7 @@ struct FlvMeta
 
 // - Parser -
 
-class FlvMetaReader : public QObject, public StoppableTask
+class FlvMetaReader : public QObject, public QxStoppableTask
 {
   Q_OBJECT
   Q_DISABLE_COPY(FlvMetaReader)
@@ -129,7 +129,7 @@ protected:
 
 // - Writer -
 
-class FlvMetaWriter : public QObject, public StoppableTask
+class FlvMetaWriter : public QObject, public QxStoppableTask
 {
   Q_OBJECT
   Q_DISABLE_COPY(FlvMetaWriter)
@@ -197,7 +197,7 @@ protected:
 
 // - Creator -
 
-class FlvMetaCreator : public QObject, public StoppableTask
+class FlvMetaCreator : public QObject, public QxStoppableTask
 {
   Q_OBJECT
   Q_DISABLE_COPY(FlvMetaCreator)

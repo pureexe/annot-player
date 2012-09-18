@@ -7,7 +7,7 @@
 // See: http://doc.qt.nokia.com/4.7/stylesheet-reference.html
 
 #include "src/common/acrc.h"
-#include "lib/qtext/ss.h"
+#include "htmlutil/sstags.h"
 #include <QtGlobal>
 
 // - Buttons -

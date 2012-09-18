@@ -13,7 +13,7 @@ class InputStream;
 class OutputStream;
 class InputOutputStream;
 
-class Stoppable;
+class QxStoppable;
 class MediaToc;
 
 class FlvCodec : public QObject
@@ -23,7 +23,7 @@ class FlvCodec : public QObject
   typedef FlvCodec Self;
   typedef QObject Base;
 
-  QList<Stoppable *> tasks_;
+  QList<QxStoppable *> tasks_;
 
   // - Construction -
 public:

@@ -5,12 +5,12 @@
 #include "tr.h"
 #include "global.h"
 #include "src/common/acui.h"
-#include "lib/qtext/datetime.h"
-#include "lib/qtext/spinbox.h"
+#include "qtx/qxdatetime.h"
+#include "qtx/qxspinbox.h"
 #include <QtGui>
 
 #define DEBUG "secondinputdialog"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 enum { EDIT_WIDTH = 50 };
 enum { BAD_TIME = -1 };
@@ -42,7 +42,7 @@ void
 SecondInputDialog::createLayout()
 {
   enum { TimeRange = 3600 * 3 }; // 3 houre
-  timeEdit_ = new QtExt::SpinBox;
+  timeEdit_ = new QxSpinBox;
   timeEdit_->setMaximum(TimeRange);
   timeEdit_->setMinimum(-TimeRange);
   timeEdit_->setToolTip(TR(T_SECOND));

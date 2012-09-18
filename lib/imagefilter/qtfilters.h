@@ -3,10 +3,12 @@
 
 // qtfilters.h
 // 5/16/2012
-// See: gui/image/qpixmapfilter.cpp
+// See: qt/src/gui/image/qpixmapfilter.cpp
 
-//#include <gui/painting/qmemrotate_p.h>
-#include <QtGui>
+//#include <qt/src/gui/painting/qmemrotate_p.h>
+#include <QtCore/qmath.h>
+#include <QtGui/QImage>
+#include <QtGui/QPainter>
 
 QT_BEGIN_NAMESPACE
 
@@ -64,7 +66,7 @@ inline void qt_blurinner_alphaOnly(uchar *bptr, int &z, int alpha)
 }
 
 template<int aprec, int zprec, bool alphaOnly>
-inline void qt_blurrow(QImage & im, int line, int alpha)
+inline void qt_blurrow(QImage &im, int line, int alpha)
 {
   uchar *bptr = im.scanLine(line);
 

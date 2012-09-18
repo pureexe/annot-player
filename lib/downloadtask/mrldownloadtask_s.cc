@@ -2,7 +2,7 @@
 // Download multiple parts.
 // 2/20/2012
 #include "lib/downloadtask/mrldownloadtask.h"
-#include "lib/qtext/filesystem.h"
+#include "qtx/qxfs.h"
 #ifdef WITH_LIB_STREAM
 # include "lib/stream/bufferedremotestream.h"
 # include "lib/stream/bufferedstreampipe.h"
@@ -21,7 +21,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 
 #define DEBUG "mrldownloadtask_s"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 enum { MaxDownloadRetries = 5 }; // TODO
 
@@ -91,7 +91,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
   QString suf = contentType.contains("mp4", Qt::CaseInsensitive) ? ".mp4" : ".flv";
 
   FileOutputStream out;
-  QString name = QtExt::escapeFileName(title);
+  QString name = qxEscapeFileName(title);
   QString tmpFile = downloadPath() + QDir::separator() + "_" + name + suf;
   for (int i = 2; QFile::exists(tmpFile); i++)
     tmpFile = downloadPath() + QDir::separator() + "_" + name + " " + QString::number(i) + suf;
@@ -128,7 +128,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
     QString fileName = downloadPath() + QDir::separator() + name + suf;
     //for (int i = 2; QFile::exists(fileName); i++)
     //  fileName = downloadPath() + QDir::separator() + name + " " + QString::number(i) + suf;
-    QtExt::trashOrRemoveFile(fileName);
+    qxTrashOrRemoveFile(fileName);
     ok =  QFile::rename(tmpFile, fileName);
     if (ok)
       setFileName(fileName);
@@ -140,7 +140,7 @@ MrlDownloadTask::downloadSingleMedia(const MediaInfo &mi, QNetworkCookieJar *jar
     emit progress(size, size);
     emit finished(this);
   } else {
-    QtExt::trashOrRemoveFile(tmpFile);
+    qxTrashOrRemoveFile(tmpFile);
     if (!isStopped())
       setState(Error);;
     emit errorMessage(tr("download incomplete") + ": " + tmpFile);

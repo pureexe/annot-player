@@ -6,7 +6,7 @@
 #include <QtGui>
 
 #define DEBUG "clipboardmonitor"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Constructions -
 

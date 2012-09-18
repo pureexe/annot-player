@@ -4,7 +4,7 @@
 #include "lib/stream/bufferedstreampipe.h"
 
 //#define DEBUG "bufferedstreampipe"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Task -
 

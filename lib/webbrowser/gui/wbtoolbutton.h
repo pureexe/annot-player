@@ -4,9 +4,9 @@
 // gui/wbtoolbutton.h
 // 4/25/2012
 
-#include "lib/qtext/toolbutton.h"
+#include "qtx/qxtoolbutton.h"
 
-typedef QtExt::ToolButton WbToolButtonBase;
+typedef QxToolButton WbToolButtonBase;
 class WbToolButton : public WbToolButtonBase
 {
   Q_OBJECT

@@ -10,12 +10,12 @@
 #include "rc.h"
 #include "src/common/acui.h"
 #include "src/common/acss.h"
-#include "lib/qtext/layoutwidget.h"
-#include "lib/qtext/overlaylayout.h"
+#include "qtx/qxlayoutwidget.h"
+#include "qtx/qxoverlaylayout.h"
 #include <QtGui>
 
 //#define DEBUG "medialibraryview"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef Q_OS_MAC
 # define K_CTRL "cmd"
@@ -218,7 +218,7 @@ MediaLibraryView::createLayout()
     header->addStretch();
     header->addWidget(filterType_);
 
-    OverlayLayout *overlay = new OverlayLayout;
+    QxOverlayLayout *overlay = new QxOverlayLayout;
     overlay->addWidget(filterEdit_);
     overlay->addWidget(countButton_, Qt::AlignRight);
     header->addLayout(overlay);
@@ -237,7 +237,7 @@ MediaLibraryView::createLayout()
     footer->setContentsMargins(0, 0, 0, 0);
     views_->setContentsMargins(0, 0, 0, 0);
     setContentsMargins(0, 0, 0, 0);
-  }  setCentralWidget(new LayoutWidget(rows, this));
+  }  setCentralWidget(new QxLayoutWidget(rows, this));
 }
 
 // - Properties -

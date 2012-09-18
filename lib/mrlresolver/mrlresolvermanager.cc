@@ -9,7 +9,7 @@
 #include "lib/mrlresolver/youkumrlresolver.h"
 
 //#define DEBUG "mrlresolvermanager"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 
@@ -18,7 +18,7 @@
 //{
 //  QNetworkAccessManager *ret = new QNetworkAccessManager;
 //#ifdef CONFIG_PROXY_DOMAIN
-//  ret->setCookieJar(new QtExt::NetworkCookieJarWithDomainAlias(".nicovideo.jp", CONFIG_PROXY_DOMAIN, ret));
+//  ret->setCookieJar(new QxNetworkCookieJarWithDomainAlias(".nicovideo.jp", CONFIG_PROXY_DOMAIN, ret));
 //#else
 //# warning "nico alias domain is not defined"
 //#endif // CONFIG_PROXY_DOMAIN

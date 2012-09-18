@@ -14,7 +14,7 @@
 #include <QtWebKit>
 
 #define DEBUG "annotationanalyticsview"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define WINDOW_SIZE     QSize(640, 640)
 #define BASE_URL        G_HOMEPAGE "/client/player/"

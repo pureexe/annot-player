@@ -14,13 +14,13 @@
 #endif // WITH_WIN_TEXTHOOK
 #include "src/common/acprotocol.h"
 #include "src/common/acui.h"
-#include "lib/qtext/htmltag.h"
-#include "lib/qtext/spinbox.h"
-//#include "lib/qtext/ss.h"
+#include "htmlutil/htmltags.h"
+#include "qtx/qxspinbox.h"
+//#include "htmlutil/sstags.h"
 #include <QtGui>
 
 //#define DEBUG "threadview"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define WINDOW_FLAGS ( \
   Qt::Dialog | \
@@ -97,7 +97,7 @@ ThreadView::createLayout()
   encodingEdit_ = ui->makeComboBox(AcUi::ReadOnlyHint, "", tr("Text Encoding"), tr("Encoding"), defaultEncodings);
   connect(encodingEdit_, SIGNAL(activated(QString)), SLOT(setEncoding(QString)));
 
-  //hookIndexEdit_ = new QtExt::SpinBox; {
+  //hookIndexEdit_ = new QxSpinBox; {
   //  hookIndexEdit_->setToolTip(tr("Signal channel"));
   //  //hookIndexEdit_->setMinimumWidth(HOOKCOMBOBOX_MINWIDTH);
   //  //hookIndexEdit_->setMaximumWidth(HOOKCOMBOBOX_MAXWIDTH);

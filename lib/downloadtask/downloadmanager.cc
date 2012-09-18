@@ -11,7 +11,7 @@
 #include <QtCore/QThreadPool>
 
 #define DEBUG "downloadmanager"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

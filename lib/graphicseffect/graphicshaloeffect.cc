@@ -3,7 +3,7 @@
 // See: gui/effects/qgraphicseffect.cpp
 #include "lib/graphicseffect/graphicshaloeffect.h"
 #include "lib/graphicseffect/graphicshaloeffect_p.h"
-#include <private/qdrawhelper_p.h>
+#include <qt/src/gui/painting/qdrawhelper_p.h>
 #include <QtCore/QRectF>
 #include <QtGui/QImage>
 #include <QtGui/QPainter>

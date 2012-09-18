@@ -8,7 +8,7 @@
 #include <QtGui/QMouseEvent>
 
 //#define DEBUG "mouseclickeventlistener"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

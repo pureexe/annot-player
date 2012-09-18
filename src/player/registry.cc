@@ -14,7 +14,7 @@
 #define APPID   G_ORGANIZATION "." G_APPLICATION
 
 //#define DEBUG "registry"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

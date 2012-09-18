@@ -8,7 +8,7 @@
 #define APP_ID          AC_DOWNLOADER_ID
 
 #define DEBUG "acdownloader"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Server -
 

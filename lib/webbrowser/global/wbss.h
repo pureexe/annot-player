@@ -5,7 +5,7 @@
 // 3/31/2012
 
 #include "global/wbrc.h"
-#include "lib/qtext/ss.h"
+#include "htmlutil/sstags.h"
 #include <QtGlobal>
 
 // - Combo box -

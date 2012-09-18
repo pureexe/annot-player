@@ -2,18 +2,18 @@
 // 3/20/2012
 #include "lib/annotcloud/annothtml.h"
 #include "lib/annotcloud/annotpaint.h"
-#include "lib/qtext/datetime.h"
-#include "lib/qtext/os.h"
+#include "qtx/qxdatetime.h"
+#include "qtx/qxos.h"
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <boost/tuple/tuple.hpp>
 
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString("M/d/yyyy ddd h:mm:ss")
-#define FORMAT_POS(_msecs)        ((_msecs) <= 0 ? QString() : QtExt::msecs2time(_msecs).toString())
+#define FORMAT_POS(_msecs)        ((_msecs) <= 0 ? QString() : qxTimeFromMsec(_msecs).toString())
 
 #define DEBUG "annothtml_thread"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Resources -
 
@@ -178,7 +178,7 @@ AnnotationHtmlParser::toHtml(const AnnotationList &l, const QString &title, bool
       continue;
     QString img = detail::rc_jsf_i();
     QString img_title = titles[i];
-    QString img_file = QtExt::mktemp(".svg");
+    QString img_file = qxMktemp(".svg");
     QString img_src =
 #ifdef Q_OS_WIN
       "file:///" + QDir::fromNativeSeparators(img_file)

@@ -4,7 +4,7 @@
 // pixmapfilter.h
 // 5/3/2012
 
-#include <gui/image/qpixmapfilter_p.h>
+#include <qt/src/gui/image/qpixmapfilter_p.h>
 
 //ntypedef QPixmapFilter PixmapFilter;
 

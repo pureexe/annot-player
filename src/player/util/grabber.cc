@@ -2,7 +2,7 @@
 // 10/10/2011
 
 #include "grabber.h"
-#include "lib/qtext/filesystem.h"
+#include "qtx/qxfs.h"
 #include <QtGui>
 
 // - Constructions -
@@ -22,7 +22,7 @@ Grabber::setBaseName(const QString &name)
   if (name.isEmpty())
     baseName_ = tr("Unknown");
   else
-    baseName_ = QtExt::escapeFileName(name);
+    baseName_ = qxEscapeFileName(name);
 }
 
 // - Actions -

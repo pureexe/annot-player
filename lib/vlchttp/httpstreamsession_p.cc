@@ -21,10 +21,10 @@
 #ifdef WITH_LIB_MRLRESOLVER
 # include "lib/mrlresolver/luamrlresolver.h"
 #endif // WITH_LIB_LUARESOLVER
-#include "lib/qtext/network.h"
-#include "lib/qtext/filesystem.h"
-#include "lib/qtext/htmltag.h"
-#include "lib/qtext/os.h"
+#include "qtx/qxnetwork.h"
+#include "qtx/qxfs.h"
+#include "htmlutil/htmltags.h"
+#include "qtx/qxos.h"
 #include <QtCore>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkCookieJar>
@@ -32,7 +32,7 @@
 #include <QtNetwork/QNetworkRequest>
 
 #define DEBUG "httpstreamsession"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 enum { MaxDownloadRetries = 10, MinDownloadRetries = 2 };
 enum { MaxIndividualDownloadRetries = 3 };
@@ -42,7 +42,7 @@ enum { BufferingInterval = 3000 }; // 3 second
 
 namespace { namespace detail {
 
-  class ProgressTask : public StoppableTask
+  class ProgressTask : public QxStoppableTask
   {
     enum { SleepInterval = 1000 }; // wake up every 1 second
 
@@ -59,12 +59,12 @@ namespace { namespace detail {
     {
       while (!stop_ && session_->isRunning()) {
         session_->updateProgress();
-        QtExt::sleep(SleepInterval);
+        qxSleep(SleepInterval);
       }
     }
   };
 
-  QtExt::SleepTimer sleep;
+  QxSleepTimer sleep;
 
 } } // anonymous detail
 
@@ -143,7 +143,7 @@ HttpStreamSession::updateFileName()
 {
   //bool mp4 = contentType().contains("mp4", Qt::CaseInsensitive);
   QString suf = ".flv";
-  fileName_ = cacheDirectory() + QDir::separator() + QtExt::escapeFileName(mediaTitle()) + suf;
+  fileName_ = cacheDirectory() + QDir::separator() + qxEscapeFileName(mediaTitle()) + suf;
 }
 
 // - Actions -
@@ -187,12 +187,12 @@ HttpStreamSession::save()
 
   //for (int i = 2; QFile::exists(fileName_); i++)
   //  fileName_ = fi.absolutePath() + QDir::separator() + fi.completeBaseName() + " " + QString::number(i) + "." + fi.suffix();
-  QtExt::trashOrRemoveFile(fileName_);
+  qxTrashOrRemoveFile(fileName_);
 
   bool ok = fifo_->writeFile(fileName_);
   if (!ok || !FlvCodec::isFlvFile(fileName_)) {
     //QFile::remove(fileName_);
-    QtExt::trashOrRemoveFile(fileName_);
+    qxTrashOrRemoveFile(fileName_);
     emit errorMessage(tr("download failed") + ": " + fileName_);
     DOUT("exit: fifo failed to write to file");
     return;
@@ -377,7 +377,7 @@ HttpStreamSession::run()
     for (; count < urls_.size() && ok && !isStopped(); count++) {
       const QUrl url = urls_[count];
       //if (isStopped()) {
-      //  foreach (InputStream *is, QtExt::revertList(ins_)) { // revert list so that nam will be deleted later
+      //  foreach (InputStream *is, QxrevertList(ins_)) { // revert list so that nam will be deleted later
       //    auto p = static_cast<RemoteStream *>(is);
       //    p->stop();
       //    delete p;
@@ -399,9 +399,9 @@ HttpStreamSession::run()
         DOUT("individual retry =" << i);
 
         RemoteStream *in = new BufferedRemoteStream(nullptr);
-        if (!nam || count % QtExt::MaxConcurrentNetworkRequestCount == namCount) {
+        if (!nam || count % QxNetwork::MaxConcurrentNetworkRequestCount == namCount) {
           if (!nam)
-            namCount = count % QtExt::MaxConcurrentNetworkRequestCount;
+            namCount = count % QxNetwork::MaxConcurrentNetworkRequestCount;
           nam = new QNetworkAccessManager(in);
           if (cookieJar()) {
             nam->setCookieJar(cookieJar());

@@ -5,7 +5,7 @@
 // 10/16/2011
 
 #include "processinfo.h"
-#include "lib/qtext/dialog.h"
+#include "qtx/qxdialog.h"
 #include <QtCore/QModelIndex>
 #include <QtCore/QHash>
 
@@ -20,12 +20,12 @@ QT_END_NAMESPACE
 
 class AcFilteredTableView;
 
-class ProcessView : public QtExt::Dialog
+class ProcessView : public QxDialog
 {
   Q_OBJECT
   Q_DISABLE_COPY(ProcessView)
   typedef ProcessView Self;
-  typedef QtExt::Dialog Base;
+  typedef QxDialog Base;
 
 protected:
   enum ProcessHeaderData {

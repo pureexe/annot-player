@@ -9,7 +9,7 @@
 //template <typename T>
 //inline void xUnused(T &x) { (void)x; }
 
-#define X_UNUSED(x) (void)x
+#define X_UNUSED(x) (void)(x)
 
 #define X_NOP   X_UNUSED(0)
 

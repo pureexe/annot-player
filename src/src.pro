@@ -1,19 +1,19 @@
-# src-dev.pro
+# src-deploy.pro
 # 7/31/2011
 
 INCLUDEPATH += $$PWD
 
 TEMPLATE = subdirs
 SUBDIRS = \
+    browser \
+    downloader \
     player \
-    translator 
-    #browser \
-    #downloader \
-    #tester
+    translator
+#   tester
 
-#win32:  SUBDIRS += \
-#    launcher \
-#    updater
+win32:  SUBDIRS += \
+    launcher \
+    updater
 #mac:    SUBDIRS += live
 #unix:   SUBDIRS += x
 
@@ -24,6 +24,7 @@ OTHER_FILES += \
     deploy-fedora.sh \
     deploy-mac.sh \
     deploy-win.cmd \
-    deploy-win-update.cmd 
+    deploy-win-delta.cmd \
+    deploy-win-update.cmd
 
 # EOF

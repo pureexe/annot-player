@@ -7,7 +7,7 @@
 #include <cstdlib>
 
 //#define DEBUG "dummyoutubemrlresolver"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // See: lua/playlist/googlevideo.lua
 

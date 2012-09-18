@@ -5,14 +5,14 @@
 // 7/16/2011
 
 #include "src/common/accomboedit.h"
-#include "lib/qtext/withsizehint.h"
+#include "qtx/qxwithsizehint.h"
 #include <QtCore/QStringList>
 
 QT_FORWARD_DECLARE_CLASS(QAction)
 
 class AnnotationEditor;
 
-class AnnotationComboEdit : public AcComboEdit, public QtExt::WithSizeHint
+class AnnotationComboEdit : public AcComboEdit, public QxWithSizeHint
 {
   Q_OBJECT
   Q_DISABLE_COPY(AnnotationComboEdit)
@@ -27,7 +27,7 @@ public:
   // - Properties -
 public slots:
   QSize sizeHint() const override
-  { return QtExt::WithSizeHint::sizeHint(); }
+  { return QxWithSizeHint::sizeHint(); }
 
 protected slots:
   void edit();

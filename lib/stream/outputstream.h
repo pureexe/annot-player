@@ -4,7 +4,7 @@
 // outputstream.h
 // 2/9/2012
 
-#include "lib/qtext/bitwise.h"
+#include "qtx/qxbitwise.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QList>
 
@@ -22,7 +22,7 @@ public:
   virtual void flush() { }
   virtual void finish() { flush(); }
 
-  // - Bitwise -
+  // - QxBitwise -
 public:
   qint64 write(const quint8 *data, qint64 count)
   { return write(reinterpret_cast<const char *>(data), count); }
@@ -33,28 +33,28 @@ public:
   int writeUInt16(quint16 value)
   {
     quint8 x[2];
-    Bitwise::BigEndian::getBytes(x, value);
+    QxBitwise::BigEndian::getBytes(x, value);
     return write(x, 2);
   }
 
   int writeUInt24(quint32 value)
   {
     quint8 x[4];
-    Bitwise::BigEndian::getBytes(x, value);
+    QxBitwise::BigEndian::getBytes(x, value);
     return write(x + 1, 3);
   }
 
   int writeUInt32(quint32 value)
   {
     quint8 x[4];
-    Bitwise::BigEndian::getBytes(x, value);
+    QxBitwise::BigEndian::getBytes(x, value);
     return write(x, 4);
   }
 
   int writeUInt64(quint64 value)
   {
     quint8 x[8];
-    Bitwise::BigEndian::getBytes(x, value);
+    QxBitwise::BigEndian::getBytes(x, value);
     return write(x, 8);
   }
 
@@ -62,7 +62,7 @@ public:
   {
     enum { size = sizeof(float) }; // 4
     quint8 x[size];
-    Bitwise::BigEndian::getBytes(x, value);
+    QxBitwise::BigEndian::getBytes(x, value);
     return write(x, size);
   }
 
@@ -70,7 +70,7 @@ public:
   {
     enum { size = sizeof(double) }; // 8
     quint8 x[size];
-    Bitwise::BigEndian::getBytes(x, value);
+    QxBitwise::BigEndian::getBytes(x, value);
     return write(x, size);
   }
 };

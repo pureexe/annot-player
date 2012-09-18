@@ -4,14 +4,15 @@
 // acslider.h
 // 5/19/2012
 
-#include "lib/qtext/slider.h"
+#include "qtx/qxslider.h"
 
-class AcSlider : public QtExt::Slider
+typedef QxSlider AcSliderBase;
+class AcSlider : public AcSliderBase
 {
   Q_OBJECT
   Q_DISABLE_COPY(AcSlider)
-  typedef Slider Self;
-  typedef QtExt::Slider Base;
+  typedef AcSlider Self;
+  typedef AcSliderBase Base;
 
   bool hovered_;
 

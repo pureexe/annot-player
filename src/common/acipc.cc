@@ -15,7 +15,7 @@
 #include <QtNetwork/QHostAddress>
 
 #define DEBUG "acipc"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define IPC_HOST        "127.0.0.1"
 

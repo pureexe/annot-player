@@ -88,6 +88,6 @@ echo.
 pause
 echo.
 
-if exist Changes.txt explorer Changes.txt
+if exist Changes.txt notepad Changes.txt
 
 :: EOF

@@ -17,7 +17,7 @@
 #endif // Q_OS_MAC
 
 #define DEBUG "qtunix"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 QStringList
 QtUnix::getDevicesWithType(DeviceType type)

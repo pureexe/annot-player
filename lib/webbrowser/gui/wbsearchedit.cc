@@ -3,11 +3,11 @@
 
 #include "gui/wbsearchedit.h"
 #include "lib/searchengine/searchenginefactory.h"
-#include "lib/qtext/actionwithid.h"
+#include "qtx/qxactionwithid.h"
 #include <QtGui>
 
 //#define DEBUG "wbsearchedit"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define MIN_WIDTH       150
 #define MAX_RECENT      15
@@ -186,7 +186,7 @@ WbSearchEdit::contextMenuEvent(QContextMenuEvent *event)
   searchMenu->setEnabled(!empty);
   if (!empty) {
     for (int engine = 0; engine < engines_.size(); engine++) {
-      QtExt::ActionWithId *a = new QtExt::ActionWithId(engine, searchMenu);
+      QxActionWithId *a = new QxActionWithId(engine, searchMenu);
       SearchEngine *e = engines_[engine];
       //a->setText(tr("Search with %1").arg(e->name()));
       a->setText(e->name());

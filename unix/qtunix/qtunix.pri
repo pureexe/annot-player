@@ -3,7 +3,6 @@
 
 DEFINES += WITH_UNIX_QTUNIX
 
-INCLUDEPATH     += $$PWD/..
 DEPENDPATH      += $$PWD
 
 HEADERS += $$PWD/qtunix.h

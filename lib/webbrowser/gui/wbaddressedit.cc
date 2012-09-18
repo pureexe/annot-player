@@ -4,7 +4,7 @@
 #include "gui/wbaddressedit.h"
 #include "global/wbrc.h"
 #include "global/wbss.h"
-#include "project/common/acrc.h"
+#include "src/common/acrc.h"
 #include "lib/mrlanalysis/mrlanalysis.h"
 #include <QtGui>
 

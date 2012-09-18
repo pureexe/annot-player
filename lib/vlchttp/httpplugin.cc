@@ -23,7 +23,7 @@ extern "C" {
 } // extern "C"
 
 #define DEBUG "httpplugin"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

@@ -4,7 +4,7 @@
 #include "devicedialog.h"
 #include "tr.h"
 #include "src/common/acui.h"
-#include "lib/qtext/ss.h"
+#include "htmlutil/sstags.h"
 #ifdef Q_OS_WIN
 # include "win/qtwin/qtwin.h"
 #endif // Q_OS_WIN
@@ -17,7 +17,7 @@
 #include <QtGui>
 
 #define DEBUG "devicedialog"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define COMBOBOX_MINWIDTH      100
 

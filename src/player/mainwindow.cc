@@ -99,13 +99,14 @@
 #include "lib/download/downloader.h"
 #include "lib/searchengine/searchenginerc.h"
 #include "lib/magnifier/magnifier.h"
-#include "lib/qtext/string.h"
-#include "lib/qtext/actionwithid.h"
-#include "lib/qtext/countdowntimer.h"
-#include "lib/qtext/datetime.h"
-#include "lib/qtext/filesystem.h"
-#include "lib/qtext/htmltag.h"
-#include "lib/qtext/rubberband.h"
+#include "qtx/qxalgorithm.h"
+#include "qtx/qxstring.h"
+#include "qtx/qxactionwithid.h"
+#include "qtx/qxcountdowntimer.h"
+#include "qtx/qxdatetime.h"
+#include "qtx/qxfs.h"
+#include "htmlutil/htmltags.h"
+#include "qtx/qxrubberband.h"
 #include "lib/eventlistener/mouseclickeventlistener.h"
 #include "lib/mediacodec/flvcodec.h"
 #include "lib/imagefilter/rippleimagefilter.h"
@@ -146,19 +147,14 @@
 //# include "mac/qtvlc/qtvlc.h"
 #endif // Q_OS_MAC
 #ifdef Q_OS_LINUX
-# include "unix/qtx/qtx.h"
+# include "unix/qtx11/qtx11.h"
 #endif // Q_OS_LINUX
 #ifdef Q_OS_UNIX
 # include "unix/qtunix/qtunix.h"
 #endif // Q_OS_UNIX
 #include <QtGui>
 #include <QtNetwork/QNetworkAccessManager>
-
-#ifdef __clang__
-# pragma clang diagnostic ignored "-Wunused-parameter" // in boost algorithm
-#endif // __clang__
 #include <boost/foreach.hpp>
-#include <boost/range/algorithm.hpp>
 #include <boost/tuple/tuple.hpp>
 
 #include <ctime>
@@ -184,7 +180,7 @@
 using namespace AnnotCloud;
 
 #define DEBUG "mainwindow"
-#include "lib/debug/debug.h"
+#include "qtx/qxDebug.h"
 
 enum { DEFAULT_LIVE_INTERVAL = 3000 }; // 3 seconds
 enum { HISTORY_SIZE = 100 };   // Size of playPos/Sub/AudioTrack history
@@ -692,12 +688,12 @@ MainWindow::createComponents(bool unique)
   mecab_ = new MeCabParser(this);
 
   // Rubber bands
-  attractRubberBand_ = new QtExt::CircularRubberBand(QRubberBand::Line, annotationView_);
-  expelRubberBand_ = new QtExt::CircularRubberBand(QRubberBand::Line, annotationView_);
+  attractRubberBand_ = new QxCircularRubberBand(QRubberBand::Line, annotationView_);
+  expelRubberBand_ = new QxCircularRubberBand(QRubberBand::Line, annotationView_);
 
-  pauseRubberBand_ = new QtExt::MouseRubberBand(QRubberBand::Rectangle, annotationView_);
-  resumeRubberBand_ = new QtExt::MouseRubberBand(QRubberBand::Rectangle, annotationView_);
-  removeRubberBand_ = new QtExt::MouseRubberBand(QRubberBand::Rectangle, annotationView_);
+  pauseRubberBand_ = new QxMouseRubberBand(QRubberBand::Rectangle, annotationView_);
+  resumeRubberBand_ = new QxMouseRubberBand(QRubberBand::Rectangle, annotationView_);
+  removeRubberBand_ = new QxMouseRubberBand(QRubberBand::Rectangle, annotationView_);
 
   pauseRubberBand_->setColor(Qt::cyan);
   removeRubberBand_->setColor(Qt::red);
@@ -839,22 +835,22 @@ MainWindow::createComponents(bool unique)
   //liveTimer_ = new QTimer(this);
   //connect(liveTimer_, SIGNAL(timeout()), SLOT(updateLiveAnnotations()));
 
-  loadSubtitlesTimer_ = new QtExt::CountdownTimer;
+  loadSubtitlesTimer_ = new QxCountdownTimer;
   loadSubtitlesTimer_->setInterval(3000); // 3 seconds
 
-  resumePlayTimer_ = new QtExt::CountdownTimer;
+  resumePlayTimer_ = new QxCountdownTimer;
   resumePlayTimer_->setInterval(3000); // 3 seconds
 
-  resumeSubtitleTimer_ = new QtExt::CountdownTimer;
+  resumeSubtitleTimer_ = new QxCountdownTimer;
   resumeSubtitleTimer_->setInterval(3000); // 3 seconds
 
-  resumeAudioTrackTimer_ = new QtExt::CountdownTimer;
+  resumeAudioTrackTimer_ = new QxCountdownTimer;
   resumeAudioTrackTimer_->setInterval(3000); // 3 seconds
 
-  resumeAudioChannelTimer_ = new QtExt::CountdownTimer;
+  resumeAudioChannelTimer_ = new QxCountdownTimer;
   resumeAudioChannelTimer_->setInterval(3000); // 3 seconds
 
-  resumeAspectRatioTimer_ = new QtExt::CountdownTimer;
+  resumeAspectRatioTimer_ = new QxCountdownTimer;
   resumeAspectRatioTimer_->setInterval(3000); // 3 seconds
 
   navigationTimer_ = new QTimer(this);
@@ -3205,13 +3201,13 @@ MainWindow::importAnnotationFile(const QString &fileName, const QString &url)
   if (m_fi.absolutePath().compare(a_fi.absolutePath(), Qt::CaseInsensitive)) {
     QString newFile = m_fi.completeBaseName() + "." + a_name;
     newFile.prepend('/').prepend(m_fi.absolutePath());
-    QtExt::trashOrRemoveFile(newFile);
+    qxTrashOrRemoveFile(newFile);
     QFile::copy(fileName, newFile);
   } else {
     QString newFile = m_fi.completeBaseName() + "." + a_name;
     if (newFile.compare(a_fi.fileName(), Qt::CaseInsensitive)) {
       newFile.prepend('/').prepend(m_fi.absolutePath());
-      QtExt::trashOrRemoveFile(newFile);
+      qxTrashOrRemoveFile(newFile);
       QFile::rename(fileName, newFile);
     }
   }
@@ -3587,7 +3583,7 @@ MainWindow::removeAnnotationFile(const QString &url)
     foreach (const QString &f, l) {
       QString that = AnnotationCodecManager::parseAnnotatedUrl(f);
       if (!that.isEmpty() && DataManager::normalizeUrl(that) == key) {
-        QtExt::trashOrRemoveFile(f);
+        qxTrashOrRemoveFile(f);
         emit message(tr("annotation file removed") + ": " + f);
       }
     }
@@ -4167,7 +4163,7 @@ MainWindow::snapshot(bool mediaOnly)
   case SignalHub::MediaTokenMode:
     if (mediaOnly && player_->hasMedia() && !player_->isStopped()) {
       QString mediaName = QFileInfo(player_->mediaPath()).fileName();
-      QTime time = QtExt::msecs2time(player_->time());
+      QTime time = qxTimeFromMsec(player_->time());
 
       QString saveName = mediaName + "__" + time.toString("hh_mm_ss_zzz") + ".png";
       QString savePath = grabber_->savePath() + "/" + saveName;
@@ -4505,7 +4501,7 @@ MainWindow::updateDownloadProgress(qint64 receivedBytes, qint64 totalBytes)
       if (speed)
         message += ", " + downloadSpeedToString(speed);
       if (remainingTime) {
-        QString ts = QtExt::msecs2time(remainingTime).toString();
+        QString ts = qxTimeFromMsec(remainingTime).toString();
         if (!ts.isEmpty())
           message += ", " + ts;
       }
@@ -5544,7 +5540,7 @@ MainWindow::setToken(const QString &input, bool async)
     if (hwnd && QtWin::getWindowProcessId(hwnd) != QCoreApplication::applicationPid()) {
       QString t = QtWin::getWindowText(hwnd).trimmed();
       if (!t.isEmpty()) {
-        t = TextCodecManager::globalInstance()->transcode(t);
+        //t = TextCodecManager::globalInstance()->transcode(t);
         DOUT("galgame window title =" << t);
         media.setTitle(t);
 
@@ -7156,7 +7152,7 @@ MainWindow::updateContextMenu()
 
       for (int tid = 0; tid < player_->titleCount(); tid++) {
         QString text = TR(T_SECTION) + " " + QString::number(tid+1);
-        auto a = new QtExt::ActionWithId(tid, text, sectionMenu_);
+        auto a = new QxActionWithId(tid, text, sectionMenu_);
         contextMenuActions_.append(a);
         if (tid == player_->titleId()) {
 #ifdef Q_OS_WIN
@@ -7191,7 +7187,7 @@ MainWindow::updateContextMenu()
             subtitle = TR(T_SUBTITLE) + " " + QString::number(id+1);
           else
             subtitle = QString::number(id+1) + ". " + subtitle;
-          auto a = new QtExt::ActionWithId(id, subtitle, subtitleMenu_);
+          auto a = new QxActionWithId(id, subtitle, subtitleMenu_);
           contextMenuActions_.append(a);
           if (id == player_->subtitleId()) {
 #ifdef Q_OS_WIN
@@ -7230,7 +7226,7 @@ MainWindow::updateContextMenu()
             name = TR(T_AUDIOTRACK) + " " + QString::number(id+1);
           else
             name = QString::number(id+1) + ". " + name;
-          auto a = new QtExt::ActionWithId(id, name, audioTrackMenu_);
+          auto a = new QxActionWithId(id, name, audioTrackMenu_);
           contextMenuActions_.append(a);
           if (id == player_->audioTrackId()) {
 #ifdef Q_OS_WIN
@@ -7627,6 +7623,7 @@ MainWindow::updateUserMenu()
 
   //if (userMenu_->isEmpty()) {
 
+#ifdef AC_ENABLE_GAME
     if (hub_->isSignalTokenMode() && !hub_->isStopped()) {
       userMenu_->addAction(showGamePreferencesAct_);
       showGamePreferencesAct_->setEnabled(hub_->isSignalTokenMode() && dataManager_->token().hasDigest());
@@ -7635,7 +7632,6 @@ MainWindow::updateUserMenu()
       updateGameTextMenu();
 
       userMenu_->addMenu(translatorMenu_);
-#ifdef AC_ENABLE_GAME
       userMenu_->addAction(toggleTranslateAct_);
 #ifdef WITH_WIN_ATLAS
       userMenu_->addAction(toggleAtlasEnabledAct_);
@@ -7643,9 +7639,9 @@ MainWindow::updateUserMenu()
       userMenu_->addAction(showBacklogAct_);
       userMenu_->addAction(showAnnotationAnalyticsAct_);
       showAnnotationAnalyticsAct_->setEnabled(dataManager_->hasAnnotations());
-#endif // AC_ENABLE_GAME
       userMenu_->addSeparator();
     }
+#endif // AC_ENABLE_GAME
 
     userMenu_->addMenu(userLanguageMenu_);
     userMenu_->addAction(toggleUserAnonymousAct_);
@@ -7691,7 +7687,7 @@ MainWindow::updateTrackMenu()
 
   foreach (Player::MediaInfo mi, player_->playlist()) {
     QString text = QString("%1. %2").arg(QString::number(mi.track + 1)).arg(mi.title);
-    auto a = new QtExt::ActionWithId(mi.track, text, trackMenu_);
+    auto a = new QxActionWithId(mi.track, text, trackMenu_);
     a->setToolTip(mi.path);
     if (mi.track == player_->trackNumber()) {
 #ifdef Q_OS_LINUX
@@ -7745,9 +7741,9 @@ MainWindow::changeEvent(QEvent *event)
 #ifdef Q_OS_LINUX
   if (event->type() == QEvent::WindowStateChange) {
     if (windowState() == Qt::WindowFullScreen)
-      QtX::setWindowInputShape(osdWindow_->winId(), embeddedPlayer_->pos(), embeddedPlayer_->rect());
+      QtX11::setWindowInputShape(osdWindow_->winId(), embeddedPlayer_->pos(), embeddedPlayer_->rect());
     else
-      QtX::zeroWindowInputShape(osdWindow_->winId());
+      QtX11::zeroWindowInputShape(osdWindow_->winId());
   }
 #endif // Q_OS_LINUX
 }
@@ -8030,6 +8026,7 @@ void
 MainWindow::closeEvent(QCloseEvent *event)
 {
   DOUT("enter: disposed =" << disposed_);
+
   if (!disposed_) {
     disposed_ = true;
     if (event)
@@ -9524,7 +9521,7 @@ MainWindow::updatePlaylistMenu()
           text = f;
       }
       text = QString::number(index+1) + ". " + shortenText(text);
-      auto a = new QtExt::ActionWithId(index++, text, playlistMenu_);
+      auto a = new QxActionWithId(index++, text, playlistMenu_);
       if (f == recentOpenedFile_) {
 #ifdef Q_OS_LINUX
         a->setCheckable(true);
@@ -9557,8 +9554,7 @@ MainWindow::updateRecent()
       i.remove();
   }
 
-  if (!recentFiles_.isEmpty())
-    boost::unique(recentFiles_);
+  qxStableUniqueList(recentFiles_);
 
   if (size != recentFiles_.size())
     updateRecentMenu();
@@ -9626,7 +9622,7 @@ MainWindow::updateRecentMenu()
       }
       Q_ASSERT(!text.isEmpty());
       text = QString::number(i+1) + ". " + shortenText(text);
-      auto a = new QtExt::ActionWithId(i++, text, recentMenu_);
+      auto a = new QxActionWithId(i++, text, recentMenu_);
       connect(a, SIGNAL(triggeredWithId(int)), SLOT(openRecent(int)));
 
       recentMenu_->addAction(a);
@@ -10152,7 +10148,7 @@ MainWindow::updateBrowseMenu(const QString &fileName)
   int id = 0;
   foreach (const QFileInfo &f, browsedFiles_) {
     QString text = QString::number(id+1) + ". " + f.fileName();
-    auto a = new QtExt::ActionWithId(id++, text, browseMenu_);
+    auto a = new QxActionWithId(id++, text, browseMenu_);
     if (f.fileName() == fi.fileName()) {
 #ifdef Q_OS_LINUX
       a->setCheckable(true);
@@ -10269,7 +10265,7 @@ MainWindow::openPreviousMrl()
 {
   QString mrl = dataManager_->token().url();
   if (!mrl.isEmpty()) {
-    QString n = QtExt::decreaseString(mrl);
+    QString n = qxDecreaseString(mrl);
     if (n != mrl) {
       n.replace("/index_0.html", "/");
       n.replace("/index_1.html", "/");
@@ -10287,7 +10283,7 @@ MainWindow::openNextMrl()
       mrl.append("index_2.html");
       openSource(mrl);
     } else {
-      QString n = QtExt::increaseString(mrl);
+      QString n = qxIncreaseString(mrl);
       if (n != mrl)
         openSource(n);
     }
@@ -10514,13 +10510,13 @@ MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url, co
          if (!fi.exists())
            AcLocationManager::globalInstance()->createDownloadsLocation();
          if (fi.exists() && fi.isDir()) {
-           QString baseName = QtExt::escapeFileName(title);
+           QString baseName = qxEscapeFileName(title);
            QString annotFile = dir + "/" + baseName;
            QString cacheFile = AnnotationCacheManager::globalInstance()->findFile(originalUrl);
            if (!cacheFile.isEmpty()) {
              annotFile.append('.')
                       .append(QFileInfo(cacheFile).fileName());
-             QtExt::trashOrRemoveFile(annotFile); // overwrite existing files
+             qxTrashOrRemoveFile(annotFile); // overwrite existing files
              bool ok = QFile::copy(cacheFile, annotFile);
              DOUT("copy =" << ok << ", annotFile =" << annotFile << ", cacheFile =" << cacheFile);
              if (ok)
@@ -10541,7 +10537,7 @@ MainWindow::addRemoteAnnotations(const AnnotationList &l, const QString &url, co
            if (!cacheFile.isEmpty()) {
              annotFile.append('.')
                       .append(QFileInfo(cacheFile).fileName());
-             QtExt::trashOrRemoveFile(annotFile); // overwrite existing files
+             qxTrashOrRemoveFile(annotFile); // overwrite existing files
              bool ok = QFile::copy(cacheFile, annotFile);
              DOUT("copy =" << ok << ", annotFile =" << annotFile << ", cacheFile =" << cacheFile);
              if (ok)
@@ -10844,7 +10840,7 @@ MainWindow::resumePlayPos()
       emit message(
         tr("resuming last play") + ": "
         HTML_SS_OPEN(color:orange)
-        + QtExt::msecs2time(pos).toString("hh:mm:ss") +
+        + qxTimeFromMsec(pos).toString("hh:mm:ss") +
         HTML_SS_CLOSE()
       );
       pos -= 5000; // seek back 5 seconds

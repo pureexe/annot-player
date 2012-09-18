@@ -6,7 +6,7 @@
 #include "lib/stream/inputstream.h"
 
 #define DEBUG "aaccodec"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 namespace { namespace detail {
   const unsigned samplingFrequencyTable[16] = {

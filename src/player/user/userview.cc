@@ -5,7 +5,7 @@
 #include "tr.h"
 #include "src/common/acss.h"
 #include "src/common/acui.h"
-#include "lib/qtext/bitwise.h"
+#include "qtx/qxbitwise.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
@@ -104,7 +104,7 @@ UserView::updateUser()
 {
 #define FORMAT_TIME(_secs)      QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate).replace('T', ' ')
 #define FORMAT_COUNT(_count)    QString::number(_count)
-#define FORMAT_IP(_ip)          Bitwise::BigEndian::long2ip(_ip)
+#define FORMAT_IP(_ip)          QxBitwise::BigEndian::long2ip(_ip)
   nameLabel_->setText(user_.name());
   nicknameLabel_->setText(user_.nickname());
   emailLabel_->setText(user_.email());

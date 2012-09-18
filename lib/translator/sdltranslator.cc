@@ -10,7 +10,7 @@
 #include <QtNetwork/QNetworkReply>
 
 //#define DEBUG "sdltranslator"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Properties -
 

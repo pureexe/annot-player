@@ -8,7 +8,7 @@
 
 #include <QtCore>
 #define DEBUG "h264videostreamsmss"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define UNUSED(_var)    (void)(_var)
 #define ASSERT(_var)

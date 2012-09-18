@@ -185,10 +185,6 @@ rm -fv webbrowser.dll
 ::cp -v "%SOURCE%"/lib/luaresolver/lua/luascript/*.lua "%LUA_PATH%"/  || exit /b 1
 ::cp -v "%SOURCE%"/lib/luaresolver/lua/luascript/*/*.lua "%LUA_PATH%"/  || exit /b 1
 
-:: doc
-::cp -Rv "%SOURCE%"/lib/qtext/doc . || exit /b 1
-::cp -Rv "%SOURCE%"/lib/qtext/images . || exit /b 1
-
 :: jsf
 ::cp -Rv "%SOURCE%"/lib/annotcloud/jsf . || exit /b 1
 

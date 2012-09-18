@@ -7,8 +7,8 @@
 #include "src/common/accomboedit.h"
 #include "src/common/actextedit.h"
 #include "src/common/aclineedit.h"
-#include "lib/qtext/combobox.h"
-#include "lib/qtext/toolbutton.h"
+#include "qtx/qxcombobox.h"
+#include "qtx/qxtoolbutton.h"
 #ifdef WITH_WIN_DWM
 # include "win/dwm/dwm.h"
 #endif // WITH_WIN_DWM
@@ -383,7 +383,7 @@ QToolButton*
 AcUi::makeToolButton(ulong hints, const QString &title, const QString &tip, const QString &key,
                         QObject *receiver, const char *slot, Qt::ConnectionType type)
 {
-  QToolButton *ret = new QtExt::ToolButton;
+  QToolButton *ret = new QxToolButton;
   ret->setToolButtonStyle(Qt::ToolButtonTextOnly);
 
   ret->setStyleSheet(
@@ -531,7 +531,7 @@ AcUi::makeComboBox(ulong hints, const QString &text, const QString &tip, const Q
   if (hints | EditHint)
     ret = new AcComboEdit(items);
   else {
-    ret = new QtExt::ComboBox;
+    ret = new QxComboBox;
     ret->setStyleSheet(ACSS_COMBOBOX);
     ret->addItems(items);
   }

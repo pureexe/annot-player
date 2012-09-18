@@ -5,7 +5,7 @@
 #include <QtCore/QStringList>
 
 #define DEBUG "mousegesture"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 void
 MouseGesture::trigger()

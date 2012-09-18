@@ -12,7 +12,7 @@
 #include <set>
 
 //#define DEBUG "processfilter"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 #include <QtCore/QDebug>
 
 // - Query -

@@ -1,4 +1,4 @@
-// tokenview.cc
+/// tokenview.cc
 // 8/13/2011
 
 #include "tokenview.h"
@@ -10,7 +10,7 @@
 #include "src/common/acui.h"
 #include "src/common/acfilteredtableview.h"
 #include "lib/annotservice/annotserveragent.h"
-#include "lib/qtext/layoutwidget.h"
+#include "qtx/qxlayoutwidget.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
@@ -148,7 +148,7 @@ TokenView::createLayout()
 
     grid->setContentsMargins(6, 6, 6, 6);
     //setContentsMargins(0, 0, 0, 0);
-  } setCentralWidget(new LayoutWidget(grid, this));
+  } setCentralWidget(new QxLayoutWidget(grid, this));
 }
 
 void

@@ -3,10 +3,10 @@
 
 // metacallevent.h
 // 4/12/2012
-// Must be consistent with corelib/kernel/qobject_p.h
+// Must be consistent with qt/src/corelib/kernel/qobject_p.h
 // Last checked with Qt 4.7.4 and 4.8.1.
 
-//#include <corelib/kernel/qobject_p.h>
+//#include <qt/src/corelib/kernel/qobject_p.h>
 #include <QtCore/QEvent>
 #include <QtCore/QMetaObject>
 

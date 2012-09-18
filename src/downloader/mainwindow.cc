@@ -20,8 +20,8 @@
 #include "src/common/acpreferences.h"
 #include "src/common/acprotocol.h"
 #include "lib/animation/fadeanimation.h"
-#include "lib/qtext/datetime.h"
-#include "lib/qtext/layoutwidget.h"
+#include "qtx/qxdatetime.h"
+#include "qtx/qxlayoutwidget.h"
 #include "lib/download/downloader.h"
 #include "lib/downloadtask/downloadmanager.h"
 #include "lib/downloadtask/mrldownloadtask.h"
@@ -30,7 +30,7 @@
 #include <climits>
 
 #define DEBUG "mainwindow"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef Q_OS_MAC
 # define K_CTRL        "cmd"
@@ -196,7 +196,7 @@ MainWindow::createLayout()
     setContentsMargins(9, patch, 9, patch);
 
   }
-  setCentralWidget(new LayoutWidget(rows));
+  setCentralWidget(new QxLayoutWidget(rows));
 
 #undef MAKE_BUTTON
 }
@@ -957,7 +957,7 @@ MainWindow::downloadSpeedToString(qreal speed) const
 QString
 MainWindow::downloadTimeToString(qint64 msecs) const
 {
-  QString ret = QtExt::msecs2time(msecs).toString();
+  QString ret = qxTimeFromMsec(msecs).toString();
   if (ret.isEmpty())
     ret = "-";
   return ret;

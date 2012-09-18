@@ -7,7 +7,7 @@
 #include <QtCore/QTimer>
 
 //#define DEBUG "downloadtask"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

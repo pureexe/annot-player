@@ -7,8 +7,8 @@
 #ifdef WITH_LIB_ANNOTCACHE
 # include "lib/annotcache/annotationcachemanager.h"
 #endif // WITH_LIB_ANNOTCACHE
-#include "lib/qtext/htmltag.h"
-#include "lib/qtext/network.h"
+#include "htmlutil/htmltags.h"
+#include "qtx/qxnetwork.h"
 #include <QtCore/QStringList>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
@@ -21,7 +21,7 @@
 #include <climits>
 
 //#define DEBUG "acfuncodec"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define RequestUrlAttribute QNetworkRequest::UserMax
 
@@ -55,7 +55,7 @@ AcfunCodec::fetch(const QString &url, const QString &originalUrl)
   Q_ASSERT(match(url));
   DOUT("enter: url =" << url);
   QNetworkReply *reply = nam_->get(QNetworkRequest(url));
-  QtExt::PublicNetworkReply::fromReply(reply)
+  QxPublicNetworkReply::fromReply(reply)
       ->setAttribute(RequestUrlAttribute, originalUrl);
   DOUT("exit");
 }
@@ -199,7 +199,7 @@ AcfunCodec::parseText(const QString &text)
   DOUT("text =" << text);
   if (text.isEmpty())
     return QString();
-  QString ret = ::html_escape(text.trimmed());
+  QString ret = ::htmlEscape(text.trimmed());
   if (ret == "/fly")
     return CORE_CMD_VIEW_FLY " " + QString::fromLocal8Bit("飞");
   ret.replace("/fly ", CORE_CMD_VIEW_FLY " ", Qt::CaseInsensitive);

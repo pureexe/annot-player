@@ -4,14 +4,15 @@
 // actimeedit.h
 // 5/30/2012
 
-#include "lib/qtext/timeedit.h"
+#include "qtx/qxtimeedit.h"
 
-class AcTimeEdit : public QtExt::TimeEdit
+typedef QxTimeEdit AcTimeEditBase;
+class AcTimeEdit : public AcTimeEditBase
 {
   Q_OBJECT
   Q_DISABLE_COPY(AcTimeEdit)
   typedef AcTimeEdit Self;
-  typedef QtExt::TimeEdit Base;
+  typedef AcTimeEditBase Base;
 
 public:
   explicit AcTimeEdit(QWidget *parent = nullptr)

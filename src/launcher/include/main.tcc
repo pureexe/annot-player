@@ -6,7 +6,7 @@
 #include <memory>
 
 //#define DEBUG "main"
-//#include "lib/debug/debug.h"
+//#include "qtx/qxdebug.h"
 //#ifdef DEBUG
 //  #include <QtCore>
 //  #define DOUT(_msg)    qDebug() << "main:" << _msg

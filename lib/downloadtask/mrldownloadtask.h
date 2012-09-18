@@ -6,7 +6,7 @@
 
 #include "lib/downloadtask/downloadtask.h"
 #include "lib/mrlresolver/mrlinfo.h"
-#include "lib/qtext/os.h"
+#include "qtx/qxos.h"
 #include <QtCore/QHash>
 
 QT_FORWARD_DECLARE_CLASS(QNetworkCookieJar)
@@ -31,7 +31,7 @@ class MrlDownloadTask : public DownloadTask
 
   int retries_;
 
-  QtExt::SleepTimer sleep_;
+  QxSleepTimer sleep_;
 
 public:
   explicit MrlDownloadTask(const QString &url, QObject *parent = nullptr)

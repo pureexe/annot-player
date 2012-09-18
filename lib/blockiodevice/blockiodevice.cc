@@ -33,7 +33,7 @@ extern "C" {
 } // extern "C"
 
 #define DEBUG "blockiodevice"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef Q_OS_MAC
   // See: http://www.filibeto.org/unix/macos/lib/dev/documentation/DeviceDrivers/Conceptual/WorkingWStorage/WorkingWStorage.pdf

@@ -5,7 +5,7 @@
 #include <QtCore/QMutexLocker>
 
 //#define DEBUG "securebufferedfifostream"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Constrution -
 

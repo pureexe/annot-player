@@ -5,7 +5,7 @@
 #include <qt_windows.h>
 
 #define DEBUG "acapplication_win"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 LONG WINAPI
 AcApplication::exceptionFilter(PEXCEPTION_POINTERS e)

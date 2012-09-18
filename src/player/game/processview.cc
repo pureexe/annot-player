@@ -18,7 +18,7 @@
 #include <QtGui>
 
 #define DEBUG "processview"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Constructions -
 

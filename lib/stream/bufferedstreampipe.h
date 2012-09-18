@@ -5,7 +5,7 @@
 // 2/22/2012
 
 #include "lib/stream/streampipe.h"
-#include "lib/qtext/stoppable.h"
+#include "qtx/qxstoppable.h"
 #include <QtCore/QObject>
 #include <QtCore/QString>
 

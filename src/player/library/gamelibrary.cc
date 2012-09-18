@@ -6,7 +6,7 @@
 #include <QtCore/QMutexLocker>
 
 #define DEBUG "gamelibrary"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

@@ -4,7 +4,7 @@
 #include "src/common/acconsole.h"
 #include "src/common/actextview.h"
 #include "src/common/acui.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 #include <QtGui>
 
 // - Constructions -

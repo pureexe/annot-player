@@ -50,6 +50,12 @@ SOURCES += \
 RESOURCES += \
     $$PWD/webbrowser.qrc
 
+DOC_FILES += \
+    $$PWD/doc/start.html
+
+OTHER_FILES += \
+    $$DOC_FILES
+
 QT += core gui network webkit
 #CONFIG(static): QTPLUGIN += qgif qico qjpeg gsvg qtiff
 

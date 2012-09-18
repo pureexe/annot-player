@@ -10,8 +10,8 @@
 #endif // Q_OS_WIN
 #include <mecab.h>
 
-#define DEBUG "mecabhighlighter"
-#include "lib/debug/debug.h"
+//#define DEBUG "mecabhighlighter"
+#include "qtx/qxdebug.h"
 //#include <QtCore/QDebug>
 
 //enum { u8sz = 3 }; // bytes of single utf8 char
@@ -53,6 +53,11 @@ MeCabHighlighter::highlightBlock(const QString &text)
   DOUT("enter: text =" << text);
 
   MeCab::Tagger *t = tagger();
+  Q_ASSERT(t);
+  if (!t) {
+    DOUT("exit: ERROR: failed to create mecab tagger");
+    return;
+  }
 
   //QByteArray ba = toShiftJIS(text);
   QByteArray ba = text.toUtf8();

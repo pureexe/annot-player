@@ -5,9 +5,9 @@
 // 1/27/2012
 
 #ifdef CONFIG_PROXY_DOMAIN
-# include "lib/qtext/networkcookie.h"
+# include "qtx/qxnetworkcookie.h"
 
-typedef QtExt::NetworkCookieJarWithDomainAlias WbNetworkCookieJarBase;
+typedef QxNetworkCookieJarWithDomainAlias WbNetworkCookieJarBase;
 class WbNetworkCookieJar : public WbNetworkCookieJarBase
 {
   Q_OBJECT

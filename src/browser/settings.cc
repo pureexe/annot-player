@@ -6,7 +6,7 @@
 #include "lib/annotcloud/traits.h"
 #include "lib/crypt/crypt.h"
 #include "lib/crypt/simplecrypt.h"
-#include "lib/qtext/algorithm.h"
+#include "qtx/qxalgorithm.h"
 #include <QtCore>
 
 // - Settings keys -

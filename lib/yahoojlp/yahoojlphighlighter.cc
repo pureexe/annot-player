@@ -13,7 +13,7 @@
 #include <QtXml/QDomElement>
 
 #define DEBUG "yahoojlphighlighter"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 //#include <QtCore/QDebug>
 
 // - Properties -

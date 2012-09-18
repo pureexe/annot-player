@@ -3,7 +3,7 @@
 
 #include "lib/mrlresolver/luamrlresolver.h"
 #include "lib/mrlresolver/mrlresolversettings.h"
-#include "lib/qtext/htmltag.h"
+#include "htmlutil/htmltags.h"
 #ifdef WITH_LIB_LUARESOLVER
 # include "lib/luaresolver/luaresolver.h"
 #else
@@ -25,7 +25,7 @@
 #include <QtCore/QtConcurrentRun>
 
 #define DEBUG "luaemrlresolver"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // TODO: move to project source project instead of hard code here
 #ifdef Q_OS_WIN
@@ -271,7 +271,7 @@ LuaMrlResolver::formatTitle(const QString &title)
 {
   return title.isEmpty() ? title :
          title == "ニコニコ動画:Zero" ? QString() :
-    ::html_unescape(title)
+    ::htmlUnescape(title)
     .remove(QRegExp("..ニコニコ動画\\(原宿\\)$"))
     .remove(QRegExp("..ニコニコ動画:Zero$"))
     .remove(QRegExp(" - 嗶哩嗶哩 - .*"))

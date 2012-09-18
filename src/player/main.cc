@@ -34,7 +34,7 @@
 #include "src/common/acsettings.h"
 #include "src/common/acplayer.h"
 #include "src/common/aclocalizer.h"
-#include "lib/qtext/filesystem.h"
+#include "qtx/qxfs.h"
 #include "lib/annotdb/annotdbdefs.h"
 #include "lib/annotcloud/user.h"
 #include "lib/annotcache/annotationcachemanager.h"
@@ -58,7 +58,7 @@
 //} // extern "C"
 
 #define DEBUG "main"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #ifdef __clang__
 # pragma clang diagnostic ignored "-Wlogical-op-parentheses" // '&&' within '||'
@@ -220,18 +220,18 @@ main(int argc, char *argv[])
 
     //bool initial = previousVersion.isEmpty();
 
-    QtExt::trashOrRemoveFile(G_PATH_DEBUG);
+    qxTrashOrRemoveFile(G_PATH_DEBUG);
 
     if (previousVersionNumber < AcVersion::toNumber(ANNOTDB_VERSION)) {
-      QtExt::trashOrRemoveFile(G_PATH_CACHEDB);
-      QtExt::trashOrRemoveFile(G_PATH_QUEUEDB);
+      qxTrashOrRemoveFile(G_PATH_CACHEDB);
+      qxTrashOrRemoveFile(G_PATH_QUEUEDB);
     }
 
     if (previousVersionNumber < AcVersion::toNumber(GAME_LIBRARY_VERSION))
-      QtExt::trashOrRemoveFile(G_PATH_GAMEDB);
+      qxTrashOrRemoveFile(G_PATH_GAMEDB);
 
     if (previousVersionNumber < AcVersion::toNumber(MEDIA_LIBRARY_VERSION))
-      QtExt::trashOrRemoveFile(G_PATH_MEDIADB);
+      qxTrashOrRemoveFile(G_PATH_MEDIADB);
 
 //#ifdef Q_OS_WIN
 //    if (majorUpdate) {
@@ -375,6 +375,7 @@ main(int argc, char *argv[])
 
   // MeCab
   MeCabSettings::setMeCabRcFile(G_PATH_MECABRC);
+  //DOUT("mecabrc =" << MeCabSettings::getMeCabRcFile());
 
   // Set theme.
   {
@@ -427,7 +428,6 @@ main(int argc, char *argv[])
 //  root.show();
 //#else
 //  MainWindow w;
-//
 //#endif // AC_ENABLE_GAME
   DOUT("create mainwindow");
   MainWindow w(unique); {
@@ -438,10 +438,6 @@ main(int argc, char *argv[])
     //  DOUT("FATAL ERROR: failed to initialize MainWindow, please contact " G_EMAIL);
     //  return -1;
     //}
-
-//#ifdef WITH_WIN_TEXTHOOK
-//    TextHook::globalInstance()->setParentWinId(w.winId());
-//#endif // WITH_WIN_TEXTHOOK
 
     a.setMainWindow(&w);
   }
@@ -531,6 +527,7 @@ main(int argc, char *argv[])
 
   //::dlpost("http://www.excite.co.jp/world/english", QUrl("http://honyaku.yahoo.co.jp/transtext"), data.toLocal8Bit());
 
+  w.show();
   DOUT("exit: exec");
   return a.exec();
 }

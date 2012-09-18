@@ -7,7 +7,7 @@
 #include "annotationlistmodel.h"
 #include "src/common/acfilteredtableview.h"
 #include "src/common/acfilteredlistview.h"
-#include "lib/qtext/datetime.h"
+#include "qtx/qxdatetime.h"
 #include <QtGui>
 
 using namespace AnnotCloud;
@@ -224,7 +224,7 @@ void
 AnnotationFilterView::addRow(const Annotation &a)
 {
 #define FORMAT_TIME(_secs)        QDateTime::fromMSecsSinceEpoch(_secs * 1000).toString(Qt::ISODate)
-#define FORMAT_POS(_msecs)        QtExt::msecs2time(_msecs).toString()
+#define FORMAT_POS(_msecs)        qxTimeFromMsec(_msecs).toString()
 #define FORMAT_LANGUAGE(_lang)    AnnotationListModel::languageToString(_lang)
 #define FORMAT_FLAGS(_flags)      AnnotationListModel::annotationFlagsToStringList(_flags)
 #define FORMAT_STATUS(_status)    AnnotationListModel::annotationStatusToString(_status)

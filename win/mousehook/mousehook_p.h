@@ -4,7 +4,8 @@
 // 11/26/2011
 
 #include <qt_windows.h>
-#include <QtCore/QObject>
+
+class QObject;
 
 class MouseHookPrivate
 {

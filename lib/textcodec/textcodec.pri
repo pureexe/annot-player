@@ -10,9 +10,9 @@ SOURCES += \
     $$PWD/textcodec_zh.cc
 
 TABLE_FILES += \
-    $$ROOTDIR/lib/qtext/table/hirakata.txt \
-    $$ROOTDIR/lib/qtext/table/zhszht.txt \
-    $$ROOTDIR/lib/qtext/table/zhtzhs.txt
+    $$PWD/table/hirakata \
+    $$PWD/table/zhszht \
+    $$PWD/table/zhtzhs
 
 OTHER_FILES += $$TABLE_FILES
 

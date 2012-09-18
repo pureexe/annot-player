@@ -14,6 +14,10 @@
 #include <QtCore/QStringList>
 #include <cstring>
 
+#ifdef _MSC_VER
+# pragma warning (disable:4800) // C4800: forcing value to bool 'true' or 'false', performance warning
+#endif // _MSC_VER
+
 namespace AnnotCloud {
 
   class Annotation

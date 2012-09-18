@@ -5,11 +5,11 @@
 #include "tr.h"
 #include "src/common/acui.h"
 #include "src/common/accomboedit.h"
-#include "lib/qtext/datetime.h"
+#include "qtx/qxdatetime.h"
 #include <QtGui>
 
 #define DEBUG "inputdialog"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define INPUTLINEEDIT_MAXWIDTH         100
 

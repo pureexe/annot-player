@@ -4,7 +4,7 @@
 
 #include "src/common/achorizontalslider.h"
 #include "src/common/acui.h"
-#include "lib/qtext/ss.h"
+#include "htmlutil/sstags.h"
 #include <QtCore/QEvent>
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/QTimer>

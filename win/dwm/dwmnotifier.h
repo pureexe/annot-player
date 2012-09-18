@@ -14,7 +14,7 @@
 // - WindowNotifier -
 
 // Invisible background window.
-// Inherit QWidget to access protected \fn winEvent.
+// Inherit QWidget to access protected winEvent.
 class DwmWindowNotifier : public QWidget
 {
   //Q_OBJECT // Q_OBJECT is not required

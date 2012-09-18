@@ -79,7 +79,7 @@ DynamicOcnTranslator::translate(const QString &text, const QString &to, const QS
   DOUT("update auth key");
   reply_ = networkAccessManager()->get(QNetworkRequest(QUrl(OCN_AUTH_API)));
 
-  auto p = QtExt::PublicNetworkReply::fromReply(reply_);
+  auto p = QxPublicNetworkReply::fromReply(reply_);
   p->setAttribute(RequestTextAttribute, text);
   p->setAttribute(RequestToAttribute, to);
   if (!from.isEmpty())

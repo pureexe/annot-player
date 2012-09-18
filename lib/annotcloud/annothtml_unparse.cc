@@ -8,7 +8,7 @@
 #include <QtWebKit/QWebPage>
 
 //#define DEBUG "annothtmlunparse"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 QString
 AnnotCloud::

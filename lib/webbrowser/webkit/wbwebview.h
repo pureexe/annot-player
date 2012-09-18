@@ -4,11 +4,11 @@
 // webkit/wbwebview.h
 // 1/27/2012
 
-#include "lib/qtext/webview.h"
+#include "qtx/qxwebview.h"
 
 class SearchEngine;
 
-typedef QtExt::WebView WbWebViewBase;
+typedef QxWebView WbWebViewBase;
 class WbWebView : public WbWebViewBase
 {
   Q_OBJECT

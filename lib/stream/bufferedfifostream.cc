@@ -6,7 +6,7 @@
 #include <QtCore/QFile>
 
 //#define DEBUG "bufferedfifostream"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 void
 BufferedFifoStream::finish()

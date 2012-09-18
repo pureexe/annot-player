@@ -6,7 +6,7 @@
 
 #include <QtGui/QTextBrowser>
 
-namespace QtExt { class TextHighlighter; }
+class QxTextHighlighter;
 
 class TranslateBrowser : public QTextBrowser
 {
@@ -16,7 +16,7 @@ class TranslateBrowser : public QTextBrowser
   typedef QTextBrowser Base;
 
   QString selectedText_;
-  QtExt::TextHighlighter *highlighter_;
+  QxTextHighlighter *highlighter_;
 
   QAction *translateAct_,
           *clearAct_;

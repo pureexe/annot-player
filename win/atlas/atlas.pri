@@ -3,7 +3,6 @@
 
 DEFINES += WITH_WIN_ATLAS
 
-INCLUDEPATH     += $$PWD/..
 DEPENDPATH      += $$PWD
 
 HEADERS += \

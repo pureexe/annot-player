@@ -9,7 +9,7 @@
 #include <QtNetwork/QNetworkRequest>
 
 #define DEBUG "nicoutil"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 namespace { namespace detail {
 

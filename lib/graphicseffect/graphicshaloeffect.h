@@ -3,7 +3,7 @@
 
 // graphicshaloeffect.h
 // 5/3/2012
-// See: gui/effects/qgraphicseffect.h
+// See: qt/src/gui/effects/qgraphicseffect.h
 
 #include <QtGui/QGraphicsEffect>
 

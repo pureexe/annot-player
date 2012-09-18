@@ -5,7 +5,7 @@
 #include <QtCore>
 
 #define DEBUG "textcodecmanager"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Construction -
 

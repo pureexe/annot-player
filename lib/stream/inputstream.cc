@@ -5,7 +5,7 @@
 #include <QtCore/QFile>
 
 #define DEBUG "inputstream"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 QByteArray
 InputStream::readAll()

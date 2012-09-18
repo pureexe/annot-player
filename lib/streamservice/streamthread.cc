@@ -12,7 +12,7 @@
 #include <string>
 
 #define DEBUG "streamthread"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 // - Live555 -
 

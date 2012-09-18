@@ -6,7 +6,6 @@ VERSION = 0.1.0.0
 DEFINES += SRC_TESTER
 
 include(../../config.pri)
-include($$ROOTDIR/lib/debug/debug.pri)
 include($$ROOTDIR/lib/download/download.pri)
 
 ## Libraries

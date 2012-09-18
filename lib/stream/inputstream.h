@@ -4,7 +4,7 @@
 // inputstream.h
 // 2/9/2012
 
-#include "lib/qtext/bitwise.h"
+#include "qtx/qxbitwise.h"
 #include <QtCore/QList>
 #include <QtCore/QString>
 
@@ -39,7 +39,7 @@ public:
   ///  Warning: default implementation will change the pos().
   virtual bool writeFile(const QString &path);
 
-  // - Bitwise -
+  // - QxBitwise -
 public:
 
   qint64 read(quint8 *data, qint64 count)
@@ -62,7 +62,7 @@ public:
       *ok = read(x, 2) == 2;
     else
       read(x, 2);
-    return Bitwise::BigEndian::toUInt16(x);
+    return QxBitwise::BigEndian::toUInt16(x);
   }
 
   quint32 readUInt24(bool *ok = nullptr)
@@ -72,7 +72,7 @@ public:
       *ok = read(x + 1, 3) == 3;
     else
       read(x + 1, 3);
-    return Bitwise::BigEndian::toUInt32(x);
+    return QxBitwise::BigEndian::toUInt32(x);
   }
 
   quint32
@@ -83,7 +83,7 @@ public:
       *ok = read(x, 4) == 4;
     else
       read(x, 4);
-    return Bitwise::BigEndian::toUInt32(x);
+    return QxBitwise::BigEndian::toUInt32(x);
   }
 
   quint64 readUInt64(bool *ok = nullptr)
@@ -93,7 +93,7 @@ public:
       *ok = read(x, 8) == 8;
     else
       read(x, 8);
-    return Bitwise::BigEndian::toUInt64(x);
+    return QxBitwise::BigEndian::toUInt64(x);
   }
 
   float readFloat(bool *ok = nullptr)
@@ -104,7 +104,7 @@ public:
       *ok = read(x, size) == size;
     else
       read(x, size);
-    return Bitwise::BigEndian::toFloat(x);
+    return QxBitwise::BigEndian::toFloat(x);
   }
 
   double readDouble(bool *ok = nullptr)
@@ -115,7 +115,7 @@ public:
       *ok = read(x, size) == size;
     else
       read(x, size);
-    return Bitwise::BigEndian::toDouble(x);
+    return QxBitwise::BigEndian::toDouble(x);
   }
 };
 

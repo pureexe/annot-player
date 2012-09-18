@@ -3,10 +3,8 @@
 
 DEFINES += WITH_WIN_TEXTHOOK
 
-INCLUDEPATH += \
-    $$PWD
-DEPENDPATH += \
-    $$PWD \
+INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
 
 QT      += core
 LIBS    += -ltexthook

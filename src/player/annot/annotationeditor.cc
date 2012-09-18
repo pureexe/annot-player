@@ -8,9 +8,9 @@
 #include "src/common/acui.h"
 #include "lib/annotcloud/annottag.h"
 #include "lib/annotcloud/annothtml.h"
-#include "lib/qtext/toolbutton.h"
-#include "lib/qtext/combobox.h"
-#include "lib/qtext/fontcombobox.h"
+#include "qtx/qxtoolbutton.h"
+#include "qtx/qxcombobox.h"
+#include "qtx/qxfontcombobox.h"
 #include <QtGui>
 #include <boost/tuple/tuple.hpp>
 
@@ -21,7 +21,7 @@
 #endif // Q_OS_MAC
 
 //#define DEBUG "annotationeditor"
-#include "lib/debug/debug.h"
+#include "qtx/qxdebug.h"
 
 #define WINDOW_FLAGS ( \
   Qt::Dialog | \
@@ -95,7 +95,7 @@ AnnotationEditor::createRibons()
   AcUi *ui = AcUi::globalInstance();
 
 #define MAKE_CHECKABLE_BUTTON(_button, _ss, _title, _tip, _slot) \
-  _button = new QtExt::ToolButton; { \
+  _button = new QxToolButton; { \
     _button->setStyleSheet(_ss); \
     _button->setToolButtonStyle(Qt::ToolButtonTextOnly); \
     _button->setText(_title); \
@@ -190,14 +190,14 @@ AnnotationEditor::createRibons()
   }
 
   // - colorButton_
-  colorButton_ = new QtExt::ToolButton; {
+  colorButton_ = new QxToolButton; {
     colorButton_->setStyleSheet(SS_TRANSPARENT);
     colorButton_->setToolTip(TR(T_FOREGROUNDCOLOR));
   }
   connect(colorButton_, SIGNAL(clicked()), SLOT(showColorDialog()));
 
   // - backgroundColorButton_
-  backgroundColorButton_ = new QtExt::ToolButton; {
+  backgroundColorButton_ = new QxToolButton; {
     backgroundColorButton_->setStyleSheet(SS_TRANSPARENT);
     backgroundColorButton_->setToolTip(TR(T_BACKGROUNDCOLOR));
   }
@@ -215,7 +215,7 @@ AnnotationEditor::createRibons()
   } connect(alignComboBox_, SIGNAL(activated(int)), SLOT(setAlignment(int)));
 
   // - fontComboBox_
-  fontComboBox_ = new QtExt::FontComboBox; {
+  fontComboBox_ = new QxFontComboBox; {
     fontComboBox_->setStyleSheet(ACSS_COMBOBOX);
     //fontComboBox_->setEditable(true);
     fontComboBox_->setFixedWidth(FONTCOMBOBOX_WIDTH);
