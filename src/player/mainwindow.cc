@@ -5540,7 +5540,7 @@ MainWindow::setToken(const QString &input, bool async)
     if (hwnd && QtWin::getWindowProcessId(hwnd) != QCoreApplication::applicationPid()) {
       QString t = QtWin::getWindowText(hwnd).trimmed();
       if (!t.isEmpty()) {
-        //t = TextCodecManager::globalInstance()->transcode(t);
+        t = TextCodecManager::globalInstance()->transcode(t);
         DOUT("galgame window title =" << t);
         media.setTitle(t);
 

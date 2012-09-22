@@ -8,6 +8,7 @@ SUBDIRS = \
     browser \
     downloader \
     player \
+    #reader \
     translator
 #   tester
 

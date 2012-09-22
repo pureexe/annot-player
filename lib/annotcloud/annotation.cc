@@ -62,11 +62,10 @@ Annotation::hash(const QList<QByteArray> &l)
   qint64 h;
   if (l.isEmpty())
     h = hash(QByteArray());
-  else for (int i = 0; i < l.size(); i++)
-    if (i == 0)
-      h = hash(l.first());
-    else
-      h = rehash(l[i], h);
+  else
+    for (int i = 0; i < l.size(); i++)
+      h = i ? rehash(l[i], h)
+            : hash(l.first());
   return h;
 }
 

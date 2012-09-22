@@ -2,8 +2,12 @@ ChangeLog (UTF-8)
 Annot Stream
 Since 6/18/2011
 
-9/?/2012 ?	annot-player	0.1.9.8
+10/?/2012 ?	annot-player	0.1.10
+        * ?
+
+9/21/2012 FRI	annot-player	0.1.9.8
         * Add basic EDICT dictionary support.
+        * Qt updated.
 
 9/9/2012 SUN	annot-player	0.1.9.7
         * Click to translate any word (parsed by MeCab) in displayed galgame text.

@@ -8,8 +8,30 @@ http://qt-project.org/wiki/Category:Add-ons
 windows 7: rebuild all binaries (dll&exe)
 annot-*.exe
 texthook.dll, mousehook.dll, picker.dll
-remove old dict/*.txt
-rename table/*.txt
+server/beans.xml player-win-0.1.0
+
+0.1.10
+
+alpha/reader with Qt5 & QtQuick2
+See:
+http://qt-project.org/videos/watch/whats-new-in-qtquick-2.0
+http://doc-snapshot.qt-project.org/4.8/qml-tutorial.html
+http://qt-project.org/doc/qt-4.8/qtquick.html
+
+This would be the last stable version using Qt4. I plan to rewrite the app from scratch using Qt5/QtQuick2, and try to make everything customizable by users using qml+css3+javascript to control the GUI, to render subtitles, to manipulate game texts, to access Internet translators, and etc. All these settings will be saved online and shared with others. Any suggestions or requests are welcomed!
+
+- integrate typeof
+
+learn QML/QtQuick2, utilize CSS3 extensively for rendering app
+- See: http://doc-snapshot.qt-project.org/4.8/qml-tutorial.html
+- able to change subtitle display
+
+- start 0.1.10 [ Reader ] (alpha)
+  - only have display translator function
+    - without submit to internet
+
+
+# EOF
 
 # key ideas
 - stream trial games, and sub trial games in chinese
@@ -40,6 +62,7 @@ work on streaming
   http://www.codeproject.com/Articles/43586/File-System-Filter-Driver-Tutorial
   - in the future, use acipc to bypass license issue
 
+
 ########
 
 xwiki, and add manual/blog
@@ -50,9 +73,8 @@ work on SNS system
   -keep track of all modifications to subtitle
   - onlly allow invited person to annotate
 
-# 0.1.9.8
 
-- mac fixme: translator's dicpath in mecabetc is not recognized
+# 0.1.10
 
 - mac: search engine
   - redesign searchengine mechanism, using a global search engine pool
@@ -62,16 +84,6 @@ work on SNS system
   - library view and others, redesign
   - copy title / location, search title
 
-- windows 7
-  - mklink change doc frmo qtext to webkit
-  - mklink qtext=>qtx
-  - update qt src position
-  - rename edict2u.txt to edictu
-  - remove "txt" on textcodec/table
-
-- winxp: fixme: crash on exit
-
-# 0.1.10
 
 split game & video exe
 redesign gui
@@ -622,8 +634,6 @@ http://cmusphinx.sourceforge.net/wiki/download/
   - FIXME: download from youtube.com: error 202
   - able to login to youtube
      example: shikabanehime @ funimation
-
-# EOF
 
 ##
 # implement SNS in server first

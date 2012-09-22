@@ -54,17 +54,15 @@ Application::createDirectories()
   if (!d.exists())
     d.mkpath(d.absolutePath());
 
-  d = QDir(G_PATH_LOCK);
-  if (!d.exists())
-    d.mkpath(d.absolutePath());
-
-  d = QDir(G_PATH_CACHES);
-  if (!d.exists())
-    d.mkpath(d.absolutePath());
-
   d = QDir(G_PATH_LOGS);
   if (!d.exists())
     d.mkpath(d.absolutePath());
+
+#ifdef Q_OS_LINUX
+  d = QDir(G_PATH_LOCK);
+  if (!d.exists())
+    d.mkpath(d.absolutePath());
+#endif // Q_OS_LINUX
 }
 
 // - Properties -

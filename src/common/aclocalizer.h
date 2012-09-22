@@ -23,6 +23,9 @@ public:
   static QString playerLocation();
   static QString playerLocalizedLocation();
 
+  static QString readerLocation();
+  static QString readerLocalizedLocation();
+
   static QString browserLocation();
   static QString browserLocalizedLocation();
 

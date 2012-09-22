@@ -160,7 +160,7 @@ Mp4Box::muxMp4File(const QString &mp4, const QStringList &tracks,
 
   bool ret = !err && QFile::exists(outputFile);
   if (ret && info) {
-    QPair<int, int> dim = Mp4Codec::fileDimension(outputFile);
+    auto dim = Mp4Codec::fileDimension(outputFile);
     info->width = dim.first;
     info->height = dim.second;
   }

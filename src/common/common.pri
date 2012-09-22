@@ -29,6 +29,7 @@ HEADERS += \
     $$PWD/acpreferences.h \
     $$PWD/acpreferencestab.h \
     $$PWD/acprotocol.h \
+    $$PWD/acreader.h \
     $$PWD/acrc.h \
     $$PWD/acsettings.h \
     $$PWD/acss.h \
@@ -68,6 +69,7 @@ SOURCES += \
     $$PWD/acnetworkproxyprefs_p.cc \
     $$PWD/acsettings.cc \
     $$PWD/acslider.cc \
+    $$PWD/acreader.cc \
     $$PWD/actabview.cc \
     $$PWD/actextedit.cc \
     $$PWD/actextview.cc \

@@ -5,7 +5,7 @@ INCLUDEPATH += $$PWD
 
 TEMPLATE = subdirs
 SUBDIRS = \
-    player \
+    reader \
     translator 
     #browser \
     #downloader \

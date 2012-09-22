@@ -6,6 +6,7 @@ SUBDIRS = \
     browser \
     downloader \
     player \
+    reader \
     translator \
     updater
 

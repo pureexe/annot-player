@@ -93,7 +93,7 @@ Downloader::get(const QUrl &url, const QString &header, bool async, int retries)
 
   QNetworkRequest request(url);
   if (!header.isEmpty()) {
-    QHash<QString, QString> h = parseHttpHeader(header);
+    auto h = parseHttpHeader(header);
     for (auto p = h.constBegin(); p != h.constEnd(); ++p)
       request.setRawHeader(p.key().toAscii(), p.value().toAscii());
   }
@@ -138,7 +138,7 @@ Downloader::post(const QUrl &url, const QByteArray &data, const QString &header,
 
   QNetworkRequest request(url);
   if (!header.isEmpty()) {
-    QHash<QString, QString> h = parseHttpHeader(header);
+    auto h = parseHttpHeader(header);
     for (auto p = h.constBegin(); p != h.constEnd(); ++p)
       request.setRawHeader(p.key().toAscii(), p.value().toAscii());
   }

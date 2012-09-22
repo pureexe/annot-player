@@ -9,12 +9,14 @@
 // SOAP imode and omode, enforcing UTF-8, and gzip compression
 #define CLOUD_SERVICE_SOAP_MODE     (SOAP_C_UTFSTRING | SOAP_ENC_ZLIB)
 
+#define AC_VERSION  "0.1.0" // 0.1.x
+
 #ifdef Q_OS_WIN
-# define APP_VERSION "player" "-" "win" "-" VERSION
+# define APP_VERSION "player" "-" "win" "-" AC_VERSION
 #elif defined(Q_OS_MAC)
-# define APP_VERSION "player" "-" "mac" "-" VERSION
+# define APP_VERSION "player" "-" "mac" "-" AC_VERSION
 #else
-# define APP_VERSION "player" "-" "linux" "-" VERSION
+# define APP_VERSION "player" "-" "linux" "-" AC_VERSION
 #endif // Q_OS_
 
 #endif // CLOUTSERVICE_CONFIG_H

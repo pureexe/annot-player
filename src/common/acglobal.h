@@ -20,20 +20,23 @@
 
 #define AC_UPDATER_ID    1
 #define AC_PLAYER_ID     2
-#define AC_DOWNLOADER_ID 3
-#define AC_BROWSER_ID    4
-#define AC_TRANSLATOR_ID 5
+#define AC_READER_ID     3
+#define AC_DOWNLOADER_ID 4
+#define AC_BROWSER_ID    5
+#define AC_TRANSLATOR_ID 6
 
 #ifdef Q_OS_MAC
 # define AC_BROWSER    "Annot Browser"
 # define AC_DOWNLOADER "Annot Downloader"
 # define AC_PLAYER     "Annot Player"
+# define AC_READER     "Annot Reader"
 # define AC_TRANSLATOR "Annot Translator"
 # define AC_UPDATER    "Annot Updater"
 #else
 # define AC_BROWSER    "annot-browser"
 # define AC_DOWNLOADER "annot-down"
 # define AC_PLAYER     "annot-player"
+# define AC_READER     "annot-reader"
 # define AC_TRANSLATOR "annot-dict"
 # define AC_UPDATER    "annot-update"
 #endif // Q_OS_MAC

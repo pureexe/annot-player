@@ -4,7 +4,7 @@
 DEFINES += SRC_PLAYER
 
 VERSION_MAJOR = 0.1.9.
-VERSION_MINOR = 7
+VERSION_MINOR = 8
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
 
@@ -59,7 +59,6 @@ win32 {
     include($$ROOTDIR/win/mousehook/mousehook.pri)
     include($$ROOTDIR/win/picker/picker.pri)
     include($$ROOTDIR/win/reg/reg.pri)
-    include($$ROOTDIR/win/texthook/texthook.pri)
     include($$ROOTDIR/win/texthook/texthook.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
     include($$ROOTDIR/win/qtwinnt/qtwinnt.pri)

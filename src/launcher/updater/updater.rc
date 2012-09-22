@@ -1,5 +1,5 @@
 /*
- * app.rc 7/20/2011
+ * updater.rc 7/20/2011
  */
 #if defined(UNDER_CE)
 # include <winbase.h>

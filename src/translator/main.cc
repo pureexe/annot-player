@@ -67,9 +67,9 @@ main(int argc, char *argv[])
 
   // Applications
   Application a(argc, argv);
-#ifdef Q_OS_WIN
+//#ifdef Q_OS_WIN
   QDir::setCurrent(QCoreApplication::applicationDirPath());
-#endif // Q_OS_WIN
+//#endif // Q_OS_WIN
   a.loadTranslations();
 
   if (!a.isSingleInstance()) {

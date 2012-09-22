@@ -27,6 +27,14 @@ AcLocalizer::playerLocalizedLocation()
 { return "../[ " + tr("Play") + " ].exe"; }
 
 QString
+AcLocalizer::readerLocation()
+{ return "../[ Read ].exe"; }
+
+QString
+AcLocalizer::readerLocalizedLocation()
+{ return "../[ " + tr("Read") + " ].exe"; }
+
+QString
 AcLocalizer::browserLocation()
 { return "../[ Browse ].exe"; }
 
@@ -126,6 +134,15 @@ AcLocalizer::updateLocations()
 
     x = playerLocation();
     y = playerLocalizedLocation();
+    if (x != y) {
+      if (!QFile::exists(y))
+        QFile::copy(x, y);
+      QtWin::setFileAttributes(x, QtWin::HiddenAttribute);
+    }
+    QtWin::removeFileAttributes(y);
+
+    x = readerLocation();
+    y = readerLocalizedLocation();
     if (x != y) {
       if (!QFile::exists(y))
         QFile::copy(x, y);

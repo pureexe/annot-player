@@ -91,7 +91,6 @@ AcApplication::isSingleInstance() const
   QString processName = fi.fileName();
   QList<ulong> pids = QtWin::getProcessIdsByName(processName);
   return pids.size() <= 1;
-  return true;
 #elif defined(Q_OS_LINUX)
   // See: http://www.linuxquestions.org/questions/programming-9/restricting-multiple-instance-of-a-program-242069/
   static int fd_lock = -1;

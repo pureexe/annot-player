@@ -8,6 +8,7 @@ SUBDIRS = \
     browser \
     downloader \
     player \
+    #reader \
     translator
 #   tester
 
@@ -24,7 +25,6 @@ OTHER_FILES += \
     deploy-fedora.sh \
     deploy-mac.sh \
     deploy-win.cmd \
-    deploy-win-delta.cmd \
-    deploy-win-update.cmd
+    deploy-win-update.cmd 
 
 # EOF

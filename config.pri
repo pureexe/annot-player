@@ -93,8 +93,8 @@ DEFINES += \
 ## External libraries
 
 win32 {
-    #DEV_HOME            = c:/dev
-    DEV_HOME            = B:/Developer
+    DEV_HOME            = c:/dev
+    #DEV_HOME            = B:/Developer
     QT_HOME             = c:/qt/current
     QT_SRC              = c:/qt
     #VLC_HOME            = "c:/Program Files/VideoLAN/VLC/sdk"
