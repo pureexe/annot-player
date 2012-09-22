@@ -527,7 +527,7 @@ main(int argc, char *argv[])
 
   //::dlpost("http://www.excite.co.jp/world/english", QUrl("http://honyaku.yahoo.co.jp/transtext"), data.toLocal8Bit());
 
-  w.show();
+  //w.show();
   DOUT("exit: exec");
   return a.exec();
 }

@@ -308,7 +308,6 @@ MainWindow::setupWindowStyle()
   setWindowOpacity(AC_WINDOW_OPACITY);
 }
 
-
 void
 MainWindow::launch(const QStringList &args)
 {
@@ -328,6 +327,7 @@ MainWindow::launch(const QStringList &args)
 
   if (showLibrary)
     showMainLibrary();
+  DOUT("show");
   show();
 
   // Automatic login
@@ -2824,10 +2824,13 @@ MainWindow::updatePlayerMode()
     embeddedPlayer_->hide();
     miniPlayer_->hide();
     mainPlayer_->show();
-    if (hub_->isNormalWindowMode())
+    if (hub_->isNormalWindowMode()) {
+      DOUT("showNormal");
       showNormal();
-    else
+    } else {
+      DOUT("show");
       show();
+    }
     break;
 
   case SignalHub::MiniPlayerMode:
@@ -2836,17 +2839,19 @@ MainWindow::updatePlayerMode()
     embeddedPlayer_->hide();
     miniPlayer_->show();
     if (!annotationView_->trackedWindow()) {
-      if (hub_->isNormalWindowMode())
+      if (hub_->isNormalWindowMode()) {
+        DOUT("showNormal");
         showNormal();
-      else
+      } else {
+        DOUT("show");
         show();
+      }
     }
     break;
 
   case SignalHub::EmbeddedPlayerMode:
     //setVisible(m);
-    if (annotationView_->trackedWindow() ||
-        hub_->isLiveTokenMode() && hub_->isFullScreenWindowMode())
+    if (annotationView_->trackedWindow())
       hide();
     mainPlayer_->hide();
     miniPlayer_->hide();
@@ -2880,6 +2885,7 @@ MainWindow::updateWindowMode()
 
     switch (hub_->tokenMode()) {
     case SignalHub::MediaTokenMode:
+      DOUT("showFullScreen");
       showFullScreen();
       if (hub_->isNormalPlayerMode())
         hub_->setEmbeddedPlayerMode();
@@ -2905,10 +2911,13 @@ MainWindow::updateWindowMode()
       if (!hub_->isMediaTokenMode() ||
           !player_->isPlaying())
         hub_->setNormalPlayerMode();
-      else if (hub_->isNormalWindowMode())
+      else if (hub_->isNormalWindowMode()) {
+        DOUT("showNormal");
         showNormal();
-      else
+      } else {
+        DOUT("show");
         show();
+      }
 
       QSize sz = size();
       QSize screen = QApplication::desktop()->availableGeometry(this).size();
@@ -3686,10 +3695,13 @@ MainWindow::openMrl(const QString &input, bool checkPath)
   disableNavigation();
 
   if (!annotationView_->trackedWindow()) {
-    if (!isVisible())
+    if (!isVisible()) {
+      DOUT("show");
       show();
-    if (isMinimized())
+    } if (isMinimized()) {
+      DOUT("showNormal");
       showNormal();
+    }
   }
 
   bool fullScreen = hub_->isLiveTokenMode() && hub_->isEmbeddedPlayerMode();
@@ -6274,7 +6286,7 @@ MainWindow::event(QEvent *e)
 void
 MainWindow::setVisible(bool visible)
 {
-  //DOUT("enter: visible =" << visible);
+  DOUT("enter: visible =" << visible);
   //if (visible == isVisible())
   //  return;
   if (!isMinimized() && !isFullScreen()) { // invoked by showNormal or showMaximized
@@ -6304,7 +6316,7 @@ MainWindow::setVisible(bool visible)
   }
   QTimer::singleShot(0, osdWindow_, SLOT(raise()));
   Base::setVisible(visible);
-  //DOUT("exit");
+  DOUT("exit: visible =" << isVisible());
 }
 
 void
@@ -7874,6 +7886,7 @@ void
 MainWindow::maximizedToFullScreen()
 {
   if (isMaximized()) {
+    DOUT("showFullScreen");
     showFullScreen();
     QTimer::singleShot(0, hub_, SLOT(setFullScreenWindowMode()));
   }
@@ -8025,7 +8038,7 @@ MainWindow::dispose()
 void
 MainWindow::closeEvent(QCloseEvent *event)
 {
-  DOUT("enter: disposed =" << disposed_);
+  DOUT("enter: disposed =" << disposed_ << ", visible =" << isVisible());
 
   if (!disposed_) {
     disposed_ = true;
@@ -8107,10 +8120,13 @@ MainWindow::setWindowOnTop(bool t)
     AcUi::globalInstance()->setDwmEnabled(true);
 #endif // WITH_WIN_DWM
     if (visible) {
-      if (hub_->isFullScreenWindowMode())
+      if (hub_->isFullScreenWindowMode()) {
+        DOUT("showFullScreen");
         showFullScreen();
-      else
+      } else {
+        DOUT("show");
         show();
+      }
     }
 
 //#ifdef Q_OS_MAC
