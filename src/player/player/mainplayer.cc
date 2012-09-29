@@ -18,6 +18,7 @@ MainPlayerUi::MainPlayerUi(SignalHub *hub, Player *player, AnnotationServerAgent
   setContentsMargins(0, 0, 0, 0);
   createLayout();
   setTabOrder(inputComboBox(), prefixComboBox());
+  setAcceptDrops(true);
 }
 
 void
@@ -88,5 +89,12 @@ MainPlayerUi::createLayout()
     SS_END
   );
 }
+
+// - Events -
+
+void MainPlayerUi::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
+void MainPlayerUi::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
+void MainPlayerUi::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
+void MainPlayerUi::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
 
 // EOF

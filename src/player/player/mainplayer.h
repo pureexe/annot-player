@@ -31,6 +31,18 @@ class MainPlayerUi : public PlayerUi
 public:
   explicit MainPlayerUi(SignalHub *hub, Player *player, AnnotationServerAgent *server, QWidget *parent = nullptr);
 
+signals:
+  void dragEnterEventReceived(QDragEnterEvent *event);
+  void dragMoveEventReceived(QDragMoveEvent *event);
+  void dragLeaveEventReceived(QDragLeaveEvent *event);
+  void dropEventReceived(QDropEvent *event);
+
+protected:
+  void dragEnterEvent(QDragEnterEvent *event) override;
+  void dragMoveEvent(QDragMoveEvent *event) override;
+  void dragLeaveEvent(QDragLeaveEvent *event) override;
+  void dropEvent(QDropEvent *event) override;
+
 private:
   void createLayout();
 };

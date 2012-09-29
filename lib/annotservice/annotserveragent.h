@@ -87,6 +87,7 @@ public slots:
   void reportSoapError(int err); ///< \internal
 
   bool isSoftwareUpdated();
+  static QString version();
 
   // - User -
 public:

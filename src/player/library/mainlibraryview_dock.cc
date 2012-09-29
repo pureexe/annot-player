@@ -26,6 +26,7 @@ MainLibraryDock::contextMenuEvent(QContextMenuEvent *event)
     Base::contextMenuEvent(event);
 }
 
+
 //void
 //MainLibraryDock::setVisible(bool visible)
 //{

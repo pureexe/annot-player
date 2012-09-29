@@ -95,8 +95,10 @@ DEFINES += \
 win32 {
     DEV_HOME            = c:/dev
     #DEV_HOME            = B:/Developer
-    QT_HOME             = c:/qt/current
+    QT_HOME             = c:/qt/qt4
     QT_SRC              = c:/qt
+    QT5_HOME            = c:/qt/qt5
+    QT5_SRC             = c:/qt
     #VLC_HOME            = "c:/Program Files/VideoLAN/VLC/sdk"
     VLC_HOME            = $$DEV_HOME/vlc
     VLC_SRC             = $$VLC_HOME/src
@@ -163,10 +165,10 @@ mac {
     SDK_HOME            = /Developer/SDKs/MacOSX10.7.sdk
     X11_HOME            = $$SDK_HOME/usr/X11
     MACPORTS_HOME       = /opt/local
-    #QT_HOME             = /opt/local/share/qt4
     QT_HOME             = ${HOME}/opt/qt
-    #QT_SRC              = /Developer/QtSDK/QtSources/4.7.4/src
     QT_SRC              = ${HOME}/opt/src
+    QT5_HOME            = ${HOME}/opt/qt5
+    QT5_SRC             = ${HOME}/opt/src
     #VLC_HOME            = ${HOME}/opt/vlc
     VLC_HOME            = /Applications/VLC.app/Contents/MacOS
     VLC_SRC             = ${HOME}/opt/src
@@ -191,6 +193,7 @@ mac {
 }
 
 INCLUDEPATH     += $$QT_SRC/qt/src
+#INCLUDEPATH     += $$QT5_SRC/qt/src
 
 INCLUDEPATH     += $$VLC_HOME/include
 INCLUDEPATH     += $$VLC_HOME/include/vlc/plugins

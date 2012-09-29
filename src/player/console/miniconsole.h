@@ -59,6 +59,7 @@ public slots:
 
 protected:
   qreal opacity() const;
+
 protected slots:
   void setOpacity(qreal value);
 

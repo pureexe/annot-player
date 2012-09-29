@@ -2,8 +2,15 @@ ChangeLog (UTF-8)
 Annot Stream
 Since 6/18/2011
 
-10/?/2012 ?	annot-player	0.1.10
-        * ?
+9/28/2012 FRI
+        * Fixed resolving video from acfun.
+          修正了A站弹幕和动画的解析。
+
+9/23/2012 SUN
+        * Fixed resolving video from bilibili.
+          修正了B站动画的解析。
+        * Fixed a bug that prevent drop-and-open.
+          修正了无法通过拖动来播放动画的bug。
 
 9/21/2012 FRI	annot-player	0.1.9.8
         * Add basic EDICT dictionary support.

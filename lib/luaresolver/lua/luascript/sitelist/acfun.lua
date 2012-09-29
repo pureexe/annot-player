@@ -46,6 +46,13 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 	local str_title_line = readIntoUntilFromUTF8(file, str_line, "</title>");
 	local str_title = getMedText(str_title_line, "<title>", "</title>");
 
+	local str_vid_line = readUntilFromUTF8(file, "[Video]");
+	local str_vid_line = readIntoUntilFromUTF8(file, str_vid_line, "[/Video]");
+	local str_vid = getMedText(str_vid_line, "[Video]", "[/Video]");
+	if str_vid==nil then
+        return
+    end
+
 	--readin vice descriptor
 	--readUntil(file, "主页</a>");
 	--readUntilFromUTF8(file, "</div><!--Tool -->");
@@ -53,24 +60,25 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 	str_line = "";
 	local str_tmp_vd = "";
 	--while str_line~=nil and string.find(str_line, "</tr>")==nil
-	while str_line~=nil and string.find(str_line, "结束")==nil
-	do
-		str_line = file:read("*l");
-		str_line = utf8_to_lua(str_line);
-		--dbgMessage(str_line);
-		--if str_line~=nil and string.find(str_line, "<option value='")~=nil
-		if str_line~=nil and string.find(str_line, "<a class=\"")~=nil
-		then
-			--dbgMessage("pager article");
-			--if str_tmp_vd=="" or string.find(str_line, "selected>")~=nil
-			if str_tmp_vd=="" or string.find(str_line, "pager-active")~=nil
-			then
-				--dbgMessage("pager active");
-				--str_tmp_vd = getMedText(str_line, ">", "</option>");
-				str_tmp_vd = getMedText(str_line, "\">", "</a>");
-			end
-		end
-	end
+    -- jichi 9/23/2012: remove useless str_tmp_vd
+	--while str_line~=nil and string.find(str_line, "结束")==nil
+	--do
+	--	str_line = file:read("*l");
+	--	str_line = utf8_to_lua(str_line);
+	--	--dbgMessage(str_line);
+	--	--if str_line~=nil and string.find(str_line, "<option value='")~=nil
+	--	if str_line~=nil and string.find(str_line, "<a class=\"")~=nil
+	--	then
+	--		--dbgMessage("pager article");
+	--		--if str_tmp_vd=="" or string.find(str_line, "selected>")~=nil
+	--		if str_tmp_vd=="" or string.find(str_line, "pager-active")~=nil
+	--		then
+	--			--dbgMessage("pager active");
+	--			--str_tmp_vd = getMedText(str_line, ">", "</option>");
+	--			str_tmp_vd = getMedText(str_line, "\">", "</a>");
+	--		end
+	--	end
+	--end
 	--save descriptor
 	local str_descriptor = "";
     -- jichi 2/3/2012: remove str_tmp_vd from title
@@ -87,16 +95,17 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 
 	--find embed flash
     --str_line = readUntilFromUTF8(file, "<embed ");
-	str_line = readUntilFromUTF8(file, "<div id=\"area-player\"");
-    local str_embed = readIntoUntilFromUTF8(file, str_line, "</div>");--"</td>");--"</embed>");
+	str_line = ""; --readUntilFromUTF8(file, "<div id=\"area-player\"");
+    local str_embed = ""; --readIntoUntilFromUTF8(file, str_line, "</div>");--"</td>");--"</embed>");
     --g_debug[1]=str_embed;
 	print(str_embed);
+
 	if str_embed==nil then
 		if pDlg~=nil then
 			sShowMessage(pDlg, "没有找到嵌入的flash播放器");
 		end
-		io.close(file);
-		return;
+		--io.close(file);
+		--return;
 	end
 
 	local b_isArtemis = 0;
@@ -181,6 +190,21 @@ function getTaskAttribute_acfun ( str_url, str_tmpfile ,str_servername, pDlg, bS
 
     --read id ok.close file
 	io.close(file);
+
+    local str_vid_url = "http://www.acfun.tv/api/getVideoByID.aspx?vid=" .. str_vid;
+	re = dlFile(str_tmpfile, str_vid_url);
+	if re~=0 then
+        return;
+    end
+	file = io.open(str_tmpfile, "r");
+	if file==nil then
+        return;
+    end
+	local str_cid_line = readUntilFromUTF8(file, "\"cid\":\"");
+	local str_cid_line = readIntoUntilFromUTF8(file, str_cid_line, "\"");
+	local str_cid = getMedText(str_cid_line, "\"cid\":\"", "\"");
+	io.close(file);
+    str_id=str_cid;
 
 	if str_id == ""
 	then

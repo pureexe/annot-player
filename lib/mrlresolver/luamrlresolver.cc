@@ -275,8 +275,7 @@ LuaMrlResolver::formatTitle(const QString &title)
     .remove(QRegExp("..ニコニコ動画\\(原宿\\)$"))
     .remove(QRegExp("..ニコニコ動画:Zero$"))
     .remove(QRegExp(" - 嗶哩嗶哩 - .*"))
-    .remove(QRegExp(" - Acfun - .*"))
-    .remove(QRegExp(" - AcFun.tv$"))
+    .remove(QRegExp(" - AcFun.*"))
      // Youku
 #ifdef _MSC_VER
     .remove(QRegExp(" - \xe7\x94\xb5\xe8\xa7\x86\xe5\x89\xa7 - .*"))

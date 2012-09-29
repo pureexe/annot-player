@@ -372,6 +372,71 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 	return index, tbl_urls, tbl_durations;
 end
 
+-- jichi 9/23/2012
+-- See: BilibiliInterfaceParser.cs
+function getRealUrls_bilibili (str_id, str_tmpfile, pDlg)
+	local tbl_urls = {};
+	local tbl_durations = {};
+	local index = 0;
+
+	local str_dynurl = "http://interface.bilibili.tv/playurl?cid="..str_id;
+	if pDlg~=nil then
+		sShowMessage(pDlg, '正在读取转接页面..');
+	end
+	--str_tmpfile = "C:\\tempacfun.html";
+	--dbgMessage(str_tmpfile);
+	--dbgMessage(str_dynurl);
+    --
+	local re = dlFile(str_tmpfile, str_dynurl);
+	--dbgMessage("dl dynurl end.");
+	if re~=0
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return index, tbl_urls, tbl_durations;
+	else
+		if pDlg~=nil then
+			sShowMessage(pDlg, '读取转接页面成功，正在分析..');
+		end
+	end
+
+	local file = io.open(str_tmpfile, "r");
+	if file==nil
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return;
+	end
+
+	local str_line = "";
+	while str_line~=nil
+	do
+		str_line = readUntil(file, "<length>");
+		str_line = readIntoUntil(file, str_line, "</length>");
+		if str_line~=nil and string.find(str_line, "<length>")~=nil
+		then
+			local str_index = string.format("%d",index);
+			tbl_durations[str_index] = getMedText(str_line, "<length>", "</length>");
+			print(tbl_durations[str_index]);
+			--index = index+1;
+		end
+		str_line = readUntil(file, "<url>");
+		str_line = readIntoUntil(file, str_line, "</url>");
+		if str_line~=nil and string.find(str_line, "<url>")~=nil
+		then
+			local str_index = string.format("%d",index);
+            -- jichi 6/10/2012: escape \\ is not required in lua 5.2
+			--tbl_urls[str_index] = getMedText(str_line, "<url><!\[CDATA\[", "\]\]></url>");
+			tbl_urls[str_index] = getMedText(str_line, "<url><![CDATA[", "]]></url>");
+			print(tbl_urls[str_index]);
+			index = index+1;
+		end
+	end
+	io.close(file);
+	return index, tbl_urls, tbl_durations;
+end
 
 function getTot_QQ ( str_id, int_mod)
 	local _loc_4 = 0;

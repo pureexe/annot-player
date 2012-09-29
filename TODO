@@ -4,32 +4,7 @@
 http://db.tt/SrtkzxIJ
 http://qt-project.org/wiki/Category:Add-ons
 
-# Changes
-windows 7: rebuild all binaries (dll&exe)
-annot-*.exe
-texthook.dll, mousehook.dll, picker.dll
-server/beans.xml player-win-0.1.0
-
-0.1.10
-
-alpha/reader with Qt5 & QtQuick2
-See:
-http://qt-project.org/videos/watch/whats-new-in-qtquick-2.0
-http://doc-snapshot.qt-project.org/4.8/qml-tutorial.html
-http://qt-project.org/doc/qt-4.8/qtquick.html
-
-This would be the last stable version using Qt4. I plan to rewrite the app from scratch using Qt5/QtQuick2, and try to make everything customizable by users using qml+css3+javascript to control the GUI, to render subtitles, to manipulate game texts, to access Internet translators, and etc. All these settings will be saved online and shared with others. Any suggestions or requests are welcomed!
-
-- integrate typeof
-
-learn QML/QtQuick2, utilize CSS3 extensively for rendering app
-- See: http://doc-snapshot.qt-project.org/4.8/qml-tutorial.html
-- able to change subtitle display
-
-- start 0.1.10 [ Reader ] (alpha)
-  - only have display translator function
-    - without submit to internet
-
+deprecated
 
 # EOF
 

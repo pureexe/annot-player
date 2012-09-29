@@ -31,6 +31,7 @@ VideoView::VideoView(QWidget *parent)
   setContentsMargins(0, 0, 0, 0);
   //setAttribute(Qt::WA_TransparentForMouseEvents);
   //setWindowOpacity(1.0); // opaque
+  setAcceptDrops(true);
   setMouseTracking(true);
 
 #ifdef Q_OS_MAC
@@ -55,6 +56,13 @@ VideoView::~VideoView()
     ::vlcvideoview_release(view_);
 #endif // Q_OS_MAC
 }
+
+// - Events -
+
+void VideoView::dragEnterEvent(QDragEnterEvent *event)     { emit dragEnterEventReceived(event); }
+void VideoView::dragMoveEvent(QDragMoveEvent *event)       { emit dragMoveEventReceived(event); }
+void VideoView::dragLeaveEvent(QDragLeaveEvent *event)     { emit dragLeaveEventReceived(event); }
+void VideoView::dropEvent(QDropEvent *event)               { emit dropEventReceived(event); }
 
 // - Mac OS X Cocoa View -
 

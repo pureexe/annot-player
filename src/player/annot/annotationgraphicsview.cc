@@ -58,7 +58,7 @@ AnnotationGraphicsView::AnnotationGraphicsView(
     hoveredItemPaused_(false), hoveredItemResumed_(false), hoveredItemRemoved_(false), nearbyItemExpelled_(false), nearbyItemAttracted_(false),
     itemVisible_(true), translateWordEnabled_(true), dragging_(false), maxItemCount_(ReservedItemCount)
 {
-  Q_ASSERT(hub_);
+    Q_ASSERT(hub_);
   Q_ASSERT(player_);
   Q_ASSERT(videoView_);
 

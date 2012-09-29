@@ -29,7 +29,18 @@ public:
   explicit VideoView(QWidget *parent = nullptr);
   ~VideoView();
 
+signals:
+  void dragEnterEventReceived(QDragEnterEvent *event);
+  void dragMoveEventReceived(QDragMoveEvent *event);
+  void dragLeaveEventReceived(QDragLeaveEvent *event);
+  void dropEventReceived(QDropEvent *event);
+
 protected:
+  void dragEnterEvent(QDragEnterEvent *event) override;
+  void dragMoveEvent(QDragMoveEvent *event) override;
+  void dragLeaveEvent(QDragLeaveEvent *event) override;
+  void dropEvent(QDropEvent *event) override;
+
   //bool macEvent(EventHandlerCallRef caller, EventRef event) override;
 
 #ifdef Q_OS_LINUX

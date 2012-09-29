@@ -6,6 +6,7 @@
 #include "lib/annotservice/castmanager_p.h"
 #include "lib/annotservice/cloudservice_config.h"
 #include <QtCore/QMutexLocker>
+#include <QtCore/QSettings>
 
 //#define DEBUG "annotserveragent"
 #include "qtx/qxdebug.h"
@@ -13,6 +14,14 @@
 using namespace AnnotCloud;
 
 #define CALLBACK_RETRY_TIME     5000 // in msec
+
+QString
+AnnotationServerAgent::version()
+{
+  QSettings settings("settings.ini", QSettings::IniFormat);
+  settings.beginGroup("Application");
+  return settings.value("Version").toString();
+}
 
 // - Construction -
 
@@ -53,7 +62,7 @@ AnnotationServerAgent::isSoftwareUpdated()
 {
   static int ret = -1;
   if (ret < 0) {
-    bool ok = proxy_->isLatestApp(APP_VERSION);
+    bool ok = proxy_->isLatestApp(version());
     ret = ok ? 1 : 0;
   }
   return ret;

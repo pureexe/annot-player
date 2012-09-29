@@ -19,7 +19,7 @@ set MSVC_DLLS=msvcp100.dll,msvcr100.dll
 set MSVC90_HOME=/Volumes/win/Program Files/Microsoft Visual Studio 9.0
 set MSVC90_REDIST=%MSVC90_HOME%/VC/redist/x86/Microsoft.VC90.CRT
 
-set QT_HOME=/Volumes/win/qt/current
+set QT_HOME=/Volumes/win/qt/qt4
 set QT_DLLS=QtCore4.dll,QtDeclarative4.dll,QtGui4.dll,QtNetwork4.dll,QtScript4.dll,QtSql4.dll,QtSvg4.dll,QtWebkit4.dll,QtXml4.dll,QtXmlPatterns4.dll,phonon4.dll
 set QT_TRANSLATIONS=qt_ja.qm,qt_zh_CN.qm,qt_zh_TW.qm
 set QT_PLUGINS=accessible bearer codecs graphicssystems iconengines imageformats sqldrivers

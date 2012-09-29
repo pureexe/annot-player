@@ -41,17 +41,17 @@ protected:
   void keyPressEvent(QKeyEvent *event) override;
   void keyReleaseEvent(QKeyEvent *event) override;
 
-protected slots:
-  void dragEnterEvent(QDragEnterEvent *event) override;
-  void dragMoveEvent(QDragMoveEvent *event) override;
-  void dragLeaveEvent(QDragLeaveEvent *event) override;
-  void dropEvent(QDropEvent *event) override;
-
 signals:
   void dragEnterEventReceived(QDragEnterEvent *event);
   void dragMoveEventReceived(QDragMoveEvent *event);
   void dragLeaveEventReceived(QDragLeaveEvent *event);
   void dropEventReceived(QDropEvent *event);
+
+protected:
+  void dragEnterEvent(QDragEnterEvent *event) override;
+  void dragMoveEvent(QDragMoveEvent *event) override;
+  void dragLeaveEvent(QDragLeaveEvent *event) override;
+  void dropEvent(QDropEvent *event) override;
 
 private:
   void createLayout();

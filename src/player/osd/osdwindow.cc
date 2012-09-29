@@ -24,7 +24,6 @@
 # define WINDOW_FLAGS WINDOW_FLAGS_BASE
 #endif // Q_OS_MA
 
-
 OsdWindow::OsdWindow(QWidget *parent)
   : Base(parent, WINDOW_FLAGS), forwarder_(nullptr)
 {
