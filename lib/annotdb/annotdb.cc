@@ -39,7 +39,27 @@ AnnotationDatabase::~AnnotationDatabase()
 
   if (db_.isOpen())
     db_.close();
+
+  if (needsBackup_)
+    backup();
   DOUT("exit");
+}
+
+void
+AnnotationDatabase::backup() const
+{
+  QString path = db_.databaseName();
+  QFileInfo fi(path);
+  if (!fi.exists() || fi.size() == 0)
+    return;
+
+  QDateTime now = QDateTime::currentDateTime();
+
+  QString bakfile = fi.absolutePath() + "/" +
+      fi.baseName() + "." + now.toString("yyyy-MM-dd") + "." + fi.completeSuffix();
+  qDebug()<<bakfile;
+
+  QFile::copy(path, bakfile);
 }
 
 QString
@@ -347,6 +367,8 @@ AnnotationDatabase::insertAnnotation(const Annotation &annot, bool lock)
        << ", uid =" << annot.userId());
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
+
+  needsBackup_ = true;
 
   ANNOTDB_INSERT_ANNOT(annot, query);
 
@@ -1105,6 +1127,8 @@ AnnotationDatabase::updateAnnotation(const Annotation &annot)
     return;
   }
 
+  needsBackup_ = true;
+
   qint64 ts = selectAnnotationUpdateTimeWithId(annot.id());
   if (ts < 0)
     insertAnnotation(annot);
@@ -1202,6 +1226,8 @@ AnnotationDatabase::updateAnnotationTextWithId(const QString &text, qint64 id)
   DOUT("enter: id =" << id << ", text =" << text);
   Q_ASSERT(isValid());
   QSqlQuery query(db_);
+
+  needsBackup_ = true;
 
   query.prepare("UPDATE annot SET annot_text = ? WHERE annot_id = ?");
   query.addBindValue(text); // 0

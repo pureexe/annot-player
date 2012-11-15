@@ -58,6 +58,10 @@ public:
     void setCallback(Class *obj, Member mfunc)
     { callback_ = boost::bind(mfunc, obj); }
 
+  template <typename Class, typename Member>
+    void setCallback(const Class *obj, Member mfunc)
+    { callback_ = boost::bind(mfunc, obj); }
+
   // - Actions -
 public:
   void trigger() { callback_(); }

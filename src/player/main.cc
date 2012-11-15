@@ -245,10 +245,12 @@ main(int argc, char *argv[])
 //    }
 //#endif // Q_OS_WIN
 
+    if (previousVersionNumber < AcVersion::toNumber("0.1.9.8"))
+      settings->setTranslationServices(TranslatorManager::InfoseekBit);
+
     if (previousVersionNumber < AcVersion::toNumber("0.1.9.4")) {
       settings->setAnnotationScale(ANNOTATION_SCALE);
       settings->setAnnotationFullscreenScale(ANNOTATION_FULLSCREEN_SCALE);
-      settings->setTranslationServices(TranslatorManager::OcnBit);
     }
     if (previousVersionNumber < AcVersion::toNumber("0.1.9.3")) {
       ac->setMenuThemeEnabled(false); // disable aero context menu effect, unless I combine qcolorization effect with my haloeffect

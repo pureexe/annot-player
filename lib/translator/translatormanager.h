@@ -17,13 +17,13 @@ class TranslatorManager : public Translator
   // - Constructions -
 public:
   enum ServiceProvider { Romaji = 0, Microsoft, Google, Yahoo, Infoseek,
-                         Ocn, Fresheye, Nifty, Excite, Sdl, Systran, ServiceCount};
+                         Fresheye, Nifty, Excite, Sdl, Systran, ServiceCount};
   enum ServiceProviderBit {
     RomajiBit = 1 << Romaji, MicrosoftBit = 1 << Microsoft, GoogleBit = 1 << Google,
-    OcnBit = 1 << Ocn, ExciteBit = 1 << Excite, SdlBit = 1 << Sdl, YahooBit = 1 << Yahoo,
+    ExciteBit = 1 << Excite, SdlBit = 1 << Sdl, YahooBit = 1 << Yahoo,
     NiftyBit = 1 << Nifty, InfoseekBit = 1 << Infoseek, FresheyeBit = 1 << Fresheye, SystranBit = 1 << Systran
   };
-  enum { AllServices = RomajiBit | MicrosoftBit | GoogleBit | YahooBit | OcnBit | ExciteBit | SdlBit | NiftyBit | InfoseekBit | FresheyeBit | SystranBit };
+  enum { AllServices = RomajiBit | MicrosoftBit | GoogleBit | YahooBit | ExciteBit | SdlBit | NiftyBit | InfoseekBit | FresheyeBit | SystranBit };
 public:
   explicit TranslatorManager(QObject *parent = nullptr);
 
@@ -50,7 +50,7 @@ signals:
   void translatedByFresheye(const QString &text);
   void translatedByGoogle(const QString &text);
   void translatedByInfoseek(const QString &text);
-  void translatedByOcn(const QString &text);
+  //void translatedByOcn(const QString &text);
   void translatedByNifty(const QString &text);
   void translatedByExcite(const QString &text);
   void translatedBySdl(const QString &text);

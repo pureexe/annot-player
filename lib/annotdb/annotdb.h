@@ -28,6 +28,7 @@ class AnnotationDatabase : public QObject
   QSqlDatabase db_;
   mutable QMutex m_;
   bool disposed_;
+  bool needsBackup_;
 
   typedef AnnotCloud::User User;
   typedef AnnotCloud::UserList UserList;
@@ -41,7 +42,7 @@ class AnnotationDatabase : public QObject
   // - Construction -
 public:
   explicit AnnotationDatabase(QObject *parent = nullptr)
-    : Base(parent), disposed_(false) { }
+    : Base(parent), needsBackup_(false), disposed_(false) { }
   ~AnnotationDatabase();
 
   bool open(const QString &fileName);
@@ -53,6 +54,7 @@ signals:
   void cleared();
 
 public slots:
+  void backup() const;
   void clear();
 
   void dispose() { disposed_ = true; }

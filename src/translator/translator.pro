@@ -1,7 +1,7 @@
 # translator.pro
 # 8/13/2012
 
-VERSION = 0.1.0.4
+VERSION = 0.1.0.5
 
 DEFINES += SRC_TRANSLATOR
 

@@ -5,11 +5,11 @@ INCLUDEPATH += $$PWD
 
 TEMPLATE = subdirs
 SUBDIRS = \
-    browser \
-    downloader \
     player \
-    #reader \
     translator
+    #browser \
+    #downloader \
+    #reader \
 #   tester
 
 win32:  SUBDIRS += \
@@ -25,6 +25,6 @@ OTHER_FILES += \
     deploy-fedora.sh \
     deploy-mac.sh \
     deploy-win.cmd \
-    deploy-win-update.cmd 
+    deploy-win-update.cmd
 
 # EOF

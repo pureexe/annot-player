@@ -73,7 +73,7 @@ signals:
   // - Connections -
 public slots:
   bool login(const QString &userName, const QString &passwordDigest);
-  void login(); // Login using last userName and password
+  bool login(); // Login using last userName and password
   void logout();
 
   void setConnected(bool yes = true); ///< forcely set connection flag

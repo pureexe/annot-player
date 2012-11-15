@@ -155,7 +155,7 @@ protected slots:
   void showExciteTranslation(const QString &text);
   void showGoogleTranslation(const QString &text);
   void showMicrosoftTranslation(const QString &text);
-  void showOcnTranslation(const QString &text);
+  //void showOcnTranslation(const QString &text);
   void showRomajiTranslation(const QString &text);
   void showSdlTranslation(const QString &text);
   void showSystranTranslation(const QString &text);
@@ -195,7 +195,7 @@ private:
 
   QAction *autoAct_, *clipboardAct_, *topAct_;
   QAction *romajiAct_, *yahooAct_, *microsoftAct_, *googleAct_,
-          *exciteAct_, *ocnAct_, *fresheyeAct_, *sdlAct_,
+          *exciteAct_, *fresheyeAct_, *sdlAct_,
           *niftyAct_, *infoseekAct_, *systranAct_;
   QAction *kotobankAct_, *jdicAct_;
 

@@ -197,7 +197,7 @@ enum { MiniConsoleTimeout = 6000, MainConsoleTimeout = 3000 };
 
 #define DEFAULT_TRANSLATORS \
 ( \
-  TranslatorManager::OcnBit \
+  TranslatorManager::InfoseekBit \
 )
 
 // - Focus -
@@ -816,7 +816,7 @@ MainWindow::createComponents(bool unique)
   holdTimer_ = new QTimer(this);
   holdTimer_->setInterval(HOLD_TIMEOUT);
   holdTimer_->setSingleShot(true);
-  connect(holdTimer_, SIGNAL(timeout()), SLOT(toggleMagnifierVisible()));
+  //connect(holdTimer_, SIGNAL(timeout()), SLOT(toggleMagnifierVisible()));
 
   windowStaysOnTopTimer_ = new QTimer(this);
   windowStaysOnTopTimer_->setInterval(G_WINDOWONTOP_TIMEOUT);
@@ -1285,7 +1285,7 @@ MainWindow::createConnections()
   connect(translator_, SIGNAL(translatedByGoogle(QString)), SLOT(showGoogleTranslation(QString)));
   connect(translator_, SIGNAL(translatedByYahoo(QString)), SLOT(showYahooTranslation(QString)));
   connect(translator_, SIGNAL(translatedByFresheye(QString)), SLOT(showFresheyeTranslation(QString)));
-  connect(translator_, SIGNAL(translatedByOcn(QString)), SLOT(showOcnTranslation(QString)));
+  //connect(translator_, SIGNAL(translatedByOcn(QString)), SLOT(showOcnTranslation(QString)));
   connect(translator_, SIGNAL(translatedByExcite(QString)), SLOT(showExciteTranslation(QString)));
   connect(translator_, SIGNAL(translatedBySdl(QString)), SLOT(showSdlTranslation(QString)));
   connect(translator_, SIGNAL(translatedBySystran(QString)), SLOT(showSystranTranslation(QString)));
@@ -1297,7 +1297,7 @@ MainWindow::createConnections()
   connect(extraTranslator_, SIGNAL(translatedByGoogle(QString)), SLOT(showGoogleAdditionalTranslation(QString)));
   connect(extraTranslator_, SIGNAL(translatedByYahoo(QString)), SLOT(showYahooAdditionalTranslation(QString)));
   connect(extraTranslator_, SIGNAL(translatedByFresheye(QString)), SLOT(showFresheyeAdditionalTranslation(QString)));
-  connect(extraTranslator_, SIGNAL(translatedByOcn(QString)), SLOT(showOcnAdditionalTranslation(QString)));
+  //connect(extraTranslator_, SIGNAL(translatedByOcn(QString)), SLOT(showOcnAdditionalTranslation(QString)));
   connect(extraTranslator_, SIGNAL(translatedByExcite(QString)), SLOT(showExciteAdditionalTranslation(QString)));
   connect(extraTranslator_, SIGNAL(translatedBySdl(QString)), SLOT(showSdlAdditionalTranslation(QString)));
   connect(extraTranslator_, SIGNAL(translatedBySystran(QString)), SLOT(showSystranAdditionalTranslation(QString)));
@@ -1545,10 +1545,10 @@ MainWindow::createActions()
   connect(toggleFresheyeTranslatorAct_ = new QAction(tr("freshEYE Honyaku") + " (en,zh)", this),
           SIGNAL(triggered(bool)), SLOT(toggleFresheyeTranslator(bool)));
           toggleFresheyeTranslatorAct_->setCheckable(true);
-  connect(toggleOcnTranslatorAct_ = new QAction(tr("OCN Honyaku") + " (en,zh,ko) - " + TR(T_DEFAULT), this),
-          SIGNAL(triggered(bool)), SLOT(toggleOcnTranslator(bool)));
-          toggleOcnTranslatorAct_->setCheckable(true);
-  connect(toggleInfoseekTranslatorAct_ = new QAction(tr("Infoseek Honyaku"), this),
+  //connect(toggleOcnTranslatorAct_ = new QAction(tr("OCN Honyaku") + " (en,zh,ko) - " + TR(T_DEFAULT), this),
+  //        SIGNAL(triggered(bool)), SLOT(toggleOcnTranslator(bool)));
+  //        toggleOcnTranslatorAct_->setCheckable(true);
+  connect(toggleInfoseekTranslatorAct_ = new QAction(tr("Infoseek Honyaku") + " - " + TR(T_DEFAULT), this),
           SIGNAL(triggered(bool)), SLOT(toggleInfoseekTranslator(bool)));
           toggleInfoseekTranslatorAct_->setCheckable(true);
   connect(toggleGoogleTranslatorAct_ = new QAction(tr("Google Translator"), this),
@@ -2187,7 +2187,7 @@ MainWindow::createMenus()
 
     translatorMenu_->addAction(toggleRomajiTranslatorAct_);
     translatorMenu_->addSeparator();
-    translatorMenu_->addAction(toggleOcnTranslatorAct_);
+    //translatorMenu_->addAction(toggleOcnTranslatorAct_);
     translatorMenu_->addAction(toggleFresheyeTranslatorAct_);
     translatorMenu_->addSeparator();
     translatorMenu_->addAction(toggleInfoseekTranslatorAct_);
@@ -5852,24 +5852,24 @@ MainWindow::showFresheyeTranslation(const QString &text, bool extra)
     );
 }
 
-void
-MainWindow::showOcnTranslation(const QString &text, bool extra)
-{
-  int lang = server_->user().language();
-  QString t = text;
-
-  if (Traits::isAsianLanguage(lang))
-    t.remove("\r\n");
-
-  if (t.contains('['))
-    t.replace('[', "\\[")
-     .replace(']', "\\]");
-
-  if (extra)
-    showAdditionalTranslation(t, TranslatorManager::Ocn);
-  else
-    showTranslation(t, TranslatorManager::Ocn);
-}
+//void
+//MainWindow::showOcnTranslation(const QString &text, bool extra)
+//{
+//  int lang = server_->user().language();
+//  QString t = text;
+//
+//  if (Traits::isAsianLanguage(lang))
+//    t.remove("\r\n");
+//
+//  if (t.contains('['))
+//    t.replace('[', "\\[")
+//     .replace(']', "\\]");
+//
+//  if (extra)
+//    showAdditionalTranslation(t, TranslatorManager::Ocn);
+//  else
+//    showTranslation(t, TranslatorManager::Ocn);
+//}
 
 void
 MainWindow::showAdditionalTranslation(const QString &text, int service)
@@ -5896,22 +5896,21 @@ MainWindow::showTranslation(const QString &text, int service)
     if (translator_->serviceCount() > 2)
       prefix.append("Romaji: ");
     break;
-  case TranslatorManager::Ocn:
-    //if (translator_->serviceCount() > 1)
-    //  prefix = CORE_CMD_COLOR_YELLOW " ";
-    if (translator_->serviceCount() > 1 && !translator_->hasService(TranslatorManager::Romaji))
-      prefix.append(CORE_CMD_COLOR_YELLOW " OCN: ");
-    break;
+  //case TranslatorManager::Ocn:
+  //  //if (translator_->serviceCount() > 1)
+  //  //  prefix = CORE_CMD_COLOR_YELLOW " ";
+  //  if (translator_->serviceCount() > 1 && !translator_->hasService(TranslatorManager::Romaji))
+  //    prefix.append(CORE_CMD_COLOR_YELLOW " OCN: ");
+  //  break;
   case TranslatorManager::Fresheye:
     prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
       CORE_CMD_COLOR_BLUE " freshEYE: " :
       CORE_CMD_COLOR_YELLOW " "
     ); break;
   case TranslatorManager::Infoseek:
-    prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
-      CORE_CMD_COLOR_RED " Infoseek: "  :
-      CORE_CMD_COLOR_YELLOW " "
-    ); break;
+    if (translator_->serviceCount() > 1 && !translator_->hasService(TranslatorManager::Romaji))
+      prefix.append(CORE_CMD_COLOR_YELLOW " Infoseek: ");
+    break;
   case TranslatorManager::Yahoo:
     prefix.append(translator_->serviceCount() > 2 || translator_->serviceCount() == 2 && !translator_->hasService(TranslatorManager::Romaji) ?
       CORE_CMD_COLOR_BLACK " Yahoo!: ":
@@ -6136,12 +6135,12 @@ MainWindow::submitText(const QString &text, bool async)
       break;
     case SignalHub::SignalTokenMode:
   #ifdef AC_ENABLE_GAME
-      if (annot.isSubtitle()) {
-        annot.setPos(messageHandler_->currentHash());
-        annot.setPosType(1);
-      } else {
+      if (messageHandler_->currentContext().count) {
         annot.setPos(messageHandler_->currentContext().hash);
         annot.setPosType(messageHandler_->currentContext().count);
+      } else {
+        annot.setPos(messageHandler_->currentHash());
+        annot.setPosType(1);
       }
   #endif // AC_ENABLE_GAME
       break;
@@ -7531,7 +7530,7 @@ MainWindow::updateTranslatorMenu()
   toggleMicrosoftTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Microsoft));
   toggleYahooTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Yahoo));
   toggleFresheyeTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Fresheye));
-  toggleOcnTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Ocn));
+  //toggleOcnTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Ocn));
   toggleRomajiTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Romaji));
   toggleSdlTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Sdl));
   toggleSystranTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Systran));
@@ -12144,17 +12143,17 @@ MainWindow::toggleYahooTranslator(bool t)
     emit messageOnce(tr("Yahoo! Honyaku Off"));
 }
 
-void
-MainWindow::toggleOcnTranslator(bool t)
-{
-  translator_->setService(TranslatorManager::Ocn, t);
-  if (!translator_->hasServices())
-    translator_->setServices(DEFAULT_TRANSLATORS);
-  if (t)
-    emit messageOnce(tr("OCN Honyaku On"));
-  else
-    emit messageOnce(tr("OCN Honyaku Off"));
-}
+//void
+//MainWindow::toggleOcnTranslator(bool t)
+//{
+//  translator_->setService(TranslatorManager::Ocn, t);
+//  if (!translator_->hasServices())
+//    translator_->setServices(DEFAULT_TRANSLATORS);
+//  if (t)
+//    emit messageOnce(tr("OCN Honyaku On"));
+//  else
+//    emit messageOnce(tr("OCN Honyaku Off"));
+//}
 
 void
 MainWindow::toggleSystranTranslator(bool t)

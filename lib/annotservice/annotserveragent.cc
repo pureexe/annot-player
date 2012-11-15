@@ -112,11 +112,13 @@ AnnotationServerAgent::login(const QString &userName, const QString &passwordDig
   return authorized_;
 }
 
-void
+bool
 AnnotationServerAgent::login()
 {
   if (user_.hasName() && user_.hasPassword())
-    proxy_->login(user_.name(), user_.password());
+    return proxy_->login(user_.name(), user_.password());
+  else
+    return false;
 }
 
 void
@@ -236,6 +238,8 @@ AnnotationServerAgent::submitGameHook(const GameHook &hook)
   }
 
   qint64 ret = proxy_->submitGameHook(hook);
+  if (!ret && login())
+    ret = proxy_->submitGameHook(hook);
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -255,6 +259,8 @@ AnnotationServerAgent::submitGameThread(const GameThread &thread)
   }
 
   qint64 ret = proxy_->submitGameThread(thread);
+  if (!ret && login())
+    ret = proxy_->submitGameThread(thread);
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -291,6 +297,13 @@ AnnotationServerAgent::submitToken(const Token &token)
     ret = proxy_->submitTokenDigest(token.digest(), token.section(), token.type());
   else if (token.hasUrl())
     ret = proxy_->submitTokenUrl(token.url(), token.section(), token.type());
+
+  if (!ret && login()) {
+    if (token.hasDigest())
+      ret = proxy_->submitTokenDigest(token.digest(), token.section(), token.type());
+    else if (token.hasUrl())
+      ret = proxy_->submitTokenUrl(token.url(), token.section(), token.type());
+  }
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -368,6 +381,13 @@ AnnotationServerAgent::submitAnnotation(const Annotation &annot)
     ret = proxy_->submitAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId());
   else if (annot.hasTokenDigest())
     ret = proxy_->submitAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest(), annot.tokenSection());
+
+  if (!ret && login()) {
+    if (annot.hasTokenId())
+      ret = proxy_->submitAnnotationTextWithTokenId(annot.text(), annot.pos(), annot.posType(), annot.tokenId());
+    else if (annot.hasTokenDigest())
+      ret = proxy_->submitAnnotationTextAndTokenDigest(annot.text(), annot.pos(), annot.posType(), annot.tokenDigest(), annot.tokenSection());
+  }
   DOUT("exit: ret =" << ret);
   return ret;
 }
@@ -468,8 +488,11 @@ bool
 AnnotationServerAgent::deleteAnnotationWithId(qint64 id)
 {
   bool ok = false;
-  if (id && isAuthorized())
+  if (id && isAuthorized()) {
     ok = proxy_->deleteAnnotationWithId(id);
+    if (!ok && login())
+      ok = proxy_->deleteAnnotationWithId(id);
+  }
   return ok;
 }
 
@@ -477,8 +500,11 @@ bool
 AnnotationServerAgent::deleteAliasWithId(qint64 id)
 {
   bool ok = false;
-  if (id && isAuthorized())
+  if (id && isAuthorized()) {
     ok = proxy_->deleteAliasWithId(id);
+    if (!ok && login())
+      ok = proxy_->deleteAliasWithId(id);
+  }
   return ok;
 }
 
@@ -554,7 +580,10 @@ AnnotationServerAgent::updateGameHookTextWithId(const QString &text, qint64 id)
   if (!id)
     return false;
 
-  return proxy_->updateGameHookTextWithId(text, id);
+  bool ok = proxy_->updateGameHookTextWithId(text, id);
+  if (!ok && login())
+    ok = proxy_->updateGameHookTextWithId(text, id);
+  return ok;
 }
 
 bool
@@ -565,7 +594,10 @@ AnnotationServerAgent::updateAnnotationTextWithId(const QString &text, qint64 id
   if (!id)
     return false;
 
-  return proxy_->updateAnnotationTextWithId(text, id);
+  bool ok = proxy_->updateAnnotationTextWithId(text, id);
+  if (!ok && login())
+    ok = proxy_->updateAnnotationTextWithId(text, id);
+  return ok;
 }
 
 bool
@@ -575,7 +607,10 @@ AnnotationServerAgent::updateAnnotationUserIdWithId(qint64 userId, qint64 id)
     return false;
   if (!isAuthorized() || userId != user_.id())
     return false;
-  return proxy_->updateAnnotationUserIdWithId(userId, id);
+  bool ok = proxy_->updateAnnotationUserIdWithId(userId, id);
+  if (!ok && login())
+    ok = proxy_->updateAnnotationUserIdWithId(userId, id);
+  return ok;
 }
 
 // EOF

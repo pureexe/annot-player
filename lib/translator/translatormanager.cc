@@ -9,7 +9,7 @@
 #include "lib/translator/infoseektranslator.h"
 #include "lib/translator/microsofttranslator.h"
 #include "lib/translator/niftytranslator.h"
-#include "lib/translator/ocntranslator.h"
+//#include "lib/translator/ocntranslator.h"
 #include "lib/translator/romajitranslator.h"
 #include "lib/translator/sdltranslator.h"
 #include "lib/translator/systrantranslator.h"
@@ -32,7 +32,6 @@ TranslatorManager::TranslatorManager(QObject *parent)
   ADD(Google)
   ADD(Yahoo)
   ADD(Infoseek)
-  ADD(Ocn)
   ADD(Fresheye)
   ADD(Nifty)
   ADD(Excite)
@@ -45,7 +44,7 @@ TranslatorManager::TranslatorManager(QObject *parent)
   connect(t_[Google], SIGNAL(translated(QString)), SIGNAL(translatedByGoogle(QString)));
   connect(t_[Yahoo], SIGNAL(translated(QString)), SIGNAL(translatedByYahoo(QString)));
   connect(t_[Infoseek], SIGNAL(translated(QString)), SIGNAL(translatedByInfoseek(QString)));
-  connect(t_[Ocn], SIGNAL(translated(QString)), SIGNAL(translatedByOcn(QString)));
+  //connect(t_[Ocn], SIGNAL(translated(QString)), SIGNAL(translatedByOcn(QString)));
   connect(t_[Fresheye], SIGNAL(translated(QString)), SIGNAL(translatedByFresheye(QString)));
   connect(t_[Nifty], SIGNAL(translated(QString)), SIGNAL(translatedByNifty(QString)));
   connect(t_[Excite], SIGNAL(translated(QString)), SIGNAL(translatedByExcite(QString)));

@@ -38,7 +38,7 @@
 #define DEBUG "mainwindow"
 #include "qtx/qxdebug.h"
 
-enum { DEFAULT_TRANSLATORS = TranslatorManager::RomajiBit | TranslatorManager::OcnBit | TranslatorManager::FresheyeBit };
+enum { DEFAULT_TRANSLATORS = TranslatorManager::RomajiBit | TranslatorManager::InfoseekBit };
 
 // Note:
 // CSS margin can have:
@@ -138,7 +138,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(textTranslator_, SIGNAL(translatedByRomaji(QString)), SLOT(showRomajiTranslation(QString)));
   connect(textTranslator_, SIGNAL(translatedByMicrosoft(QString)), SLOT(showMicrosoftTranslation(QString)));
   connect(textTranslator_, SIGNAL(translatedByGoogle(QString)), SLOT(showGoogleTranslation(QString)));
-  connect(textTranslator_, SIGNAL(translatedByOcn(QString)), SLOT(showOcnTranslation(QString)));
+  //connect(textTranslator_, SIGNAL(translatedByOcn(QString)), SLOT(showOcnTranslation(QString)));
   connect(textTranslator_, SIGNAL(translatedByExcite(QString)), SLOT(showExciteTranslation(QString)));
   connect(textTranslator_, SIGNAL(translatedBySdl(QString)), SLOT(showSdlTranslation(QString)));
   connect(textTranslator_, SIGNAL(translatedBySystran(QString)), SLOT(showSystranTranslation(QString)));
@@ -184,7 +184,7 @@ MainWindow::MainWindow(QWidget *parent)
   romajiAct_->setChecked(t & TranslatorManager::RomajiBit);
   microsoftAct_->setChecked(t & TranslatorManager::MicrosoftBit);
   googleAct_->setChecked(t & TranslatorManager::GoogleBit);
-  ocnAct_->setChecked(t & TranslatorManager::OcnBit);
+  //ocnAct_->setChecked(t & TranslatorManager::OcnBit);
   exciteAct_->setChecked(t & TranslatorManager::ExciteBit);
   sdlAct_->setChecked(t & TranslatorManager::SdlBit);
   systranAct_->setChecked(t & TranslatorManager::SystranBit);
@@ -397,8 +397,8 @@ MainWindow::createActions()
     romajiAct_->setCheckable(true);
     m->addSeparator();
 
-    ocnAct_ = m->addAction(tr("OCN") + " (en,zh,ko)", this, SLOT(updateTranslators()));
-    ocnAct_->setCheckable(true);
+    //ocnAct_ = m->addAction(tr("OCN") + " (en,zh,ko)", this, SLOT(updateTranslators()));
+    //ocnAct_->setCheckable(true);
     fresheyeAct_ = m->addAction(tr("freshEYE") + " (en,zh)", this, SLOT(updateTranslators()));
     fresheyeAct_->setCheckable(true);
 
@@ -567,7 +567,7 @@ MainWindow::updateTranslators()
   textTranslator_->setService(TranslatorManager::Romaji, romajiAct_->isChecked());
   textTranslator_->setService(TranslatorManager::Google, googleAct_->isChecked());
   textTranslator_->setService(TranslatorManager::Microsoft, microsoftAct_->isChecked());
-  textTranslator_->setService(TranslatorManager::Ocn, ocnAct_->isChecked());
+  //textTranslator_->setService(TranslatorManager::Ocn, ocnAct_->isChecked());
   textTranslator_->setService(TranslatorManager::Excite, exciteAct_->isChecked());
   textTranslator_->setService(TranslatorManager::Sdl, sdlAct_->isChecked());
   textTranslator_->setService(TranslatorManager::Systran, systranAct_->isChecked());
@@ -888,14 +888,14 @@ MainWindow::showNiftyTranslation(const QString &text)
   );
 }
 
-void
-MainWindow::showOcnTranslation(const QString &text)
-{
-  showTextTranslation(
-    "OCN: "
-    HTML_SS_OPEN(color:blue) + text + HTML_SS_CLOSE()
-  );
-}
+//void
+//MainWindow::showOcnTranslation(const QString &text)
+//{
+//  showTextTranslation(
+//    "OCN: "
+//    HTML_SS_OPEN(color:blue) + text + HTML_SS_CLOSE()
+//  );
+//}
 
 void
 MainWindow::showExciteTranslation(const QString &text)

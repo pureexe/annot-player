@@ -556,7 +556,7 @@ protected slots:
   void showGoogleTranslation(const QString &text) { showTranslation(text, TranslatorManager::Google); }
   void showYahooTranslation(const QString &text) { showTranslation(text, TranslatorManager::Yahoo); }
   void showFresheyeTranslation(const QString &text, bool extra = false);
-  void showOcnTranslation(const QString &text, bool extra = false);
+  //void showOcnTranslation(const QString &text, bool extra = false);
   void showExciteTranslation(const QString &text) { showTranslation(text, TranslatorManager::Excite); }
   void showSdlTranslation(const QString &text) { showTranslation(text, TranslatorManager::Sdl); }
   void showSystranTranslation(const QString &text) { showTranslation(text, TranslatorManager::Systran); }
@@ -568,7 +568,7 @@ protected slots:
   void showGoogleAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Google); }
   void showYahooAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Yahoo); }
   void showFresheyeAdditionalTranslation(const QString &text) { showFresheyeTranslation(text, true); }
-  void showOcnAdditionalTranslation(const QString &text) { showOcnTranslation(text, true); }
+  //void showOcnAdditionalTranslation(const QString &text) { showOcnTranslation(text, true); }
   void showExciteAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Excite); }
   void showSdlAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Sdl); }
   void showSystranAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Systran); }
@@ -914,7 +914,7 @@ protected slots:
   void toggleGoogleTranslator(bool t);
   void toggleYahooTranslator(bool t);
   void toggleFresheyeTranslator(bool t);
-  void toggleOcnTranslator(bool t);
+  //void toggleOcnTranslator(bool t);
   void toggleExciteTranslator(bool t);
   void toggleSdlTranslator(bool t);
   void toggleSystranTranslator(bool t);
@@ -1146,7 +1146,7 @@ private:
           *toggleMicrosoftTranslatorAct_,
           *toggleYahooTranslatorAct_,
           *toggleFresheyeTranslatorAct_,
-          *toggleOcnTranslatorAct_,
+          //*toggleOcnTranslatorAct_,
           *toggleRomajiTranslatorAct_,
           *toggleSdlTranslatorAct_,
           *toggleSystranTranslatorAct_,

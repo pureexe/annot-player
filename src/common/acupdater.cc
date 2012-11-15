@@ -9,7 +9,7 @@
 #define APP_ID          AC_UPDATER_ID
 
 #ifdef Q_OS_WIN
-# define APP_PATH       "../[ Update ]"
+# define APP_PATH       "../../[ Update ]"
 #else
 # define APP_PATH       APP_NAME
 #endif // Q_OS_WIN

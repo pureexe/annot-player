@@ -12,83 +12,85 @@
 #define DEBUG "aclocalizer"
 #include "qtx/qxdebug.h"
 
+#define ROOT_DIR    "../.."
+
 // - Properties -
 
 QString
 AcLocalizer::rootLocation()
-{ return ".."; }
+{ return ROOT_DIR; }
 
 QString
 AcLocalizer::playerLocation()
-{ return "../[ Play ].exe"; }
+{ return ROOT_DIR "/[ Play ].exe"; }
 
 QString
 AcLocalizer::playerLocalizedLocation()
-{ return "../[ " + tr("Play") + " ].exe"; }
+{ return ROOT_DIR "/[ " + tr("Play") + " ].exe"; }
 
 QString
 AcLocalizer::readerLocation()
-{ return "../[ Read ].exe"; }
+{ return ROOT_DIR "/[ Read ].exe"; }
 
 QString
 AcLocalizer::readerLocalizedLocation()
-{ return "../[ " + tr("Read") + " ].exe"; }
+{ return ROOT_DIR "/[ " + tr("Read") + " ].exe"; }
 
 QString
 AcLocalizer::browserLocation()
-{ return "../[ Browse ].exe"; }
+{ return ROOT_DIR "/[ Browse ].exe"; }
 
 QString
 AcLocalizer::browserLocalizedLocation()
-{ return "../[ " + tr("Browse") + " ].exe"; }
+{ return ROOT_DIR "/[ " + tr("Browse") + " ].exe"; }
 
 QString
 AcLocalizer::downloaderLocation()
-{ return "../[ Download ].exe"; }
+{ return ROOT_DIR "/[ Download ].exe"; }
 
 QString
 AcLocalizer::downloaderLocalizedLocation()
-{ return "../[ " + tr("Download") + " ].exe"; }
+{ return ROOT_DIR "/[ " + tr("Download") + " ].exe"; }
 
 QString
 AcLocalizer::translatorLocation()
-{ return "../[ Translate ].exe"; }
+{ return ROOT_DIR "/[ Translate ].exe"; }
 
 QString
 AcLocalizer::translatorLocalizedLocation()
-{ return "../[ " + tr("Translate") + " ].exe"; }
+{ return ROOT_DIR "/[ " + tr("Translate") + " ].exe"; }
 
 QString
 AcLocalizer::updaterLocation()
-{ return "../[ Update ].exe"; }
+{ return ROOT_DIR "/[ Update ].exe"; }
 
 QString
 AcLocalizer::updaterLocalizedLocation()
-{ return "../[ " + tr("Update") + " ].exe"; }
+{ return ROOT_DIR "/[ " + tr("Update") + " ].exe"; }
 
 QString
 AcLocalizer::readmeLocation()
-{ return "../Readme.txt"; }
+{ return ROOT_DIR "/Readme.txt"; }
 
 QString
 AcLocalizer::readmeLocalizedLocation()
-{ return "../" + tr("Readme") + ".txt"; }
+{ return ROOT_DIR "/" + tr("Readme") + ".txt"; }
 
 QString
 AcLocalizer::changelogLocation()
-{ return "../Changes.txt"; }
+{ return ROOT_DIR "/Changes.txt"; }
 
 QString
 AcLocalizer::changelogLocalizedLocation()
-{ return "../" + tr("Changes") + ".txt"; }
+{ return ROOT_DIR "/" + tr("Changes") + ".txt"; }
 
 QString
 AcLocalizer::licenseLocation()
-{ return "../License.txt"; }
+{ return ROOT_DIR "/License.txt"; }
 
 QString
 AcLocalizer::licenseLocalizedLocation()
-{ return "../" + tr("License") + ".txt"; }
+{ return ROOT_DIR "/" + tr("License") + ".txt"; }
 
 // - Actions -
 
@@ -107,10 +109,11 @@ AcLocalizer::updateLocations()
     DOUT("updating locations");
 
     foreach (const QString &file,
-             QDir(rootLocation()).entryList(QStringList("*.exe") << "*.txt", QDir::Files)) {
-      DOUT("updating:" << file);
-      QtWin::setFileAttributes(rootLocation() + '/' + file, QtWin::HiddenAttribute);
-    }
+             QDir(rootLocation()).entryList(QStringList("*.exe") << "*.txt", QDir::Files))
+      if (file.contains('[')) {
+        DOUT("updating:" << file);
+        QtWin::setFileAttributes(rootLocation() + '/' + file, QtWin::HiddenAttribute);
+      }
 
     QString x, y;
 

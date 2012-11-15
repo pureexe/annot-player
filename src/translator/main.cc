@@ -26,7 +26,7 @@
 
 #define DEFAULT_SIZE    QSize(300, 200) // minimal size
 
-enum { DEFAULT_TRANSLATORS = TranslatorManager::RomajiBit | TranslatorManager::OcnBit | TranslatorManager::FresheyeBit };
+enum { DEFAULT_TRANSLATORS = TranslatorManager::RomajiBit | TranslatorManager::InfoseekBit };
 
 // - Startup stages -
 
