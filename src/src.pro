@@ -6,11 +6,9 @@ INCLUDEPATH += $$PWD
 TEMPLATE = subdirs
 SUBDIRS = \
     player \
-    translator
-    #browser \
-    #downloader \
-    #reader \
-#   tester
+    browser \
+    downloader
+    #translator
 
 win32:  SUBDIRS += \
     launcher \

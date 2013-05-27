@@ -60,6 +60,7 @@ class SignalHub;
 class Tray;
 class TranslatorManager;
 class MeCabParser;
+class Updater;
 
 class AcPlayerServer;
 class AcDownloader;
@@ -181,7 +182,9 @@ public:
   bool inputLineHasFocus() const;
   bool prefixLineHasFocus() const;
 
+#ifdef AC_ENABLE_HONYAKU
   bool isTranslateEnabled() const;
+#endif // AC_ENABLE_HONYAKU
 
   bool isAutoPlayNext() const;
   bool repeatCurrent() const;
@@ -196,9 +199,11 @@ public slots:
 
   void maximizedToFullScreen();
 
+#ifdef AC_ENABLE_HONYAKU
   void setTranslateEnabled(bool enabled);
   void translate(const QString &text, bool extra = false);
   void translate(const QString &text, int lang, bool extra = false);
+#endif // AC_ENABLE_HONYAKU
 
   void showTraditionalChinese(const QString &gbk);
 
@@ -229,7 +234,6 @@ public slots:
   void about();
   //void quit();
   void help();
-  void update();
 
   void login(const QString &userName, const QString &encryptedPassword, bool async = true);
   void logout(bool async = true);
@@ -349,12 +353,18 @@ protected:
 protected slots:
   void checkReachEnd();
 
+#ifdef AC_ENABLE_HONYAKU
   void showTranslator();
   void translateUsingTranslator(const QString &text);
+#endif // // AC_ENABLE_HONYAKU
 
   void toggleLibrary();
   void toggleMainLibrary();
   void toggleMediaLibrary();
+
+  void update();
+protected slots:
+  void checkVersion(long version);
 
 public slots:
   void invalidateMediaAndPlay(bool async = true);
@@ -546,6 +556,7 @@ public slots:
   void curseAnnotationWithId(qint64 tid, bool async = true);
   void blockAnnotationWithId(qint64 tid, bool async = true);
 
+#ifdef AC_ENABLE_HONYAKU
   // - Translation -
 protected slots:
   void showTranslation(const QString &text, int service);
@@ -574,6 +585,7 @@ protected slots:
   void showSystranAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Systran); }
   void showNiftyAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Nifty); }
   void showInfoseekAdditionalTranslation(const QString &text) { showAdditionalTranslation(text, TranslatorManager::Infoseek); }
+#endif // AC_ENABLE_HONYAKU
 
   // - Remote annotations -
 public slots:
@@ -654,8 +666,10 @@ protected slots:
 
   void updateAnnotationHoverGesture();
 
-  void updateContextMenu();
+#ifdef AC_ENABLE_HONYAKU
   void updateTranslatorMenu();
+#endif // AC_ENABLE_HONYAKU
+  void updateContextMenu();
   void updateGameMenu();
   void updateAspectRatioMenu();
   void updateAudioChannelMenu();
@@ -907,6 +921,7 @@ protected:
   QStringList externalAnnotationFiles() const;
   QStringList externalAnnotationUrls() const;
 
+#ifdef AC_ENABLE_HONYAKU
   // - Translation -
 protected slots:
   void toggleRomajiTranslator(bool t);
@@ -920,6 +935,7 @@ protected slots:
   void toggleSystranTranslator(bool t);
   void toggleNiftyTranslator(bool t);
   void toggleInfoseekTranslator(bool t);
+#endif // AC_ENABLE_HONYAKU
 
   // - Rubber band -
 protected slots:
@@ -1010,20 +1026,25 @@ private:
 
   QString windowTitleSuffix_;
 
+#ifdef AC_ENABLE_HONYAKU
   TranslatorManager *translator_, *extraTranslator_;
+  AcTranslator *translatorDelegate_;
+#endif // AC_ENABLE_HONYAKU
 
   AcPlayerServer *appServer_;
   AcBrowser *browserDelegate_;
   AcDownloader *downloaderDelegate_;
-  AcTranslator *translatorDelegate_;
   AcUpdater *updaterDelegate_;
   AnnotationDownloader *annotationDownloader_;
 
   AnnotationServerAgent *server_;
+  Updater *updater_;
 
   Player *player_;
 
+#ifdef AC_ENABLE_MECAB
   MeCabParser *mecab_;
+#endif // AC_ENABLE_MECAB
 
   AnnotationDatabase *cache_,
                      *queue_;
@@ -1140,6 +1161,7 @@ private:
         *subtitleColorMenu_;
   QList<QAction*> contextMenuActions_;
 
+#ifdef AC_ENABLE_HONYAKU
   QMenu *translatorMenu_;
   QAction *toggleExciteTranslatorAct_,
           *toggleGoogleTranslatorAct_,
@@ -1152,6 +1174,7 @@ private:
           *toggleSystranTranslatorAct_,
           *toggleNiftyTranslatorAct_,
           *toggleInfoseekTranslatorAct_;
+#endif // AC_ENABLE_HONYAKU
 
   QAction *showLibraryAct_;
 
@@ -1297,7 +1320,9 @@ private:
 
   QAction *toggleUserAnonymousAct_;
   QAction *openProxyBrowserAct_;
+#ifdef AC_ENABLE_HONYAKU
   QAction *showTranslatorAct_;
+#endif // AC_ENABLE_HONYAKU
 
   QAction *forward5sAct_,
           *backward5sAct_,

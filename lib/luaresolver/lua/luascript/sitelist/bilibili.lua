@@ -65,7 +65,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   end
 
   --readin vice descriptor
-    
+
     -- FIXME jichi 2/1/2011:
     -- cus utf8_to_lua is not implemented, WCHAR matching is broken
   --readUntilFromUTF8(file, "主 页</a>", str_title_line);
@@ -171,7 +171,13 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
 
   --read id
   local str_id = "";
-  if string.find(str_embed, "flashvars=\"id=")~=nil
+  if string.find(str_embed, "/secure,cid=")~=nil
+  then
+    str_id = getMedText2end(str_embed, "/secure,cid=", "&", "&amp;");
+  elseif string.find(str_embed, "flashvars=\"cid=")~=nil
+  then
+    str_id = getMedText2end(str_embed, "flashvars=\"cid=", "&", "&amp;");
+  elseif string.find(str_embed, "flashvars=\"id=")~=nil
   then
     str_id = getMedText2end(str_embed, "flashvars=\"id=", "\"", "&amp;");
   elseif string.find(str_embed, "flashvars=\"avid=")~=nil

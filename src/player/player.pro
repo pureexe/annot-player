@@ -7,9 +7,11 @@ VERSION_MAJOR = 0.1.9.
 VERSION_MINOR = 9
 
 VERSION = $$VERSION_MAJOR$$VERSION_MINOR
+VERSION_TIMESTAMP = 1369539049
 
 DEFINES += VERSION_MAJOR=\\\"$$VERSION_MAJOR\\\" \
-           VERSION_MINOR=\\\"$$VERSION_MINOR\\\"
+           VERSION_MINOR=\\\"$$VERSION_MINOR\\\" \
+           VERSION_TIMESTAMP=$$VERSION_TIMESTAMP
 
 include(../../config.pri)
 include(tr/tr.pri)
@@ -37,7 +39,6 @@ include($$ROOTDIR/lib/imagefilter/imagefilter.pri)
 include($$ROOTDIR/lib/ioutil/ioutil.pri)
 include($$ROOTDIR/lib/magnifier/magnifier.pri)
 include($$ROOTDIR/lib/mediacodec/mediacodec.pri)
-include($$ROOTDIR/lib/mecab/mecab.pri)
 include($$ROOTDIR/lib/mrlresolver/mrlresolver.pri)
 include($$ROOTDIR/lib/mstypes/mstypes.pri)
 include($$ROOTDIR/lib/nicoutil/nicoutil.pri)
@@ -47,19 +48,24 @@ include($$ROOTDIR/lib/qtx/qtx.pri)
 include($$ROOTDIR/lib/searchengine/searchengine.pri)
 include($$ROOTDIR/lib/stream/stream.pri)
 include($$ROOTDIR/lib/textcodec/textcodec.pri)
-include($$ROOTDIR/lib/translator/translator.pri)
 #include($$ROOTDIR/lib/yahoojlp/yahoojlp.pri)
+
+#DEFINES += AC_ENABLE_MECAB
+#include($$ROOTDIR/lib/mecab/mecab.pri)
+
+#DEFINES += AC_ENABLE_HONYAKU
+#include($$ROOTDIR/lib/translator/translator.pri)
+#include($$ROOTDIR/win/atlas/atlas.pri)
 
 !mac: include($$ROOTDIR/lib/metacall/metacall.pri)
 win32 {
     include($$ROOTDIR/win/applocale/applocale.pri)
-    include($$ROOTDIR/win/atlas/atlas.pri)
     include($$ROOTDIR/win/dwm/dwm.pri)
     #include($$ROOTDIR/win/hook/hook.pri)
     include($$ROOTDIR/win/mousehook/mousehook.pri)
     include($$ROOTDIR/win/picker/picker.pri)
     include($$ROOTDIR/win/reg/reg.pri)
-    include($$ROOTDIR/win/texthook/texthook.pri)
+    #include($$ROOTDIR/win/texthook/texthook.pri)
     include($$ROOTDIR/win/qtwin/qtwin.pri)
     include($$ROOTDIR/win/qtwinnt/qtwinnt.pri)
 }
@@ -123,6 +129,7 @@ HEADERS += \
     signalhub.h \
     textcodecmanager.h \
     tray.h \
+    updater.h \
     annot/annotationanalyticsview.h \
     annot/annotationeditor.h \
     annot/annotationfilter.h \
@@ -216,6 +223,7 @@ SOURCES += \
     signalhub.cc \
     textcodecmanager.cc \
     tray.cc \
+    updater.cc \
     annot/annotationanalyticsview.cc \
     annot/annotationeditor.cc \
     annot/annotationfilter.cc \
@@ -305,27 +313,27 @@ win32 {
     registry.cc \
     preferences/associationprefs.cc
 
-  DEFINES += AC_ENABLE_GAME
+  #DEFINES += AC_ENABLE_GAME
   DEFINES += AC_ENABLE_LAUNCHER
   DEFINES += AC_ENABLE_UPDATE
 
-  HEADERS += \
-    game/hookdialog.h \
-    game/messagehandler.h \
-    game/processinfo.h \
-    game/processfilter.h \
-    game/processview.h \
-    game/syncview.h \
-    game/threadview.h
+  #HEADERS += \
+  #  game/hookdialog.h \
+  #  game/messagehandler.h \
+  #  game/processinfo.h \
+  #  game/processfilter.h \
+  #  game/processview.h \
+  #  game/syncview.h \
+  #  game/threadview.h
 
-  SOURCES += \
-    game/hookdialog.cc \
-    game/messagehandler.cc \
-    game/processinfo.cc \
-    game/processfilter.cc \
-    game/processview.cc \
-    game/syncview.cc \
-    game/threadview.cc
+  #SOURCES += \
+  #  game/hookdialog.cc \
+  #  game/messagehandler.cc \
+  #  game/processinfo.cc \
+  #  game/processfilter.cc \
+  #  game/processview.cc \
+  #  game/syncview.cc \
+  #  game/threadview.cc
 }
 
 RESOURCES += player.qrc

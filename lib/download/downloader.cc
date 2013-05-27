@@ -206,11 +206,11 @@ Downloader::save(QNetworkReply *reply)
     DOUT("exit: reply error: " + reply->errorString());
     return;
   }
-  if (fileName_.isEmpty()) {
-    state_ = OK;
-    DOUT("exit: no fileName required");
-    return;
-  }
+  //if (fileName_.isEmpty()) {
+  //  state_ = OK;
+  //  DOUT("exit: no fileName required");
+  //  return;
+  //}
   QByteArray data = reply->readAll();
   DOUT("raw data size =" << data.size());
 
@@ -224,6 +224,11 @@ Downloader::save(QNetworkReply *reply)
 #endif // WITH_LIB_COMPRESS
   }
   DOUT("data.size =" << data.size() << ", data =" << QString(data.left(50)) << "...");
+  if (fileName_.isEmpty()) {
+    state_ = OK;
+    DOUT("exit: no fileName required");
+    return;
+  }
   bool ok = save(data, fileName_);
   state_ = ok ? OK : Error;
   if (ok)

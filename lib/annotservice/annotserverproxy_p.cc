@@ -969,7 +969,7 @@ AnnotationServerProxy::selectGameHookWithTokenDigest(const QString &digest)
   GameHook ret;
 
   if (digest.size() != Traits::TOKEN_DIGEST_LENGTH) {
-    DOUT("exit: error: invalid digest =" << digest());
+    DOUT("exit: error: invalid digest =" << digest);
     return ret;
   }
 
@@ -1052,7 +1052,7 @@ AnnotationServerProxy::selectGameThreadWithTokenDigest(const QString &digest)
   GameThread ret;
 
   if (digest.size() != Traits::TOKEN_DIGEST_LENGTH) {
-    DOUT("exit: error: invalid digest =" << digest());
+    DOUT("exit: error: invalid digest =" << digest);
     return ret;
   }
 

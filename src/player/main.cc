@@ -10,8 +10,12 @@
 #include "medialibrary.h"
 #include "gamelibrary.h"
 #include "annotationgraphicsitem.h"
-#include "lib/translator/translatorsettings.h"
-#include "lib/mecab/mecabsettings.h"
+#ifdef AC_ENABLE_HONYAKU
+# include "lib/translator/translatorsettings.h"
+#endif // AC_ENABLE_HONYAKU
+#ifdef AC_ENABLE_MECAB
+# include "lib/mecab/mecabsettings.h"
+#endif // AC_ENABLE_MECAB
 #ifdef Q_OS_WIN
 # include "registry.h"
 # include "lib/player/player.h"
@@ -39,7 +43,9 @@
 #include "lib/annotcloud/user.h"
 #include "lib/annotcache/annotationcachemanager.h"
 #include "lib/qt/qtsettings.h"
-#include "lib/translator/translatormanager.h"
+#ifdef AC_ENABLE_HONYAKU
+# include "lib/translator/translatormanager.h"
+#endif // AC_ENABLE_HONYAKU
 //#include "lib/download/downloader.h"
 #include <QtGui>
 #include <QtNetwork/QNetworkProxy>
@@ -245,8 +251,10 @@ main(int argc, char *argv[])
 //    }
 //#endif // Q_OS_WIN
 
+#ifdef AC_ENABLE_HONYAKU
     if (previousVersionNumber < AcVersion::toNumber("0.1.9.8"))
       settings->setTranslationServices(TranslatorManager::InfoseekBit);
+#endif // AC_ENABLE_HONYAKU
 
     if (previousVersionNumber < AcVersion::toNumber("0.1.9.4")) {
       settings->setAnnotationScale(ANNOTATION_SCALE);
@@ -369,15 +377,19 @@ main(int argc, char *argv[])
 //#endif // WITH_LIB_WEBBROWSER
 
   // Set translate network cache directory, same as web settings' offline cache
+#ifdef AC_ENABLE_HONYAKU
   TranslatorSettings::globalSettings()->setCacheDirectory(G_PATH_CACHES);
   TranslatorSettings::globalSettings()->setCacheSize(10);
+#endif // AC_ENABLE_HONYAKU
 
   // Set annotation cache directory, shared across different annot apps
   AnnotationCacheManager::globalInstance()->setLocation(AC_PATH_CACHES);
 
+#ifdef AC_ENABLE_MECAB
   // MeCab
   MeCabSettings::setMeCabRcFile(G_PATH_MECABRC);
   //DOUT("mecabrc =" << MeCabSettings::getMeCabRcFile());
+#endif // AC_ENABLE_MECAB
 
   // Set theme.
   {
@@ -454,7 +466,7 @@ main(int argc, char *argv[])
 
 #ifdef AC_ENABLE_LAUNCHER
   // Rename lauchers
-  AcLocalizer::updateLocations();
+  //AcLocalizer::updateLocations();
 #endif // AC_ENABLE_LAUNCHER
 
   //QWidget t;

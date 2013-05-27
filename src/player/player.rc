@@ -24,12 +24,12 @@ VS_VERSION_INFO VERSIONINFO
                         BEGIN
                                 VALUE "CompanyName", "Annot Cloud"
                                 VALUE "FileDescription", "Annot Player"
-                                VALUE "FileVersion", VERSION
+                                VALUE "FileVersion", 0.1
                                 VALUE "LegalCopyright", "Copyright (C) 2012."
                                 VALUE "InternalName", "annot-player.exe"
                                 VALUE "OriginalFilename", "annot-player.exe"
                                 VALUE "ProductName", "Annot Player"
-                                VALUE "ProductVersion", VERSION
+                                VALUE "ProductVersion", 0.1
                         END
                 END
                 BLOCK "VarFileInfo"

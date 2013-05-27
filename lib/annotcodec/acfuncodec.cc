@@ -1,4 +1,4 @@
-// acfuncodec.cc
+﻿// acfuncodec.cc
 // 2/4/2012
 
 #include "lib/annotcodec/acfuncodec.h"

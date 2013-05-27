@@ -66,9 +66,11 @@ MediaLibraryView::createActions()
   contextMenu_ = new QMenu(this);
   AcUi::globalInstance()->setContextMenuStyle(contextMenu_, true); // persistent = true
 
+#ifdef AC_ENABLE_GAME
   showGameAct_ = contextMenu_->addAction(tr("Game Preferences"), this, SLOT(showGame()));
   syncGameAct_ = contextMenu_->addAction(tr("Sync with Running Galgame"), this, SLOT(syncGame()));
   contextMenu_->addSeparator();
+#endif // AC_ENABLE_GAME
 
   openAct_ = contextMenu_->addAction(QIcon(RC_IMAGE_PLAY), TR(T_OPEN), this, SLOT(open()));
   browseAct_ = contextMenu_->addAction(tr("Browse"), this, SLOT(browse()));
@@ -159,10 +161,12 @@ MediaLibraryView::createLayout()
     filterType_->setMinimumWidth(70);
     filterType_->addItem(tr("All"));
     filterType_->addItem(TR(T_FOLDER));
-    filterType_->addItem(TR(T_GALGAME));
     filterType_->addItem(TR(T_VIDEO));
     //filterType_->addItem(TR(T_Audio));
     filterType_->addItem(TR(T_URL));
+#ifdef AC_ENABLE_GAME
+    filterType_->addItem(TR(T_GALGAME));
+#endif // AC_ENABLE_GAME
   } connect(filterType_, SIGNAL(activated(int)), SLOT(setFilterType(int)));
 
   browseButton_ = ui->makeToolButton(AcUi::PushHint, tr("Browse"), tr("Browse location"), this, SLOT(browse()));
@@ -438,9 +442,11 @@ MediaLibraryView::setFilterType(int type)
   QString key;
   switch (type) {
   case FT_Folder: key = TR(T_FOLDER); break;
-  case FT_Game:   key = TR(T_GALGAME); break;
   case FT_Video:  key = TR(T_VIDEO); break;
   case FT_Url:    key = TR(T_URL); break;
+#ifdef AC_ENABLE_GAME
+  case FT_Game:   key = TR(T_GALGAME); break;
+#endif // AC_ENABLE_GAME
   }
   filterModel_->setFilterFixedString(key);
   updateCount();
@@ -502,6 +508,7 @@ MediaLibraryView::updateContextMenu()
   openAct_->setVisible(v);
   browseAct_->setVisible(v);
 
+#ifdef AC_ENABLE_GAME
   syncGameAct_->setVisible(library_->hasGames());
   if (v && library_->hasGames()) {
     QModelIndex index = selectionModel_->currentIndex();
@@ -509,6 +516,7 @@ MediaLibraryView::updateContextMenu()
     showGameAct_->setVisible(type == Media::Game);
   } else
     showGameAct_->setVisible(false);
+#endif // AC_ENABLE_GAME
 }
 
 // EOF

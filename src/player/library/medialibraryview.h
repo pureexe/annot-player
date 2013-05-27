@@ -32,9 +32,11 @@ class MediaLibraryView : public AcMainWindow
   enum FilterType {
     FT_All,
     FT_Folder,
-    FT_Game,
     FT_Video,
     FT_Url,
+#ifdef AC_ENABLE_GAME
+    FT_Game,
+#endif // AC_ENABLE_GAME
     FT_Count
   };
 

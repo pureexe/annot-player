@@ -35,6 +35,7 @@ protected:
   static QUrl encodeGetchuUrl(const QUrl &url);
   static QUrl encodeDmmUrl(const QUrl &url);
 
+  static QUrl encodeAliceSoftUrl(const QUrl &url);
   static QUrl encodeAb2Url(const QUrl &url);
   static QUrl encodeAb3Url(const QUrl &url);
   static QUrl encodeAb2TryUrl(const QUrl &url);
@@ -48,6 +49,7 @@ protected:
   static QUrl encodeSpermaniaxUrl(const QUrl &url);
   static QUrl encodeWitchFlameUrl(const QUrl &url);
   static QUrl encodeSpielSoftUrl(const QUrl &url);
+  static QUrl encodeSpriteUrl(const QUrl &url);
 };
 
 #endif // WBNETWORKACCESSMANAGER_H

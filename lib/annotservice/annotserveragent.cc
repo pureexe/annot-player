@@ -6,6 +6,7 @@
 #include "lib/annotservice/castmanager_p.h"
 #include "lib/annotservice/cloudservice_config.h"
 #include <QtCore/QMutexLocker>
+#include <QtCore/QCoreApplication>
 #include <QtCore/QSettings>
 
 //#define DEBUG "annotserveragent"
@@ -18,7 +19,7 @@ using namespace AnnotCloud;
 QString
 AnnotationServerAgent::version()
 {
-  QSettings settings("settings.ini", QSettings::IniFormat);
+  QSettings settings("etc/settings.ini", QSettings::IniFormat);
   settings.beginGroup("Application");
   return settings.value("Version").toString();
 }

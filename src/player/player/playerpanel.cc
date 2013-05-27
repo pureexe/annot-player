@@ -148,6 +148,7 @@ PlayerPanel::inputComboBox()
   if (!inputComboBox_) {
     inputComboBox_ = new InputComboBox(this);
     inputComboBox_->setToolTip(TR(T_TOOLTIP_INPUTLINE));
+    inputComboBox_->hide(); // disable comment submission
   } return inputComboBox_;
 }
 
@@ -158,6 +159,7 @@ PlayerPanel::prefixComboBox()
     prefixComboBox_ = new PrefixComboBox(this);
     prefixComboBox_->setToolTip(TR(T_TOOLTIP_PREFIXLINE));
     prefixComboBox_->setMaximumWidth(G_PREFIXLINE_MAXWIDTH);
+    prefixComboBox_->hide(); // disable comment submission
   } return prefixComboBox_;
 }
 

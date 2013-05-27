@@ -8,6 +8,7 @@
 
 #include "datamanager.h"
 #include "dataserver.h"
+#include "updater.h"
 #include "eventlogger.h"
 #include "grabber.h"
 #include "mainconsole.h"
@@ -79,7 +80,9 @@
 #include "src/common/acbrowser.h"
 #include "src/common/acupdater.h"
 #include "src/common/acdownloader.h"
-#include "src/common/actranslator.h"
+#ifdef AC_ENABLE_HONYAKU
+# include "src/common/actranslator.h"
+#endif // AC_ENABLE_HONYAKU
 #include "src/common/acprotocol.h"
 #include "src/common/acpaths.h"
 #include "src/common/acplayer.h"
@@ -87,7 +90,9 @@
 #include "src/common/acui.h"
 #include "lib/annotdb/annotdb.h"
 #include "lib/annotdown/annotationdownloader.h"
-#include "lib/mecab/mecabparser.h"
+#ifdef AC_ENABLE_MECAB
+# include "lib/mecab/mecabparser.h"
+#endif // AC_ENABLE_MECAB
 #include "lib/player/player.h"
 #include "lib/player/playerdefs.h"
 #include "lib/annotcodec/annotationcodecmanager.h"
@@ -95,7 +100,7 @@
 #include "lib/mrlanalysis/mrlanalysis.h"
 #include "lib/mrlresolver/mrlresolvermanager.h"
 #include "lib/mrlresolver/mrlresolversettings.h"
-#include "lib/translator/translatormanager.h"
+//#include "lib/translator/translatormanager.h"
 #include "lib/download/downloader.h"
 #include "lib/searchengine/searchenginerc.h"
 #include "lib/magnifier/magnifier.h"
@@ -156,6 +161,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
+// #include <boost/lexical_cast.hpp>
 
 #include <ctime>
 
@@ -470,7 +476,9 @@ MainWindow::MainWindow(bool unique, QWidget *parent, Qt::WindowFlags f)
 
   //recentGameEncodings_ = settings->gameEncodings();
 
+#ifdef AC_ENABLE_HONYAKU
   setTranslateEnabled(settings->isTranslateEnabled());
+#endif // AC_ENABLE_HONYAKU
 
   embeddedPlayer_->setOnTop(settings->isEmbeddedPlayerOnTop());
   //embeddedCanvas_->setEnabled(settings->isPlayerLabelEnabled());
@@ -633,6 +641,9 @@ MainWindow::createComponents(bool unique)
   // Server agents
   server_ = new AnnotationServerAgent(this);
 
+  updater_ = new Updater(this);
+  connect(updater_, SIGNAL(versionReceived(long)), SLOT(checkVersion(long)));
+
   // Player
   player_ = new Player(this);
 
@@ -685,7 +696,9 @@ MainWindow::createComponents(bool unique)
   miniConsole_->setAutoClearInterval(MiniConsoleTimeout);
 
   // MeCab
+#ifdef AC_ENABLE_MECAB
   mecab_ = new MeCabParser(this);
+#endif // AC_ENABLE_MECAB
 
   // Rubber bands
   attractRubberBand_ = new QxCircularRubberBand(QRubberBand::Line, annotationView_);
@@ -776,6 +789,7 @@ MainWindow::createComponents(bool unique)
 //  player_->setFullScreen(false);
 
   // Translator
+#ifdef AC_ENABLE_HONYAKU
   translator_ = new TranslatorManager(this);
 
   extraTranslator_ = new TranslatorManager(this);
@@ -785,6 +799,7 @@ MainWindow::createComponents(bool unique)
   translator_->setServices(Settings::globalSettings()->translationServices());
   if (!translator_->hasServices())
     translator_->setServices(DEFAULT_TRANSLATORS);
+#endif // AC_ENABLE_HONYAKU
 
   // Dialogs
   //userPanel_ = new UserPanel(this);
@@ -860,9 +875,11 @@ MainWindow::createComponents(bool unique)
 
   browserDelegate_ = new AcBrowser(this);
   downloaderDelegate_ = new AcDownloader(this);
-  translatorDelegate_ = new AcTranslator(this);
   updaterDelegate_ = new AcUpdater(this);
   appServer_ = new AcPlayerServer(this);
+#ifdef AC_ENABLE_HONYAKU
+  translatorDelegate_ = new AcTranslator(this);
+#endif // AC_ENABLE_HONYAKU
 
   annotationDownloader_ = new AnnotationDownloader(this);
   annotationDownloader_->setDownloadsLocation(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation));
@@ -1092,8 +1109,10 @@ MainWindow::createConnections()
   AC_CONNECT_WARNING(annotationDownloader_, this, Qt::QueuedConnection);
   AC_CONNECT_ERROR(annotationDownloader_, this, Qt::QueuedConnection);
 
+#ifdef AC_ENABLE_HONYAKU
   connect(translator_, SIGNAL(errorMessage(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
   connect(extraTranslator_, SIGNAL(errorMessage(QString)), SLOT(warn(QString)), Qt::QueuedConnection);
+#endif // AC_ENABLE_HONYAKU
 
   // Annotation graphics view
   connect(this, SIGNAL(addAnnotationsRequested(AnnotationList)),
@@ -1280,6 +1299,7 @@ MainWindow::createConnections()
   //connect(Localizer::globalInstance(), SIGNAL(localeChanged()), SLOT(invalidateAppLanguage()));
 
   // Translator:
+#ifdef AC_ENABLE_HONYAKU
   connect(translator_, SIGNAL(translatedByRomaji(QString)), SLOT(showRomajiTranslation(QString)));
   connect(translator_, SIGNAL(translatedByMicrosoft(QString)), SLOT(showMicrosoftTranslation(QString)));
   connect(translator_, SIGNAL(translatedByGoogle(QString)), SLOT(showGoogleTranslation(QString)));
@@ -1303,6 +1323,7 @@ MainWindow::createConnections()
   connect(extraTranslator_, SIGNAL(translatedBySystran(QString)), SLOT(showSystranAdditionalTranslation(QString)));
   connect(extraTranslator_, SIGNAL(translatedByNifty(QString)), SLOT(showNiftyAdditionalTranslation(QString)));
   connect(extraTranslator_, SIGNAL(translatedByInfoseek(QString)), SLOT(showInfoseekAdditionalTranslation(QString)));
+#endif // AC_ENABLE_HONYAKU
 
 #ifdef AC_ENABLE_GAME
   connect(this, SIGNAL(windowPicked(WId)), annotationView_, SLOT(setTrackedWindow(WId)));
@@ -1435,8 +1456,10 @@ MainWindow::createActions()
           openProxyBrowserAct_->setShortcut(QKeySequence("CTRL+B"));
           addAction(openProxyBrowserAct_);
 
+#ifdef AC_ENABLE_HONYAKU
   connect(showTranslatorAct_ = new QAction(QIcon(ACRC_IMAGE_TRANSLATOR), tr("Translator"), this),
           SIGNAL(triggered()), SLOT(showTranslator()));
+#endif // AC_ENABLE_HONYAKU
 
   connect(showDownloaderAct_ = new QAction(QIcon(ACRC_IMAGE_DOWNLOADER), TR(T_MENUTEXT_DOWNLOAD), this),
           SIGNAL(triggered()), SLOT(showDownloader()));
@@ -1536,6 +1559,7 @@ MainWindow::createActions()
           SIGNAL(triggered()), SLOT(close()));
           quitAct_->setShortcuts(QKeySequence::Quit);
 
+#ifdef AC_ENABLE_HONYAKU
   connect(toggleRomajiTranslatorAct_ = new QAction(tr("Romaji Translator"), this),
           SIGNAL(triggered(bool)), SLOT(toggleRomajiTranslator(bool)));
           toggleRomajiTranslatorAct_->setCheckable(true);
@@ -1569,6 +1593,7 @@ MainWindow::createActions()
   connect(toggleSystranTranslatorAct_ = new QAction(tr("SYSTRAN Translator") + " (en)", this),
           SIGNAL(triggered(bool)), SLOT(toggleSystranTranslator(bool)));
           toggleSystranTranslatorAct_->setCheckable(true);
+#endif // AC_ENABLE_HONYAKU
 
   connect(setStereoChannelAct_ = new QAction(tr("Stereo"), this),
           SIGNAL(triggered(bool)), SLOT(setStereoChannel()));
@@ -2180,6 +2205,7 @@ MainWindow::createMenus()
     currentMenu_->addAction(saveMediaAct_);
   }
 
+#ifdef AC_ENABLE_HONYAKU
   translatorMenu_ = new QMenu(this); {
     ui->setContextMenuStyle(translatorMenu_, this);
     translatorMenu_->setTitle(tr("Translation Service")  + " ...");
@@ -2200,6 +2226,7 @@ MainWindow::createMenus()
     translatorMenu_->addAction(toggleSdlTranslatorAct_);
     translatorMenu_->addAction(toggleSystranTranslatorAct_);
   }
+#endif // AC_ENABLE_HONYAKU
 
   annotationEffectMenu_ = new QMenu(this); {
     ui->setContextMenuStyle(annotationEffectMenu_, true); // persistent = true
@@ -2529,7 +2556,9 @@ MainWindow::createMenus()
     utilityMenu_->addSeparator();
     utilityMenu_->addAction(openProxyBrowserAct_);
     utilityMenu_->addAction(showDownloaderAct_);
+#ifdef AC_ENABLE_HONYAKU
     utilityMenu_->addAction(showTranslatorAct_);
+#endif // AC_ENABLE_HONYAKU
     utilityMenu_->addAction(toggleMagnifierVisibleAct_);
     utilityMenu_->addAction(showAnnotationEditorAct_ );
     utilityMenu_->addAction(downloadAnnotationsAct_);
@@ -2545,7 +2574,9 @@ MainWindow::createMenus()
     settingsMenu_->setToolTip(tr("Settings"));
     ui->setContextMenuStyle(settingsMenu_, true); // persistent = true
 
+#ifdef AC_ENABLE_HONYAKU
     settingsMenu_->addMenu(translatorMenu_);
+#endif // AC_ENABLE_HONYAKU
     settingsMenu_->addSeparator();
 
     //settingsMenu_->addAction(tr("Preferences"), this, SLOT(showPreferences()), QKeySequence("CTRL+,"));
@@ -4443,11 +4474,19 @@ MainWindow::help()
 void
 MainWindow::update()
 {
-  bool updated = server_->isSoftwareUpdated();
+  if (updater_->isOnline())
+    updater_->queryVersion();
+}
+
+void
+MainWindow::checkVersion(long version)
+{
+  bool updated = version <= VERSION_TIMESTAMP;
+  DOUT("current version =" << VERSION_TIMESTAMP << ", new version =" << version);
   if (updated)
     emit notification(tr("you are using the lastest version"));
   else {
-    emit notification(tr("new version released at Google Code"));
+    emit notification(tr("new version is released"));
 #ifdef AC_ENABLE_UPDATE
     emit message(tr("updater launched, please close Annot Player"));
     updaterDelegate_->open();
@@ -4770,7 +4809,9 @@ MainWindow::backlogDialog()
   if (!w) {
     w = new BacklogDialog(this);
     windows_.append(w);
+#ifdef AC_ENABLE_HONYAKU
     connect(w, SIGNAL(translateRequested(QString)), SLOT(translateUsingTranslator(QString)));
+#endif // AC_ENABLE_HONYAKU
     connect(hub_, SIGNAL(tokenModeChanged(SignalHub::TokenMode)), w, SLOT(clear()));
     connect(player_, SIGNAL(mediaChanged()), w, SLOT(clear()));
     connect(annotationView_, SIGNAL(subtitleAdded(QString)), w, SLOT(appendSubtitle(QString)));
@@ -5835,6 +5876,7 @@ MainWindow::showText(const QString &text, bool isSigned)
   DOUT("exit");
 }
 
+#ifdef AC_ENABLE_HONYAKU
 void
 MainWindow::showFresheyeTranslation(const QString &text, bool extra)
 {
@@ -5951,6 +5993,8 @@ MainWindow::showTranslation(const QString &text, int service)
     prefix.append(' ');
   showSubtitle(text, userLang, prefix);
 }
+
+#endif // AC_ENABLE_HONYAKU
 
 void
 MainWindow::showSubtitle(const QString &input, int userLang, const QString &prefix)
@@ -7425,11 +7469,13 @@ MainWindow::updateContextMenu()
     updateGameTextMenu();
     contextMenu_->addMenu(gameTextMenu_);
 
+#ifdef AC_ENABLE_HONYAKU
     contextMenu_->addMenu(translatorMenu_);
     contextMenu_->addAction(toggleTranslateAct_);
 #ifdef WITH_WIN_ATLAS
     contextMenu_->addAction(toggleAtlasEnabledAct_);
 #endif // WITH_WIN_ATLAS
+#endif AC_ENABLE_HONYAKU
 
     contextMenu_->addAction(toggleSubtitleOnTopAct_);
     contextMenu_->addAction(showBacklogAct_);
@@ -7522,6 +7568,7 @@ MainWindow::updateContextMenu()
   //DOUT("exit");
 }
 
+#ifdef AC_ENABLE_HONYAKU
 void
 MainWindow::updateTranslatorMenu()
 {
@@ -7537,6 +7584,7 @@ MainWindow::updateTranslatorMenu()
   toggleNiftyTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Nifty));
   toggleInfoseekTranslatorAct_->setChecked(translator_->hasService(TranslatorManager::Infoseek));
 }
+#endif // AC_ENABLE_HONYAKU
 
 void
 MainWindow::updateAspectRatioMenu()
@@ -7652,11 +7700,13 @@ MainWindow::updateUserMenu()
       userMenu_->addMenu(gameTextMenu_);
       updateGameTextMenu();
 
+#ifdef AC_ENABLE_HONYAKU
       userMenu_->addMenu(translatorMenu_);
       userMenu_->addAction(toggleTranslateAct_);
 #ifdef WITH_WIN_ATLAS
       userMenu_->addAction(toggleAtlasEnabledAct_);
 #endif // WITH_WIN_ATLAS
+#endif // AC_ENABLE_HONYAKU
       userMenu_->addAction(showBacklogAct_);
       userMenu_->addAction(showAnnotationAnalyticsAct_);
       showAnnotationAnalyticsAct_->setEnabled(dataManager_->hasAnnotations());
@@ -7670,7 +7720,9 @@ MainWindow::updateUserMenu()
     userMenu_->addAction(logoutAct_);
   //}
 
+#ifdef AC_ENABLE_HONYAKU
   updateTranslatorMenu();
+#endif // AC_ENABLE_HONYAKU
 
   //if (ALPHA) {
   //  if (server_->isConnected())
@@ -9808,6 +9860,7 @@ MainWindow::showGameText(const QString &text, int role)
     return;
 
   QString out;
+#ifdef AC_ENABLE_MECAB
   bool colorful = toggleGameTextColorfulAct_->isChecked(),
        resizable = toggleGameTextResizableAct_->isChecked();
 
@@ -9833,6 +9886,7 @@ MainWindow::showGameText(const QString &text, int role)
       }
     }
   }
+#endif AC_ENABLE_MECAB
 
   if (!out.isEmpty()) {
     QString prefix = CORE_CMD_NOWRAP;
@@ -9857,6 +9911,7 @@ MainWindow::translateGameText(const QString &text, int role)
 
 // - Translate -
 
+#ifdef AC_ENABLE_HONYAKU
 bool
 MainWindow::isTranslateEnabled() const
 { return toggleTranslateAct_->isChecked(); }
@@ -9883,6 +9938,7 @@ MainWindow::translate(const QString &text, int lang, bool extra)
   (extra ? extraTranslator_ : translator_)
       ->translate(text, lang ? lang : Translator::English);
 }
+#endif // AC_ENABLE_HONYAKU
 
 void
 MainWindow::showTraditionalChinese(const QString &input)
@@ -12027,7 +12083,9 @@ MainWindow::saveSettings()
 
   settings->setPreferLocalDatabase(dataServer_->preferCache());
 
+#ifdef AC_ENABLE_HONYAKU
   settings->setTranslationServices(translator_->services());
+#endif // AC_ENABLE_HONYAKU
 
   settings->setSubtitleColor(subtitleColor());
 
@@ -12058,7 +12116,9 @@ MainWindow::saveSettings()
   settings->setBufferedMediaSaved(player_->isBufferSaved());
   settings->setAnnotationFileSaved(toggleSaveAnnotationFileAct_->isChecked());
 
+#ifdef AC_ENABLE_HONYAKU
   settings->setTranslateEnabled(isTranslateEnabled());
+#endif // AC_ENABLE_HONYAKU
 
   settings->setEmbeddedPlayerOnTop(embeddedPlayer_->isOnTop());
   //settings->setPlayerLabelEnabled(embeddedCanvas_->isEnabled());
@@ -12119,6 +12179,7 @@ MainWindow::saveSettingsLater()
 
 // - Translation -
 
+#ifdef AC_ENABLE_HONYAKU
 void
 MainWindow::toggleFresheyeTranslator(bool t)
 {
@@ -12275,6 +12336,8 @@ MainWindow::translateUsingTranslator(const QString &text)
   }
 }
 
+#endif // AC_ENABLE_HONYAKU
+
 // - Library -
 
 void
@@ -12361,6 +12424,7 @@ MainWindow::showMainLibrary()
 
 // - Atlas Translator -
 
+#ifdef AC_ENABLE_HONYAKU
 #ifdef WITH_WIN_ATLAS
 
 bool
@@ -12415,6 +12479,7 @@ MainWindow::translateWithAtlas(const QString &text, int role)
   }
 }
 #endif // WITH_WIN_ATLAS
+#endif // AC_ENABLE_HONYAKU
 
 // EOF
 

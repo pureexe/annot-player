@@ -34,6 +34,7 @@ QStringList
 WbNetworkAccessManager::supportedSites()
 {
   return QStringList()
+    << "alicesoft.com"
     << "akabeesoft3.com"
     << "akabeesoft2.com"
     << "akabeesoft2-try.com"
@@ -45,6 +46,7 @@ WbNetworkAccessManager::supportedSites()
     << "applique-soft.com"
     << "shallotsoft.com"
     << "spermaniax.net"
+    << "sprite.gr.jp"
     << "witchflame.jp"
     << "spielsoft.1000.tv"
     << "getchu.com"
@@ -104,6 +106,7 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
       r.setUrl(_encode(url)); \
       return Base::createRequest(op, r, outgoingData); \
     }
+    ELIF("alicesoft.com", encodeAliceSoftUrl)
     ELIF("akabeesoft3.com", encodeAb3Url)
     ELIF("akabeesoft2.com", encodeAb2Url)
     ELIF("syangrila.com", encodeSyangrilaUrl)
@@ -117,6 +120,7 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
     ELIF("spermaniax.net", encodeSpermaniaxUrl)
     ELIF("witchflame.jp", encodeWitchFlameUrl)
     ELIF("spielsoft.1000.tv", encodeSpielSoftUrl)
+    ELIF("sprite.gr.jp", encodeSpriteUrl)
 #undef ELIF
   }
   return Base::createRequest(op, req, outgoingData);
@@ -188,6 +192,7 @@ WbNetworkAccessManager::encodeEroUrl(const QUrl &url)
   TRANSFORM("getchu", encodeGetchuUrl)
   TRANSFORM("dmm", encodeDmmUrl)
 
+  TRANSFORM("alicesoft", encodeAliceSoftUrl)
   TRANSFORM("akabeesoft2", encodeAb2Url)
   TRANSFORM("akabeesoft3", encodeAb3Url)
   TRANSFORM("akabeesoft2-try", encodeAb2TryUrl)
@@ -201,6 +206,7 @@ WbNetworkAccessManager::encodeEroUrl(const QUrl &url)
   TRANSFORM("spermaniax", encodeSpermaniaxUrl)
   TRANSFORM("witchflame", encodeWitchFlameUrl)
   TRANSFORM("spielsoft", encodeSpielSoftUrl)
+  TRANSFORM("sprite", encodeSpriteUrl)
 #undef TRANSFORM
 
 // EOF

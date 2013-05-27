@@ -1,693 +1,715 @@
 ChangeLog (UTF-8)
-Annot Stream
+Annot Player
 Since 6/18/2011
 
+5/26/2013 SUN
+  * Project status switches to incubating.
+  * Update VLC and Qt libaries.
+  * Remove galgame support.
+  * Remove translation support.
+  * Remove danmaku submission support.
+  * Fix application's updater.
+
+12/16/2012 SUN
+  * 修正了对B站弹幕解析的BUG。
+  * 将Galgame与动画的功能分离。
+  * 升级了VLC和Qt。
+
+11/14/2012 TUE
+  * Split annotations for galgame out from annot-player into a new app:
+    Visual Novel Reader (pre-alpha)
+  * Source code moved to mercurial repository at sakuradite.org/hg/stream.
+    The "Library" directory is just clone of sakuradite.org/hg/stream.
+  * The underlying framework is switching from C++ to Python/Javascript.
+
+*** Annot Player is split into video player and galgame player ***
+
 11/4/2012 SUN
-    * Automatically backup local database of games and subtitles.
-    * Update VLC plugins
+  * Automatically backup local database of games and subtitles.
+  * Update VLC plugins
 
 10/14/2012 SUN
-    * Support for OCN is removed, as OCN shut down its translation service.
+  * Support for OCN is removed, as OCN shut down its translation service.
 
 10/11/2012 THU
-    * Make the saved subtitles to be context-sensitive to the game texts.
-      Special thanks to aaeru.
+  * Make the saved subtitles to be context-sensitive to the game texts.
+    Special thanks to aaeru.
 
 9/28/2012 FRI
-    * Fixed resolving video from acfun.
-      修正了A站弹幕和动画的解析。
+  * Fixed resolving video from acfun.
+    修正了A站弹幕和动画的解析。
 
 9/23/2012 SUN
-    * Fixed resolving video from bilibili.
-      修正了B站动画的解析。
-    * Fixed a bug that prevent drop-and-open.
-      修正了无法通过拖动来播放动画的bug。
+  * Fixed resolving video from bilibili.
+    修正了B站动画的解析。
+  * Fixed a bug that prevent drop-and-open.
+    修正了无法通过拖动来播放动画的bug。
 
 9/21/2012 FRI	annot-player	0.1.9.8
-    * Add basic EDICT dictionary support.
-    * Qt updated.
+  * Add basic EDICT dictionary support.
+  * Qt updated.
 
 9/9/2012 SUN	annot-player	0.1.9.7
-    * Click to translate any word (parsed by MeCab) in displayed galgame text.
-      If you don't like this feature, turn it off from the context menu.
-    * Always focus on the input text edit after submitting subtitles.
-    * Fix a severe bug which prevents subtitles from being saved.
-    * Translator is simplified.
+  * Click to translate any word (parsed by MeCab) in displayed galgame text.
+    If you don't like this feature, turn it off from the context menu.
+  * Always focus on the input text edit after submitting subtitles.
+  * Fix a severe bug which prevents subtitles from being saved.
+  * Translator is simplified.
 
 9/7/2012 FRI	annot-player	0.1.9.6
-    * Update annotation resolver for bilibili.tv.
-      更新的B站弹幕的解析方法。
-      由于B站的更新，以前版本将无法解析弹幕。感谢蓝染。
+  * Update annotation resolver for bilibili.tv.
+    更新的B站弹幕的解析方法。
+    由于B站的更新，以前版本将无法解析弹幕。感谢蓝染。
 
 9/7/2012 FRI	annot-player	0.1.9.5
-    * Add ATLAS support for offline translation.
-    * Fix a bug when displaying manual subtitles.
+  * Add ATLAS support for offline translation.
+  * Fix a bug when displaying manual subtitles.
 
 9/5/2012 WED	annot-player	0.1.9.4
-    * Fix a line-wrapping bug when rendering annotated Japanese text.
-    * Fix a bug when converting katagana to hiragana.
-    * Fix a bug when generating annotation analytics.
-      修正了无法显示弹幕统计图的bug。
+  * Fix a line-wrapping bug when rendering annotated Japanese text.
+  * Fix a bug when converting katagana to hiragana.
+  * Fix a bug when generating annotation analytics.
+    修正了无法显示弹幕统计图的bug。
 
 9/5/2012 WED	annot-player	0.1.9.3
-    * Integrate with MeCab.
-      Able to show annotated galgame text with furigana.
-      Hover-and-translate ability is not implemented yet.
-    * If AppLocale is installed on your Windows, launch galgame using AppLocale with 0x0411 by default.
-    * Add SYSTRANet translation support.
-    * Distinguish Traditional Chinese and Simplified Chinese.
+  * Integrate with MeCab.
+    Able to show annotated galgame text with furigana.
+    Hover-and-translate ability is not implemented yet.
+  * If AppLocale is installed on your Windows, launch galgame using AppLocale with 0x0411 by default.
+  * Add SYSTRANet translation support.
+  * Distinguish Traditional Chinese and Simplified Chinese.
 
 9/3/2012 MON	annot-player	0.1.9.2
-    * Able to add user-defined ITH hook code for game.
-      The added hook code is then shared by all users online.
-    * Highlight tool buttons.
-    * Translations are cached.
-    * Fix the bug which causes OCN translation failed to show up.
+  * Able to add user-defined ITH hook code for game.
+    The added hook code is then shared by all users online.
+  * Highlight tool buttons.
+  * Translations are cached.
+  * Fix the bug which causes OCN translation failed to show up.
 
 8/31/2012 FRI	annot-player	0.1.9.1
-    * Thread profile will be saved online at annot.me and shared with all users.
-      After sync with a game, the thread profile will be saved both offline and online.
-      Other users opening the same game will automatically import proper thread profile from annot.me,
-      and do not need to set up text threads manually anymore.
-      Thread settings could be changed at "Game Settings".
-      The changes will also be saved both offline and online.
-    * Able to subscribe to more than one text threads in a galgame.
-      When sync with a game, you could select which text threads to subscribe and translate.
-      You could also select the roles of text threads.
-      Texts with different roles will be rendered differently.
-      Only two roles are supported at the time:
-      * Leading role (the leading thread)
-      Supposed to be the scenario thread. Translations will be rendered on the top or on the bottom.
-      The leading thread is used as the timeline for annotation/subtitle synchronization.
-      * Support role (supplementary threads)
-      Could be the choice thread, or the thread of character names, etc.
-      Translations will be rendered at the top-left corner.
-    * Option to change subtitle's background opacity from "Preferences" (galgame only).
-      Set the value to zero if you prefer transparent background like in previous version.
-    * Annotations are rendered smaller than before, and in a darker color.
-      The subtitle's font size and outline color could be adjusted in "Preferences".
-      默认的弹幕比以前更小，颜色更深，速度更快。
-      如果觉得不舒服，可以在【偏好】里调整弹幕的渲染。
+  * Thread profile will be saved online at annot.me and shared with all users.
+    After sync with a game, the thread profile will be saved both offline and online.
+    Other users opening the same game will automatically import proper thread profile from annot.me,
+    and do not need to set up text threads manually anymore.
+    Thread settings could be changed at "Game Settings".
+    The changes will also be saved both offline and online.
+  * Able to subscribe to more than one text threads in a galgame.
+    When sync with a game, you could select which text threads to subscribe and translate.
+    You could also select the roles of text threads.
+    Texts with different roles will be rendered differently.
+    Only two roles are supported at the time:
+    * Leading role (the leading thread)
+    Supposed to be the scenario thread. Translations will be rendered on the top or on the bottom.
+    The leading thread is used as the timeline for annotation/subtitle synchronization.
+    * Support role (supplementary threads)
+    Could be the choice thread, or the thread of character names, etc.
+    Translations will be rendered at the top-left corner.
+  * Option to change subtitle's background opacity from "Preferences" (galgame only).
+    Set the value to zero if you prefer transparent background like in previous version.
+  * Annotations are rendered smaller than before, and in a darker color.
+    The subtitle's font size and outline color could be adjusted in "Preferences".
+    默认的弹幕比以前更小，颜色更深，速度更快。
+    如果觉得不舒服，可以在【偏好】里调整弹幕的渲染。
 
 8/26/2012 SUN	annot-player	0.1.9.0
-    * Add word translation support from Kotobank (ja).
-    * Add more text translation options, including:
-      * Infoseek honyaku
-      * Yahoo! honyaku
-      * OCN translator (en, zh, ko) - the best for Chinese
-      * freshEYE honyaku (en,zh)
-      * @nifty honyaku (en)
-      * Excite hongyaku (en)
-      * SDL free translator (en)
-      The default translator switched to Ocn from Microsoft.
-    * Try to synchronize with any running game in the library on startup.
-    * Retry to reconnect on accidental soap error.
-    * Option to set annotation transparency from Preferences.
-      在设定中可以调整弹幕透明度。
-    * Option to set fullscreen annotation size, which is slightly larger than normal one.
-      在设定中可以调整全屏弹幕大小（默认略大于非全屏弹幕）。
+  * Add word translation support from Kotobank (ja).
+  * Add more text translation options, including:
+    * Infoseek honyaku
+    * Yahoo! honyaku
+    * OCN translator (en, zh, ko) - the best for Chinese
+    * freshEYE honyaku (en,zh)
+    * @nifty honyaku (en)
+    * Excite hongyaku (en)
+    * SDL free translator (en)
+    The default translator switched to Ocn from Microsoft.
+  * Try to synchronize with any running game in the library on startup.
+  * Retry to reconnect on accidental soap error.
+  * Option to set annotation transparency from Preferences.
+    在设定中可以调整弹幕透明度。
+  * Option to set fullscreen annotation size, which is slightly larger than normal one.
+    在设定中可以调整全屏弹幕大小（默认略大于非全屏弹幕）。
 
 8/20/2012 MON	player,down,browser,translator	0.1.8.3,0.1.3.4,0.1.2.4,0.1.0.1
-    * Fix a severe bug that might crash the app when opening new game/media in Windows.
-      修正了Windows下可能导致切换再生动画时crash的bug。
-    * Improve the scheduling algorithm for floating annotations.
-      改进了滚动弹幕的调度算法。
-      如果觉得弹幕滚动过快，可在设定里调整弹幕速度。
+  * Fix a severe bug that might crash the app when opening new game/media in Windows.
+    修正了Windows下可能导致切换再生动画时crash的bug。
+  * Improve the scheduling algorithm for floating annotations.
+    改进了滚动弹幕的调度算法。
+    如果觉得弹幕滚动过快，可在设定里调整弹幕速度。
 
 8/18/2012 SAT	player,down,browser,translator	0.1.8.2,0.1.3.4,0.1.2.4,0.1.0.1
-    * Show media library on startup.
-    * Game launch settings (channel & encoding) will be saved for the next launch.
-      Setting up synchronization is only required once for each game.
-    * Highlight selected text in yellow in all textedit widgets.
-    * Fix a bug in the updater.
+  * Show media library on startup.
+  * Game launch settings (channel & encoding) will be saved for the next launch.
+    Setting up synchronization is only required once for each game.
+  * Highlight selected text in yellow in all textedit widgets.
+  * Fix a bug in the updater.
 
 8/14/2012 TUE	player,down,browser,translator	0.1.8.1,0.1.3.3,0.1.2.3,0.1.0.0
-    * Add intremental updater (Windows only).
-      Alternatively, latest binaries could be found at ftp.annot.me/release/annot-player.
-      Versions before 0.1.8.1 are now broken and won't work propertly.
-    * Add Annot Translator using WWWJDIC (beta). Internet access is indispensible.
-    * Integrate galgame Backlog with Annot Translator.
-    * Add media library to index available media and games from play history.
-    * Double-click subtitles will edit it if the user has its ownership.
-      Otherwise, show its analytics.
-    * Add support for Russian language.
-    * Update VLC plugins to version 2.0.3.
+  * Add intremental updater (Windows only).
+    Alternatively, latest binaries could be found at ftp.annot.me/release/annot-player.
+    Versions before 0.1.8.1 are now broken and won't work propertly.
+  * Add Annot Translator using WWWJDIC (beta). Internet access is indispensible.
+  * Integrate galgame Backlog with Annot Translator.
+  * Add media library to index available media and games from play history.
+  * Double-click subtitles will edit it if the user has its ownership.
+    Otherwise, show its analytics.
+  * Add support for Russian language.
+  * Update VLC plugins to version 2.0.3.
 
 7/29/2012 MON	annot.player, down, browser	0.1.8.0, 0.1.3.2, 0.1.2.2
-    * Fix the severe issue for synchronizing annotations caused by the changes of the server framework.
-      App before version 0.1.8.0 might not function well anymore.
-    * Fix the bug which might cause downloaded gzipped annotations failed to be unzipped and parsed.
-    * Utilize cookies to reduce network traffic.
+  * Fix the severe issue for synchronizing annotations caused by the changes of the server framework.
+    App before version 0.1.8.0 might not function well anymore.
+  * Fix the bug which might cause downloaded gzipped annotations failed to be unzipped and parsed.
+  * Utilize cookies to reduce network traffic.
 
 7/22/2012 SUN	annot.player, down, browser	0.1.7.1, 0.1.3.1, 0.1.2.1
-    * Long annotations/subtitles will be wrapped by word boundaries.
-    * Game subtitles will be rendered stably on the top or bottom.
-    * Add dock button to embedded mode, to toggle whether embed to the top or bottom.
-    * Add Italian language for galgame translation.
-    * Existing files to overwrite will be moved to trash instead of being deleted or renamed.
-    * Press the "Play/Pause" button after sync with galgame will start or pause listening to game signals.
-    * Add XML/JSON annotations download dialog to annot-player.
-    * Some unstable experimental features are temporarily disabled.
-    * Annotation Downloader is changed to use single download thread to avoid parallel bugs.
-    * Fix the bug that makes wmv and ISO images invisible from opening.
-    * Fix the bug that causes annot-player unable to fetch annotations when opening files in Windows Explorer.
-    * Fix a bug that might cause context menu to render in full black.
-    * Reimplement thread-safe message logging mechanism which could result in mystery crashes.
+  * Long annotations/subtitles will be wrapped by word boundaries.
+  * Game subtitles will be rendered stably on the top or bottom.
+  * Add dock button to embedded mode, to toggle whether embed to the top or bottom.
+  * Add Italian language for galgame translation.
+  * Existing files to overwrite will be moved to trash instead of being deleted or renamed.
+  * Press the "Play/Pause" button after sync with galgame will start or pause listening to game signals.
+  * Add XML/JSON annotations download dialog to annot-player.
+  * Some unstable experimental features are temporarily disabled.
+  * Annotation Downloader is changed to use single download thread to avoid parallel bugs.
+  * Fix the bug that makes wmv and ISO images invisible from opening.
+  * Fix the bug that causes annot-player unable to fetch annotations when opening files in Windows Explorer.
+  * Fix a bug that might cause context menu to render in full black.
+  * Reimplement thread-safe message logging mechanism which could result in mystery crashes.
 
 7/16/2012 MON	annot.player, down, browser	0.1.7, 0.1.3, 0.1.2
-    * Able to edit and save machine-translated subtitles.
-      The user will take the ownership of the editted subtitles.
-    * Render widgets (such as push buttons) as annotations (currently not for Mac).
-    * Bing API is replaced with Microsoft Azure API for default Galgame translation.
-      Because Microsoft will stop Bing translation service after Aug. 1, 2012,
-      galgame translation before version 0.1.7 will stop functioning after Aug.1.
-    * Add Google Translator and Romaji translation service.
-    * Able to turn on more than one translation providers.
-    * Enble translation for French/German/Spanish/Portuguese
-    * Opion to change annotation moving speed in preferences.
-      Modification to movement resolution is removed.
-    * Prefetch annotations and save to XML/JSON before streaming media is completed.
-    * Able to download annotation XML/JSON from Annot Browser or Annot Downloader.
-      To associate the downloaded XML/JSON subtitle with media file, rename the subtitle
-      as the same basename as the media file.
-    * Update VLC plugins to version 2.0.2.
-    * Fix the bug for creating Annotation Analytics view for galgame.
-      Double-click the annotation will show analytics of all annotations from its owner user.
-    * Fix the bug which causes annot-player window to disappear after the galgame is minimized,
-    * Fix a bug that might randomly crashes annot-player when dragging annotations.
-    * Fix the offline-cache inconsistent bug when editing annotations.
+  * Able to edit and save machine-translated subtitles.
+    The user will take the ownership of the editted subtitles.
+  * Render widgets (such as push buttons) as annotations (currently not for Mac).
+  * Bing API is replaced with Microsoft Azure API for default Galgame translation.
+    Because Microsoft will stop Bing translation service after Aug. 1, 2012,
+    galgame translation before version 0.1.7 will stop functioning after Aug.1.
+  * Add Google Translator and Romaji translation service.
+  * Able to turn on more than one translation providers.
+  * Enble translation for French/German/Spanish/Portuguese
+  * Opion to change annotation moving speed in preferences.
+    Modification to movement resolution is removed.
+  * Prefetch annotations and save to XML/JSON before streaming media is completed.
+  * Able to download annotation XML/JSON from Annot Browser or Annot Downloader.
+    To associate the downloaded XML/JSON subtitle with media file, rename the subtitle
+    as the same basename as the media file.
+  * Update VLC plugins to version 2.0.2.
+  * Fix the bug for creating Annotation Analytics view for galgame.
+    Double-click the annotation will show analytics of all annotations from its owner user.
+  * Fix the bug which causes annot-player window to disappear after the galgame is minimized,
+  * Fix a bug that might randomly crashes annot-player when dragging annotations.
+  * Fix the offline-cache inconsistent bug when editing annotations.
 
 6/30/2012	annot.player, down, browser	0.1.6.4, 0.1.2.9, 0.1.1.9
-    * Able to convert all Chinese annotations to Traditional Chinese.
-    * Add translation for Traditional Chinese.
-    * Able to adjust annotation movement resolution for floating annotations.
-    * Switch from llvm gcc to clang with C++11 enabled on Mac.
-    * Fix a bug while rendering translations in Galgame with multiple lines.
-    * Fix a bug which results in failure to resolve nico anime from nicovideo.jp/watch/so[0-9]*
-    * Fix severe multi-threading bugs in downloader.
-    * Switch from qthreadpool task to qthread in downloader to deal with concurrency bugs.
-    * Imported annotations will be saved to XML/JSON files.
-      New annotation searching logic follows:
-      * Search offline annotations in "Annot Stream/Data/cache/cache.db"
-          (or ~/Library/Caches/me.annot.player/cache.db on Mac OS X).
-      * Search offline annotations from XML/JSON files in the same folder of the video.
-      Assume the current file being played is ABC.mp4, then
-      ABC.whatever.xml and ABC.whatever.json will be imported.
-      * If no offline annotations exist, fetch latest annotations online.
-      Trigger "Update Annotations" from context menu will sync all three sources of annotations.
-      Edit annotations sources from "Annotation Source" in context menu.
+  * Able to convert all Chinese annotations to Traditional Chinese.
+  * Add translation for Traditional Chinese.
+  * Able to adjust annotation movement resolution for floating annotations.
+  * Switch from llvm gcc to clang with C++11 enabled on Mac.
+  * Fix a bug while rendering translations in Galgame with multiple lines.
+  * Fix a bug which results in failure to resolve nico anime from nicovideo.jp/watch/so[0-9]*
+  * Fix severe multi-threading bugs in downloader.
+  * Switch from qthreadpool task to qthread in downloader to deal with concurrency bugs.
+  * Imported annotations will be saved to XML/JSON files.
+    New annotation searching logic follows:
+    * Search offline annotations in "Annot Stream/Data/cache/cache.db"
+        (or ~/Library/Caches/me.annot.player/cache.db on Mac OS X).
+    * Search offline annotations from XML/JSON files in the same folder of the video.
+    Assume the current file being played is ABC.mp4, then
+    ABC.whatever.xml and ABC.whatever.json will be imported.
+    * If no offline annotations exist, fetch latest annotations online.
+    Trigger "Update Annotations" from context menu will sync all three sources of annotations.
+    Edit annotations sources from "Annotation Source" in context menu.
 
 6/14/2012	annot.player, down, browser	0.1.6.3, 0.1.2.8, 0.1.1.8
-    * Annotation motionless scheduling and rendering improved.
-    * Add halo effect to render annotations (able to change colors in Preferences).
-    * Selected annotations will glow.
-    * Able to change audio channels and delay time in context menu.
-    * Able to import annotation files in XML/JSON format downloaded from nicovideo/acfun/bilibili.
-      Automatically load external annotation files whose name starts with the file name of current media.
-    * Able to select text encoding for the annotated Galgame (usually Shift-JIS or UTF-16).
-      Enforce Shift-JIS as default.
-    * Fix the encoding issue for Galgame from light (malie.exe).
+  * Annotation motionless scheduling and rendering improved.
+  * Add halo effect to render annotations (able to change colors in Preferences).
+  * Selected annotations will glow.
+  * Able to change audio channels and delay time in context menu.
+  * Able to import annotation files in XML/JSON format downloaded from nicovideo/acfun/bilibili.
+    Automatically load external annotation files whose name starts with the file name of current media.
+  * Able to select text encoding for the annotated Galgame (usually Shift-JIS or UTF-16).
+    Enforce Shift-JIS as default.
+  * Fix the encoding issue for Galgame from light (malie.exe).
 
 6/8/2012	annot.player, down, browser	0.1.6.2, 0.1.2.8, 0.1.1.7
-    * Update the scripts to resolve annotations from bilibili's new web ui.
+  * Update the scripts to resolve annotations from bilibili's new web ui.
 
 6/8/2012	annot.player, down, browser	0.1.6.1, 0.1.2.7, 0.1.1.7
-    * Add option to switch whether connect to the Internet.
-      If connected, the latest online annotations are preferred.
-      When disconnected, the local offline annotation database is used.
-    * Add new annotation scheduler to reduce annotation movement for better readability.
-    * Update from ITH2 to ITH3 for tracking Galgame.
-      Translation for Akatsuki no Goei 2 is partially broken.
-      Translation support for games from light is broken.
+  * Add option to switch whether connect to the Internet.
+    If connected, the latest online annotations are preferred.
+    When disconnected, the local offline annotation database is used.
+  * Add new annotation scheduler to reduce annotation movement for better readability.
+  * Update from ITH2 to ITH3 for tracking Galgame.
+    Translation for Akatsuki no Goei 2 is partially broken.
+    Translation support for games from light is broken.
 
 6/3/2012	annot.player, down, browser	0.1.6.0, 0.1.2.6, 0.1.1.6
-    * Option to always show avatars (could be disabled from context menu).
-    * Able to translate annotations to different languages.
-    * Able to change file associations from Preferences.
-    * Enable HTTP pipelining to improve download and stream speed.
-    * Update to Qt 4.8.2. Switch from Carbon to Cocoa on Mac OS X.
-    * Add getchu.com to the browser's delegate list.
-    * Fix the issues that cause buttons in full screen difficult to press.
-    * Fix a bug in downloader which might result in incorrent file size.
-    * Fix bugs while tracking Galgame process and rendering annotations.
+  * Option to always show avatars (could be disabled from context menu).
+  * Able to translate annotations to different languages.
+  * Able to change file associations from Preferences.
+  * Enable HTTP pipelining to improve download and stream speed.
+  * Update to Qt 4.8.2. Switch from Carbon to Cocoa on Mac OS X.
+  * Add getchu.com to the browser's delegate list.
+  * Fix the issues that cause buttons in full screen difficult to press.
+  * Fix a bug in downloader which might result in incorrent file size.
+  * Fix bugs while tracking Galgame process and rendering annotations.
 
 5/25/2012	annot.player, down, browser	0.1.5.6, 0.1.2.5, 0.1.1.5
-    * Add randomized avatars to identify different users.
-    * Able to change annotation font in preferences ("Helvetia" as default).
-    * Option to limit annotation bandwith (enabled by default).
-    * Bugfix
-      * Fix a bug which could freeze the player when stream video with more than 6 parts.
-      * Fix a bug which bound # of download tasks to # of CPUs.
-      * Fix a bug which might mess up merged FLV streams, esp. Sina video from AcFun.tv.
-      * Fix a bug that could crash the browser when activate context menu.
-      * Fix a bug when prevent logging in to Nicovideo.jp on Windows.
-      * Fix a bug while annotating galgame.
-      * Fix a bug while rendering Aero on Windows 7.
+  * Add randomized avatars to identify different users.
+  * Able to change annotation font in preferences ("Helvetia" as default).
+  * Option to limit annotation bandwith (enabled by default).
+  * Bugfix
+    * Fix a bug which could freeze the player when stream video with more than 6 parts.
+    * Fix a bug which bound # of download tasks to # of CPUs.
+    * Fix a bug which might mess up merged FLV streams, esp. Sina video from AcFun.tv.
+    * Fix a bug that could crash the browser when activate context menu.
+    * Fix a bug when prevent logging in to Nicovideo.jp on Windows.
+    * Fix a bug while annotating galgame.
+    * Fix a bug while rendering Aero on Windows 7.
 
 5/19/2012	annot.player, down, browser	0.1.5.5, 0.1.2.4, 0.1.1.4
-    * Add water ripple effect to render windows (conflicts with Aero effect,
-      Mac/WinXP only).
-    * Show meta info (e.g. user,date) after annotations.
-    * Show loading progress in Browser's address bar.
-    * When the download option is off, try to use MMS protocal instead of
-      HTTP to stream remote video.
-      Include Youtube, and any other video which is less than 6 minutes.
-      Currently, parted remote video and those require authentification
-      (such as Nicovideo) do not support MMS mode.
-    * Fix a bug when resolve Youtube video on Windows.
-    * Fix an encoding bug when resolve Tudou video.
-    * Fix a bug that might result in unsaved download tasks when downloading
-      multiple videos.
+  * Add water ripple effect to render windows (conflicts with Aero effect,
+    Mac/WinXP only).
+  * Show meta info (e.g. user,date) after annotations.
+  * Show loading progress in Browser's address bar.
+  * When the download option is off, try to use MMS protocal instead of
+    HTTP to stream remote video.
+    Include Youtube, and any other video which is less than 6 minutes.
+    Currently, parted remote video and those require authentification
+    (such as Nicovideo) do not support MMS mode.
+  * Fix a bug when resolve Youtube video on Windows.
+  * Fix an encoding bug when resolve Tudou video.
+  * Fix a bug that might result in unsaved download tasks when downloading
+    multiple videos.
 
 5/11/2012	annot.player, down, browser	0.1.5.4, 0.1.2.3, 0.1.1.3
-    * FadeIn/FadeOut animation applied to all windows and annotations.
-    * Change menubar shortcuts from ALT to CAPSLOCK.
-    * Added magnifier (CTRL+E or hold LeftButton).
-    * Fixed mouse freezing issue on Windows.
-    * Fixed a bug while decoding AcFun.tv URLs.
-    * Fixed a bug in Browser when visiting SSL encrypted webs.
+  * FadeIn/FadeOut animation applied to all windows and annotations.
+  * Change menubar shortcuts from ALT to CAPSLOCK.
+  * Added magnifier (CTRL+E or hold LeftButton).
+  * Fixed mouse freezing issue on Windows.
+  * Fixed a bug while decoding AcFun.tv URLs.
+  * Fixed a bug in Browser when visiting SSL encrypted webs.
 
 5/5/2012	annot.player, down, browser	0.1.5.3, 0.1.2.2, 0.1.1.2
-    * Able to play limited Youku video from outside of China.
-    * Use annotion pool to reduce memory traffic and CPU usage significantly.
-    * Support for AcFun.tv is fixed.
-    * Fixed a bug preventing network proxy settings from being saved.
-    * Change stream strategy from mult-thread to single-thread multi-task
-      to avoid being banned by remote server when download in parallel.
-    * right button will collect nearby annotations.
-      ALT + DoubleClick will attract all annotations.
-      SHIFT + DoubleClick will expel nearby annotations.
-      Shortcuts to manipulate annotations changed.
-    * Added FadeIn / FadeOut effects to render annotations.
-    * Added touchpad gestures to player and all webview (Mac only).
-    * Added menu bar to Browser/Downloader on Windows.
-    * Added debug console to Browser.
-    * Added preferences dialog. Able to change default downloads location.
-    * Context menu to repeat current video.
+  * Able to play limited Youku video from outside of China.
+  * Use annotion pool to reduce memory traffic and CPU usage significantly.
+  * Support for AcFun.tv is fixed.
+  * Fixed a bug preventing network proxy settings from being saved.
+  * Change stream strategy from mult-thread to single-thread multi-task
+    to avoid being banned by remote server when download in parallel.
+  * right button will collect nearby annotations.
+    ALT + DoubleClick will attract all annotations.
+    SHIFT + DoubleClick will expel nearby annotations.
+    Shortcuts to manipulate annotations changed.
+  * Added FadeIn / FadeOut effects to render annotations.
+  * Added touchpad gestures to player and all webview (Mac only).
+  * Added menu bar to Browser/Downloader on Windows.
+  * Added debug console to Browser.
+  * Added preferences dialog. Able to change default downloads location.
+  * Context menu to repeat current video.
 
 4/28/2012	annot.player, down, browser	0.1.5.2, 0.1.2.1, 0.1.1.1
-    * Fixed a severe bug that might cause duplicated imported annotations.
+  * Fixed a severe bug that might cause duplicated imported annotations.
 
 4/28/2012	annot.player, down, browser	0.1.5.1, 0.1.2.0, 0.1.1.1
-    * Fixed a bug that prevent resolving annotations when the app or system
-      path contains Chinese characters in Windows.
-    * Option to change online/offline annotations preference.
-      Prefer cached offline annotations by default.
-    * Able to select annotation and draw all annotations from the its user.
-    * Able to exile surrounded annotations using SHIFT+LButton or LButton+RButton.
-    * Added more mouse gestures to manipulate annotations. Shortcuts follow.
-    * Browser improved.
-      * Added multiple search engines.
-      * Always highlight selected text.
-      * Highlight hovered downloadable links.
-      * Added menus on Mac and Linux.
-      * Able to go full screen by double clicking any tab.
-      * Added mouse gestures with right or middle button, as follow.
+  * Fixed a bug that prevent resolving annotations when the app or system
+    path contains Chinese characters in Windows.
+  * Option to change online/offline annotations preference.
+    Prefer cached offline annotations by default.
+  * Able to select annotation and draw all annotations from the its user.
+  * Able to exile surrounded annotations using SHIFT+LButton or LButton+RButton.
+  * Added more mouse gestures to manipulate annotations. Shortcuts follow.
+  * Browser improved.
+    * Added multiple search engines.
+    * Always highlight selected text.
+    * Highlight hovered downloadable links.
+    * Added menus on Mac and Linux.
+    * Able to go full screen by double clicking any tab.
+    * Added mouse gestures with right or middle button, as follow.
 
 4/22/2012	annot.player, down, browser	0.1.5.0, 0.1.1.0, 0.1.1.0
-    * Offline caching improved. Most network accesses are cached if possible.
-      Imported annotations are also cached for offline playing.
-      Offline database performance improved.
-    * Able to change annotation offset in time. Shortcuts follow.
-      * CTRL+ALT with =-0
-      * CTRL+ALT+Wheel
-    * Able to open media file from context menu on Windows.
-    * To maximize will result in full screen.
-    * Browser improved.
-      * Detect streamable video and open in Annot Player from context menu.
-      * Most webkit compatible shortcuts added.
-      * Fixed URL encoding for Asia characters.
-      * Offline cookies and caching are enabled.
-    * Downloader improved.
-      * Added concurrency control. Limit max number of downloads to 3.
-      * Added system tray.
-      * Added context menu.
-    * Streaming from AcFun.tv is broken.
-      Won't fix until AcFun.tv finalize its new RESTful API.
-    * Bugfix.
-      * Fixed bugs that might crash the player while switching media.
-      * Fixed bugs preventing Adobe Flash from playing MP4 video on Mac.
+  * Offline caching improved. Most network accesses are cached if possible.
+    Imported annotations are also cached for offline playing.
+    Offline database performance improved.
+  * Able to change annotation offset in time. Shortcuts follow.
+    * CTRL+ALT with =-0
+    * CTRL+ALT+Wheel
+  * Able to open media file from context menu on Windows.
+  * To maximize will result in full screen.
+  * Browser improved.
+    * Detect streamable video and open in Annot Player from context menu.
+    * Most webkit compatible shortcuts added.
+    * Fixed URL encoding for Asia characters.
+    * Offline cookies and caching are enabled.
+  * Downloader improved.
+    * Added concurrency control. Limit max number of downloads to 3.
+    * Added system tray.
+    * Added context menu.
+  * Streaming from AcFun.tv is broken.
+    Won't fix until AcFun.tv finalize its new RESTful API.
+  * Bugfix.
+    * Fixed bugs that might crash the player while switching media.
+    * Fixed bugs preventing Adobe Flash from playing MP4 video on Mac.
 
 4/14/2012	annot.player, down, browser	0.1.4.3, 0.1.0.2, 0.1.0.1
-    * Fixed a severe bug while streaming MP4 video from nicovideo.jp.
-    * Use CTRL+SHIFT/MiddleButton with Mouse to select and delete annotations.
-    * Annotation analytics improved.
-    * Display download progress and media information in full screen mode.
-    * Preferred playing mode changed to embedded mode.
-    * Browser improved.
-      * Automatic login nicovideo.jp and bilibili.tv.
-      * Added built-in adblock.
-      * Remember history of visited and recent closed URLs.
+  * Fixed a severe bug while streaming MP4 video from nicovideo.jp.
+  * Use CTRL+SHIFT/MiddleButton with Mouse to select and delete annotations.
+  * Annotation analytics improved.
+  * Display download progress and media information in full screen mode.
+  * Preferred playing mode changed to embedded mode.
+  * Browser improved.
+    * Automatic login nicovideo.jp and bilibili.tv.
+    * Added built-in adblock.
+    * Remember history of visited and recent closed URLs.
 
 4/8/2012	annot.player, down, browser	0.1.4.2, 0.1.0.1, 0.1.0.1
-    * Annotation analytics improved.
-    * Show annotation analysis while playing.
-    * Fixed a bug in deployed package for Windows.
+  * Annotation analytics improved.
+  * Show annotation analysis while playing.
+  * Fixed a bug in deployed package for Windows.
 
 4/7/2012	annot.player, down, browser	0.1.4.1, 0.1.0.1, 0.1.0.1
-    * Added keyboard shortcuts to adjust contrast, brightness, hue, saturation and gamma.
-    * Added mouse wheel shortcuts to rotate/scale annotations.
-      * Ctrl + Wheel: scale all/paused annotations
-      * Shift + Wheel: rotate all/paused annotations
-    * Added basic analytics for annotations.
-    * Hardcode anonymous accounts for annot.me and nicovideo.jp.
-    * Alpha-release for linux.
-    * Service host moved to Japan.
-    * Bug fix and improvement on usability and stability.
+  * Added keyboard shortcuts to adjust contrast, brightness, hue, saturation and gamma.
+  * Added mouse wheel shortcuts to rotate/scale annotations.
+    * Ctrl + Wheel: scale all/paused annotations
+    * Shift + Wheel: rotate all/paused annotations
+  * Added basic analytics for annotations.
+  * Hardcode anonymous accounts for annot.me and nicovideo.jp.
+  * Alpha-release for linux.
+  * Service host moved to Japan.
+  * Bug fix and improvement on usability and stability.
 
 3/30/2012	annot.player, down, browser	0.1.4.0, 0.1.0.0, 0.1.0.0
-    * Web browser and downloader utilities are made into different apps.
-    * Added mouse rubber band to select annotations with CTRL/SHIFT modifiers.
-    * Nico browser fixed. Able to visit nico anime channel from outside of Japan.
-    * Added previous/next/browse actions for online video.
-    * Upgraded to Qt 4.8.1 and VLC 2.0.1.
+  * Web browser and downloader utilities are made into different apps.
+  * Added mouse rubber band to select annotations with CTRL/SHIFT modifiers.
+  * Nico browser fixed. Able to visit nico anime channel from outside of Japan.
+  * Added previous/next/browse actions for online video.
+  * Upgraded to Qt 4.8.1 and VLC 2.0.1.
 
 3/23/2012	annot.player	0.1.3.4
-    * Show download progress in position slider.
-    * Added annotation thread view.
-    * Allow opennng multiple windows from context menu.
-    * Bug fix in streaming module.
+  * Show download progress in position slider.
+  * Added annotation thread view.
+  * Allow opennng multiple windows from context menu.
+  * Bug fix in streaming module.
 
 3/20/2012	annot.player	0.1.3.3
-    * Fixed a severe bug which could crash the app while downloading.
-    * Option to disable context menu rendering.
-    * Option to open multiple player windows on Windows in context menu.
-    * Able to change video aspect ratio in context menu.
-      Specified aspect ratio will be saved for the movie.
+  * Fixed a severe bug which could crash the app while downloading.
+  * Option to disable context menu rendering.
+  * Option to open multiple player windows on Windows in context menu.
+  * Able to change video aspect ratio in context menu.
+    Specified aspect ratio will be saved for the movie.
 
 3/17/2012	annot.player	0.1.3.2
-    * When playing online video from AcFun/Bilibili,
-      parted videos are now merged on the fly.
-      Knowing issues with current implementation:
-      * Seeking over downloaded frames is not allowed.
-      * High CPU usage on Macbook Air.
-    * Added network proxy.
-    * Added proxy browser for nicovideo.
-      Able to play nico video from outside of Japan.
-    * Added utilities menu.
-    * Monitor clipboard for online media/annot URLs.
-    * Added increase/decrease buttons to URL dialog.
-    * Reimplemented video download and demux modules.
-      Removed dependencies on mp4v2 and gpac.
+  * When playing online video from AcFun/Bilibili,
+    parted videos are now merged on the fly.
+    Knowing issues with current implementation:
+    * Seeking over downloaded frames is not allowed.
+    * High CPU usage on Macbook Air.
+  * Added network proxy.
+  * Added proxy browser for nicovideo.
+    Able to play nico video from outside of Japan.
+  * Added utilities menu.
+  * Monitor clipboard for online media/annot URLs.
+  * Added increase/decrease buttons to URL dialog.
+  * Reimplemented video download and demux modules.
+    Removed dependencies on mp4v2 and gpac.
 
 3/10/2012	annot.player	0.1.3.1
-    * Added fast forward buttons.
-    * Able to disable Aero effect in Windows Vista/7.
-    * Automatically detect last language preference for subtitle/audio track.
-    * Several bug fixes.
+  * Added fast forward buttons.
+  * Able to disable Aero effect in Windows Vista/7.
+  * Automatically detect last language preference for subtitle/audio track.
+  * Several bug fixes.
 
 3/2/2012	annot.player	0.1.3.0
-    * Now support streaming from nicovideo.jp in Mac OS X as well.
-      Online video will be automatically downloaded and associated with annotations.
-    * Support streaming nicovideo using proxy.
-    * Switched to VLC2. Performance and stability improved.
-    * Now support playing Bluray Disc.
-    * Playing cue is broken on Mac OS X.
-    * GUI improved.
+  * Now support streaming from nicovideo.jp in Mac OS X as well.
+    Online video will be automatically downloaded and associated with annotations.
+  * Support streaming nicovideo using proxy.
+  * Switched to VLC2. Performance and stability improved.
+  * Now support playing Bluray Disc.
+  * Playing cue is broken on Mac OS X.
+  * GUI improved.
 
 2/25/2012	annot.player	0.1.2.9
-    * Annotation rendering improved.
-    * Online streaming improved.
-      Added support to stream from nicovideo.jp (Windows only).
-    * Added dialog to download online videos, and remux parted videos to mp4.
-      Downloaded videos will be associated with online annotations automatically.
-      Supported websites: nicovideo.jp,acfun.tv,bilibili.tv,....
-    * Added debug console.
+  * Annotation rendering improved.
+  * Online streaming improved.
+    Added support to stream from nicovideo.jp (Windows only).
+  * Added dialog to download online videos, and remux parted videos to mp4.
+    Downloaded videos will be associated with online annotations automatically.
+    Supported websites: nicovideo.jp,acfun.tv,bilibili.tv,....
+  * Added debug console.
 
 2/17/2012	annot.player	0.1.2.8
-    * Added annotation rendering effects.
-      Annotations rendered with shadow by default.
-    * Added support to open RTSP stream.
-    * GUI improved.
+  * Added annotation rendering effects.
+    Annotations rendered with shadow by default.
+  * Added support to open RTSP stream.
+  * GUI improved.
 
 2/9/2012	annot.player	0.1.2.7
-    * Support importing annotations from nicovideo.jp.
-    * Support bilibili/nicovideo login.
-    * Online video and annotations decoding improved.
-    * User interface improved.
-    * Added history to all input line edits.
-    * Web browser module removed.
-    * Remember last played position, subtitle, and audio track for each movie.
-    * Added option to limit annotation count.
+  * Support importing annotations from nicovideo.jp.
+  * Support bilibili/nicovideo login.
+  * Online video and annotations decoding improved.
+  * User interface improved.
+  * Added history to all input line edits.
+  * Web browser module removed.
+  * Remember last played position, subtitle, and audio track for each movie.
+  * Added option to limit annotation count.
 
 2/4/2012	annot.player	0.1.2.6
-    * Fixed a severe bug while opening remote media.
+  * Fixed a severe bug while opening remote media.
 
 2/4/2012	annot.player	0.1.2.5
-    * Now support playing GoogleVideo/AcFun/BiliBili/Sina/Tudou,QQ video online, with annotation support.
-    * Support importing online annotations from AcFun and Bilibli.
+  * Now support playing GoogleVideo/AcFun/BiliBili/Sina/Tudou,QQ video online, with annotation support.
+  * Support importing online annotations from AcFun and Bilibli.
 
 1/27/2012	annot.player	0.1.2.4
-    * Now support playing Youtube/Youku video online, with annotation support.
+  * Now support playing Youtube/Youku video online, with annotation support.
 
 1/20/2012	annot.player	0.1.2.3
-    * Adjusted for Akatsuki no Goei 2
-    * Added support to play commentary audio tracks in BD video.
-    * Performance improved while handling large amount of annots/subtitles.
-    * Cast (bless/curse/block) to annotation and user added.
-    * Shortcuts assigned to switch play modes.
-    * Filters added to to annotation browser.
-    * Added basic user view.
-    * Several bug fixes.
+  * Adjusted for Akatsuki no Goei 2
+  * Added support to play commentary audio tracks in BD video.
+  * Performance improved while handling large amount of annots/subtitles.
+  * Cast (bless/curse/block) to annotation and user added.
+  * Shortcuts assigned to switch play modes.
+  * Filters added to to annotation browser.
+  * Added basic user view.
+  * Several bug fixes.
 
 1/12/2012	annot.player	0.1.2.2
-    * Enforce Japanese encoding to decode Galgame text in Windows.
-    * Service domain changed.
-    * Added automatic game signal detection.
-      Current database only supports galgame from light and a few other games.
-    * Subtitle rendering improved.
+  * Enforce Japanese encoding to decode Galgame text in Windows.
+  * Service domain changed.
+  * Added automatic game signal detection.
+    Current database only supports galgame from light and a few other games.
+  * Subtitle rendering improved.
 
 1/6/2012	annot.player	0.1.2.1 (Spring Festival Edition)
-    * Added Spring Festival channel.
-    * Ensure buttons repaint correctly in Windows.
-    * Fixed crash on exit in Mac OS X caused by unreleased nsobject.
+  * Added Spring Festival channel.
+  * Ensure buttons repaint correctly in Windows.
+  * Fixed crash on exit in Mac OS X caused by unreleased nsobject.
 
 1/1/2012	annot.player	0.1.2.0
-    * Able to delete annotations and alias.
-    * Fixed bugs while editing annotations.
-    * Adopted on-demand window creation to improve performance.
-    * Startup popups eliminated.
-    * Ensure player always on top of DirectX windows in full screen mode.
-    * Window-always-on-top disabled by default.
-    * Stop listening to process if required or on process close.
-    * Performance improved on large number of annotations.
-    * Updated to Qt 4.8 on Windows. Several improvements using new APIs.
-    * Added backlog view for annotations/translations.
-    * Annotation font rendered with contoured shadow.
-    * Mac OS X upgraded to 10.7. Toolchain switched.
-      No more support for 10.6 in the future.
+  * Able to delete annotations and alias.
+  * Fixed bugs while editing annotations.
+  * Adopted on-demand window creation to improve performance.
+  * Startup popups eliminated.
+  * Ensure player always on top of DirectX windows in full screen mode.
+  * Window-always-on-top disabled by default.
+  * Stop listening to process if required or on process close.
+  * Performance improved on large number of annotations.
+  * Updated to Qt 4.8 on Windows. Several improvements using new APIs.
+  * Added backlog view for annotations/translations.
+  * Annotation font rendered with contoured shadow.
+  * Mac OS X upgraded to 10.7. Toolchain switched.
+    No more support for 10.6 in the future.
 
 12/25/2011	annot.player	0.1.1.5
-    * Fixed a bug while clustering annotations.
-    * Fixed a bug in annotation editor.
+  * Fixed a bug while clustering annotations.
+  * Fixed a bug in annotation editor.
 
 12/22/2011	annot.player	0.1.1.4
-    * Fixed a bug while playing DVD.
-    * Fixed a bug while dragging annotion.
+  * Fixed a bug while playing DVD.
+  * Fixed a bug while dragging annotion.
 
 12/16/2011	annot.player	0.1.1.3
-    * Added input line history.
-    * Added pre-defined command to input line.
+  * Added input line history.
+  * Added pre-defined command to input line.
 
 12/13/2011	annot.player	0.1.1.2
-    * Windows tool chain updated. Qt library rebuilt. gSOAP updated.
-    * Added disc type automatic detection.
-    * Launcher dependency on msvcrt removed.
-    * Offline annotation caching improved.
+  * Windows tool chain updated. Qt library rebuilt. gSOAP updated.
+  * Added disc type automatic detection.
+  * Launcher dependency on msvcrt removed.
+  * Offline annotation caching improved.
 
 12/7/2011	annot.player	0.1.1.1
-    * Added Fedora support.
-    * Added CD/DVD device dialog. CD/DVD buffering performance improved.
-    * Fixed sqlite cache creation bug in Linux.
-    * Menubar enabled to all OSes.
-    * Forward token digest to reduce delay on opening media.
-    * Added playlist to open multiple files or folder.
-    * Switched to GNU ChangeLog format.
+  * Added Fedora support.
+  * Added CD/DVD device dialog. CD/DVD buffering performance improved.
+  * Fixed sqlite cache creation bug in Linux.
+  * Menubar enabled to all OSes.
+  * Forward token digest to reduce delay on opening media.
+  * Added playlist to open multiple files or folder.
+  * Switched to GNU ChangeLog format.
 
 12/2/2011	annot.player	0.1.1.0
-    * Windows global mouse hook removed and replaced with native vlcore calls.
-    Less mouse hanging in Windows when the app is busy.
-    * Added support to play cue file.
-    * Added support to play cdda. Fixed bug while opening CD on Windows.
-    * Added embedded mode.
-    Able to embed/play vidoe/annots in any window, such as Notepad, Photoshop, or PPStream.
-    * Able to select embedded player on the top or bottom.
-    * Player buttons and menues extended.
-    * Added task bar icon for Windows 7.
-    * Added Dwm notifier in Windows 7 to watch aero composition changes.
+  * Windows global mouse hook removed and replaced with native vlcore calls.
+  Less mouse hanging in Windows when the app is busy.
+  * Added support to play cue file.
+  * Added support to play cdda. Fixed bug while opening CD on Windows.
+  * Added embedded mode.
+  Able to embed/play vidoe/annots in any window, such as Notepad, Photoshop, or PPStream.
+  * Able to select embedded player on the top or bottom.
+  * Player buttons and menues extended.
+  * Added task bar icon for Windows 7.
+  * Added Dwm notifier in Windows 7 to watch aero composition changes.
 
 11/26/2011	annot.player	0.1.0.3
-    * Fixed a severe bug in annot-player-0.1.0.2-win that might cause significant delay for displaying context menu.
-    * Added support for navigating DVD menu on Mac OS X.
-    * Added app desktop/icon on linux.
+  * Fixed a severe bug in annot-player-0.1.0.2-win that might cause significant delay for displaying context menu.
+  * Added support for navigating DVD menu on Mac OS X.
+  * Added app desktop/icon on linux.
 
 11/25/2011	annot.player	0.1.0.2
-    * Added support for playing disc images such as ISO/MDF/BIN/IMG.
-    * Added support for Ubuntu 11.
-    * Improved mouse hook in windows to reduce GUI hanging.
-    * Minor bug fix.
+  * Added support for playing disc images such as ISO/MDF/BIN/IMG.
+  * Added support for Ubuntu 11.
+  * Improved mouse hook in windows to reduce GUI hanging.
+  * Minor bug fix.
 
 11/22/2011	annot.player	0.1.0.1
-    * Added annotation counting.
-    * Delete Caches script removed. Caches will be automatically invalidated if required.
-    * Minor bug fix.
+  * Added annotation counting.
+  * Delete Caches script removed. Caches will be automatically invalidated if required.
+  * Minor bug fix.
 
 11/18/2011	annot.player	0.1.0.0
-    * Improved translations.
-    * Minor bug fix.
+  * Improved translations.
+  * Minor bug fix.
 
 11/18/2011	annot.player	0.1.0.0.rc
-    * Added basic support for viewing/annotating pictures and manga.
-    * CD/DVD/DVDISO support completed. DVD menu added.
-    * Added basic NG support.
-    * Block/bless/curse cast completed.
-    * Communication module and underlying data structure redesigned.
-    Player with version# less than 0.1.0.0 might not work anymore.
-    * Added support for Mac OS X Lion 10.7.
-    * Added support for Mac to directly open file in Finder.
-    * Added drag/drop support for Mac.
-    * Mouse hook bug fixed on Windows.
-    * GUI improved.
-    * Translations improved.
+  * Added basic support for viewing/annotating pictures and manga.
+  * CD/DVD/DVDISO support completed. DVD menu added.
+  * Added basic NG support.
+  * Block/bless/curse cast completed.
+  * Communication module and underlying data structure redesigned.
+  Player with version# less than 0.1.0.0 might not work anymore.
+  * Added support for Mac OS X Lion 10.7.
+  * Added support for Mac to directly open file in Finder.
+  * Added drag/drop support for Mac.
+  * Mouse hook bug fixed on Windows.
+  * GUI improved.
+  * Translations improved.
 
 11/12/2011	annot.player	0.0.9.2
-    * Several bugfixes for Mac.
-    * OSD structure redesigned for sake of Mac and Windows XP.
-    * Mac OS X deployment frameworks finished.
-    * Caches and logs moved to ~/Library on Mac OS X.
-    * Added warming-up caches to speed up program startup.
-    * Reduced slow-downs that caused by Windows XP compatible code.
-    * Theming bug fixed for Windows XP.
+  * Several bugfixes for Mac.
+  * OSD structure redesigned for sake of Mac and Windows XP.
+  * Mac OS X deployment frameworks finished.
+  * Caches and logs moved to ~/Library on Mac OS X.
+  * Added warming-up caches to speed up program startup.
+  * Reduced slow-downs that caused by Windows XP compatible code.
+  * Theming bug fixed for Windows XP.
 
 11/10/2011	annot.player	0.0.9.0-0.0.9.1
-    * Windows XP theme redesigned.
-    * Mac OS X theme redesigned.
-    * Several bug fixes for Mac and Windows XP.
-    * Added Chinese translation.
+  * Windows XP theme redesigned.
+  * Mac OS X theme redesigned.
+  * Several bug fixes for Mac and Windows XP.
+  * Added Chinese translation.
 
 11/8/2011	touch.player	0.0.8.4
-    * Open file context menu item now could open game exe as well.
-    * Finished update module.
-    * HTML editor sibling bug fixed.
-    * Subtitle color is now customizable. Long subtitle is splitted.
+  * Open file context menu item now could open game exe as well.
+  * Finished update module.
+  * HTML editor sibling bug fixed.
+  * Subtitle color is now customizable. Long subtitle is splitted.
 
 11/4/2011	touch.player	0.0.8.3
-    * NtCreateThreadEx replaced by synchronized NtCreatThread for Windows XP support.
+  * NtCreateThreadEx replaced by synchronized NtCreatThread for Windows XP support.
 
 11/3/2011	touch.player	0.0.8.2
-    * Added missed qtxml.
+  * Added missed qtxml.
 
 11/2/2011	touch.player	0.0.8.1
-    * Added in translate module.
-    * Added subtitle position settings.
+  * Added in translate module.
+  * Added subtitle position settings.
 
 11/1/2011	touch.player	0.0.8.0
-    * Communication approach with server changed.
+  * Communication approach with server changed.
 
 10/30/2011	touch.player	0.0.7.2
-    * Added window picker (windows only).
-    * Enable attach process by window (windows only).
-    * Enable attach OSDPlayer to other window (windows only).
-    * TokenView removed from SignalView.
+  * Added window picker (windows only).
+  * Enable attach process by window (windows only).
+  * Enable attach OSDPlayer to other window (windows only).
+  * TokenView removed from SignalView.
 
 10/29/2011	touch.player	0.0.7.1
-    * Asynchronized communication.
-    * Annotation scheduling algorithm changed.
+  * Asynchronized communication.
+  * Annotation scheduling algorithm changed.
 
 10/27/2011	touch.player	0.0.7.0
-    * Added debug output.
-    * Added system tray.
-    * Removed ALPHA features.
-    * Added single application feature.
-    * Added font caching notification.
-    * Game annotation hashing algorithm changed.
+  * Added debug output.
+  * Added system tray.
+  * Removed ALPHA features.
+  * Added single application feature.
+  * Added font caching notification.
+  * Game annotation hashing algorithm changed.
 
 10/26/2011	touch.player	0.0.6.0
-    * Get local caching work, ready for publish.
+  * Get local caching work, ready for publish.
 
 10/24/2011	touch.player	0.0.5.1
-    * Mac theme and mouse events fixed
+  * Mac theme and mouse events fixed
 
 10/23/2011	touch.player	0.0.5.0
-    * Renamed from touch to annot
-    * Start using google code.
-    * Added language selection.
-    * Added annot filter.
-    * Finished annot editing.
-    * Finished alias editing.
-    * Token tag, name and file merged into alias.
-    * Game and media type merged into one.
-    * Most client-side componets finished except sync mode and local cache.
-    * Ready for publishing.
+  * Renamed from touch to annot
+  * Start using google code.
+  * Added language selection.
+  * Added annot filter.
+  * Finished annot editing.
+  * Finished alias editing.
+  * Token tag, name and file merged into alias.
+  * Game and media type merged into one.
+  * Most client-side componets finished except sync mode and local cache.
+  * Ready for publishing.
 
 10/16/2011	touch.player	0.0.4.2
-    * Added client side signal mode.
+  * Added client side signal mode.
 
 10/16/2011	touch.player	0.0.4.1
-    * Finished GTH and process monitor module
+  * Finished GTH and process monitor module
 
 10/12/2011	touch.player	0.0.4
-    * Start with ITH
+  * Start with ITH
 
 9/15/2011	touch.player	0.0.3.1
-    * Added local cache using SQLite to implement SOAP client functions.
-    * Added persistant storage.
-    * Added licences
+  * Added local cache using SQLite to implement SOAP client functions.
+  * Added persistant storage.
+  * Added licences
 
 9/10/2011	touch.player	0.0.3
-    * Replaced REST xml parser with SOAP RPC.
+  * Replaced REST xml parser with SOAP RPC.
 
 9/3/2011	touch.app	0.0.0.1
-    * Project start.
+  * Project start.
 
 9/3/2011	touch.player	0.0.2.1
-    * Add subtitle support
+  * Add subtitle support
 
 8/26/2011	touch.player	0.0.2.0
-    * First server side support (annotation/token/user)
-    * Mac OS X new GUI
-    * Several bug fixed. Stable release.
-    * Support LaTeX style commands
-    * Disc basic support in Windows.
+  * First server side support (annotation/token/user)
+  * Mac OS X new GUI
+  * Several bug fixed. Stable release.
+  * Support LaTeX style commands
+  * Disc basic support in Windows.
 
 7/31/2011	touch.player	0.0.1.3
-    * Added AIML module.
+  * Added AIML module.
 
 7/30/2011	touch.player	0.0.1.2
-    * Mac OS X support using VLCKit!
+  * Mac OS X support using VLCKit!
 
 7/27/2011	touch.player	0.0.1.1
-    * Several bug fixed. Stable release.
-    * Improved command line edit.
-    * Using event filter in Windows hook
+  * Several bug fixed. Stable release.
+  * Improved command line edit.
+  * Using event filter in Windows hook
 
 7/26/2011	touch.player	0.0.1.0
-    * Most GUI issue solved.
-      * DWM aero
-      * Mouse hook on Windows
-      * OSD display
-      * Graphics view animation
-      * Text encoding
-      * QSS and UI style
-    * Directory structure changed a lot.
-      * Moved common packages into Core
-      * Moved Windows stuff into win32
-      * Put VLC wrapper (MediaPlayer) alone.
-      * Combined with touch.reader.
-    * Work under Linux.
-    But only tested for Windows.
-    Missing VLC 1.1.x for Mac.
-    * Major Missing component
-      * Database
-      * User
-      * Network
-      * Platform other then win7
+  * Most GUI issue solved.
+    * DWM aero
+    * Mouse hook on Windows
+    * OSD display
+    * Graphics view animation
+    * Text encoding
+    * QSS and UI style
+  * Directory structure changed a lot.
+    * Moved common packages into Core
+    * Moved Windows stuff into win32
+    * Put VLC wrapper (MediaPlayer) alone.
+    * Combined with touch.reader.
+  * Work under Linux.
+  But only tested for Windows.
+  Missing VLC 1.1.x for Mac.
+  * Major Missing component
+    * Database
+    * User
+    * Network
+    * Platform other then win7
 
 6/30/2011	touch.player	0.0.0.0
-    * Project launched.
+  * Project launched.
 
 6/18/2011	touch.reader	0.0.0.0
-    * Project launched.
+  * Project launched.
 
 Copyright 2011, Annot Cloud
 Copying and distribution of this file, with or without modification, are

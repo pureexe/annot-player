@@ -6,14 +6,17 @@ require "lalib"
 
 function Login_Bilibili( str_tmp_file )
 	--local str_login_url = "https://secure.bilibili.us/member/index_do.php";
-	local str_login_url = "https://secure.bilibili.tv/member/index_do.php";
+	local str_login_url = "https://secure.bilibili.tv/login";
 	local post_str = string.format(
 		--"fmdo=login&dopost=login&refurl=http%%3A%%2F%%2Fbilibili.tv%%2F&keeptime=604800&userid=%s&pwd=%s&keeptime=604800"
-		"fmdo=login&dopost=login&gourl=&keeptime=604800&userid=%s&pwd=%s&keeptime=604800"
+		--"fmdo=login&dopost=login&gourl=&keeptime=604800&userid=%s&pwd=%s&keeptime=604800"
+		"act=login&gourl=http%%3A%%2F%%2Fbilibili.tv%%2F&userid=%s&pwd=%s&keeptime=604800"
 		,username["bilibili"],decrypt(password["bilibili"]));
 	--dbgMessage(post_str);
 	re = postdlFile("", str_login_url, post_str,
-		"Content-type: application/x-www-form-urlencoded\r\nReferer: https://secure.bilibili.tv/login.php");
+		--"Content-type:application/x-www-form-urlencoded\r\nReferer:https://secure.bilibili.tv/login.php"
+		"Content-Type:application/x-www-form-urlencoded\r\nReferer:https://secure.bilibili.tv/login.php"
+        );
 
 	--check login state
 	if re~=0

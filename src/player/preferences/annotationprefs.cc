@@ -248,8 +248,10 @@ AnnotationPreferencesTab::save()
   saveJapaneseFont();
   saveOffset();
   saveSpeed();
-  saveBackgroundOpacity();
   saveOpacity();
+#ifdef AC_ENABLE_GAME
+  saveBackgroundOpacity();
+#endif // AC_ENABLE_GAME
 
   //saveScale(); // avoid loosing precision
   //saveFullscreenScale(); // avoid loosing precision
@@ -268,13 +270,15 @@ AnnotationPreferencesTab::load()
   loadJapaneseFont();
   loadOffset();
   loadSpeed();
-  loadBackgroundOpacity();
   loadOpacity();
   loadScale();
   loadFullscreenScale();
   loadAnnotationColor();
   loadSubtitleColor();
   loadHighlightColor();
+#ifdef AC_ENABLE_GAME
+  loadBackgroundOpacity();
+#endif // AC_ENABLE_GAME
 }
 
 void
