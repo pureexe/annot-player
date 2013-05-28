@@ -1280,6 +1280,7 @@ AnnotationServerProxy::selectAliasesWithTokenId(qint64 tid)
   return ret;
 }
 
+/*
 AliasList
 AnnotationServerProxy::selectRelatedAliasesWithTokenId(qint64 tid)
 {
@@ -1329,6 +1330,7 @@ AnnotationServerProxy::selectRelatedAliasesWithTokenId(qint64 tid)
   DOUT("exit: count =" << ret.size());
   return ret;
 }
+*/
 
 AnnotationList
 AnnotationServerProxy::selectAnnotationsWithTokenId(qint64 tid)
@@ -1385,6 +1387,7 @@ AnnotationServerProxy::selectAnnotationsWithTokenId(qint64 tid)
   return ret;
 }
 
+/*
 AnnotationList
 AnnotationServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
 {
@@ -1439,6 +1442,7 @@ AnnotationServerProxy::selectRelatedAnnotationsWithTokenId(qint64 tid)
   DOUT("exit: count =" << ret.size());
   return ret;
 }
+*/
 
 // - Cast/Delete -
 

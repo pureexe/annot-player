@@ -472,10 +472,11 @@ AnnotationServerAgent::selectRelatedAnnotationsWithTokenId(qint64 tid)
 AliasList
 AnnotationServerAgent::selectRelatedAliasesWithTokenId(qint64 tid)
 {
-  AliasList ret;
-  if (tid)
-    ret = proxy_->selectRelatedAliasesWithTokenId(tid);
-  return ret;
+  return selectAliasesWithTokenId(tid);
+  //AliasList ret;
+  //if (tid)
+  //  ret = proxy_->selectRelatedAliasesWithTokenId(tid);
+  //return ret;
 }
 
 AliasList
