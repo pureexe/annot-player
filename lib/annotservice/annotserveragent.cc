@@ -451,8 +451,10 @@ AnnotationList
 AnnotationServerAgent::selectAnnotationsWithTokenId(qint64 tid)
 {
   AnnotationList ret;
+#ifdef AC_ENABLE_ANNOT
   if (tid)
     ret = proxy_->selectAnnotationsWithTokenId(tid);
+#endif // AC_ENABLE_ANNOT
   return ret;
 }
 
@@ -460,8 +462,10 @@ AnnotationList
 AnnotationServerAgent::selectRelatedAnnotationsWithTokenId(qint64 tid)
 {
   AnnotationList ret;
+#ifdef AC_ENABLE_ANNOT
   if (tid)
     ret = proxy_->selectRelatedAnnotationsWithTokenId(tid);
+#endif // AC_ENABLE_ANNOT
   return ret;
 }
 

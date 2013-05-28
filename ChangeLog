@@ -5,10 +5,16 @@ Since 6/18/2011
 5/26/2013 SUN
   * Project status switches to incubating.
   * Update VLC and Qt libaries.
+  * Simplify the UI.
   * Remove galgame support.
   * Remove translation support.
   * Remove danmaku submission support.
-  * Fix application's updater.
+  * Fix software update.
+
+  * 更新了VLC和Qt。
+  * 简化了界面。
+  * 移除了对Galgame，日文翻译，和提交弹幕的支持。
+  * 修正了软件更新。
 
 12/16/2012 SUN
   * 修正了对B站弹幕解析的BUG。

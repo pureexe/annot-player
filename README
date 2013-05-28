@@ -1,9 +1,9 @@
 README (UTF-8)
 
 Product:	Annot Stream
-Version:	0.1.9.9
-Release:	2012/11/4 SUN
-Homepage:	http://annot.me
+Version:	0.2.0.0
+Release:	2012/5/26 SUN
+Homepage:	http://sakuradite.com
 Download:	http://code.google.com/p/annot-player/downloads
 Source (Git):	https://code.google.com/p/annot-player
 License:	GNU GPL v3
@@ -15,11 +15,10 @@ Requirements:
 - Linux (Debian/Ubuntu/Fedora)
 
 Distribution (Windows):
-- [ Browse ].exe        Shortcut of Data/annot-browser.exe
-- [ Download ].exe      Shortcut of Data/annot-down.exe
-- [ Play ].exe          Shortcut of Data/annot-player.exe
-- [ Translate ].exe     Shortcut of Data/annot-dict.exe
-- [ Update ].exe        Shortcut of Update/update.exe
+- Browse.exe            Shortcut of Data/annot-browser.exe
+- Download.exe          Shortcut of Data/annot-down.exe
+- Play.exe              Shortcut of Data/annot-player.exe
+- Update.exe            Shortcut of Update/update.exe
 --
 - Changes.txt           ChangeLog (UTF-8)
 - License.txt           GPLv3 license

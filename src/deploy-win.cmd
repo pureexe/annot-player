@@ -1,11 +1,11 @@
 :: deploy-win.cmd
 :: 11/5/2011
 setlocal
-cd /d d:/dev/build || exit /b 1
+cd /d s:/build || exit /b 1
 
-set VERSION=0.1.9.0
+set VERSION=0.2.0.0
 set APP=annot-player
-set TARGET=Annot Stream
+set TARGET=Annot Player
 set ZIPFILE=%APP%-%VERSION%-win.zip
 
 ::set BASENAME=%APP%-%VERSION%-win
@@ -19,7 +19,7 @@ set MSVC_DLLS=msvcp100.dll,msvcr100.dll
 set MSVC90_HOME=/Volumes/win/Program Files/Microsoft Visual Studio 9.0
 set MSVC90_REDIST=%MSVC90_HOME%/VC/redist/x86/Microsoft.VC90.CRT
 
-set QT_HOME=/Volumes/win/qt/qt4
+set QT_HOME=/Volumes/win/qt/4
 set QT_DLLS=QtCore4.dll,QtDeclarative4.dll,QtGui4.dll,QtNetwork4.dll,QtScript4.dll,QtSql4.dll,QtSvg4.dll,QtWebkit4.dll,QtXml4.dll,QtXmlPatterns4.dll,phonon4.dll
 set QT_TRANSLATIONS=qt_ja.qm,qt_zh_CN.qm,qt_zh_TW.qm
 set QT_PLUGINS=accessible bearer codecs graphicssystems iconengines imageformats sqldrivers
@@ -101,8 +101,9 @@ cp "%SOURCE%/COPYING" License.txt || exit /b 1
 unix2dos License.txt
 
 :: deploy modules
-mkdir Data
-cd Data || exit /b 1
+mkdir Library
+mkdir Library\Deprecated
+pushd Library\Deprecated || exit /b 1
 
 mkdir translations
 cp -v "%QT_HOME%"/translations/{%QT_TRANSLATIONS%} translations/ || exit /b 1
@@ -121,7 +122,7 @@ cp -v "%QT_HOME%"/bin/{%QT_DLLS%} . || exit /b 1
 cp -v "%MSVC_HOME%"/{%MSVC_DLLS%} . || exit /b 1
 cp -Rv "%MSVC90_REDIST%" . || exit /b 1
 cp -v "%VLC_HOME%"/{%VLC_DLLS%} . || exit /b 1
-cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
+::cp -v "%ITH_HOME%"/bin/{%ITH_DLLS%} . || exit /b 1
 cp -v "%OPENSSL_HOME%"/{%OPENSSL_DLLS%} . || exit /b 1
 ::cp -v "%GPAC_HOME%"/bin/{%GPAC_DLLS%} . || exit /b 1
 ::cp -v "%MP4BOX_HOME%"/bin/%MP4BOX_EXE% . || exit /b 1
@@ -129,8 +130,8 @@ cp -v "%OPENSSL_HOME%"/{%OPENSSL_DLLS%} . || exit /b 1
 ::cp -v "%LUA_HOME%"/bin/%LUA_DLL% . || exit /b 1
 cp -v "%ZLIB_HOME%"/bin/%ZLIB_DLL% . || exit /b 1
 
-cp -v "%MECAB_HOME%"/bin/%MECAB_DLL% . || exit /b 1
-cp -Rv "%MECAB_HOME%"/%MECAB_DATA% . || exit /b 1
+::cp -v "%MECAB_HOME%"/bin/%MECAB_DLL% . || exit /b 1
+::cp -Rv "%MECAB_HOME%"/%MECAB_DATA% . || exit /b 1
 
 ::cp -v "%CURL_HOME%"/bin/%CURL_BIN% . || exit /b 1
 ::cp -v "%GZIP_HOME%"/bin/%GZIP_BIN% . || exit /b 1
@@ -198,7 +199,7 @@ cp -Rv "%SOURCE%"/lib/annotcloud/jsf . || exit /b 1
 :: images
 cp -Rv "%SOURCE%"/src/player/avatars . || exit /b 1
 
-cd ..
+popd
 
 mkdir Update
 cd Update || exit /b 1
