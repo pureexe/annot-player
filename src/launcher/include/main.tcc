@@ -52,7 +52,7 @@ WinMain(__in HINSTANCE hInstance, __in HINSTANCE hPrevInstance, __in LPSTR lpCmd
   ::SetFileAttributesW(wsDir.c_str(), FILE_ATTRIBUTE_READONLY);
 
   std::wstring wsLibraryDir = wsDir + L"\\Library";
-  ::SetFileAttributesW(wsLibraryDir.c_str(), FILE_ATTRIBUTE_READONLY);
+  ::SetFileAttributesW(wsLibraryDir.c_str(), FILE_ATTRIBUTE_READONLY|FILE_ATTRIBUTE_HIDDEN);
 
   DOUT(QString::fromStdWString(app));
 
