@@ -359,7 +359,13 @@ MainWindow::launch(const QStringList &args)
       openProcessId(gamePid);
     }
 #endif // AC_ENABLE_GAME
-    break;
+    {
+      QDate today = QDate::currentDate();
+      if (Settings::globalSettings()->updateDate() != today) {
+        update();
+        Settings::globalSettings()->setUpdateDate(today);
+      }
+    } break;
   case 2: openSource(args.last()); break;
   default:
     {
@@ -8581,8 +8587,6 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     return;
   }
 
-  bool updated = true;
-
   DOUT("inetMutex locking");
   inetMutex_.lock();
   DOUT("inetMutex locked");
@@ -8652,33 +8656,6 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
     if (cache_->isValid())
       cache_->updateUser(server_->user());
 
-    // Languages
-    //switch (server_->user().language()) {
-    //case Traits::Japanese:
-    //  toggleAnnotationLanguageToJapaneseAct_->setChecked(true);
-    //  break;
-    //case Traits::Chinese:
-    //  toggleAnnotationLanguageToChineseAct_->setChecked(true);
-    //  break;
-    //case Traits::Korean:
-    //  toggleAnnotationLanguageToKoreanAct_->setChecked(true);
-    //  break;
-    //case Traits::UnknownLanguage:
-    //  toggleAnnotationLanguageToUnknownAct_->setChecked(true);
-    //  break;
-    //case Traits::English:
-    //case Traits::AnyLanguage:
-    //default:
-    //  toggleAnnotationLanguageToEnglishAct_->setChecked(true);
-    //}
-    //invalidateAnnotationLanguages();
-
-    QDate today = QDate::currentDate();
-    if (Settings::globalSettings()->updateDate() != today) {
-      updated = server_->isSoftwareUpdated();
-      Settings::globalSettings()->setUpdateDate(today);
-    }
-
     if (disposed_) {
       DOUT("inetMutex unlocking"); inetMutex_.unlock(); DOUT("inetMutex unlocked");
       DOUT("exit: returned from disposed branch");
@@ -8699,13 +8676,13 @@ MainWindow::login(const QString &userName, const QString &encryptedPassword, boo
       Settings::globalSettings()->isLive() && !hub_->isSignalTokenMode() && !player_->hasMedia())
     QTimer::singleShot(0, hub_, SLOT(setLiveTokenMode()));
 
-  if (!updated) {
-    emit notification(tr("new version released at Google Code"));
-#ifdef AC_ENABLE_UPDATE
-    emit message(tr("updater launched, please close Annot Player"));
-    updaterDelegate_->open();
-#endif // AC_ENABLE_UPDATE
-  }
+//  if (!updated) {
+//    emit notification(tr("new version released at Google Code"));
+//#ifdef AC_ENABLE_UPDATE
+//    emit message(tr("updater launched, please close Annot Player"));
+//    updaterDelegate_->open();
+//#endif // AC_ENABLE_UPDATE
+//  }
 
   DOUT("exit");
 }

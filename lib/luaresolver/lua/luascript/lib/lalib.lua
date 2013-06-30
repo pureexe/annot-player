@@ -10,12 +10,12 @@ function getACFPV ( str_url, str_servername)
 	then
 		return 1;--ACFPV_NEW
 		--return 65535;
-	elseif string.find(str_url, "bilibili.us",1,true)~=nil or string.find(str_url, "bilibili.tv",1,true)~=nil
+	elseif string.find(str_url, "bilibili.kankanews.com",1,true)~=nil or string.find(str_url, "bilibili.us",1,true)~=nil or string.find(str_url, "bilibili.tv",1,true)~=nil
 	then
 		return 3;--BIRIBIRIPAD
 	elseif string.find(str_url, "mikufans.cn",1,true)~=nil  or string.find(str_url, "danmaku.us", 1, true)~=nil
 	then
-		if string.find(str_url, "bilibili", 1,true)~=nil
+		if string.find(str_url, "Bilibili", 1,true)~=nil
 		then
 			return 3;--BIRI
 		else
@@ -24,15 +24,12 @@ function getACFPV ( str_url, str_servername)
 	elseif string.find(str_url, "nicovideo.jp", 1, true)~=nil
 	then
 		return 2;--NICOP_2009
-	elseif string.find(str_url, "nico.galstars.net", 1, true)~=nil
-	then
-		return 2;
 	end
 	--2:NICOP_2009
 	--0:ACFPV_ORI
 	--65535:NOTFLV
 	--other:reserved
-	return 0;
+	return 1;
 
 end
 
@@ -54,6 +51,7 @@ function readUntil( file, str_tag , str_old)
 	repeat
 		str_line = file:read("*l");
 		print(str_line);
+		--dbgMessage(str_line);
 	until str_line==nil or string.find(str_line, str_tag, 1, true)~=nil
 	return str_line;
 end
@@ -91,6 +89,30 @@ function readNextLineFromUTF8( file )
 	return str_line;
 end
 
+--[[if find one or more patten in str, return true]]
+function laFindOr(str, pattens, index_chr, bool)
+	--dbgMessage(str);
+	if type(pattens)=="string" then
+		return string.find(str, pattens, index_chr, bool);
+	end
+
+	if type(pattens)=="table" then
+		if table.getn(pattens) == 1 then
+			--dbgMessage("1 pattern");
+			return string.find(str,pattens[1],index_chr,bool);
+		else
+			--dbgMessage("more than 1 pattern");
+			--retn_v = nil;
+			for _,v in ipairs(pattens) do
+				if string.find(str, v, index_chr, bool) ~= nil then
+					return string.find(str, v, index_chr, bool);
+				end
+			end
+			return nil;
+		end
+	end
+end
+
 --[[read from file until counter str_tag. return the last read line.]]
 function readUntilFromUTF8( file, str_tag ,str_old)
 	if str_old ~= nil then
@@ -111,15 +133,17 @@ function readUntilFromUTF8( file, str_tag ,str_old)
 	return str_line;
 end
 
---[[read from file until counter str_tag. every line read is attached to str_ori and return the joined str.]]
-function readIntoUntilFromUTF8(file, str_ori, str_tag, str_old)
+
+--[[read from file until counter str_tags. every line read is attached to str_ori and return the joined str.]]
+function readIntoUntilFromUTF8(file, str_ori, str_tags, str_old)
 	if str_old ~= nil then
-		if string.find(str_old, str_tag, 1, true)~=nil then
+		--if string.find(str_old, str_tag, 1, true)~=nil then
+		if laFindOr(str_old, str_tags, 1, true)~=nil then
 			return str_old;
 		end
 	end
 	local str_line = "";
-	while str_line~=nil and str_ori~=nil and string.find(str_ori, str_tag, 1, true)==nil
+	while str_line~=nil and str_ori~=nil and laFindOr(str_ori, str_tags, 1, true)==nil --string.find(str_ori, str_tag, 1, true)==nil
 	do
 		local tmp_line = file:read("*l");
 		if tmp_line == nil then
@@ -154,6 +178,7 @@ function getAfterText( str, str_tag , index)
 
 
 end
+
 
 --[[substring in str, between str_tagb and str_tage.]]
 function getMedText(str, str_tagb, str_tage, index)
@@ -296,6 +321,9 @@ fls["qq"]=2;
 fls["youku"]=3;
 fls["tudou"]=4;
 fls["6cn"]=5;
+fls["bili"]=6;
+fls["iqiyi"]=7;
+fls["sohu"]=8;
 
 
 --BOOLEAN
@@ -304,13 +332,8 @@ FAILURE = 0;
 
 
 --[[read real urls from sina through vid]]
--- See: http://agonix.5d6d.com/archiver/tid-47.html
--- Example: http://v.iask.com/v_play.php?vid=15830701
---          http://video.sina.com.cn/v/b/15830701-1264371947.html
---          http://p.you.video.sina.com.cn/player/outer_player.swf?auto=1&vid=15830701&uid=1264371947
 function getRealUrls (str_id, str_tmpfile, pDlg)
 	local tbl_urls = {};
-	local tbl_durations = {};
 	local index = 0;
 
 	local str_dynurl = "http://v.iask.com/v_play.php?vid="..str_id;
@@ -320,7 +343,6 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 	--str_tmpfile = "C:\\tempacfun.html";
 	--dbgMessage(str_tmpfile);
 	--dbgMessage(str_dynurl);
-    --
 	local re = dlFile(str_tmpfile, str_dynurl);
 	--dbgMessage("dl dynurl end.");
 	if re~=0
@@ -328,7 +350,7 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 		if pDlg~=nil then
 			sShowMessage(pDlg, '转接页面读取错误。');
 		end
-		return index, tbl_urls, tbl_durations;
+		return index, tbl_urls;
 	else
 		if pDlg~=nil then
 			sShowMessage(pDlg, '读取转接页面成功，正在分析..');
@@ -347,96 +369,21 @@ function getRealUrls (str_id, str_tmpfile, pDlg)
 	local str_line = "";
 	while str_line~=nil
 	do
-		str_line = readUntil(file, "<length>");
-		str_line = readIntoUntil(file, str_line, "</length>");
-		if str_line~=nil and string.find(str_line, "<length>")~=nil
-		then
-			local str_index = string.format("%d",index);
-			tbl_durations[str_index] = getMedText(str_line, "<length>", "</length>");
-			print(tbl_durations[str_index]);
-			--index = index+1;
-		end
 		str_line = readUntil(file, "<url>");
 		str_line = readIntoUntil(file, str_line, "</url>");
 		if str_line~=nil and string.find(str_line, "<url>")~=nil
 		then
 			local str_index = string.format("%d",index);
-            -- jichi 6/10/2012: escape \\ is not required in lua 5.2
-			--tbl_urls[str_index] = getMedText(str_line, "<url><!\[CDATA\[", "\]\]></url>");
-			tbl_urls[str_index] = getMedText(str_line, "<url><![CDATA[", "]]></url>");
+			tbl_urls[str_index] = getMedText(str_line, "<url><!\[CDATA\[", "\]\]></url>");
+			tbl_urls[str_index] = encodeUrl(tbl_urls[str_index]);
 			print(tbl_urls[str_index]);
 			index = index+1;
 		end
 	end
 	io.close(file);
-	return index, tbl_urls, tbl_durations;
+	return index, tbl_urls;
 end
 
--- jichi 9/23/2012
--- See: BilibiliInterfaceParser.cs
-function getRealUrls_bilibili (str_id, str_tmpfile, pDlg)
-	local tbl_urls = {};
-	local tbl_durations = {};
-	local index = 0;
-
-	local str_dynurl = "http://interface.bilibili.tv/playurl?cid="..str_id;
-	if pDlg~=nil then
-		sShowMessage(pDlg, '正在读取转接页面..');
-	end
-	--str_tmpfile = "C:\\tempacfun.html";
-	--dbgMessage(str_tmpfile);
-	--dbgMessage(str_dynurl);
-    --
-	local re = dlFile(str_tmpfile, str_dynurl);
-	--dbgMessage("dl dynurl end.");
-	if re~=0
-	then
-		if pDlg~=nil then
-			sShowMessage(pDlg, '转接页面读取错误。');
-		end
-		return index, tbl_urls, tbl_durations;
-	else
-		if pDlg~=nil then
-			sShowMessage(pDlg, '读取转接页面成功，正在分析..');
-		end
-	end
-
-	local file = io.open(str_tmpfile, "r");
-	if file==nil
-	then
-		if pDlg~=nil then
-			sShowMessage(pDlg, '转接页面读取错误。');
-		end
-		return;
-	end
-
-	local str_line = "";
-	while str_line~=nil
-	do
-		str_line = readUntil(file, "<length>");
-		str_line = readIntoUntil(file, str_line, "</length>");
-		if str_line~=nil and string.find(str_line, "<length>")~=nil
-		then
-			local str_index = string.format("%d",index);
-			tbl_durations[str_index] = getMedText(str_line, "<length>", "</length>");
-			print(tbl_durations[str_index]);
-			--index = index+1;
-		end
-		str_line = readUntil(file, "<url>");
-		str_line = readIntoUntil(file, str_line, "</url>");
-		if str_line~=nil and string.find(str_line, "<url>")~=nil
-		then
-			local str_index = string.format("%d",index);
-            -- jichi 6/10/2012: escape \\ is not required in lua 5.2
-			--tbl_urls[str_index] = getMedText(str_line, "<url><!\[CDATA\[", "\]\]></url>");
-			tbl_urls[str_index] = getMedText(str_line, "<url><![CDATA[", "]]></url>");
-			print(tbl_urls[str_index]);
-			index = index+1;
-		end
-	end
-	io.close(file);
-	return index, tbl_urls, tbl_durations;
-end
 
 function getTot_QQ ( str_id, int_mod)
 	local _loc_4 = 0;
@@ -569,6 +516,10 @@ function getRealUrls_QQ (str_id, str_tmpfile, pDlg)
 
 	local str_realurl = getMedText(str_line, "<url>", "</url>");
 
+	if str_realurl ~= nil then
+		str_realurl= string.gsub(str_realurl,"&amp;","&");
+	end
+	--dbgMessage(str_realurl)
 	io.close(file);
 
 	if str_realurl == nil then
@@ -590,19 +541,13 @@ function getRealUrls_youku (str_id, str_tmpfile, pDlg)
 	local tbl_urls = {};
 	local index = 0;
 
-    -- jichi 5/9/2012: use ran
-    -- see: http://cpansearch.perl.org/src/MONSIEUR/App-get_flash_videos-1.24/lib/FlashVideo/Site/Youku.pm
-	local now = os.time();
-	math.randomseed(now);
-    local rand = math.random(10000); -- four digits
-	local str_dynurl = "http://v.youku.com/player/getPlayList/VideoIDS/"..str_id.."/timezone/+09/version/5/source/video?password=&ran="..rand.."&n=3";
+	local str_dynurl = "http://v.youku.com/player/getPlayList/VideoIDS/"..str_id.."...ezone/+08/version/5/source/video?password=&ran=1527&n=3";
 	--dbgMessage(str_dynurl);
 	if pDlg~=nil then
 		sShowMessage(pDlg, '正在读取转接页面..');
 	end
 
-	local header = "X-Forwarded-For: 202.108.8.82";
-	local re = dlFile(str_tmpfile, str_dynurl, header);
+	local re = dlFile(str_tmpfile, str_dynurl);
 	if re~=0
 	then
 		if pDlg~=nil then
@@ -743,8 +688,7 @@ function getRealUrls_tudou (str_id, str_tmpfile, pDlg)
 	if pDlg~=nil then
 		sShowMessage(pDlg, '正在读取转接页面..');
 	end
-	local header = "X-Forwarded-For: 202.108.8.82";
-	local re = dlFile(str_tmpfile, str_oriurl, header);
+	local re = dlFile(str_tmpfile, str_oriurl);
 	if re~=0
 	then
 		if pDlg~=nil then
@@ -769,16 +713,18 @@ function getRealUrls_tudou (str_id, str_tmpfile, pDlg)
 	local str_line = readUntil(file, "document.domain");
 	local str_line_end = readIntoUntil(file , str_line, "</script>");
 	--dbgMessage(str_line_end);
-	local iid = getMedText(str_line_end, "iid = ", ",");
+	local iid = getMedText(str_line_end, "iid: ", ",");
+
+	--read iid ok closefile
+	io.close(file);
 
 	if iid==nil then
 		iid=str_id;
 	end
 
-	--read iid ok closefile
-	io.close(file);
-
+	--dbgMessage(iid);
 	local str_preurl = "http://v2.tudou.com/v?st=1%2C2%2C3%2C4%2C99&it=" .. iid;
+	--dbgMessage(str_preurl)
 
 	re = dlFile(str_tmpfile, str_preurl);
 	if re~=0
@@ -839,6 +785,8 @@ function getRealUrls_tudou (str_id, str_tmpfile, pDlg)
 
 	return index, tbl_urls;
 end
+
+
 
 --[[read real urls from 6cn through vid]]
 function getRealUrls_6cn (str_id, str_tmpfile, pDlg)
@@ -919,6 +867,133 @@ function getRealUrls_6cn (str_id, str_tmpfile, pDlg)
 	return index, tbl_urls;
 end
 
+function getRealUrls_bili(str_id, str_tmpfile, pDlg)
+	local index = 0;
+	local tbl_urls= {};
+
+	--dbgMessage(str_id);
+
+	local str_oriurl = "http://interface.bilibili.tv/playurl?cid=" .. str_id;
+
+	if pDlg~=nil then
+		sShowMessage(pDlg, '正在读取转接页面..');
+	end
+	local re = dlFile(str_tmpfile, str_oriurl);
+	if re~=0
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return index, tbl_urls;
+	else
+		if pDlg~=nil then
+			sShowMessage(pDlg, '读取转接页面成功，正在分析..');
+		end
+	end
+
+	local file = io.open(str_tmpfile, "r");
+	if file==nil
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return;
+	end
+
+--~		local str_line = readUntil(file, "<url>");
+--~		--dbgMessage(str_line);
+
+--~ 	while str_line ~= nil do
+--~ 		local str_line_end = str_line;
+--~ 		if string.find(str_line, "</url>",1,true)==nil then
+--~ 			str_line_end = readIntoUntil(file , str_line, "</url>");
+--~ 		end
+--~ 		--dbgMessage(str_line_end);
+
+--~ 		local str_v_realurl = getMedText(str_line_end, "<url><![CDATA[", "]]></url>");
+
+--~ 		--str_v_realurl = encodeUrl(str_v_realurl);
+
+--~ 		--there is something wrong with the realurl from qqvideo get from bili, change it:
+--~ 		if string.find(str_v_realurl , "qqvideo.tc.qq.com") ~=nil then
+--~ 			--dbgMessage(str_v_realurl);
+--~ 			local _,_,str_channel,str_posfix,str_quote = string.find(str_v_realurl,
+--~ 				'http://([^%.]+)%.[^/]+/([^%?]+)%?(.+)');
+--~ 			--dbgMessage(str_channel);
+--~ 			--dbgMessage(str_posfix);
+--~ 			--dbgMessage(str_quote);
+
+--~ 			str_v_realurl = 'http://vsrc.store.qq.com/' .. str_posfix .. '?channel=' .. str_channel .. '&' .. str_quote;--sdtfrom=v2&r=256&rfc=v10
+--~ 		end
+
+
+--~ 		str_v_realurl = encodeUrl(str_v_realurl);
+--~ 		--dbgMessage(str_v_realurl);
+--~ 		local str_index = string.format("%d",index);
+--~ 		tbl_urls[str_index] = str_v_realurl;
+--~ 		index = index+1;
+
+--~
+--~ 		str_line = string.sub(str_line, string.find(str_line, "</url>")+string.len("</url>"));
+--~ 		while str_line~=nil and string.find(str_line, "<url>",1,true)==nil do
+--~ 			--str_line = "";
+--~ 			str_line = readIntoUntil(file, str_line, "<url>");
+--~ 			if string.find(str_line, "<backup_url>")~=nil then
+--~ 				str_line = readUntil(file, "</backup_url>");
+--~ 			end
+--~ 			str_line = readUntil(file, "<url>");
+--~ 		end
+--~ 	end
+
+	local str_line = readUntil(file, "<durl>");
+	while str_line ~= nil do
+		local str_line_end = str_line;
+		--if string.find(str_line, "</url>",1,true)==nil then
+		--	str_line_end = readIntoUntil(file , str_line, "</url>");
+		--end
+		--dbgMessage(str_line_end);
+
+		str_line = readIntoUntil(file, str_line, "</durl>");
+		str_line_end = (string.gsub(str_line, '<backup_url>.*</backup_url>', ''));
+		--dbgMessage(str_line);
+		--dbgMessage(str_line_end);
+
+		local str_v_realurl = getMedText(str_line_end, "<url><![CDATA[", "]]></url>");
+
+		--str_v_realurl = encodeUrl(str_v_realurl);
+
+		--there is something wrong with the realurl from qqvideo get from bili, change it:
+		if string.find(str_v_realurl , "qqvideo.tc.qq.com") ~=nil then
+			--dbgMessage(str_v_realurl);
+			local _,_,str_channel,str_posfix,str_quote = string.find(str_v_realurl,
+				'http://([^%.]+)%.[^/]+/([^%?]+)%?(.+)');
+			--dbgMessage(str_channel);
+			--dbgMessage(str_posfix);
+			--dbgMessage(str_quote);
+
+			str_v_realurl = 'http://vsrc.store.qq.com/' .. str_posfix .. '?channel=' .. str_channel .. '&' .. str_quote;--sdtfrom=v2&r=256&rfc=v10
+		end
+
+
+		str_v_realurl = encodeUrl(str_v_realurl);
+		--dbgMessage(str_v_realurl);
+		local str_index = string.format("%d",index);
+		tbl_urls[str_index] = str_v_realurl;
+		index = index+1;
+
+
+		str_line = string.sub(str_line, string.find(str_line, "</durl>")+string.len("</durl>"));
+		if str_line~=nil and string.find(str_line, "<durl>",1,true)==nil then
+			str_line = readUntil(file, "<durl>");
+		end
+	end
+
+	--read str_v_realurl ok closefile
+	io.close(file);
+
+	return index, tbl_urls;
+end
+
 function getAcVideo_CommentID(str_acid, str_tmpfile, pDlg)
 	local str_apiurl = "http://www.acfun.tv/api/getVideoByID.aspx?vid="..str_acid;
 
@@ -966,16 +1041,408 @@ function getAcVideo_CommentID(str_acid, str_tmpfile, pDlg)
 			int_foreignlinksite = fls["youku"];
 		elseif string.find(str_line, "\"vtype\":\"qq\"", 1, true)~=nil then
 			int_foreignlinksite = fls["qq"];
+		elseif string.find(str_line, "\"vtype\":\"tudou\"", 1, true)~=nil then
+			int_foreignlinksite = fls["tudou"];
 		end--[[may be there are other types for adding]]
 
-		str_id = getMedText(str_line, "\"vid\":\"", "\",");
-		str_subid = getMedText(str_line, "\"cid\":\"", "\",");
+		str_id = getMedText(str_line, "\"vid\":\"", "\"");
+		str_subid = getMedText(str_line, "\"cid\":\"", "\"");
 		return int_foreignlinksite, str_id, str_subid;
 	else
 		return nil;
 	end
 
+
+
+
+
 end
+
+
+
+--[[read real urls from ifeng through vid]]
+function getRealUrls_ifeng (str_id, str_tmpfile, pDlg)
+	local tbl_urls = {};
+	local index = 0;
+
+	local str_dynurl = "http://v.ifeng.com/video_info_new/" .. string.sub(str_id,-2,-2) .. "/" .. string.sub(str_id,35)  .. "/" .. str_id .. ".xml";
+
+	--dbgMessage(str_dynurl);
+
+	if pDlg~=nil then
+		sShowMessage(pDlg, '正在读取转接页面..');
+	end
+
+	local re = dlFile(str_tmpfile, str_dynurl);
+	if re~=0
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return index, tbl_urls;
+	else
+		if pDlg~=nil then
+			sShowMessage(pDlg, '读取转接页面成功，正在分析..');
+		end
+	end
+
+	local file = io.open(str_tmpfile, "r");
+	if file==nil
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return;
+	end
+
+	local str_line = readUntil(file, "<item");
+	str_line = utf8_to_lua(str_line);
+	--dbgMessage(str_line);
+
+	local str_Name = getMedText(str_line, " Name=\"", "\"");
+
+	local str_line = readUntil(file, "<parts playurl");
+	while str_line ~= nil do
+		str_line = utf8_to_lua(str_line);
+
+		local str_realurl = getMedText(str_line, "<parts playurl=\"", "\"");
+
+		local str_index = string.format("%d",index);
+		tbl_urls[str_index] = str_realurl;
+		index = index+1;
+
+		str_line = readUntil(file, "<parts playurl");
+	end
+	--dbgMessage(str_Name);
+
+	io.close(file);
+
+
+	return index, tbl_urls, str_Name;
+
+end
+
+
+
+--[[read real urls from cntv through vid]]
+function getRealUrls_cntv (str_id, str_tmpfile, pDlg)
+	local tbl_urls = {};
+	local index = 0;
+
+	local str_dynurl = "http://vdn.apps.cntv.cn/api/getHttpVideoInfo.do?pid=" .. str_id;
+
+	--dbgMessage(str_dynurl);
+
+	if pDlg~=nil then
+		sShowMessage(pDlg, '正在读取转接页面..');
+	end
+
+	local re = dlFile(str_tmpfile, str_dynurl);
+	if re~=0
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return index, tbl_urls;
+	else
+		if pDlg~=nil then
+			sShowMessage(pDlg, '读取转接页面成功，正在分析..');
+		end
+	end
+
+	local file = io.open(str_tmpfile, "r");
+	if file==nil
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return;
+	end
+
+	local str_line = readUntil(file, "chapters2");
+	str_line = utf8_to_lua(str_line);
+	--dbgMessage(str_line);
+
+	local str_Name = getMedText(str_line, "\"title\":\"", "\"");
+	--dbgMessage(str_Name)
+
+	--[[local str_line = readUntil(file, "<parts playurl");
+	while str_line ~= nil do
+		str_line = utf8_to_lua(str_line);
+
+		local str_realurl = getMedText(str_line, "<parts playurl=\"", "\"");
+
+		local str_index = string.format("%d",index);
+		tbl_urls[str_index] = str_realurl;
+		index = index+1;
+
+		str_line = readUntil(file, "<parts playurl");
+	end]]
+	str_line = getMedText(str_line, "\"chapters2\"", "}]")
+	--dbgMessage(str_line)
+	--dbgMessage(str_Name);
+	while str_line ~= nil do
+		local str_realurl, se = getMedText(str_line, "\"url\":\"","\"");
+
+		local str_index = string.format("%d", index);
+		tbl_urls[str_index] = str_realurl;
+		index = index+1;
+		if se~=nil then
+			str_line = string.sub(str_line,se+1);
+		else
+			str_line = nil
+		end
+		--dbgMessage(str_line);
+	end
+
+	io.close(file);
+
+
+	return index, tbl_urls, str_Name;
+
+end
+
+--[[read real urls from iqiyi through vid]]
+function getRealUrls_iqiyi (str_id, str_tmpfile, pDlg)
+	local tbl_urls = {};
+	local index = 0;
+
+	local str_dynurl = "http://cache.video.qiyi.com/v/" .. str_id;
+
+	--dbgMessage(str_dynurl);
+
+	if pDlg~=nil then
+		sShowMessage(pDlg, '正在读取转接页面..');
+	end
+
+	local re = dlFile(str_tmpfile, str_dynurl);
+	if re~=0
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return index, tbl_urls;
+	else
+		if pDlg~=nil then
+			sShowMessage(pDlg, '读取转接页面成功，正在分析..');
+		end
+	end
+
+	local file = io.open(str_tmpfile, "r");
+	if file==nil
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return;
+	end
+
+	local str_line = readUntil(file, "<fileUrl>");
+
+	io.close(file);
+
+	str_line = utf8_to_lua(str_line);
+	--dbgMessage(str_line);
+
+	str_line = getMedText(str_line, "<fileUrl>", "</fileUrl>")
+	--dbgMessage(str_line)
+	--dbgMessage(str_Name);
+	while str_line ~= nil do
+		local str_fakeurl, se = getMedText(str_line, "<file>","</file>");
+
+		if str_fakeurl == nil then
+			break;
+		end
+		--dbgMessage(str_fakeurl);
+
+		str_fakeurl = string.sub(str_fakeurl,0,-4) .. "hml?v=" .. tostring(bit.bxor(os.time(),0x96283BC0));--+2391355385);--2391363447);--this number maybe varified.
+
+		--dbgMessage(str_fakeurl);
+
+		if pDlg~=nil then
+			sShowMessage(pDlg, '正在读取转接页面..');
+		end
+
+		re = dlFile(str_tmpfile, str_fakeurl);
+		if re~=0
+		then
+			if pDlg~=nil then
+				sShowMessage(pDlg, '转接页面读取错误。');
+			end
+			return index, tbl_urls;
+		else
+			if pDlg~=nil then
+				sShowMessage(pDlg, '读取转接页面成功，正在分析..');
+			end
+		end
+
+		file = io.open(str_tmpfile, "r");
+		if file==nil
+		then
+			if pDlg~=nil then
+				sShowMessage(pDlg, '转接页面读取错误。');
+			end
+			return;
+		end
+
+		local str_line_real = readUntil(file, "\"l\"");
+
+		io.close(file);
+
+		local str_realurl = getMedText(str_line_real, "\"l\":\"", "\"");
+
+		--dbgMessage(str_realurl);
+
+		local str_index = string.format("%d", index);
+		tbl_urls[str_index] = str_realurl;
+		index = index+1;
+		if se~=nil then
+			str_line = string.sub(str_line,se+1);
+		else
+			str_line = nil
+		end
+		--dbgMessage(str_line);
+	end
+
+
+
+
+	return index, tbl_urls;
+
+end
+
+
+--[[read real urls from sohu through vid]]
+function getRealUrls_sohu (str_id, str_tmpfile, pDlg)
+	local tbl_urls = {};
+	local index = 0;
+
+	local str_dynurl = "http://hot.vrs.sohu.com/vrs_flash.action?vid=" .. str_id;
+
+	--dbgMessage(str_dynurl);
+
+	if pDlg~=nil then
+		sShowMessage(pDlg, '正在读取转接页面..');
+	end
+
+	local re = dlFile(str_tmpfile, str_dynurl);
+	if re~=0
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return index, tbl_urls;
+	else
+		if pDlg~=nil then
+			sShowMessage(pDlg, '读取转接页面成功，正在分析..');
+		end
+	end
+
+	local file = io.open(str_tmpfile, "r");
+	if file==nil
+	then
+		if pDlg~=nil then
+			sShowMessage(pDlg, '转接页面读取错误。');
+		end
+		return;
+	end
+
+	local str_line = readUntil(file, "\"clipsURL\"");
+
+	io.close(file);
+
+	str_line = utf8_to_lua(str_line);
+	--dbgMessage(str_line);
+
+	local str_prot = getMedText(str_line, "\"prot\":", "," );
+	local str_allot = getMedText(str_line, "\"allot\":\"", "\"");
+	local str_clipsURLs = getMedText(str_line, "\"clipsURL\":[", "]");
+	local str_sus = getMedText(str_line, "\"su\":[", "]");
+
+	--str_line = getMedText(str_line, "<fileUrl>", "</fileUrl>")
+	--dbgMessage(str_line)
+	--dbgMessage(str_Name);
+	while str_clipsURLs ~= nil  and str_sus ~=nil do
+		local str_clipsURL, se_clipsURL = getMedText(str_clipsURLs, "\"", "\"");
+		--dbgMessage(str_clipsURL);
+		local str_su, se_su = getMedText(str_sus, "\"", "\"");
+		--dbgMessage(str_su);
+		if str_clipsURL == nil or str_su == nil then
+			break;
+		end
+
+		local str_transurl = "http://"..str_allot.."/?prot="..str_prot.."&file="..str_clipsURL.."&new="..str_su;
+
+		local str_line_trans = nil;
+		repeat
+			if pDlg~=nil then
+				sShowMessage(pDlg, '正在读取转接页面..');
+			end
+
+			re = dlFile(str_tmpfile, str_transurl);
+			if re~=0
+			then
+				if pDlg~=nil then
+					sShowMessage(pDlg, '转接页面读取错误。');
+				end
+				return index, tbl_urls;
+			else
+				if pDlg~=nil then
+					sShowMessage(pDlg, '读取转接页面成功，正在分析..');
+				end
+			end
+
+			file = io.open(str_tmpfile, "r");
+			if file==nil
+			then
+				if pDlg~=nil then
+					sShowMessage(pDlg, '转接页面读取错误。');
+				end
+				return;
+			end
+
+			str_line_trans = readUntil(file, "http");
+
+			io.close(file);
+		until str_line_trans ~= nil;
+
+		--dbgMessage(str_line_trans);
+
+		local _,_,str_realurl, str_host, str_key  = string.find(str_line_trans, "([^%|]+)|[^%|]+|([^%|]+)|([^%|]+)|[^%|]+|[^%|]+");
+
+		--dbgMessage(str_realurl);
+		--dbgMessage(str_host);
+		--dbgMessage(str_key);
+
+		str_realurl = string.sub(str_realurl,0,-2)..str_su.."?key="..str_key;
+
+		--dbgMessage(str_realurl);
+
+		local str_index = string.format("%d", index);
+		tbl_urls[str_index] = str_realurl;
+		index = index+1;
+		if se_clipsURL~=nil then
+			str_clipsURLs = string.sub(str_clipsURLs,se_clipsURL+1);
+		else
+			str_clipsURLs = nil;
+		end
+
+		if se_su ~=nil then
+			str_sus = string.sub(str_sus, se_su+1);
+		else
+			str_sus = nil;
+		end
+		--dbgMessage(str_line);
+	end
+
+
+
+
+	return index, tbl_urls;
+
+end
+
+
 
 --[[copy table]]
 function deepcopy(object)
@@ -1012,4 +1479,7 @@ function time_sleep(int_millisecond, int_random_max)
 		end
 	end
 end
+
+
+
 

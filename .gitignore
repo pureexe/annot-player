@@ -43,3 +43,9 @@ build
 Icon?
 ehthumbs.db
 Thumbs.db
+
+# Projects #
+############
+*.pro.user
+
+# EOF

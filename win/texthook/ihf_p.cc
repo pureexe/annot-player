@@ -20,6 +20,9 @@ HookManager *Ihf::hookManager_;
 qint64 Ihf::messageInterval_ = 200; // 0.2 secs by default
 WId Ihf::parentWindow_;
 
+bool Ihf::blacklistEnabled_;
+std::set<qint64> Ihf::blacklist_;
+
 QHash<TextThread *, TextThreadDelegate *> Ihf::threadDelegates_;
 QHash<QString, ulong> Ihf::hookAddresses_;
 

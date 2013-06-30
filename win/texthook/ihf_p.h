@@ -6,6 +6,7 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QHash>
 #include <QtGui/QWidget>
+#include <set>
 
 class HookManager; // opaque
 class TextThread; // opaque
@@ -18,9 +19,11 @@ class Ihf
   static HookManager *hookManager_;
   static qint64 messageInterval_;
   static WId parentWindow_;
+  static bool blacklistEnabled_;
 
   static QHash<TextThread *, TextThreadDelegate *> threadDelegates_;
   static QHash<QString, ulong> hookAddresses_;
+  static std::set<qint64> blacklist_; // Thread signature blacklist
 
 public:
 
@@ -43,6 +46,13 @@ public:
   static bool addHook(ulong pid, const QString &code, const QString &name = QString());
   static bool updateHook(ulong pid, const QString &code);
   static bool removeHook(ulong pid, const QString &code);
+
+  // - Filter -
+
+  static bool blacklistEnabled() { return blacklistEnabled_; }
+  static void setBlacklistEnabled(bool t) { blacklistEnabled_ = t; }
+
+  static std::set<qint64> &blacklist() { return blacklist_; }
 
   // - Callbacks -
 protected:

@@ -251,7 +251,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
     then
       --fetch dynamic url
       --int_realurlnum, tbl_realurls, tbl_durations = getRealUrls(str_id, str_tmpfile, pDlg);
-      int_realurlnum, tbl_realurls, tbl_durations = getRealUrls_bilibili(str_id, str_tmpfile, pDlg);
+      int_realurlnum, tbl_realurls, tbl_durations = getRealUrls_bili(str_id, str_tmpfile, pDlg);
     elseif int_foreignlinksite == fls["youku"]
     then
       int_realurlnum, tbl_realurls = getRealUrls_youku(str_id, str_tmpfile, pDlg);

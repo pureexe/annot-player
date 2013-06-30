@@ -8,9 +8,9 @@ TEMPLATE = subdirs
 #include(qtwinnt/qtwinnt.pri)
 #include(wmtimer/wmtimer.pri)
 #SUBDIRS += hook
-SUBDIRS += mousehook
-SUBDIRS += picker
-SUBDIRS += texthook
+#SUBDIRS += mousehook
+#SUBDIRS += picker
+#SUBDIRS += texthook
 
 }
 # EOF
