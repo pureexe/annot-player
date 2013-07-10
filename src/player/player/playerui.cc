@@ -105,6 +105,7 @@ PlayerUi::createConnections()
   toggleMiniModeButton()->setCheckable(true);
   toggleFullScreenModeButton()->setCheckable(true);
   toggleTraceWindowButton()->setCheckable(true);
+  toggleTraceWindowButton()->setVisible(false); // hide this button
 
   connect(menuButton(), SIGNAL(clicked()), SLOT(popupMenu()));
   connect(openButton(), SIGNAL(clicked()), openButton(), SLOT(showMenu()));

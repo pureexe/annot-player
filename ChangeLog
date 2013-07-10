@@ -2,6 +2,9 @@ ChangeLog (UTF-8)
 Annot Player
 Since 6/18/2011
 
+7/10/2013 WED
+  * The underlying GUI framework (Qt) is updated.
+
 6/30/2013 SUN
   * 修正了A站无法解析分段动画的问题。
   * 修正了部分B站动画无法解析弹幕的问题。

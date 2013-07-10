@@ -29,7 +29,7 @@
 
 #define _qs(_cstr)      QString::fromLocal8Bit(_cstr)
 
-#define DEBUG "luaresolver"
+//#define DEBUG "luaresolver"
 #include "qtx/qxdebug.h"
 
 #ifdef __GNUC__
@@ -467,7 +467,7 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
 
   } catch (std::exception &e) {
 #ifdef DEBUG
-    std::cerr << DEBUG ":exception: " << e.what() << std::endl;
+    DOUT("exception: " << e.what());
     if (L)
       printLastError(L);
 #else
