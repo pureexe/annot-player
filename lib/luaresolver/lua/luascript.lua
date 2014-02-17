@@ -50,7 +50,7 @@ function file_readable(name)
    if file~=nil then
      io.close(file);
      return true;
-   else 
+   else
      return false;
    end
 end
@@ -159,7 +159,7 @@ function set_bilibili_account(name, passwd)
   set_account("bilibili", name, passwd);
   g_bilibili_login = true;
 end
-  
+
 --[[
 -- Test --
 function test()

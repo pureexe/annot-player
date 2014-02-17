@@ -50,7 +50,7 @@ WbNetworkAccessManager::supportedSites()
     << "witchflame.jp"
     << "spielsoft.1000.tv"
     << "getchu.com"
-    //<< "dmm.co.jp"
+    << "dmm.co.jp"
     << "erogamescape.dyndns.org/~ap2/ero/toukei_kaiseki"
     << "erogamescape.dyndns.org/~ap2/ero/toukei_kaiseki/index_toukei.php";
 }
@@ -98,7 +98,7 @@ WbNetworkAccessManager::createRequest(Operation op, const QNetworkRequest &req, 
     }
     ELIF("erogamescape.dyndns.org", encodeEroUrl)
     ELIF("www.getchu.com", encodeGetchuUrl)
-    //ELIF("www.dmm.co.jp", encodeDmmUrl)
+    ELIF("www.dmm.co.jp", encodeDmmUrl)
 #undef ELIF
 #define ELIF(_host, _encode) \
     else if (host.endsWith(_host, Qt::CaseInsensitive)) { \
@@ -144,7 +144,7 @@ WbNetworkAccessManager::encodeNicoUrl(const QUrl &url)
   if (!host.compare("nicovideo.jp", Qt::CaseInsensitive)) {
     QUrl ret = url;
     ret.setHost(PROXY_HOST);
-    ret.setPath("/nicovideo" + ret.path());
+    ret.setPath("/nico/www" + ret.path());
     return ret;
   }
 
@@ -175,7 +175,7 @@ WbNetworkAccessManager::encodeEroUrl(const QUrl &url)
   ret.setHost(PROXY_HOST);
   QString path = ret.path();
   //path.remove(QRegExp("^/~ap2/ero/toukei_kaiseki", Qt::CaseInsensitive));
-  ret.setPath("/erogamescape" + path);
+  ret.setPath("/proxy/erogamescape" + path);
   return ret;
 }
 
@@ -185,7 +185,7 @@ WbNetworkAccessManager::encodeEroUrl(const QUrl &url)
   { \
     QUrl ret = url; \
     ret.setHost(PROXY_HOST); \
-    ret.setPath("/" _host + ret.path()); \
+    ret.setPath("/proxy/" _host + ret.path()); \
     return ret; \
   }
 

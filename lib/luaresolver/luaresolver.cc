@@ -29,7 +29,7 @@
 
 #define _qs(_cstr)      QString::fromLocal8Bit(_cstr)
 
-//#define DEBUG "luaresolver"
+#define DEBUG "luaresolver"
 #include "qtx/qxdebug.h"
 
 #ifdef __GNUC__
@@ -69,6 +69,13 @@ namespace detail {
     if (!obj)
       return 1;
     return obj->dlpost(L);
+  }
+
+  int NOINLINE debug(lua_State *L)
+  {
+    QString text = _qs(lua_tostring(L, 1));
+    DOUT(text);
+    return 0;
   }
 
 } // anonymous detail
@@ -247,9 +254,10 @@ LuaResolver::resolve(const QString &href, int *siteid, QString *refurl, QString 
 
     // See: http://stackoverflow.com/questions/2710194/register-c-function-in-lua-table
     const luaL_Reg ft[] = {
-      { "dlget", detail::clib_dlget },
-      { "dlpost", detail::clib_dlpost },
-      { 0, 0 }
+      { "dlget", detail::clib_dlget }
+      , { "dlpost", detail::clib_dlpost }
+      , { "debug", detail::debug }
+      , { 0, 0 }
     };
     luaL_register(L, "clib", ft);
 

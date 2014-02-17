@@ -10,7 +10,7 @@ function getACFPV ( str_url, str_servername)
 	then
 		return 1;--ACFPV_NEW
 		--return 65535;
-	elseif string.find(str_url, "bilibili.kankanews.com",1,true)~=nil or string.find(str_url, "bilibili.us",1,true)~=nil or string.find(str_url, "bilibili.tv",1,true)~=nil
+	elseif string.find(str_url, "bilibili.kankanews.com",1,true)~=nil or string.find(str_url, "bilibili.us",1,true)~=nil or string.find(str_url, "bilibili.tv",1,true)~=nil or string.find(str_url, "letv.com", 1, true)~=nil
 	then
 		return 3;--BIRIBIRIPAD
 	elseif string.find(str_url, "mikufans.cn",1,true)~=nil  or string.find(str_url, "danmaku.us", 1, true)~=nil
@@ -38,6 +38,12 @@ function readNextLine( file )
 	local str_line = "";
 	str_line = file:read("*l");
 	return str_line;
+end
+
+-- jichi 2/16/2014
+function readAll(file) -- file -> utf8
+    local content = file:read("*all")
+    return utf8_to_lua(content)
 end
 
 --[[read from file until counter str_tag. return the last read line.]]
@@ -994,8 +1000,10 @@ function getRealUrls_bili(str_id, str_tmpfile, pDlg)
 	return index, tbl_urls;
 end
 
+-- jichi 2/16/2014
 function getAcVideo_CommentID(str_acid, str_tmpfile, pDlg)
-	local str_apiurl = "http://www.acfun.tv/api/getVideoByID.aspx?vid="..str_acid;
+	--local str_apiurl = "http://www.acfun.tv/api/getVideoByID.aspx?vid="..str_acid;
+	local str_apiurl = "http://www.acfun.tv/video/getVideo.aspx?id=" .. str_acid;
 
 	--dbgMessage(str_apiurl);
 
@@ -1034,19 +1042,22 @@ function getAcVideo_CommentID(str_acid, str_tmpfile, pDlg)
 	local int_foreignlinksite = fls["realurl"];
 	local str_id = "";
 	local str_subid = str_id;
+	--[[change tag 20131230]]
 	if string.find(str_line, "\"success\":true", 1, true)~=nil then
-		if string.find(str_line, "\"vtype\":\"sina\"", 1, true)~=nil then
+		if string.find(str_line, "\"sourceType\":\"sina\"", 1, true)~=nil then
 			int_foreignlinksite = fls["sina"];
-		elseif string.find(str_line, "\"vtype\":\"youku\"", 1, true)~=nil then
+		elseif string.find(str_line, "\"sourceType\":\"youku\"", 1, true)~=nil then
 			int_foreignlinksite = fls["youku"];
-		elseif string.find(str_line, "\"vtype\":\"qq\"", 1, true)~=nil then
+		elseif string.find(str_line, "\"sourceType\":\"qq\"", 1, true)~=nil then
 			int_foreignlinksite = fls["qq"];
-		elseif string.find(str_line, "\"vtype\":\"tudou\"", 1, true)~=nil then
+		elseif string.find(str_line, "\"sourceType\":\"tudou\"", 1, true)~=nil then
 			int_foreignlinksite = fls["tudou"];
+		elseif string.find(str_line, "\"sourceType\":\"pps\"", 1, true)~=nil then
+			int_foreignlinksite = fls["pps"];
 		end--[[may be there are other types for adding]]
 
-		str_id = getMedText(str_line, "\"vid\":\"", "\"");
-		str_subid = getMedText(str_line, "\"cid\":\"", "\"");
+		str_id = getMedText(str_line, "\"sourceId\":\"", "\"");
+		str_subid = getMedText(str_line, "\"danmakuId\":\"", "\"");
 		return int_foreignlinksite, str_id, str_subid;
 	else
 		return nil;

@@ -1,0 +1,42 @@
+7/14/2012
+
+** mklink /j include/vlc/plugins ..
+#replace LLU to ULL in vlc_common.h
+
+** vlc_configuration.h **
+
+after including sys/types.h
+#ifdef _MSC_VER
+// jichi 2/16/2014
+typedef size_t ssize_t;
+#endif // _MSC_VER
+
+
+**
+https://patches.videolan.org/patch/3422/
+** vlc_atomic.h **
+
+// jichi 2/16/2014 BEGIN
+// See: atomic.c in vlc-2.0.8
+
+# elif defined (_MSC_VER)
+
+#  ifdef WIN64
+#    define atomic_fetch_add(x, y)  InterlockedExchangeAdd64(x, y)
+#    define atomic_exchange(x, y)   InterlockedExchange64(x, y)
+#    define atomic_compare_exchange(x, y, z)   InterlockedCompareExchange64(x, *y, z)
+#  else
+#    define atomic_fetch_add(x, y)  InterlockedExchangeAdd(x, y)
+#    define atomic_exchange(x, y)   InterlockedExchange(x, y)
+#    define atomic_compare_exchange(x, y, z)   InterlockedCompareExchange(x, *y, z)
+#  endif
+#  define atomic_fetch_sub(x, y)    atomic_fetch_add(x, -(y)) // http://mail-archives.apache.org/mod_mbox/apr-commits/200311.mbox/%3C20031116200945.28631.qmail@minotaur.apache.org%3E
+#  define atomic_store(x, y)        atomic_exchange(x, y)
+#  define atomic_compare_exchange_strong(x, y, z)   atomic_compare_exchange(x, y, z)
+#  define atomic_load(p)            (*p)
+
+// jichi 2/16/2014 END
+
+ # else
+ #  error FIXME: implement atomic operations for this compiler.
+ # endif

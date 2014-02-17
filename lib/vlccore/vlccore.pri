@@ -3,6 +3,9 @@
 
 DEFINES += WITH_LIB_VLCCORE
 
+# Cancel building pthread support on Windows
+win32: DEFINES += LIBVLC_USE_PTHREAD_CANCEL
+
 DEPENDPATH += $$PWD
 
 HEADERS += \

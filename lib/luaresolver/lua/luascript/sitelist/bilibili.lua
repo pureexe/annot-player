@@ -6,13 +6,13 @@ require "login"
 
 --[[parse single bilibili url]]
 function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bSubOnly)
+  clib.debug("bilibili: enter")
   local IsAutoLogin;
   if g_bilibili_login then
     IsAutoLogin = SUCCESS;
   else
     IsAutoLogin = FAILURE;
   end
-
 
   --dbgMessage("bilibili parse begin!");
   if pDlg~=nil then
@@ -27,6 +27,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   if IsAutoLogin == SUCCESS and isNeedLogin==true then
     local loginstate = Login_Bilibili ( str_tmpfile );
     if loginstate == FAILURE then
+      clib.debug("bilibili: abort: login failed")
       return nil;
     end
   end
@@ -37,6 +38,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
     if pDlg~=nil then
       sShowMessage(pDlg, '读取原始页面错误。');
     end
+    clib.debug("bilibili: abort: download failed")
     return;
   else
     if pDlg~=nil then
@@ -51,6 +53,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
     if pDlg~=nil then
       sShowMessage(pDlg, '读取原始页面错误。');
     end
+    clib.debug("bilibili: abort: read failed")
     return;
   end
   --readin descriptor
@@ -79,32 +82,36 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   local tbl_bilibili_vice_descriptor = {};
   local tbl_bilibili_vice_url = {};
   local vicedes_index = 1;
---  while str_line~=nil and (string.find(str_line, "<option value='")~=nil or string.find(str_line, "</div>", 1, true)==nil)
---  do
---
---    --dbgMessage(str_line);
---    --str_line = readIntoUntilFromUTF8(file, str_line, "<option value='", str_line);
---    if str_line ~= nil and string.find(str_line, "<option value='", 1, true)==nil then
---      local tmp_str_line = file:read("*l");
---      str_line = utf8_to_lua(tmp_str_line);
---    end
---    --dbgMessage(str_line);
---    if str_line~=nil and string.find(str_line, "<option value='", 1, true)~=nil
---    then
---      str_line = readIntoUntilFromUTF8(file, str_line, "</option>", str_line);
---      local tmp_vdindex = string.format("%d", vicedes_index);
---      --dbgMessage(str_line);
---      tbl_bilibili_vice_url[tmp_vdindex] = getMedText(str_line, "<option value='", "'");
---      tbl_bilibili_vice_descriptor[tmp_vdindex] = cutTags(getMedText(str_line, ">", "</option>"));
---      --dbgMessage(tbl_bilibili_vice_descriptor[tmp_vdindex]);
---      vicedes_index = vicedes_index+1;
---      str_line = string.sub(str_line, string.find(str_line, "</option>")+string.len("</option>"));
---    end
---  end
---  str_line = readUntilFromUTF8(file, "var pageno =", str_line);
-  str_line = readUntilFromUTF8(file, "var pageno =");
-  --dbgMessage(str_line);
 
+  while str_line~=nil and (string.find(str_line, "<option value='")~=nil or string.find(str_line, "</div>", 1, true)==nil)
+  do
+
+    --dbgMessage(str_line);
+    --str_line = readIntoUntilFromUTF8(file, str_line, "<option value='", str_line);
+    if str_line ~= nil and string.find(str_line, "<option value='", 1, true)==nil then
+      local tmp_str_line = file:read("*l");
+      str_line = utf8_to_lua(tmp_str_line);
+    end
+    --dbgMessage(str_line);
+    if str_line~=nil and string.find(str_line, "<option value='", 1, true)~=nil
+    then
+      str_line = readIntoUntilFromUTF8(file, str_line, "</option>", str_line);
+      local tmp_vdindex = string.format("%d", vicedes_index);
+      --dbgMessage(str_line);
+      tbl_bilibili_vice_url[tmp_vdindex] = getMedText(str_line, "<option value='", "'");
+      tbl_bilibili_vice_descriptor[tmp_vdindex] = cutTags(getMedText(str_line, ">", "</option>"));
+      --dbgMessage(tbl_bilibili_vice_descriptor[tmp_vdindex]);
+
+      --selected indicate this subpage is current
+      if string.find(str_line, "selected", 1, true)~=nil then
+        str_tmp_vd = tbl_bilibili_vice_descriptor[tmp_vdindex];
+      end
+      vicedes_index = vicedes_index+1;
+      str_line = string.sub(str_line, string.find(str_line, "</option>")+string.len("</option>"));
+    end
+  end
+--[[  str_line = readUntilFromUTF8(file, "var pageno =", str_line);
+  --dbgMessage(str_line);
   if str_line == nil then
     io.close(file);
     return;
@@ -120,19 +127,21 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
       --dbgMessage(str_tmp_vd);
     end
   end
+  ]]
 
   --save descriptor
   local str_descriptor = "";
 
     -- jichi 2/2/2011: remove str_tmp_vd from title
-  --if str_tmp_vd~=nil and str_tmp_vd ~= ""
-  --then
-  --  str_descriptor = str_title.."-"..str_tmp_vd;
-  --else
+  if str_tmp_vd~=nil and str_tmp_vd ~= ""
+  then
+    str_descriptor = str_title.."-"..str_tmp_vd;
+  else
     str_descriptor = str_title;
-    --end
+  end
 --dbgMessage(str_descriptor);
 --dbgMessage(str_line);
+
   --find embed flash
   local str_embed_start = "<div class=\"scontent\" id=\"bofqi\">";
   --local str_embed_end = "</div><!-- /content -->";
@@ -151,6 +160,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
       sShowMessage(pDlg, "没有找到嵌入的flash播放器");
     end
     io.close(file);
+    clib.debug("bilibili: abort: flash not found")
     return;
   end
 
@@ -228,6 +238,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
     if pDlg~=nil then
       sShowMessage(pDlg, '解析FLV ID错误。');
     end
+    clib.debug("bilibili: abort: cid not found")
     return;
   end
   ------------------------------------------------------------[[read flv id end]]
@@ -299,6 +310,8 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
 
   local tbl_resig = {};
   tbl_resig[string.format("%d",0)] = tbl_ta;
+
+  clib.debug("bilibili: leave: ok")
   return tbl_resig;
 end
 

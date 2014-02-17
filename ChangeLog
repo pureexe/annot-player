@@ -2,6 +2,17 @@ ChangeLog (UTF-8)
 Annot Player
 Since 6/18/2011
 
+2/16/2014 SUN
+  * Update VLC plugins to 2.1.3.
+  * 修正了B站无法解析分段动画的问题。
+  * 修正了部分A站动画无法解析弹幕的问题。
+
+  感谢郁闷中sama的报告！
+
+8/20/2013 FRI
+  * Update VLC plugins to 2.0.8.
+  * Bug fix for subtitle encoding.
+
 7/10/2013 WED
   * The underlying GUI framework (Qt) is updated.
 

@@ -1,1 +1,3 @@
-code.google.com/p/luascript-for-acfunlocalizer/
+http://code.google.com/p/luascript-for-acfunlocalizer/
+
+svn checkout http://luascript-for-acfunlocalizer.googlecode.com/svn/trunk/ luascript-for-acfunlocalizer-read-only

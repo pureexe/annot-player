@@ -245,7 +245,7 @@ vlccore::codec_name(uint i_codec)
   case VLC_CODEC_VC1:           return "VC-1";
   case VLC_CODEC_THEORA:        return "theo";
   case VLC_CODEC_TARKIN:        return "tark";
-  case VLC_CODEC_SNOW:          return "SNOW";
+  //case VLC_CODEC_SNOW:          return "SNOW"; // jichi 2/16/2014: remove which is not defined in VLC 2.1.3
   case VLC_CODEC_DIRAC:         return "drac";
   case VLC_CODEC_CAVS:          return "CAVS";
   case VLC_CODEC_NUV:           return "NJPG";
@@ -430,7 +430,7 @@ vlccore::codec_name(uint i_codec)
   case VLC_CODEC_GSM_MS:        return "agsm";
   case VLC_CODEC_ATRAC1:        return "atr1";
   case VLC_CODEC_ATRAC3:        return "atrc";
-  case VLC_CODEC_SONIC:         return "SONC";
+  //case VLC_CODEC_SONIC:         return "SONC";  // jichi 2/16/2014: remove which is not defined in VLC 2.1.3
   case VLC_CODEC_IMC:           return "0x10x40x00x0";
   case VLC_CODEC_TRUESPEECH:    return "0x220x00x00x0";
   case VLC_CODEC_NELLYMOSER:    return "NELL";
@@ -466,7 +466,7 @@ vlccore::codec_name(uint i_codec)
   case VLC_CODEC_MULAW:         return "mlaw";
   case VLC_CODEC_DAT12:         return "LP12";
   case VLC_CODEC_S24DAUD:       return "daud";
-  case VLC_CODEC_FI32:          return "fi32";
+  //case VLC_CODEC_FI32:          return "fi32";  // jichi 2/16/2014: remove which is not defined in VLC 2.1.3
   case VLC_CODEC_TWINVQ:        return "TWIN";
   case VLC_CODEC_ADPCM_IMA_AMV: return "imav";
 
