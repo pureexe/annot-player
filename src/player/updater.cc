@@ -14,7 +14,18 @@
 //#define DEBUG "bilibilicodec"
 #include "qtx/qxdebug.h"
 
-#define UPDATE_URL "http://210.175.54.32/api/1/app/version"
+#define UPDATE_URL "http://210.175.54.32/api/xml/app/version"
+
+namespace { // anonymous
+class GetThread : public QRunnable
+{
+  QNetworkAccessManager *nam_;
+  QString url_;
+public:
+  GetThread(QNetworkAccessManager *nam, const QString &url) : nam_(nam), url_(url) {}
+  void run() override { nam_->get(QNetworkRequest(url)); }
+};
+} // anonymous namespace
 
 // - Construction -
 
@@ -23,7 +34,7 @@ Updater::Updater(QObject *parent)
 {
   ncm_ = new QNetworkConfigurationManager(this);
   nam_ = new QNetworkAccessManager(this);
-  connect(nam_, SIGNAL(finished(QNetworkReply*)), SLOT(parseReply(QNetworkReply*)));
+  connect(nam_, SIGNAL(finished(QNetworkReply*)), SLOT(parseReply(QNetworkReply*)), Qt::QueuedConnection);
 }
 
 bool Updater::isOnline() const
@@ -32,7 +43,7 @@ bool Updater::isOnline() const
 // - Query -
 
 void Updater::queryVersion()
-{ nam_->get(QNetworkRequest(QString(UPDATE_URL))); }
+{ QThreadPool::globalInstance()->start(new GetThread(nam_, UPDATE_URL)); }
 
 void Updater::parseReply(QNetworkReply *reply)
 {
