@@ -23,7 +23,7 @@ class GetThread : public QRunnable
   QString url_;
 public:
   GetThread(QNetworkAccessManager *nam, const QString &url) : nam_(nam), url_(url) {}
-  void run() override { nam_->get(QNetworkRequest(url)); }
+  void run() override { nam_->get(QNetworkRequest(url_)); }
 };
 } // anonymous namespace
 
