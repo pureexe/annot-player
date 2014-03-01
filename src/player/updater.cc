@@ -14,7 +14,7 @@
 //#define DEBUG "bilibilicodec"
 #include "qtx/qxdebug.h"
 
-#define UPDATE_URL "http://210.175.54.32/api/xml/app/version"
+#define UPDATE_URL "http://153.121.54.194/api/xml/app/version"
 
 namespace { // anonymous
 class GetThread : public QRunnable

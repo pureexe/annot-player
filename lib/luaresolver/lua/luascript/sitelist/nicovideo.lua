@@ -54,7 +54,7 @@ function getTaskAttribute_nico ( str_url, str_tmpfile , pDlg, bSubOnly)
   --local nico_proxy_url = "http://nico.galstars.net/?t=www&u=%2Fwatch%2F"..str_id;
   --local nico_proxy_url = "http://nico.galstars.net/?t=www&u=/watch/"..str_id;
   --local nico_proxy_url = "http://sakuradite.com/nico/www/watch/"..str_id;
-  local nico_proxy_url = "http://210.175.52.140/nico/www/watch/"..str_id;
+  local nico_proxy_url = "http://153.121.52.138/nico/www/watch/"..str_id;
   --if bSubOnly then
   --  re = dlFile(str_tmpfile, nico_url);
     re = dlFile(str_tmpfile, nico_proxy_url); -- bypass banning

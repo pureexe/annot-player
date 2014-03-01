@@ -293,9 +293,9 @@ DEFINES += CONFIG_BILIBILI_USERNAME=\\\"oedivocin@gmail.com\\\" \
            CONFIG_BILIBILI_PASSWORD=\\\"nicovideo.jp\\\"
 
 #DEFINES += ANNOT_PROXY_DOMAIN=\\\"sakuradite.com\\\"
-DEFINES += CONFIG_PROXY_DOMAIN=\\\"210.175.52.140\\\"
-DEFINES += CONFIG_ANNOT_IP=\\\"210.175.54.32\\\" \
-           CONFIG_ANNOT_DOC_IP=\\\"210.175.52.140\\\"
+DEFINES += CONFIG_PROXY_DOMAIN=\\\"153.121.52.138\\\"
+DEFINES += CONFIG_ANNOT_IP=\\\"153.121.54.194\\\" \
+           CONFIG_ANNOT_DOC_IP=\\\"153.121.52.138\\\"
 
 ## IDs
 

@@ -118,7 +118,7 @@ int CloudServiceSoapBindingProxy::blessMediaAliasWithId(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -173,7 +173,7 @@ int CloudServiceSoapBindingProxy::blessMediaAnnotationWithId(const char *endpoin
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -228,7 +228,7 @@ int CloudServiceSoapBindingProxy::blessMediaTokenWithId(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -283,7 +283,7 @@ int CloudServiceSoapBindingProxy::blessUserWithId(const char *endpoint, const ch
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -338,7 +338,7 @@ int CloudServiceSoapBindingProxy::blockMediaAliasWithId(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -393,7 +393,7 @@ int CloudServiceSoapBindingProxy::blockMediaAnnotationWithId(const char *endpoin
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -448,7 +448,7 @@ int CloudServiceSoapBindingProxy::blockUserWithId(const char *endpoint, const ch
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -503,7 +503,7 @@ int CloudServiceSoapBindingProxy::chat(const char *endpoint, const char *soap_ac
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -558,7 +558,7 @@ int CloudServiceSoapBindingProxy::curseMediaAliasWithId(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -613,7 +613,7 @@ int CloudServiceSoapBindingProxy::curseMediaAnnotationWithId(const char *endpoin
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -668,7 +668,7 @@ int CloudServiceSoapBindingProxy::curseMediaTokenWithId(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -723,7 +723,7 @@ int CloudServiceSoapBindingProxy::curseUserWithId(const char *endpoint, const ch
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -778,7 +778,7 @@ int CloudServiceSoapBindingProxy::deleteMediaAliasWithId(const char *endpoint, c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -833,7 +833,7 @@ int CloudServiceSoapBindingProxy::deleteMediaAnnotationWithId(const char *endpoi
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -888,7 +888,7 @@ int CloudServiceSoapBindingProxy::getUser(const char *endpoint, const char *soap
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -943,7 +943,7 @@ int CloudServiceSoapBindingProxy::isAuthorized(const char *endpoint, const char 
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -998,7 +998,7 @@ int CloudServiceSoapBindingProxy::isConnected(const char *endpoint, const char *
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1053,7 +1053,7 @@ int CloudServiceSoapBindingProxy::isLatestApp(const char *endpoint, const char *
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1108,7 +1108,7 @@ int CloudServiceSoapBindingProxy::login(const char *endpoint, const char *soap_a
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1163,7 +1163,7 @@ int CloudServiceSoapBindingProxy::selectGameHookWithTokenDigest(const char *endp
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1218,7 +1218,7 @@ int CloudServiceSoapBindingProxy::selectGameHookWithTokenId(const char *endpoint
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1273,7 +1273,7 @@ int CloudServiceSoapBindingProxy::selectGameThreadWithTokenDigest(const char *en
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1328,7 +1328,7 @@ int CloudServiceSoapBindingProxy::selectGameThreadWithTokenId(const char *endpoi
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1383,7 +1383,7 @@ int CloudServiceSoapBindingProxy::selectMediaAliasesWithTokenId(const char *endp
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1438,7 +1438,7 @@ int CloudServiceSoapBindingProxy::selectMediaAnnotationsWithTokenId(const char *
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1493,7 +1493,7 @@ int CloudServiceSoapBindingProxy::selectMediaTokenIdWithDigest(const char *endpo
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1548,7 +1548,7 @@ int CloudServiceSoapBindingProxy::selectMediaTokenIdWithUrl(const char *endpoint
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1603,7 +1603,7 @@ int CloudServiceSoapBindingProxy::selectMediaTokenWithDigest(const char *endpoin
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1658,7 +1658,7 @@ int CloudServiceSoapBindingProxy::selectMediaTokenWithId(const char *endpoint, c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1713,7 +1713,7 @@ int CloudServiceSoapBindingProxy::selectRelatedMediaAliasesWithTokenId(const cha
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1768,7 +1768,7 @@ int CloudServiceSoapBindingProxy::selectRelatedMediaAnnotationsWithTokenId(const
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1823,7 +1823,7 @@ int CloudServiceSoapBindingProxy::setUserAnonymous(const char *endpoint, const c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1878,7 +1878,7 @@ int CloudServiceSoapBindingProxy::setUserLanguage(const char *endpoint, const ch
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1933,7 +1933,7 @@ int CloudServiceSoapBindingProxy::submitGameHook(const char *endpoint, const cha
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -1988,7 +1988,7 @@ int CloudServiceSoapBindingProxy::submitGameThread(const char *endpoint, const c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2043,7 +2043,7 @@ int CloudServiceSoapBindingProxy::submitMediaAlias(const char *endpoint, const c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2098,7 +2098,7 @@ int CloudServiceSoapBindingProxy::submitMediaAliasTextAndTokenDigest(const char 
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2153,7 +2153,7 @@ int CloudServiceSoapBindingProxy::submitMediaAliasTextWithTokenId(const char *en
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2208,7 +2208,7 @@ int CloudServiceSoapBindingProxy::submitMediaAnnotation(const char *endpoint, co
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2263,7 +2263,7 @@ int CloudServiceSoapBindingProxy::submitMediaAnnotationTextAndTokenDigest(const 
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2318,7 +2318,7 @@ int CloudServiceSoapBindingProxy::submitMediaAnnotationTextWithTokenId(const cha
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2373,7 +2373,7 @@ int CloudServiceSoapBindingProxy::submitMediaToken(const char *endpoint, const c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2428,7 +2428,7 @@ int CloudServiceSoapBindingProxy::submitMediaTokenDigest(const char *endpoint, c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2483,7 +2483,7 @@ int CloudServiceSoapBindingProxy::submitMediaTokenUrl(const char *endpoint, cons
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2538,7 +2538,7 @@ int CloudServiceSoapBindingProxy::updateGameHookTextWithId(const char *endpoint,
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2593,7 +2593,7 @@ int CloudServiceSoapBindingProxy::updateGameThread(const char *endpoint, const c
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2648,7 +2648,7 @@ int CloudServiceSoapBindingProxy::updateMediaAnnotationLanguageWithId(const char
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2703,7 +2703,7 @@ int CloudServiceSoapBindingProxy::updateMediaAnnotationTextWithId(const char *en
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;
@@ -2758,7 +2758,7 @@ int CloudServiceSoapBindingProxy::updateMediaAnnotationUserIdWithId(const char *
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://210.175.54.32/service/cloud";
+		soap_endpoint = "http://153.121.54.194/service/cloud";
 	if (soap_action == NULL)
 		soap_action = "";
 	soap->encodingStyle = NULL;

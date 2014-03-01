@@ -17,7 +17,7 @@ cd /d ..\..
 set CYGWIN=nodosfilewarning
 set PATH=%CD%\update\%CYGWIN_VERSION%;%PATH%
 
-set HOST=210.175.52.140
+set HOST=153.121.52.138
 set SOURCE=/release/annot-player/win32/Annot Stream
 set TARGET=.
 
