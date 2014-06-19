@@ -45,7 +45,7 @@
 
 #define HOMEPAGE_EN    "http://www.youtube.com/FUNimation"
 #define HOMEPAGE_JP    "http://ch.nicovideo.jp/menu/anime"
-#define HOMEPAGE_ZH    "http://www.bilibili.tv/video/bangumi.html"
+#define HOMEPAGE_ZH    "http://www.bilibili.com/video/bangumi.html"
 
 #define MIN_SIZE        QSize(400, 300)
 #ifdef Q_OS_WIN
@@ -118,7 +118,7 @@ MainWindow::MainWindow(QWidget *parent)
     << QString("http://huoying.com")
     << QString("http://linekong.com")
     << QString("http://8864.com")
-    << QString("http://www.bilibili.tv/html/arcgg.html")
+    << QString("http://www.bilibili.com/html/arcgg.html")
   );
 
   if (AcSettings::globalSettings()->isJapanese())
@@ -384,7 +384,7 @@ MainWindow::login()
   QString userName, password;
   boost::tie(userName, password) = AcSettings::globalSettings()->bilibiliAccount();
   if (!userName.isEmpty() && !password.isEmpty()) {
-    showMessage(tr("logging in bilibili.tv as %1 ...").arg(userName));
+    showMessage(tr("logging in bilibili.com as %1 ...").arg(userName));
     bilibili::login(userName, password, cookieJar());
   }
   boost::tie(userName, password) = AcSettings::globalSettings()->nicovideoAccount();

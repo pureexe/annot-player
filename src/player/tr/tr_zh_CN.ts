@@ -59,7 +59,7 @@
         <translation type="obsolete">ニコニコ動画</translation>
     </message>
     <message>
-        <source>Bilibili.tv</source>
+        <source>bilibili.com</source>
         <translation type="obsolete">嗶哩嗶哩動画</translation>
     </message>
 </context>
@@ -92,7 +92,7 @@
     </message>
     <message>
         <location filename="../../common/acaccountprefs_p.cc" line="41"/>
-        <source>Bilibili.tv</source>
+        <source>bilibili.com</source>
         <translation>嗶哩嗶哩動画</translation>
     </message>
 </context>
@@ -4290,7 +4290,7 @@
     </message>
     <message>
         <location filename="localizer.cc" line="703"/>
-        <source>http://bilibili.tv</source>
+        <source>http://bilibili.com</source>
         <translation></translation>
     </message>
     <message>
@@ -6576,7 +6576,7 @@
     </message>
     <message>
         <source>http://www.youtube.com/watch?v=-DJqnomZoLk</source>
-        <translation type="obsolete">http://www.bilibili.tv/video/av207531/</translation>
+        <translation type="obsolete">http://www.bilibili.com/video/av207531/</translation>
     </message>
     <message>
         <source>Import annotations from URL</source>
@@ -8665,7 +8665,7 @@
         <translation type="obsolete">ニコニコ動画</translation>
     </message>
     <message>
-        <source>Bilibili.tv</source>
+        <source>bilibili.com</source>
         <translation type="obsolete">嗶哩嗶哩動画</translation>
     </message>
 </context>

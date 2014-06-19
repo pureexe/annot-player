@@ -8,7 +8,7 @@
 
 // Video sites with annotations
 #define MA_EIGEN_NICOVIDEO      "www.nicovideo.jp/watch/"
-#define MA_EIGEN_BILIBILI       "www.bilibili.tv/video/av"
+#define MA_EIGEN_BILIBILI       "www.bilibili.com/video/av"
 #define MA_EIGEN_ACFUN          "www.acfun.tv/v/ac"
 
 // Video sites from China

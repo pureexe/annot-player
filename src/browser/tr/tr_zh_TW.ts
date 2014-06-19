@@ -94,7 +94,7 @@
         <translation type="obsolete">ニコニコ動畫</translation>
     </message>
     <message>
-        <source>Bilibili.tv</source>
+        <source>bilibili.com</source>
         <translation type="obsolete">嗶哩嗶哩動畫</translation>
     </message>
 </context>
@@ -127,7 +127,7 @@
     </message>
     <message>
         <location filename="../../common/acaccountprefs_p.cc" line="41"/>
-        <source>Bilibili.tv</source>
+        <source>bilibili.com</source>
         <translation>嗶哩嗶哩動畫</translation>
     </message>
 </context>
@@ -945,8 +945,8 @@
     </message>
     <message>
         <location filename="../mainwindow.cc" line="387"/>
-        <source>logging in bilibili.tv as %1 ...</source>
-        <translation>以%1登錄bilibili.tv中...</translation>
+        <source>logging in bilibili.com as %1 ...</source>
+        <translation>以%1登錄bilibili.com中...</translation>
     </message>
     <message>
         <location filename="../mainwindow.cc" line="392"/>

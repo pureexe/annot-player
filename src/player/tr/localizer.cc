@@ -700,7 +700,7 @@ Localizer::translate(int tid)
   case T_MENUTHEME:     return tr("Render Context Menu");
 
   case T_URL_NICOVIDEO: return tr("http://nicovideo.jp");
-  case T_URL_BILIBILI:  return tr("http://bilibili.tv");
+  case T_URL_BILIBILI:  return tr("http://bilibili.com");
 
   case T_ASPECTRATIO:   return tr("Aspect ratio");
   case T_NEWWINDOW:     return tr("New window"); // + " [" K_CTRL "+" K_SHIFT "+" "N]";

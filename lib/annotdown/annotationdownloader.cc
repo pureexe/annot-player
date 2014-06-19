@@ -138,7 +138,7 @@ AnnotationDownloader::processReply(QNetworkReply *reply)
 
   QByteArray data = reply->readAll();
 #ifdef WITH_LIB_COMPRESS
-  if (!data.isEmpty() && url.contains(".bilibili.tv/", Qt::CaseInsensitive)) {
+  if (!data.isEmpty() && url.contains(".bilibili.com/", Qt::CaseInsensitive)) {
     QByteArray unzipped = ::gHttpUncompress(data);
     if (!unzipped.isEmpty())
       data = unzipped;

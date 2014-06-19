@@ -59,7 +59,7 @@
         <translation type="obsolete">ニコニコ動画</translation>
     </message>
     <message>
-        <source>Bilibili.tv</source>
+        <source>bilibili.com</source>
         <translation type="obsolete">ビリビリ動画</translation>
     </message>
 </context>
@@ -92,7 +92,7 @@
     </message>
     <message>
         <location filename="../../common/acaccountprefs_p.cc" line="41"/>
-        <source>Bilibili.tv</source>
+        <source>bilibili.com</source>
         <translation>ビリビリ動画</translation>
     </message>
 </context>
@@ -4053,7 +4053,7 @@
     </message>
     <message>
         <location filename="localizer.cc" line="703"/>
-        <source>http://bilibili.tv</source>
+        <source>http://bilibili.com</source>
         <translation></translation>
     </message>
     <message>
@@ -8579,7 +8579,7 @@
         <translation type="obsolete">ニコニコ動画</translation>
     </message>
     <message>
-        <source>Bilibili.tv</source>
+        <source>bilibili.com</source>
         <translation type="obsolete">ビリビリ動画</translation>
     </message>
 </context>
@@ -8620,7 +8620,7 @@
         <translation type="obsolete">URLから「弾幕だけを導入」</translation>
     </message>
     <message>
-        <source>http://www.bilibili.tv/video/av55775/</source>
+        <source>http://www.bilibili.com/video/av55775/</source>
         <translation type="obsolete">http://www.nicovideo.jp/watch/1310115872</translation>
     </message>
     <message>

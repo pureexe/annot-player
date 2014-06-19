@@ -77,7 +77,7 @@ function dlFile(filesavepath, fileurl, httpheader)
   end
   dprint("fileurl:", fileurl);
   dprint("filesavepath:", filesavepath);
-  if string.match(fileurl, "bilibili.tv") then
+  if string.match(fileurl, "bilibili.com") then
     cmd = "curl -s \""..fileurl.."\"|gzip -d >\""..filesavepath.."\"";
   else
     cmd = "curl -s \""..fileurl.."\">\""..filesavepath.."\"";
@@ -109,7 +109,7 @@ g_sizes = nil;
 g_durations = nil;
 g_suburl = nil;
 function resolve(url, tmpnam, bSubOnly)
-  --local t = getTaskAttribute("http://www.bilibili.tv/video/av205838/", tmpnam, "acfun.tv", bSubOnly);
+  --local t = getTaskAttribute("http://www.bilibili.com/video/av205838/", tmpnam, "acfun.tv", bSubOnly);
   local t = getTaskAttribute(url, tmpnam, "acfun.tv", nil, bSubOnly);
   if t == nil then
     return 1;
@@ -164,8 +164,8 @@ end
 -- Test --
 function test()
   local tmpnam = "tmp";
-  local tbl_re = getTaskAttribute("http://www.bilibili.tv/video/av205838/", tmpnam, "acfun.tv");
-  --local tbl_re = getTaskAttributeBatch("http://www.bilibili.tv/video/av55775/", tmpnam, "acfun.tv");
+  local tbl_re = getTaskAttribute("http://www.bilibili.com/video/av205838/", tmpnam, "acfun.tv");
+  --local tbl_re = getTaskAttributeBatch("http://www.bilibili.com/video/av55775/", tmpnam, "acfun.tv");
   --local tbl_re = getTaskAttribute("http://v.youku.com/v_show/id_XMzQ3OTc4MTg4.html", tmpnam, "acfun.tv");
   --os.remove(tmpnam);
 

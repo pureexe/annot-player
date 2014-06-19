@@ -18,8 +18,8 @@ MrlAnalysis::normalizeUrl(const QString &url)
   else if (ret.startsWith("http://nicovideo.jp/")) {
     ret.replace("http://nicovideo.jp/", "http://www.nicovideo.jp/");
     ret.remove(QRegExp("\\?.*"));
-  } else if (ret.startsWith("http://bilibili.tv/"))
-    ret.replace("http://bilibili.tv/", "http://www.bilibili.tv/");
+  } else if (ret.startsWith("http://bilibili.com/"))
+    ret.replace("http://bilibili.com/", "http://www.bilibili.com/");
   else if (ret.startsWith("http://acfun.tv/"))
     ret.replace("http://acfun.tv/", "http://www.acfun.tv/");
   else if (ret.startsWith("http://www.tudou.com/programs/view/", Qt::CaseInsensitive))

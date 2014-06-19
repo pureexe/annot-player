@@ -308,7 +308,7 @@ LuaMrlResolver::cleanUrl(const QString &url)
 {
   QString ret = url.trimmed();
   ret.replace("http://acfun.tv/" , "http://www.acfun.tv", Qt::CaseInsensitive)
-     .replace("http://bilibili.tv/" , "http://www.bilibili.tv", Qt::CaseInsensitive);
+     .replace("http://bilibili.com/" , "http://www.bilibili.com", Qt::CaseInsensitive);
   if (ret.startsWith("http://www.nicovideo.jp/watch/", Qt::CaseInsensitive)) {
     ret.remove(QRegExp("\\?.*"));
     if (ret.startsWith("http://www.nicovideo.jp/watch/so", Qt::CaseInsensitive)) {

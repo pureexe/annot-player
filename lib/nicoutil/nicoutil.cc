@@ -60,7 +60,7 @@ nico::login(const QString &username, const QString &password, QNetworkCookieJar 
 bool
 bilibili::login(const QString &username, const QString &password, QNetworkCookieJar *cookieJar, int retries)
 {
-  QString url = "https://secure.bilibili.tv/member/index_do.php",
+  QString url = "https://secure.bilibili.com/member/index_do.php",
           post = QString("fmdo=login&dopost=login&gourl=&keeptime=604800&userid=%1&pwd=%2&keeptime=604800")
                  .arg(username).arg(password);
   return detail::login(url, post, cookieJar, retries);

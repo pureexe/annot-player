@@ -58,7 +58,7 @@ SiteAccountView::createLayout()
   connect(_pref##PasswordEdit_, SIGNAL(returnPressed()), SLOT(save()));
 
   ADDSITE(nicovideo, Nicovideo, tr("Nicovideo.jp"), "nicovideo.jp")
-  ADDSITE(bilibili, Bilibili, tr("Bilibili.tv"), "bilibili.tv")
+  ADDSITE(bilibili, Bilibili, tr("bilibili.com"), "bilibili.com")
 #undef ADDSITE
 
   QToolButton *saveButton = ui->makeToolButton(

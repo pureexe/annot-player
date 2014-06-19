@@ -59,7 +59,7 @@
         <translation type="obsolete">ニコニコ動画</translation>
     </message>
     <message>
-        <source>Bilibili.tv</source>
+        <source>bilibili.com</source>
         <translation type="obsolete">哔哩哔哩動画</translation>
     </message>
 </context>
@@ -92,7 +92,7 @@
     </message>
     <message>
         <location filename="../../common/acaccountprefs_p.cc" line="41"/>
-        <source>Bilibili.tv</source>
+        <source>bilibili.com</source>
         <translation>哔哩哔哩動画</translation>
     </message>
 </context>

@@ -38,7 +38,7 @@ AcAccountPrefs::createLayout()
   connect(_pref##PasswordEdit_, SIGNAL(editingFinished()), SLOT(saveIfValid())); \
 
   ADDSITE(nicovideo, Nicovideo, tr("Nicovideo.jp"), "nicovideo.jp")
-  ADDSITE(bilibili, Bilibili, tr("Bilibili.tv"), "bilibili.tv")
+  ADDSITE(bilibili, Bilibili, tr("bilibili.com"), "bilibili.com")
 #undef ADDSITE
 
   // Layouts
@@ -74,7 +74,7 @@ AcAccountPrefs::visitNicovideo()
 
 void
 AcAccountPrefs::visitBilibili()
-{ QDesktopServices::openUrl(QString("http://www.bilibili.tv")); }
+{ QDesktopServices::openUrl(QString("http://www.bilibili.com")); }
 
 void
 AcAccountPrefs::load()

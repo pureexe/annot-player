@@ -195,7 +195,7 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
 
   if string.find(str_id, "levelup", 1, true)~=nil then
     --str_notsinaurl = "http://pl.bilibili.us/uploads/"..string.gsub(str_id, "levelup", "/")..".flv";
-    str_notsinaurl = "http://pl.bilibili.tv/"..string.gsub(str_id, "levelup", "/")..".flv";
+    str_notsinaurl = "http://pl.bilibili.com/"..string.gsub(str_id, "levelup", "/")..".flv";
   end
 
   --certain foreign sitelink
@@ -234,9 +234,9 @@ function getTaskAttribute_bilibili ( str_url, str_tmpfile, pDlg, isNeedLogin, bS
   --define subxmlurl
   local str_subxmlurl = "";
   --str_subxmlurl = "http://d.bilibili.us/"..str_id.."?r=968";
-  --str_subxmlurl = "http://www.bilibili.tv/dm," .. str_id .. "?r=126";
-  --str_subxmlurl = "http://comment.bilibili.tv/dm," .. str_id;
-  str_subxmlurl = "http://comment.bilibili.tv/" .. str_id .. ".xml";
+  --str_subxmlurl = "http://www.bilibili.com/dm," .. str_id .. "?r=126";
+  --str_subxmlurl = "http://comment.bilibili.com/dm," .. str_id;
+  str_subxmlurl = "http://comment.bilibili.com/" .. str_id .. ".xml";
 
   --realurls
   local int_realurlnum = 0;
@@ -428,7 +428,7 @@ function getTaskAttributeBatch_bilibili ( str_url, str_tmpfile , pDlg)
   --else
     --urlprefix = "http://bilibili.us/video/av"..str_biliid.."/";
   end
-  urlprefix = "http://www.bilibili.tv/video/av"..str_biliid.."/"
+  urlprefix = "http://www.bilibili.com/video/av"..str_biliid.."/"
 
   --dbgMessage(urlprefix);
 

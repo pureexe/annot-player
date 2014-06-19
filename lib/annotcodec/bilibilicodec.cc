@@ -45,7 +45,7 @@ BilibiliCodec::BilibiliCodec(QObject *parent)
 
 bool
 BilibiliCodec::match(const QString &url) const
-{ return url.contains("http://comment.bilibili.tv/", Qt::CaseInsensitive); }
+{ return url.contains("http://comment.bilibili.com/", Qt::CaseInsensitive); }
 
 void
 BilibiliCodec::fetch(const QString &url, const QString &originalUrl)

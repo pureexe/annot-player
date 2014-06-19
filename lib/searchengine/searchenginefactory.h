@@ -13,7 +13,7 @@
 
 #define SE_YOUTUBE    "http://www.youtube.com/results?search_query=%1"
 #define SE_NICOVIDEO  "http://www.nicovideo.jp/search/%1"
-#define SE_BILIBILI   "http://www.bilibili.tv/search?orderby=pubdate&keyword=%1@新番"
+#define SE_BILIBILI   "http://www.bilibili.com/search?orderby=pubdate&keyword=%1@新番"
 #define SE_ACFUN      "http://www.acfun.tv/search.aspx?q=%1"
 #define SE_YOUKU      "http://www.soku.com/search_video/q_%1"
 

@@ -88,7 +88,7 @@ AnnotationCodecManager::fileFormat(const QString &fileName)
   if (head.startsWith("<!-- annotation")) {
     if (head.contains("www.nicovideo.jp"))
       return Nicovideo;
-    if (head.contains("www.bilibili.tv"))
+    if (head.contains("www.bilibili.com"))
       return Bilibili;
     if (head.contains("www.acfun.tv"))
       return Acfun;

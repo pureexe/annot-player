@@ -2,7 +2,7 @@
 ---[[by lostangel 20100528]]
 ---[[edit 20101117]]
 ---[[edit 20110402 for new return struct]]
----[[edit 20110625 for new bilibili.tv]]
+---[[edit 20110625 for new bilibili.com]]
 ---[[edit 20110704 for new acfun.tv]]
 ---[[edit 20110705 for acfun.tv batch]]
 ---[[note: this version must run with acfunlocalizer 2.600+]]
@@ -58,7 +58,7 @@ function getTaskAttribute ( str_url, str_tmpfile ,str_servername, pDlg, bSubOnly
 		return getTaskAttribute_acfun(str_url, str_tmpfile, str_servername, pDlg, bSubOnly);
 	end
 
-	if string.find(str_url, "bilibili.tv", 1, true)~=nil or string.find(str_url, "bilibili.us", 1, true)~=nil
+	if string.find(str_url, "bilibili.com", 1, true)~=nil or string.find(str_url, "bilibili.us", 1, true)~=nil
 	then
 		return getTaskAttribute_bilibili(str_url, str_tmpfile, pDlg, true, bSubOnly);
 	end
@@ -112,7 +112,7 @@ function getTaskAttributeBatch ( str_url, str_tmpfile, str_servername, pDlg)
 		return getTaskAttributeBatch_acfun(str_url, str_tmpfile, str_servername, pDlg);
 	end
 
-	if string.find(str_url, "bilibili.tv", 1, true)~=nil or string.find(str_url, "bilibili.us", 1, true)~=nil
+	if string.find(str_url, "bilibili.com", 1, true)~=nil or string.find(str_url, "bilibili.us", 1, true)~=nil
 	then
 		return getTaskAttributeBatch_bilibili(str_url, str_tmpfile, pDlg);
 	end

@@ -48,7 +48,7 @@ AnnotationCacheManager::hashFileName(const QString &url)
       .append(".xml")
       .prepend("nico_");
 
-  rx = QRegExp("bilibili.tv/video/(.*)", Qt::CaseInsensitive);
+  rx = QRegExp("bilibili.com/video/(.*)", Qt::CaseInsensitive);
   if (rx.indexIn(url) >= 0) {
     QString ret = rx.cap(1);
     rx = QRegExp("index_(\\d).html", Qt::CaseInsensitive);

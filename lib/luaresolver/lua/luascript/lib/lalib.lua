@@ -10,7 +10,7 @@ function getACFPV ( str_url, str_servername)
 	then
 		return 1;--ACFPV_NEW
 		--return 65535;
-	elseif string.find(str_url, "bilibili.kankanews.com",1,true)~=nil or string.find(str_url, "bilibili.us",1,true)~=nil or string.find(str_url, "bilibili.tv",1,true)~=nil or string.find(str_url, "letv.com", 1, true)~=nil
+	elseif string.find(str_url, "bilibili.kankanews.com",1,true)~=nil or string.find(str_url, "bilibili.us",1,true)~=nil or string.find(str_url, "bilibili.com",1,true)~=nil or string.find(str_url, "letv.com", 1, true)~=nil
 	then
 		return 3;--BIRIBIRIPAD
 	elseif string.find(str_url, "mikufans.cn",1,true)~=nil  or string.find(str_url, "danmaku.us", 1, true)~=nil
@@ -879,7 +879,7 @@ function getRealUrls_bili(str_id, str_tmpfile, pDlg)
 
 	--dbgMessage(str_id);
 
-	local str_oriurl = "http://interface.bilibili.tv/playurl?cid=" .. str_id;
+	local str_oriurl = "http://interface.bilibili.com/playurl?cid=" .. str_id;
 
 	if pDlg~=nil then
 		sShowMessage(pDlg, '正在读取转接页面..');
